@@ -1,0 +1,101 @@
+/* SERP form entrance + idle + hover animations */
+@keyframes fs-serp-in {
+  0%   { opacity: 0; transform: translateY(28px) scale(.96); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fs-serp-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes fs-serp-halo {
+  0%, 100% { opacity: .55; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: .85; transform: translate(-50%, -50%) scale(1.08); }
+}
+.fs-serp-card-wrap {
+  animation: fs-serp-in .9s cubic-bezier(.2,.7,.2,1) both;
+}
+.fs-serp-card {
+  animation: fs-serp-float 6s ease-in-out 1s infinite;
+  transition: box-shadow .35s ease, transform .35s ease;
+  will-change: transform;
+}
+.fs-serp-card:hover {
+  box-shadow: 0 30px 80px rgba(4,84,255,.28), 0 8px 30px rgba(0,0,0,.18);
+}
+.fs-serp-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 78%;
+  height: 78%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(80,160,255,.55), rgba(4,84,255,0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: fs-serp-halo 5s ease-in-out infinite;
+}
+.fs-serp-input {
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.fs-serp-input:focus {
+  border-color: #0454ff !important;
+  box-shadow: 0 0 0 4px rgba(4,84,255,.12);
+}
+.fs-serp-input:hover:not(:focus) {
+  border-color: #cdd5e6 !important;
+}
+.fs-serp-submit {
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+}
+.fs-serp-submit::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-20deg);
+  transition: left .7s ease;
+}
+.fs-serp-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(4,84,255,.35);
+  filter: brightness(1.05);
+}
+.fs-serp-submit:hover::after { left: 130%; }
+
+/* ─── Steps — guided tour carousel ──────────────────────────────── */
+.fs-tour-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+@media (max-width: 760px) {
+  .fs-tour-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.fs-tour-btn {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease,
+    filter .2s ease;
+}
+.fs-tour-btn:hover {
+  transform: translateY(-1px);
+  border-color: #cdd5e6;
+}
+.fs-tour-btn--primary:hover {
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(4, 84, 255, .32);
+  filter: brightness(1.06);
+}
+.fs-tour-chip {
+  transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.fs-tour-chip:hover {
+  transform: translateY(-2px);
+}
