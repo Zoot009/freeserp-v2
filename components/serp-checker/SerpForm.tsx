@@ -388,27 +388,37 @@ export function SerpForm() {
           </div>
         )}
 
-        {/* Rate limit — a calm, neutral notice, not an error. */}
+        {/* Rate limit — an amber "heads-up" notice. Visible and attention-
+            grabbing, but not a red error: hitting the limit is expected. */}
         {phase.kind === "ratelimit" && (
           <div
             style={{
               marginTop: 16,
-              padding: "12px 16px",
+              padding: "14px 16px",
               borderRadius: 10,
-              background: COLORS.softGray,
-              border: `1px solid ${COLORS.border}`,
-              fontSize: 13,
+              background: COLORS.amberBg,
+              border: `1.5px solid ${COLORS.amber}`,
+              boxShadow: "0 6px 18px rgba(245,166,35,.25)",
+              fontSize: 13.5,
               lineHeight: 1.5,
-              color: COLORS.gray,
+              color: COLORS.amberText,
+              display: "flex",
+              gap: 10,
+              alignItems: "flex-start",
             }}
           >
-            {phase.message}{" "}
-            <a
-              href={appUrl("/signup")}
-              style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}
-            >
-              Sign up for more checks
-            </a>
+            <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1.35 }}>
+              ⏳
+            </span>
+            <span>
+              <strong style={{ fontWeight: 600 }}>{phase.message}</strong>{" "}
+              <a
+                href={appUrl("/signup")}
+                style={{ color: COLORS.blue, fontWeight: 700, textDecoration: "underline" }}
+              >
+                Sign up for more checks
+              </a>
+            </span>
           </div>
         )}
 
