@@ -407,9 +407,6 @@ export function SerpForm() {
               alignItems: "flex-start",
             }}
           >
-            <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1.35 }}>
-              ⏳
-            </span>
             <span>
               <strong style={{ fontWeight: 600 }}>{phase.message}</strong>{" "}
               <a
