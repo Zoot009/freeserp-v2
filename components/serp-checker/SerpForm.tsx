@@ -42,7 +42,10 @@ type Phase =
   | { kind: "loading"; keyword: string }
   | { kind: "polling"; keyword: string; checkId: string }
   | { kind: "done"; keyword: string; domain: string; result: CheckResult }
-  | { kind: "error"; message: string; showSignup?: boolean }
+  | { kind: "error"; message: string }
+  // Hitting the anonymous-check limit is expected behaviour, not a failure —
+  // it gets its own phase so it can be shown as a calm notice, not a red error.
+  | { kind: "ratelimit"; message: string }
   | { kind: "timeout" };
 
 const POLL_INTERVAL_MS = 2500;
@@ -159,9 +162,8 @@ export function SerpForm() {
       if (res.status === 429) {
         const data = (await res.json()) as { error?: string };
         setPhase({
-          kind: "error",
+          kind: "ratelimit",
           message: data.error ?? "You've reached the free check limit.",
-          showSignup: true,
         });
         return;
       }
@@ -368,7 +370,7 @@ export function SerpForm() {
           </p>
         )}
 
-        {/* 429 / rate-limit error */}
+        {/* Error — something actually went wrong */}
         {phase.kind === "error" && (
           <div
             style={{
@@ -383,17 +385,30 @@ export function SerpForm() {
             }}
           >
             {phase.message}
-            {phase.showSignup && (
-              <>
-                {" "}
-                <a
-                  href={appUrl("/signup")}
-                  style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}
-                >
-                  Sign up for more checks
-                </a>
-              </>
-            )}
+          </div>
+        )}
+
+        {/* Rate limit — a calm, neutral notice, not an error. */}
+        {phase.kind === "ratelimit" && (
+          <div
+            style={{
+              marginTop: 16,
+              padding: "12px 16px",
+              borderRadius: 10,
+              background: COLORS.softGray,
+              border: `1px solid ${COLORS.border}`,
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: COLORS.gray,
+            }}
+          >
+            {phase.message}{" "}
+            <a
+              href={appUrl("/signup")}
+              style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}
+            >
+              Sign up for more checks
+            </a>
           </div>
         )}
 
