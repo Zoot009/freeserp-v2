@@ -195,3 +195,18 @@
 .fs-tour-chip:hover {
   transform: translateY(-2px);
 }
+
+/* Free-vs-paid comparison: a table on desktop, per-feature cards on phones. */
+.fs-cmp-cards {
+  display: none;
+}
+@media (max-width: 640px) {
+  .fs-cmp-table {
+    display: none;
+  }
+  .fs-cmp-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

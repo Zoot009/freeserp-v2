@@ -18,6 +18,7 @@ export function Compare() {
       />
       <Reveal style={{ marginTop: 56, maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
         <div
+          className="fs-cmp-table"
           style={{
             border: `1px solid ${COLORS.border}`,
             borderRadius: 16,
@@ -88,6 +89,63 @@ export function Compare() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile: the table reflowed into one card per feature */}
+        <div className="fs-cmp-cards">
+          {COMPARE_ROWS.map((row) => (
+            <div
+              key={row.feature}
+              style={{
+                border: `1px solid ${COLORS.border}`,
+                borderRadius: 12,
+                background: "#fff",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  padding: "11px 14px",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: COLORS.black,
+                  background: COLORS.softGray,
+                }}
+              >
+                {row.feature}
+              </div>
+              <div style={{ padding: "0 14px 6px" }}>
+                {[
+                  { label: "FreeSERP", value: row.ours, highlight: true },
+                  { label: "Ahrefs / Semrush", value: row.mid, highlight: false },
+                  { label: "WhatsMySerp / SerpRobot", value: row.light, highlight: false },
+                ].map((c) => (
+                  <div
+                    key={c.label}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: 14,
+                      padding: "9px 0",
+                      borderTop: `1px solid ${COLORS.border}`,
+                      fontSize: 13.5,
+                    }}
+                  >
+                    <span style={{ color: COLORS.gray, flexShrink: 0 }}>{c.label}</span>
+                    <span
+                      style={{
+                        textAlign: "right",
+                        fontWeight: c.highlight ? 600 : 400,
+                        color: c.highlight ? COLORS.green : COLORS.black,
+                      }}
+                    >
+                      {c.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </Reveal>
 
