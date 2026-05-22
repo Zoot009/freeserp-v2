@@ -57,4 +57,4 @@ export function appUrl(path = ""): string {
  * Override per-env with NEXT_PUBLIC_BACKEND_URL; the backend's ALLOWED_ORIGINS
  * must include this site's origin.
  */
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3003";
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3002";

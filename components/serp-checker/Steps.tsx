@@ -136,8 +136,6 @@ export function Steps() {
         padding: "100px 40px 100px",
         scrollMarginTop: 80,
         overflow: "hidden",
-        background:
-          "radial-gradient(60% 50% at 20% 0%, rgba(4,84,255,.10) 0%, transparent 70%), radial-gradient(50% 50% at 90% 30%, rgba(126,91,255,.08) 0%, transparent 70%), radial-gradient(60% 60% at 50% 100%, rgba(4,84,255,.06) 0%, transparent 70%)",
       }}
     >
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
