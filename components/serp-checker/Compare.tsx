@@ -114,7 +114,7 @@ export function Compare() {
               >
                 {row.feature}
               </div>
-              <div style={{ padding: "0 14px 6px" }}>
+              <div style={{ paddingBottom: 6 }}>
                 {[
                   { label: "FreeSERP", value: row.ours, highlight: true },
                   { label: "Ahrefs / Semrush", value: row.mid, highlight: false },
@@ -126,12 +126,21 @@ export function Compare() {
                       display: "flex",
                       justifyContent: "space-between",
                       gap: 14,
-                      padding: "9px 0",
+                      padding: "9px 14px",
                       borderTop: `1px solid ${COLORS.border}`,
+                      background: c.highlight ? COLORS.blueBg : "transparent",
                       fontSize: 13.5,
                     }}
                   >
-                    <span style={{ color: COLORS.gray, flexShrink: 0 }}>{c.label}</span>
+                    <span
+                      style={{
+                        flexShrink: 0,
+                        fontWeight: c.highlight ? 600 : 400,
+                        color: c.highlight ? COLORS.blue : COLORS.gray,
+                      }}
+                    >
+                      {c.label}
+                    </span>
                     <span
                       style={{
                         textAlign: "right",
