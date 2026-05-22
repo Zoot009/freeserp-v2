@@ -11,7 +11,7 @@ const LOGOS = [
 
 export function Ticker() {
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
+    <section className="fs-ticker-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
       <p
         style={{
           textAlign: "center",

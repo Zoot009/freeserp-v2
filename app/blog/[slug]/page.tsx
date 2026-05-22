@@ -136,8 +136,8 @@ export default async function BlogPostPage({
       />
       <Nav currentNav="Blog" />
 
-      <header style={heroSection}>
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 40px" }}>
+      <header className="fs-blog-post-hero" style={heroSection}>
+        <div className="fs-blog-post-hero-inner" style={{ maxWidth: 900, margin: "0 auto", padding: "0 40px" }}>
           <Link
             href="/blog"
             style={{
@@ -196,7 +196,7 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      <main style={{ maxWidth: 900, margin: "0 auto", padding: "0 40px 110px" }}>
+      <main className="fs-blog-post-main" style={{ maxWidth: 900, margin: "0 auto", padding: "0 40px 110px" }}>
         {post.mainImage?.asset && (
           <div
             style={{

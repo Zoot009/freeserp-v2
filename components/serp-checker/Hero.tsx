@@ -4,6 +4,7 @@ import { SerpForm } from "./SerpForm";
 export function Hero() {
   return (
     <header
+      className="fs-serp-hero"
       style={{
         paddingTop: 140,
         paddingBottom: 120,
@@ -15,7 +16,7 @@ export function Hero() {
         position: "relative",
       }}
     >
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", position: "relative", zIndex: 1 }}>
+      <div className="fs-serp-hero-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 40px", position: "relative", zIndex: 1 }}>
         <Reveal>
           <h1
             style={{

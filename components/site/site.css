@@ -122,6 +122,160 @@
     display: none !important;
   }
 }
+
+/* ─── mobile nav ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Shrink nav padding on small screens */
+  .fs-nav {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  /* Hide desktop links & CTA; show hamburger */
+  .fs-nav-links {
+    display: none !important;
+  }
+  .fs-nav-cta {
+    display: none !important;
+  }
+  .fs-hamburger {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ─── two-column rows stack on mobile ───────────────────────────── */
+@media (max-width: 768px) {
+  .fs-row {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+}
+
+/* ─── section padding shrinks on mobile ─────────────────────────── */
+@media (max-width: 768px) {
+  .fs-section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  /* Sections that use inline padding via maxWidth wrapper */
+  .fs-section-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* ─── hero section mobile ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-hero {
+    padding-top: 120px !important;
+    padding-bottom: 72px !important;
+  }
+  .fs-hero-cursor-zone {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    margin-top: 48px !important;
+  }
+}
+
+/* ─── integration section mobile ────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-integration-inner {
+    padding-top: 72px !important;
+    padding-bottom: 72px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
+}
+
+/* ─── CTA section mobile ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-cta-inner {
+    padding: 56px 24px !important;
+    margin-left: 16px !important;
+    margin-right: 16px !important;
+  }
+}
+
+/* ─── pricing feature grid mobile ───────────────────────────────── */
+@media (max-width: 640px) {
+  .fs-pricing-features {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── testimonials grid mobile ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-testimonials-grid {
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+/* ─── footer mobile ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-footer-inner {
+    padding: 56px 20px 32px !important;
+  }
+  .fs-footer-bottom {
+    flex-direction: column !important;
+    gap: 8px !important;
+    text-align: center;
+  }
+}
+
+/* ─── ticker section mobile ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-ticker-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 56px !important;
+    padding-bottom: 24px !important;
+  }
+}
+
+/* ─── faq section mobile ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fs-faq-section {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 56px !important;
+    padding-bottom: 56px !important;
+  }
+  .fs-faq-q {
+    font-size: 17px !important;
+  }
+}
+
+/* ─── hero search form mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .fs-hero-search-form {
+    flex-wrap: wrap !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+  }
+  .fs-hero-search-select {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .fs-hero-search-divider {
+    display: none !important;
+  }
+  .fs-hero-search-input {
+    width: 100% !important;
+  }
+  .fs-hero-search-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+  }
+}
+
 @media (max-width: 640px) {
   .fs-grid-3,
   .fs-grid-2 {

@@ -50,3 +50,11 @@ export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.freeserp.
 export function appUrl(path = ""): string {
   return `${APP_URL}${path}`;
 }
+
+/**
+ * The freeserp API backend. The marketing-site SERP checker calls it directly
+ * from the browser (so the rate-limit + result IP-gate see the real visitor).
+ * Override per-env with NEXT_PUBLIC_BACKEND_URL; the backend's ALLOWED_ORIGINS
+ * must include this site's origin.
+ */
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3003";

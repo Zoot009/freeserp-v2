@@ -1,20 +1,202 @@
 "use client";
 
-import { useState } from "react";
-import { COLORS } from "@/components/site/constants";
-import { COUNTRIES } from "./data";
+import { useEffect, useRef, useState } from "react";
+import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
+import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
 
 type Device = "desktop" | "mobile";
+
+/** "whatsmyserp.com" → "Whatsmyserp" — the site-name line, like Google's. */
+function siteName(domain: string): string {
+  const base = domain.replace(/^www\./, "").split(".")[0] || domain;
+  return base.charAt(0).toUpperCase() + base.slice(1);
+}
+
+/** A URL → "domain › path › bits" breadcrumb, like Google's result URL line. */
+function breadcrumb(url: string): string {
+  try {
+    const u = new URL(url.startsWith("http") ? url : `https://${url}`);
+    const host = u.hostname.replace(/^www\./, "");
+    const segs = u.pathname.split("/").filter(Boolean);
+    return [host, ...segs].join(" › ");
+  } catch {
+    return url;
+  }
+}
+
+type Competitor = {
+  position: number;
+  domain: string;
+  url: string;
+  title: string;
+  snippet: string;
+};
+
+type CheckResult = {
+  position: number | null;
+  competitors: Competitor[];
+};
+
+type Phase =
+  | { kind: "idle" }
+  | { kind: "loading"; keyword: string }
+  | { kind: "polling"; keyword: string; checkId: string }
+  | { kind: "done"; keyword: string; domain: string; result: CheckResult }
+  | { kind: "error"; message: string; showSignup?: boolean }
+  | { kind: "timeout" };
+
+const POLL_INTERVAL_MS = 2500;
+const POLL_TIMEOUT_MS = 90_000;
 
 export function SerpForm() {
   const [domain, setDomain] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [country, setCountry] = useState("United States");
+  const [country, setCountry] = useState("in");
   const [device, setDevice] = useState<Device>("desktop");
-  const [submitted, setSubmitted] = useState<null | { domain: string; keyword: string; country: string; device: Device }>(null);
+  const [phase, setPhase] = useState<Phase>({ kind: "idle" });
 
+  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortedRef = useRef(false);
+
+  const clearTimers = () => {
+    if (pollTimerRef.current !== null) {
+      clearInterval(pollTimerRef.current);
+      pollTimerRef.current = null;
+    }
+    if (timeoutTimerRef.current !== null) {
+      clearTimeout(timeoutTimerRef.current);
+      timeoutTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      abortedRef.current = true;
+      clearTimers();
+    };
+  }, []);
+
+  const startPolling = (checkId: string, kw: string, dom: string) => {
+    abortedRef.current = false;
+
+    // Kick off the hard timeout
+    timeoutTimerRef.current = setTimeout(() => {
+      clearTimers();
+      if (!abortedRef.current) {
+        setPhase({ kind: "timeout" });
+      }
+    }, POLL_TIMEOUT_MS);
+
+    const doPoll = async () => {
+      if (abortedRef.current) return;
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/check/${checkId}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (abortedRef.current) return;
+
+        if (!res.ok) {
+          clearTimers();
+          setPhase({ kind: "error", message: `Polling error: ${res.status} ${res.statusText}` });
+          return;
+        }
+
+        const data = (await res.json()) as {
+          status: string;
+          error?: string;
+          position?: number | null;
+          competitors?: Competitor[];
+        };
+
+        if (abortedRef.current) return;
+
+        if (data.status === "COMPLETED") {
+          clearTimers();
+          setPhase({
+            kind: "done",
+            keyword: kw,
+            domain: dom,
+            result: {
+              position: data.position ?? null,
+              competitors: data.competitors ?? [],
+            },
+          });
+        } else if (data.status === "FAILED") {
+          clearTimers();
+          setPhase({ kind: "error", message: data.error ?? "The check failed. Please try again." });
+        }
+        // Otherwise keep polling
+      } catch {
+        if (abortedRef.current) return;
+        clearTimers();
+        setPhase({ kind: "error", message: "Network error while checking results. Please try again." });
+      }
+    };
+
+    // Poll immediately, then on interval
+    doPoll();
+    pollTimerRef.current = setInterval(doPoll, POLL_INTERVAL_MS);
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const kw = keyword.trim();
+    const dom = domain.trim();
+    if (!kw || !dom) return;
+
+    clearTimers();
+    setPhase({ kind: "loading", keyword: kw });
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ keyword: kw, domain: dom, location: country, device }),
+      });
+
+      if (res.status === 429) {
+        const data = (await res.json()) as { error?: string };
+        setPhase({
+          kind: "error",
+          message: data.error ?? "You've reached the free check limit.",
+          showSignup: true,
+        });
+        return;
+      }
+
+      if (!res.ok) {
+        setPhase({ kind: "error", message: `Server error: ${res.status} ${res.statusText}` });
+        return;
+      }
+
+      const data = (await res.json()) as { checkId?: string };
+      if (!data.checkId) {
+        setPhase({ kind: "error", message: "Unexpected response from server. Please try again." });
+        return;
+      }
+
+      setPhase({ kind: "polling", keyword: kw, checkId: data.checkId });
+      startPolling(data.checkId, kw, dom);
+    } catch {
+      setPhase({ kind: "error", message: "Could not reach the server. Check your connection and try again." });
+    }
+  };
+
+  const reset = () => {
+    abortedRef.current = true;
+    clearTimers();
+    setPhase({ kind: "idle" });
+  };
+
+  const isChecking = phase.kind === "loading" || phase.kind === "polling";
+  const submitDisabled = isChecking || !keyword.trim() || !domain.trim();
+
+  // ─── Form (always visible) + results panel rendered below it once done ────
   return (
-    <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
+    <>
+      <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
       <div className="fs-serp-halo" aria-hidden="true" />
       <div
         className="fs-serp-card"
@@ -27,12 +209,7 @@ export function SerpForm() {
           textAlign: "left",
         }}
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSubmitted({ domain, keyword, country, device });
-          }}
-        >
+        <form onSubmit={submit}>
           <div
             className="fs-form-grid"
             style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}
@@ -45,6 +222,7 @@ export function SerpForm() {
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
                 placeholder="example.com"
+                disabled={isChecking}
                 className="fs-serp-input"
                 style={inputStyle}
               />
@@ -57,6 +235,7 @@ export function SerpForm() {
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 placeholder="best running shoes"
+                disabled={isChecking}
                 className="fs-serp-input"
                 style={inputStyle}
               />
@@ -72,12 +251,30 @@ export function SerpForm() {
               <select
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
+                disabled={isChecking}
+                aria-label="Country"
                 className="fs-serp-input"
-                style={{ ...inputStyle, background: "#fff", appearance: "none", cursor: "pointer" }}
+                style={{
+                  ...inputStyle,
+                  background: "#fff",
+                  appearance: "none",
+                  cursor: isChecking ? "default" : "pointer",
+                }}
               >
-                {COUNTRIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                <optgroup label="Popular">
+                  {POPULAR_LOCATIONS.map((l) => (
+                    <option key={`p-${l.code}`} value={l.code}>
+                      {l.name} {flagFor(l.code)}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="All countries">
+                  {ALL_LOCATIONS.map((l) => (
+                    <option key={l.code} value={l.code}>
+                      {l.name} {flagFor(l.code)}
+                    </option>
+                  ))}
+                </optgroup>
               </select>
             </label>
             <div>
@@ -110,6 +307,7 @@ export function SerpForm() {
                     key={d}
                     type="button"
                     onClick={() => setDevice(d)}
+                    disabled={isChecking}
                     style={{
                       position: "relative",
                       background: "transparent",
@@ -118,7 +316,7 @@ export function SerpForm() {
                       fontSize: 14,
                       fontWeight: 600,
                       color: device === d ? "#fff" : COLORS.black,
-                      cursor: "pointer",
+                      cursor: isChecking ? "default" : "pointer",
                       textTransform: "capitalize",
                       fontFamily: "inherit",
                     }}
@@ -132,6 +330,7 @@ export function SerpForm() {
 
           <button
             type="submit"
+            disabled={submitDisabled}
             className="fs-serp-submit"
             style={{
               width: "100%",
@@ -142,43 +341,314 @@ export function SerpForm() {
               borderRadius: 12,
               fontSize: 15,
               fontWeight: 600,
-              cursor: "pointer",
+              cursor: submitDisabled ? "default" : "pointer",
+              letterSpacing: "-.1px",
+              boxShadow: "0 8px 22px rgba(4,84,255,.25)",
+              opacity: submitDisabled ? 0.65 : 1,
+              transition: "opacity .2s ease",
+            }}
+          >
+            {isChecking ? "Checking…" : "Check Rankings →"}
+          </button>
+        </form>
+
+        {/* Loading / polling status */}
+        {isChecking && (
+          <p
+            style={{
+              margin: "16px 0 0",
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: COLORS.gray,
+              textAlign: "center",
+            }}
+          >
+            Sit tight — checking &ldquo;{(phase as { keyword: string }).keyword}&rdquo;&hellip; this can take ~20–30
+            seconds.
+          </p>
+        )}
+
+        {/* 429 / rate-limit error */}
+        {phase.kind === "error" && (
+          <div
+            style={{
+              marginTop: 16,
+              padding: "12px 16px",
+              borderRadius: 10,
+              background: COLORS.redBg,
+              border: `1px solid ${COLORS.red}`,
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: COLORS.red,
+            }}
+          >
+            {phase.message}
+            {phase.showSignup && (
+              <>
+                {" "}
+                <a
+                  href={appUrl("/signup")}
+                  style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}
+                >
+                  Sign up for more checks
+                </a>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Timeout */}
+        {phase.kind === "timeout" && (
+          <div
+            style={{
+              marginTop: 16,
+              padding: "12px 16px",
+              borderRadius: 10,
+              background: COLORS.softGray,
+              border: `1px solid ${COLORS.border}`,
+              fontSize: 13,
+              lineHeight: 1.5,
+              color: COLORS.gray,
+            }}
+          >
+            This is taking longer than usual.{" "}
+            <a href={appUrl("/signup")} style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}>
+              Sign up to finish your check
+            </a>{" "}
+            and get full results.
+          </div>
+        )}
+      </div>
+      </div>
+
+      {phase.kind === "done" && (
+        <div style={{ marginTop: 24 }}>
+          <ResultsPanel phase={phase} onReset={reset} />
+        </div>
+      )}
+    </>
+  );
+}
+
+// ─── Results panel ─────────────────────────────────────────────────────────────
+
+type DonePhase = {
+  kind: "done";
+  keyword: string;
+  domain: string;
+  result: CheckResult;
+};
+
+function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => void }) {
+  const { keyword, domain, result } = phase;
+  const top10 = result.competitors.slice(0, 10);
+
+  return (
+    <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
+      <div className="fs-serp-halo" aria-hidden="true" />
+      <div
+        className="fs-serp-card"
+        style={{
+          position: "relative",
+          background: "#fff",
+          borderRadius: 20,
+          padding: 28,
+          boxShadow: "0 20px 60px rgba(0,0,0,.18)",
+          textAlign: "left",
+        }}
+      >
+        {/* Summary */}
+        <p
+          style={{
+            margin: "0 0 20px",
+            fontSize: 16,
+            fontWeight: 600,
+            color: COLORS.black,
+            lineHeight: 1.4,
+          }}
+        >
+          {result.position !== null ? (
+            <>
+              <span style={{ color: COLORS.blue }}>{domain}</span> ranks{" "}
+              <span style={{ color: COLORS.green }}>#{result.position}</span> for &ldquo;{keyword}&rdquo;
+            </>
+          ) : (
+            <>
+              <span style={{ color: COLORS.blue }}>{domain}</span>{" "}
+              isn&apos;t in the results we scanned for &ldquo;{keyword}&rdquo;
+            </>
+          )}
+        </p>
+
+        {/* Results list — styled like a Google SERP */}
+        {top10.length === 0 ? (
+          <p style={{ fontSize: 14, color: COLORS.gray, margin: "0 0 20px" }}>
+            No results returned for this keyword.
+          </p>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 20 }}>
+            {top10.map((row) => {
+              const isOwn = row.domain.toLowerCase() === domain.toLowerCase();
+              return (
+                <div
+                  key={row.position}
+                  className="fs-serp-result-row"
+                  style={{
+                    padding: "14px 16px",
+                    borderRadius: 12,
+                    background: isOwn ? COLORS.blueBg : "transparent",
+                    border: `1px solid ${isOwn ? COLORS.blue : "transparent"}`,
+                  }}
+                >
+                  {/* site line — favicon + name + URL breadcrumb */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(row.domain)}`}
+                      alt=""
+                      width={28}
+                      height={28}
+                      onError={(e) => {
+                        e.currentTarget.style.visibility = "hidden";
+                      }}
+                      style={{
+                        flexShrink: 0,
+                        borderRadius: "50%",
+                        border: `1px solid ${COLORS.border}`,
+                        background: "#fff",
+                      }}
+                    />
+                    <div style={{ minWidth: 0, lineHeight: 1.3 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 14, color: COLORS.black }}>
+                          {siteName(row.domain)}
+                        </span>
+                        {isOwn && (
+                          <span
+                            style={{
+                              fontSize: 10,
+                              fontWeight: 700,
+                              letterSpacing: ".06em",
+                              textTransform: "uppercase",
+                              color: "#fff",
+                              background: COLORS.blue,
+                              padding: "2px 7px",
+                              borderRadius: 100,
+                            }}
+                          >
+                            Your site
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 12.5,
+                          color: COLORS.gray,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {breadcrumb(row.url)}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* title — clickable, like a Google result link */}
+                  <a
+                    href={row.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-block",
+                      margin: "6px 0 0",
+                      fontSize: 19,
+                      fontWeight: 500,
+                      color: COLORS.blue,
+                      lineHeight: 1.3,
+                      textDecoration: "none",
+                      letterSpacing: "-.2px",
+                    }}
+                  >
+                    {row.title || row.domain}
+                  </a>
+
+                  {/* snippet */}
+                  {row.snippet && (
+                    <p
+                      style={{
+                        margin: "4px 0 0",
+                        fontSize: 14,
+                        color: COLORS.gray,
+                        lineHeight: 1.55,
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {row.snippet}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Login gate */}
+        <div
+          style={{
+            padding: "20px 22px",
+            borderRadius: 12,
+            border: `1px solid ${COLORS.border}`,
+            background: COLORS.softGray,
+            textAlign: "center",
+          }}
+        >
+          <p style={{ margin: "0 0 14px", fontSize: 14, lineHeight: 1.5, color: COLORS.gray }}>
+            This free check scans just the first page or two of results. Log in to see the full
+            report and competitor analysis.
+          </p>
+          <a
+            href={appUrl("/login")}
+            style={{
+              display: "inline-block",
+              background: COLORS.blue,
+              color: "#fff",
+              padding: "13px 28px",
+              borderRadius: 10,
+              fontSize: 15,
+              fontWeight: 600,
+              textDecoration: "none",
               letterSpacing: "-.1px",
               boxShadow: "0 8px 22px rgba(4,84,255,.25)",
             }}
           >
-            Check Rankings →
-          </button>
-        </form>
+            Log in to view the full report
+          </a>
+        </div>
 
-        {submitted && (
-          <div
+        {/* Reset */}
+        <p style={{ margin: "16px 0 0", textAlign: "center", fontSize: 13 }}>
+          <button
+            type="button"
+            onClick={onReset}
             style={{
-              marginTop: 20,
-              padding: 18,
-              borderRadius: 12,
-              background: COLORS.softGray,
-              display: "grid",
-              gridTemplateColumns: "auto 1fr",
-              gap: "8px 16px",
-              fontSize: 14,
-              color: COLORS.black,
+              background: "none",
+              border: "none",
+              color: COLORS.blue,
+              cursor: "pointer",
+              fontSize: 13,
+              fontWeight: 600,
+              textDecoration: "underline",
+              fontFamily: "inherit",
+              padding: 0,
             }}
           >
-            <span style={{ color: COLORS.gray }}>Domain:</span>
-            <span style={{ fontWeight: 500 }}>{submitted.domain}</span>
-            <span style={{ color: COLORS.gray }}>Keyword:</span>
-            <span style={{ fontWeight: 500 }}>{submitted.keyword}</span>
-            <span style={{ color: COLORS.gray }}>Country:</span>
-            <span style={{ fontWeight: 500 }}>{submitted.country}</span>
-            <span style={{ color: COLORS.gray }}>Device:</span>
-            <span style={{ fontWeight: 500, textTransform: "capitalize" }}>{submitted.device}</span>
-            <span style={{ color: COLORS.gray }}>Status:</span>
-            <span style={{ color: COLORS.blue, fontWeight: 600 }}>
-              Connect the FreeSERP API to run a live check
-            </span>
-          </div>
-        )}
+            Check another keyword
+          </button>
+        </p>
       </div>
     </div>
   );

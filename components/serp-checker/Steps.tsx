@@ -42,17 +42,6 @@ function PlayIcon() {
     </svg>
   );
 }
-function GlobeIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M2 12h20" />
-      <path d="M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20" />
-    </svg>
-  );
-}
-
 export function Steps() {
   const [active, setActive] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
@@ -140,6 +129,7 @@ export function Steps() {
   return (
     <section
       id="how-it-works"
+      className="fs-steps-section"
       style={{
         position: "relative",
         margin: "100px auto 0",
@@ -219,51 +209,6 @@ export function Steps() {
                     />
                   ))}
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 7,
-                    minWidth: 0,
-                    maxWidth: "62%",
-                    padding: "5px 12px",
-                    borderRadius: 8,
-                    border: `1px solid ${COLORS.border}`,
-                    background: "#fff",
-                    fontSize: 12,
-                    fontFamily: "var(--font-geist-mono)",
-                  }}
-                >
-                  <span style={{ color: COLORS.subtle, flexShrink: 0, display: "inline-flex" }}>
-                    <GlobeIcon />
-                  </span>
-                  <span style={{ color: COLORS.gray, flexShrink: 0 }}>
-                    {step.route.startsWith("/dashboard") ? "app.freeserp.com" : "freeserp.com"}
-                  </span>
-                  <span
-                    style={{
-                      color: "#0f1018",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {step.route}
-                  </span>
-                </div>
-                <span
-                  style={{
-                    width: 32,
-                    textAlign: "right",
-                    fontSize: 9,
-                    fontFamily: "var(--font-geist-mono)",
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: COLORS.subtle,
-                  }}
-                >
-                  live
-                </span>
               </div>
 
               {/* screenshot — all steps stacked, crossfaded on opacity so
@@ -298,6 +243,7 @@ export function Steps() {
 
             {/* ─── caption + controls ─── */}
             <div
+              className="fs-tour-controls"
               style={{
                 position: "relative",
                 zIndex: 1,
@@ -309,7 +255,7 @@ export function Steps() {
                 gap: 20,
               }}
             >
-              <div style={{ flex: "1 1 320px", minWidth: 0 }}>
+              <div className="fs-tour-caption" style={{ flex: "1 1 320px", minWidth: 0 }}>
                 <div
                   style={{
                     fontSize: 11,

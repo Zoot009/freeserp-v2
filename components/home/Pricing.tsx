@@ -13,7 +13,7 @@ export function Pricing() {
   const [billing, setBilling] = useState<Billing>("monthly");
 
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
+    <section className="fs-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
       <SectionHead
         tag="WHY FREE?"
         title="No paywalls. Ever."
@@ -138,6 +138,7 @@ export function Pricing() {
                 </div>
               </div>
               <div
+                className="fs-pricing-features"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",

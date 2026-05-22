@@ -9,7 +9,7 @@ const STATS = [
 
 export function UsageStats() {
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 0" }}>
+    <section className="fs-serp-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 0" }}>
       <div className="fs-grid-3">
         {STATS.map((s, i) => (
           <Reveal key={s.l} delay={i * 0.08}>

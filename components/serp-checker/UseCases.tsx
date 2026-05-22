@@ -9,6 +9,7 @@ export function UseCases() {
   return (
     <section
       id="who-uses"
+      className="fs-serp-section"
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead

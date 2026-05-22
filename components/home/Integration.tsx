@@ -16,6 +16,7 @@ export function Integration() {
   return (
     <section style={{ padding: "80px 0" }}>
       <div
+        className="fs-integration-inner"
         style={{
           maxWidth: 1280,
           margin: "0 auto",

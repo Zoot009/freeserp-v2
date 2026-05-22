@@ -21,7 +21,7 @@ function StarRow() {
 
 export function Testimonials() {
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
+    <section className="fs-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
       <SectionHead
         tag="TESTIMONIALS"
         title="Trusted by SEOs worldwide"
@@ -29,7 +29,7 @@ export function Testimonials() {
       />
 
       <div
-        className="fs-row"
+        className="fs-row fs-testimonials-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",

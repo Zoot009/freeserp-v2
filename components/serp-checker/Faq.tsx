@@ -7,30 +7,34 @@ export function Faq() {
   return (
     <section
       id="faq"
+      className="fs-serp-section"
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
-      <div className="fs-row" style={{ display: "flex", gap: 80, alignItems: "flex-start" }}>
-        <Reveal style={{ flex: "0 0 33%" }}>
-          <Tag text="Common Questions" />
-          <h2
-            style={{
-              fontSize: "clamp(28px, 4vw, 52px)",
-              fontWeight: 600,
-              letterSpacing: "-0.04em",
-              lineHeight: 1.1,
-              margin: "20px 0 16px",
-            }}
-          >
-            Frequently asked questions
-          </h2>
-          <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5 }}>
-            Common questions about SERP checking, accuracy, and tracking. Still stuck? Email
-            support@freeserp.com.
-          </p>
-        </Reveal>
+      <div className="fs-row fs-faq-layout" style={{ display: "flex", gap: 80, alignItems: "flex-start" }}>
+        {/* sidebar: tag + title + intro */}
+        <div className="fs-faq-sidebar" style={{ flex: "0 0 33%", minWidth: 0 }}>
+          <Reveal>
+            <Tag text="Common Questions" />
+            <h2
+              style={{
+                fontSize: "clamp(28px, 4vw, 52px)",
+                fontWeight: 600,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+                margin: "20px 0 16px",
+              }}
+            >
+              Frequently asked questions
+            </h2>
+            <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5 }}>
+              Common questions about SERP checking, accuracy, and tracking. Still stuck? Email
+              support@freeserp.com.
+            </p>
+          </Reveal>
+        </div>
 
         {/* Every answer is always visible — no accordion to expand. */}
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           {FAQ_ITEMS.map((f, i) => (
             <Reveal key={f.q} delay={i * 0.04}>
               <div

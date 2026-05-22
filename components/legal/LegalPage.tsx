@@ -77,8 +77,8 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
       <Nav />
 
       {/* Dark header — sits behind the fixed nav so its white text stays legible. */}
-      <header style={{ background: "#0a0a14", paddingTop: 140, paddingBottom: 72 }}>
-        <div style={{ maxWidth: 880, margin: "0 auto", padding: "0 40px" }}>
+      <header className="fs-legal-header" style={{ background: "#0a0a14", paddingTop: 140, paddingBottom: 72 }}>
+        <div className="fs-legal-inner" style={{ maxWidth: 880, margin: "0 auto", padding: "0 40px" }}>
           <Reveal>
             <span
               style={{
@@ -129,7 +129,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
         </div>
       </header>
 
-      <main style={{ maxWidth: 880, margin: "0 auto", padding: "60px 40px 110px" }}>
+      <main className="fs-legal-main fs-legal-inner" style={{ maxWidth: 880, margin: "0 auto", padding: "60px 40px 110px" }}>
         {doc.sections.map((s, i) => (
           <Reveal key={s.heading} delay={Math.min(i, 6) * 0.03}>
             <section style={{ marginBottom: 40 }}>

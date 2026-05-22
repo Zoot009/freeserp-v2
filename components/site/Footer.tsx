@@ -20,7 +20,7 @@ const FOOTER_HREFS: Record<string, string> = {
 export function Footer() {
   return (
     <footer style={{ background: "#0a0a14", color: "#fff" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
+      <div className="fs-footer-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
         <div
           className="fs-row"
           style={{
@@ -67,6 +67,7 @@ export function Footer() {
         </div>
 
         <div
+          className="fs-footer-bottom"
           style={{
             marginTop: 60,
             paddingTop: 24,

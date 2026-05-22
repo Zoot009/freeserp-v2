@@ -7,6 +7,7 @@ export function Benefits() {
   return (
     <section
       id="how-it-works"
+      className="fs-section"
       style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px", scrollMarginTop: 80 }}
     >
       <SectionHead

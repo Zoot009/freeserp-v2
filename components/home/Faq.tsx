@@ -34,7 +34,7 @@ function FaqItem({
           justifyContent: "space-between",
         }}
       >
-        <h4 style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.4px", margin: 0 }}>
+        <h4 className="fs-faq-q" style={{ fontSize: 20, fontWeight: 500, letterSpacing: "-0.4px", margin: 0 }}>
           {q}
         </h4>
         <svg
@@ -80,7 +80,7 @@ export function Faq() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
+    <section className="fs-faq-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
       <div
         className="fs-row"
         style={{ display: "flex", gap: 80, alignItems: "flex-start" }}

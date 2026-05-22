@@ -1,3 +1,68 @@
+/* ─── Mobile responsiveness ──────────────────────────────────────────
+   Inline styles can't hold media queries; we use !important here to
+   override them at the mobile breakpoints.
+   ------------------------------------------------------------------ */
+
+/* ── Blog index page: hero + main padding ── */
+@media (max-width: 640px) {
+  .fs-blog-hero {
+    padding-top: 100px !important;
+    padding-bottom: 56px !important;
+  }
+  .fs-blog-hero-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .fs-blog-main {
+    padding: 40px 20px 72px !important;
+  }
+}
+
+/* ── Blog post page: hero + main padding ── */
+@media (max-width: 640px) {
+  .fs-blog-post-hero {
+    padding-top: 100px !important;
+    padding-bottom: 48px !important;
+  }
+  .fs-blog-post-hero-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .fs-blog-post-main {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
+/* ── Blog post body: code blocks must scroll, not overflow ── */
+@media (max-width: 640px) {
+  .fs-blog-post-main pre {
+    overflow-x: auto !important;
+    max-width: 100% !important;
+  }
+  /* Ensure embedded iframes (YouTube/Vimeo) stay in viewport */
+  .fs-blog-post-main iframe {
+    max-width: 100% !important;
+  }
+}
+
+/* ── Legal pages: header + main padding ── */
+@media (max-width: 640px) {
+  .fs-legal-header {
+    padding-top: 100px !important;
+    padding-bottom: 48px !important;
+  }
+  .fs-legal-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .fs-legal-main {
+    padding-top: 40px !important;
+    padding-bottom: 72px !important;
+  }
+}
+
 /* ─── blog ───────────────────────────────────────────────────────── */
 .fs-clamp-2 {
   display: -webkit-box;

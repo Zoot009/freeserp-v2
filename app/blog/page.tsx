@@ -46,8 +46,8 @@ export default async function BlogPage() {
     <>
       <Nav currentNav="Blog" />
 
-      <header style={heroSection}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+      <header className="fs-blog-hero" style={heroSection}>
+        <div className="fs-blog-hero-inner" style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
           <div
             style={{
               fontFamily: "var(--font-geist-mono)",
@@ -86,7 +86,7 @@ export default async function BlogPage() {
         </div>
       </header>
 
-      <main style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 40px 110px" }}>
+      <main className="fs-blog-main" style={{ maxWidth: 1200, margin: "0 auto", padding: "72px 40px 110px" }}>
         <PostsGrid posts={posts} />
       </main>
 

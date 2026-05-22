@@ -36,7 +36,7 @@ export async function Blog() {
   if (posts.length === 0) return null;
 
   return (
-    <section style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
+    <section className="fs-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
       <SectionHead
         tag="BLOG"
         title="SEO playbooks, SERP deep-dives, and ranking tactics"

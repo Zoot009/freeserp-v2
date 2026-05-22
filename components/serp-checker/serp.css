@@ -1,3 +1,99 @@
+/* ─── Mobile responsiveness ──────────────────────────────────────────
+   Inline styles can't hold media queries; we use !important here to
+   override them at the mobile breakpoints.
+   ------------------------------------------------------------------ */
+
+/* ── SerpForm: stack the 2-column grid on phones ── */
+@media (max-width: 640px) {
+  .fs-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+  /* Reduce card padding so the form breathes on 360 px screens */
+  .fs-serp-card {
+    padding: 18px !important;
+  }
+  /* Google-style SERP result rows: let URLs wrap / ellipsis already
+     applied via inline overflow:hidden, so this just ensures the row
+     padding doesn't push things off-screen */
+  .fs-serp-result-row {
+    padding: 12px 10px !important;
+  }
+}
+
+/* ── Hero section: shrink top/bottom padding on phones ── */
+@media (max-width: 640px) {
+  .fs-serp-hero {
+    padding-top: 100px !important;
+    padding-bottom: 64px !important;
+  }
+  .fs-serp-hero-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* ── Generic section padding shrink on phones ── */
+@media (max-width: 640px) {
+  .fs-serp-section {
+    padding-top: 56px !important;
+    padding-bottom: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+/* ── Steps section ── */
+@media (max-width: 640px) {
+  .fs-steps-section {
+    margin-top: 40px !important;
+    padding: 56px 20px 56px !important;
+  }
+  /* Caption + controls: stack vertically */
+  .fs-tour-controls {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .fs-tour-caption {
+    flex: none !important;
+  }
+}
+/* At 640px and below, override to a 3-col scrollable row so all chips stay usable */
+@media (max-width: 640px) {
+  .fs-tour-strip {
+    grid-template-columns: repeat(3, minmax(90px, 1fr)) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+  }
+}
+
+/* ── Cta: reduce inner padding ── */
+@media (max-width: 640px) {
+  .fs-cta-inner {
+    padding: 40px 24px !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* ── WhyChecker: the inline 2-col grid inside fs-row ── */
+@media (max-width: 640px) {
+  .fs-why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* ── Faq: side-by-side flex → stack ── */
+@media (max-width: 640px) {
+  .fs-faq-layout {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  .fs-faq-sidebar {
+    flex: none !important;
+  }
+}
+
 /* SERP form entrance + idle + hover animations */
 @keyframes fs-serp-in {
   0%   { opacity: 0; transform: translateY(28px) scale(.96); }

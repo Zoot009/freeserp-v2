@@ -8,6 +8,7 @@ export function WhyChecker() {
   return (
     <section
       id="why-checker"
+      className="fs-serp-section"
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead
@@ -15,7 +16,7 @@ export function WhyChecker() {
         title="Why use a free SERP checker instead of Google?"
       />
       <div
-        className="fs-row"
+        className="fs-row fs-why-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",

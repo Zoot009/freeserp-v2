@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Reveal } from "@/components/site/Reveal";
 import { COLORS } from "@/components/site/constants";
-import { HeroSearch } from "./HeroSearch";
 
 export function Hero() {
   return (
     <header
+      className="fs-hero"
       style={{
         paddingTop: 160,
         paddingBottom: 120,
@@ -72,11 +73,31 @@ export function Hero() {
           marketers, and developers.
         </p>
 
-        <HeroSearch />
+        <Link
+          href="/serp-checker"
+          className="fs-btn"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            marginTop: 36,
+            background: "#000",
+            color: "#fff",
+            padding: "16px 34px",
+            borderRadius: 100,
+            fontSize: 15,
+            fontWeight: 600,
+            letterSpacing: "-0.1px",
+            textDecoration: "none",
+            boxShadow: "0 14px 34px rgba(8, 32, 96, .28)",
+          }}
+        >
+          Free SERP Checker
+        </Link>
       </div>
 
       <div
         id="fs-cursor-zone"
+        className="fs-hero-cursor-zone"
         style={{
           maxWidth: 1360,
           margin: "90px auto 0",

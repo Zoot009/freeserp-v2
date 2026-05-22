@@ -8,6 +8,7 @@ export function Cta() {
   return (
     <section style={{ padding: "100px 0 80px" }}>
       <div
+        className="fs-cta-inner"
         style={{
           maxWidth: 1280,
           margin: "0 auto",
