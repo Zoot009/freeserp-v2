@@ -277,17 +277,6 @@ export function Steps() {
                 >
                   {step.title}
                 </h3>
-                <p
-                  style={{
-                    margin: "8px 0 0",
-                    maxWidth: 620,
-                    fontSize: 15,
-                    lineHeight: 1.6,
-                    color: COLORS.gray,
-                  }}
-                >
-                  {step.desc}
-                </p>
               </div>
 
               <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>

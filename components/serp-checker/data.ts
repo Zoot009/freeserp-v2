@@ -68,7 +68,6 @@ export type Step = {
   label: string;
   route: string;
   title: string;
-  desc: string;
   src: string;
   alt: string;
   w: number;
@@ -80,8 +79,7 @@ export const STEPS: Step[] = [
     n: "01",
     label: "Create project",
     route: "/dashboard/projects",
-    title: "Create a project for the domain you want to track",
-    desc: "Add your domain, pick the country and device, and FreeSERP starts pulling rankings on a daily schedule. No credit card, no setup — just paste the URL.",
+    title: "Create a project for the domain you want to track",    
     src: "/serp-checker/step-1-create-project.png",
     alt: "FreeSERP serp-checker step 1 — creating a new project to track a domain across Google rankings",
     w: 1440,
@@ -91,8 +89,7 @@ export const STEPS: Step[] = [
     n: "02",
     label: "Track keywords",
     route: "/dashboard/keywords",
-    title: "Watch your keywords ranked, ranked daily",
-    desc: "Every tracked keyword gets a fresh position, change delta, search volume, traffic estimate, SERP features, and a 30-day trend sparkline — all on one screen.",
+    title: "Watch your keywords ranked, ranked daily",    
     src: "/serp-checker/step-2-track-keywords.png",
     alt: "FreeSERP serp-checker step 2 — tracked keywords table with positions, change deltas, volume and SERP features",
     w: 1438,
@@ -102,8 +99,7 @@ export const STEPS: Step[] = [
     n: "03",
     label: "Spy on competitors",
     route: "/dashboard/competitor-analysis",
-    title: "Spy on competitors who outrank you",
-    desc: "See every domain that shares keywords with you. Drill into shared rankings, gaps where you don't rank but they do, and the exact pages eating your traffic.",
+    title: "Spy on competitors who outrank you",    
     src: "/serp-checker/step-3-competitor-spy.png",
     alt: "FreeSERP serp-checker step 3 — competitor spy dashboard showing shared keywords, content gaps and competing domains",
     w: 1436,
@@ -113,8 +109,7 @@ export const STEPS: Step[] = [
     n: "04",
     label: "One-off check",
     route: "/serp-checker",
-    title: "Run a one-off SERP check, anytime",
-    desc: "Need a fast unbiased check without setting up tracking? The SERP Checker tool returns a depersonalized top-100 result in under 10 seconds with the full SERP composition.",
+    title: "Run a one-off SERP check, anytime",    
     src: "/serp-checker/step-4-run-serp-check.png",
     alt: "FreeSERP serp-checker step 4 — one-off SERP Checker tool with domain, keyword, country and device inputs",
     w: 1430,
@@ -124,8 +119,7 @@ export const STEPS: Step[] = [
     n: "05",
     label: "Catch movements",
     route: "/dashboard",
-    title: "Catch every movement before your client does",
-    desc: "Latest Movements highlights the biggest gains and drops in the last 24 hours — sorted, sparkline'd, and filterable so you spot a Google update before someone Slacks you about it.",
+    title: "Catch every movement before your client does",    
     src: "/serp-checker/step-5-monitor-movements.png",
     alt: "FreeSERP serp-checker step 5 — latest movements feed with biggest rank gains and drops over 24 hours",
     w: 1431,
