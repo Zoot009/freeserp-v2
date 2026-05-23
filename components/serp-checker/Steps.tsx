@@ -133,18 +133,19 @@ export function Steps() {
       style={{
         position: "relative",
         margin: "100px auto 0",
-        padding: "100px 40px 100px",
+        padding: "100px 0 100px",
         scrollMarginTop: 80,
         overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1360, margin: "0 auto", padding: "0 40px" }}>
         <SectionHead
-          title="How The Free SERP Checker Tool Works"
+          title="How The Free SERP Checker Works"
           sub={`From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
         />
+      </div>
 
-        <Reveal style={{ maxWidth: 1000, margin: "56px auto 0" }}>
+        <Reveal style={{ margin: "56px auto 0", maxWidth: 1360 }}>
           <div
             onMouseEnter={() => {
               pausedRef.current = true;
@@ -208,32 +209,31 @@ export function Steps() {
                 </div>
               </div>
 
-              {/* screenshot — all steps stacked, crossfaded on opacity so
-                  switching never flashes an unloaded image */}
-              <div
-                style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: `${step.w} / ${step.h}`,
-                  background: "#fff",
-                }}
-              >
+              {/* screenshot — all steps stacked, crossfaded on opacity */}
+              <div style={{ position: "relative" }}>
                 {STEPS.map((s, i) => (
-                  <Image
+                  <div
                     key={s.src}
-                    src={s.src}
-                    alt={s.alt}
-                    title={s.title}
-                    fill
-                    priority={i === 0}
-                    sizes="(max-width: 1040px) 100vw, 960px"
                     style={{
-                      objectFit: "cover",
-                      objectPosition: "top center",
+                      position: i === 0 ? "relative" : "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
                       opacity: i === active ? 1 : 0,
                       transition: "opacity .45s ease",
                     }}
-                  />
+                  >
+                    <Image
+                      src={s.src}
+                      alt={s.alt}
+                      title={s.title}
+                      width={s.w}
+                      height={s.h}
+                      priority={i === 0}
+                      sizes="(max-width: 1360px) 100vw, 1360px"
+                      style={{ width: "100%", height: "auto", display: "block" }}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
@@ -372,7 +372,6 @@ export function Steps() {
             </div>
           </div>
         </Reveal>
-      </div>
     </section>
   );
 }
