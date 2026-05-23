@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Archivo, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { CursorBall } from "@/components/site/CursorBall";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -34,7 +33,6 @@ export default function RootLayout({
       className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CursorBall />
         {children}
         {/* gtag.js — single loader, multiple config() calls for both the
             Google Ads (AW-) and Google Analytics 4 (G-) tags. This is Google's
