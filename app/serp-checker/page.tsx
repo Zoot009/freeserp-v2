@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { Hero } from "@/components/serp-checker/Hero";
-import { UsageStats } from "@/components/serp-checker/UsageStats";
-import { Report } from "@/components/serp-checker/Report";
 import { Steps } from "@/components/serp-checker/Steps";
 import { WhyChecker } from "@/components/serp-checker/WhyChecker";
-import { Compare } from "@/components/serp-checker/Compare";
 import { UseCases } from "@/components/serp-checker/UseCases";
 import { Faq } from "@/components/serp-checker/Faq";
 import { Cta } from "@/components/serp-checker/Cta";
@@ -55,11 +52,8 @@ export default function SerpCheckerPage() {
 
       <Nav currentNav="Free SERP Checker" />
       <Hero />
-      <UsageStats />
       <Steps />
-      <Report />
       <WhyChecker />
-      <Compare />
       <UseCases />
       <Faq />
       <Cta />

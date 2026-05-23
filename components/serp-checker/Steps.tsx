@@ -140,8 +140,7 @@ export function Steps() {
     >
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
         <SectionHead
-          tag="How The Free SERP Checker Tool Works"
-          title="Track. Analyze. Improve. Outrank."
+          title="How The Free SERP Checker Tool Works"
           sub={`From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
         />
 

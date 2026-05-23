@@ -13,7 +13,7 @@ export function WhyChecker() {
     >
       <SectionHead
         tag="Why It Matters"
-        title="Why use a free SERP checker instead of Google?"
+        title="Why use a free SERP checker?"
       />
       <div
         className="fs-row fs-why-grid"

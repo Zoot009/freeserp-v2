@@ -5,6 +5,7 @@ import { Ticker } from "@/components/home/Ticker";
 import { Features } from "@/components/home/Features";
 import { Pricing } from "@/components/home/Pricing";
 import { Benefits } from "@/components/home/Benefits";
+import { Compare } from "@/components/serp-checker/Compare";
 import { Integration } from "@/components/home/Integration";
 import { Testimonials } from "@/components/home/Testimonials";
 import { Blog } from "@/components/home/Blog";
@@ -20,6 +21,7 @@ export default function HomePage() {
       <Features />
       <Pricing />
       <Benefits />
+      <Compare />
       <Integration />
       <Testimonials />
       <Blog />

@@ -7,13 +7,13 @@ export function SectionHead({
   title,
   sub,
 }: {
-  tag: string;
+  tag?: string;
   title: string;
   sub?: string;
 }) {
   return (
     <Reveal style={{ maxWidth: 700, textAlign: "center", margin: "0 auto" }}>
-      <Tag text={tag} />
+      {tag && <Tag text={tag} />}
       <h2
         style={{
           fontSize: "clamp(28px, 4vw, 56px)",

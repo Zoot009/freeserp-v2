@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://freeserp.com"),
   title: "FreeSERP — Track Keyword Rankings for Free",
   description:
-    "Free SERP checker that tracks Google rankings in real time for any keyword, domain, country, and device. No credit card. No limits.",
+    "Free SERP checker instantly checks your website's keyword ranking position and graph search engine keyword ranking positions.",
 };
 
 export default function RootLayout({

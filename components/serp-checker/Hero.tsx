@@ -42,8 +42,7 @@ export function Hero() {
               opacity: 0.92,
             }}
           >
-            Check your real Google ranking for any keyword, in any country, on any device.
-            Depersonalized, top-100, free. No signup, no credit card, no limits.
+            Check your real SERP ranking for any keyword, in any country, on any device for free. No signup, no credit card, no limits.
           </p>
         </Reveal>
 
