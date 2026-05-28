@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { ArrowUpRight } from "@/components/site/icons";
+import { PricingCta } from "./PricingCta";
 
 const PAGE_URL = "https://freeserp.com/pricing";
 const DESCRIPTION =
@@ -87,17 +87,7 @@ export default function PricingPage() {
           the FreeSERP checker is 100% free — no signup, no credit card, no limits.
         </p>
 
-        <Link
-          href="/serp-checker"
-          className="fs-cta-btn"
-          style={{
-            background: "#fff",
-            color: "#000",
-            marginTop: 36,
-            padding: "15px 30px",
-            fontSize: 15,
-          }}
-        >
+        <PricingCta>
           Try the free SERP checker
           <span className="fs-arrow-wrap">
             <span className="fs-arrow fs-arrow-1">
@@ -107,7 +97,7 @@ export default function PricingPage() {
               <ArrowUpRight />
             </span>
           </span>
-        </Link>
+        </PricingCta>
       </main>
       <Footer />
     </>

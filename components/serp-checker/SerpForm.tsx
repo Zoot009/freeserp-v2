@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
+import { pushDataLayer } from "@/lib/gtm";
 
 type Device = "desktop" | "mobile";
 
@@ -117,6 +118,7 @@ export function SerpForm() {
 
         if (data.status === "COMPLETED") {
           clearTimers();
+          pushDataLayer({ event: "serp_check_completed" });
           setPhase({
             kind: "done",
             keyword: kw,
@@ -411,6 +413,7 @@ export function SerpForm() {
               <strong style={{ fontWeight: 600 }}>{phase.message}</strong>{" "}
               <a
                 href={appUrl("/signup")}
+                onClick={() => pushDataLayer({ event: "cta_click" })}
                 style={{ color: COLORS.blue, fontWeight: 700, textDecoration: "underline" }}
               >
                 Sign up for more checks
@@ -434,7 +437,11 @@ export function SerpForm() {
             }}
           >
             This is taking longer than usual.{" "}
-            <a href={appUrl("/signup")} style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}>
+            <a
+              href={appUrl("/signup")}
+              onClick={() => pushDataLayer({ event: "cta_click" })}
+              style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}
+            >
               Sign up to finish your check
             </a>{" "}
             and get full results.

@@ -1,6 +1,9 @@
+"use client";
+
 import { Reveal } from "@/components/site/Reveal";
 import { Tag } from "@/components/site/Tag";
 import { COLORS } from "@/components/site/constants";
+import { pushDataLayer } from "@/lib/gtm";
 import { INTEGRATIONS } from "./data";
 
 const POSITIONS: Array<React.CSSProperties> = [
@@ -89,10 +92,11 @@ export function Integration() {
                 opacity: 0.85,
               }}
             >
-              Real-time Google SERP data, daily rank updates, and city-level targeting — always free.
+              Real-time Google SERP data, daily rank updates, and city-level targeting — free to start.
             </p>
             <a
               href="/serp-checker"
+              onClick={() => pushDataLayer({ event: "cta_click" })}
               className="fs-btn"
               style={{
                 display: "inline-block",
