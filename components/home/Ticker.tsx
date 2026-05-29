@@ -21,7 +21,7 @@ export function Ticker() {
           margin: "0 0 32px",
         }}
       >
-        50M+ Keywords · 190 Countries · Daily Updates · Free Forever
+        50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available
       </p>
       <div
         style={{

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { COLORS, appUrl } from "@/components/site/constants";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
+import { pushDataLayer } from "@/lib/gtm";
 
 export function HeroSearch() {
   const [keyword, setKeyword] = useState("");
@@ -14,6 +15,7 @@ export function HeroSearch() {
     const kw = keyword.trim();
     if (!kw || checking) return;
     setChecking(true);
+    pushDataLayer({ event: "cta_click" });
     // The marketing site doesn't run checks itself — hand the visitor to the
     // app's sign-up page, carrying the keyword + country for the app to use.
     setTimeout(() => {

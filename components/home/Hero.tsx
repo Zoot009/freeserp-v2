@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/site/Reveal";
 import { COLORS } from "@/components/site/constants";
+import { pushDataLayer } from "@/lib/gtm";
 
 export function Hero() {
   return (
@@ -75,6 +78,7 @@ export function Hero() {
 
         <Link
           href="/serp-checker"
+          onClick={() => pushDataLayer({ event: "cta_click" })}
           className="fs-btn"
           style={{
             display: "inline-flex",

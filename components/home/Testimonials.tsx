@@ -135,10 +135,9 @@ export function Testimonials() {
             <p
               style={{ fontSize: 17, lineHeight: 1.5, margin: "0 0 auto", paddingBottom: 28 }}
             >
-              &quot;Free SERP is the rare tool that&apos;s genuinely free without feeling
-              stripped down. Real-time Google data, daily rank tracking, and AI keyword
-              clusters — the same intelligence the $999/mo enterprise tools sell, accessible
-              to every solo SEO.&quot;
+              &quot;Free SERP delivers the same intelligence the $999/mo enterprise tools
+              sell — the Free tier is genuinely useful for solo work, and Pro is the
+              cheapest serious tier I&apos;ve seen.&quot;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <Image

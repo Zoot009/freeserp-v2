@@ -5,6 +5,7 @@ import { Reveal } from "@/components/site/Reveal";
 import { SectionHead } from "@/components/site/SectionHead";
 import { CheckIcon } from "@/components/site/icons";
 import { COLORS, appUrl } from "@/components/site/constants";
+import { pushDataLayer } from "@/lib/gtm";
 import { PLANS } from "./data";
 
 type Billing = "monthly" | "yearly";
@@ -16,8 +17,8 @@ export function Pricing() {
     <section className="fs-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px" }}>
       <SectionHead
         tag="WHY FREE?"
-        title="No paywalls. Ever."
-        sub="While others charge $99–$999/month for basic SERP tracking, we believe keyword research should be free for everyone. No credit card. No limits. No BS."
+        title="Free to start. Pro when you scale."
+        sub="Most SERP tools charge $99–$999/month. We let you do real keyword research on a generous free tier, and keep Pro affordable when you outgrow it."
       />
 
       <Reveal style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>
@@ -109,6 +110,7 @@ export function Pricing() {
                 >
                   <a
                     href={appUrl("/signup")}
+                    onClick={() => pushDataLayer({ event: "cta_click" })}
                     className="fs-btn"
                     style={{
                       display: "inline-block",

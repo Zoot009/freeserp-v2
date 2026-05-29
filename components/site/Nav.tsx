@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useScrolled } from "./hooks";
 import { NAV, navHref, appUrl, type NavItem } from "./constants";
 import { ArrowUpRight } from "./icons";
+import { pushDataLayer } from "@/lib/gtm";
 
 export function Nav({ currentNav }: { currentNav?: NavItem }) {
   const scrolled = useScrolled(40);
@@ -82,7 +83,12 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
             ))}
           </div>
 
-          <a href={appUrl("/signup")} className="fs-cta-btn fs-nav-cta" style={{ background: "#000", color: "#fff" }}>
+          <a
+            href={appUrl("/signup")}
+            onClick={() => pushDataLayer({ event: "cta_click" })}
+            className="fs-cta-btn fs-nav-cta"
+            style={{ background: "#000", color: "#fff" }}
+          >
             Get started
             <span className="fs-arrow-wrap">
               <span className="fs-arrow fs-arrow-1">
@@ -166,7 +172,10 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
             ))}
             <a
               href={appUrl("/signup")}
-              onClick={closeMenu}
+              onClick={() => {
+                pushDataLayer({ event: "cta_click" });
+                closeMenu();
+              }}
               className="fs-cta-btn"
               style={{
                 background: "#0454ff",

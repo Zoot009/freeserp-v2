@@ -3,6 +3,7 @@
 import { Reveal } from "@/components/site/Reveal";
 import { SparkleIcon } from "@/components/site/icons";
 import { COLORS, appUrl } from "@/components/site/constants";
+import { pushDataLayer } from "@/lib/gtm";
 
 export function Cta() {
   return (
@@ -69,6 +70,7 @@ export function Cta() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
+                pushDataLayer({ event: "cta_click" });
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="fs-btn"
@@ -86,6 +88,7 @@ export function Cta() {
             </a>
             <a
               href={appUrl("/signup")}
+              onClick={() => pushDataLayer({ event: "cta_click" })}
               className="fs-btn"
               style={{
                 display: "inline-block",

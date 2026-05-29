@@ -57,13 +57,13 @@ export const BENEFITS = [
 export const PLANS = {
   monthly: [
     {
-      name: "Free Forever",
+      name: "Free",
       price: 0,
-      desc: "Everything you need to research keywords, track rankings, and analyze SERPs — no credit card required.",
-      cta: "Start Tracking for Free",
+      desc: "Start researching keywords and tracking rankings with no credit card. Built for solo SEOs and side projects.",
+      cta: "Start for Free",
       featured: false,
       features: [
-        "Unlimited keyword lookups",
+        "20 SERP searches per day",
         "50M+ indexed keywords",
         "190+ countries supported",
         "Daily rank updates",
@@ -72,30 +72,30 @@ export const PLANS = {
       ],
     },
     {
-      name: "Always Free",
-      price: 0,
-      desc: "No paywalls. No trials. No upsells. Same powerful SERP intelligence, billed monthly or yearly — always $0.",
-      cta: "Start Tracking for Free",
+      name: "Pro",
+      price: 20,
+      desc: "Higher daily limits and full SERP intelligence for agencies, in-house teams, and serious operators.",
+      cta: "Upgrade to Pro",
       featured: true,
       features: [
-        "Unlimited credits",
+        "75 SERP searches per day",
         "Real-time Google SERP data",
         "AI-powered keyword clusters",
         "Search intent grouping",
         "API access included",
-        "Email support",
+        "Priority email support",
       ],
     },
   ],
   yearly: [
     {
-      name: "Free Forever",
+      name: "Free",
       price: 0,
-      desc: "Everything you need to research keywords, track rankings, and analyze SERPs — no credit card required.",
-      cta: "Start Tracking for Free",
+      desc: "Start researching keywords and tracking rankings with no credit card. Built for solo SEOs and side projects.",
+      cta: "Start for Free",
       featured: false,
       features: [
-        "Unlimited keyword lookups",
+        "20 SERP searches per day",
         "50M+ indexed keywords",
         "190+ countries supported",
         "Daily rank updates",
@@ -104,18 +104,18 @@ export const PLANS = {
       ],
     },
     {
-      name: "Always Free",
-      price: 0,
-      desc: "No paywalls. No trials. No upsells. Same powerful SERP intelligence, billed monthly or yearly — always $0.",
-      cta: "Start Tracking for Free",
+      name: "Pro",
+      price: 200,
+      desc: "Higher daily limits and full SERP intelligence for agencies, in-house teams, and serious operators.",
+      cta: "Upgrade to Pro",
       featured: true,
       features: [
-        "Unlimited credits",
+        "75 SERP searches per day",
         "Real-time Google SERP data",
         "AI-powered keyword clusters",
         "Search intent grouping",
         "API access included",
-        "Email support",
+        "Priority email support",
       ],
     },
   ],
@@ -132,7 +132,7 @@ export const INTEGRATIONS = [
 
 export const TESTIMONIALS = [
   {
-    text: "I cancelled my $299/mo SEO tool the day I found Free SERP. Same keyword data, same rank tracking, zero cost — it's wild that this exists.",
+    text: "I dropped a $299/mo SEO tool the day I found Free SERP. The free tier got me through my first month, and Pro at $20 is a no-brainer for the daily search headroom.",
     name: "Daniel Cooper",
     role: "Indie SEO Consultant",
     img: "https://framerusercontent.com/images/KcCMMECKZOgi4RCYPbRBT2B8u0.png",
@@ -173,7 +173,7 @@ export const FAQS = [
     a: "You can check SERP ranking by using a SERP checker tool to see where your website appears for a specific keyword.",
   },
   {
-    q: "Is Free SERP really free forever?",
-    a: "Yes — unlimited credits, unlimited keywords, no trial, no credit card. If you have more questions, email support@freeserp.com.",
+    q: "Is there a free plan?",
+    a: "Yes — the Free plan gives you 20 SERP searches per day with no credit card. If you need more headroom, Pro ($20/month) raises the limit to 75 searches per day. Questions? Email support@freeserp.com.",
   },
 ];

@@ -1,5 +1,8 @@
+"use client";
+
 import { Reveal } from "@/components/site/Reveal";
 import { COLORS, appUrl } from "@/components/site/constants";
+import { pushDataLayer } from "@/lib/gtm";
 
 export function Cta() {
   return (
@@ -39,7 +42,7 @@ export function Cta() {
                 fill="#fff"
               />
             </svg>
-            No paywalls · No credit card · Forever free
+            Free tier · No credit card · Pro from $20/mo
           </div>
           <h2
             style={{
@@ -65,11 +68,12 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            Unlimited keywords, daily updates, real-time Google SERP data — for SEOs,
-            marketers, and developers. No trials. No upsells.
+            20 free SERP searches a day, real-time Google data, daily rank updates — for
+            SEOs, marketers, and developers. Upgrade to Pro for 75/day when you need more.
           </p>
           <a
             href={appUrl("/signup")}
+            onClick={() => pushDataLayer({ event: "cta_click" })}
             className="fs-btn"
             style={{
               display: "inline-block",
