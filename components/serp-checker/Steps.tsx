@@ -140,7 +140,7 @@ export function Steps() {
     >
       <div style={{ maxWidth: 1360, margin: "0 auto", padding: "0 40px" }}>
         <SectionHead
-          title="How The Free SERP Checker Works"
+          title="How The Free Rank Tracker Works"
           sub={`From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
         />
       </div>
