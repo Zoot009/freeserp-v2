@@ -18,7 +18,7 @@ export function Pricing() {
       <SectionHead
         tag="WHY FREE?"
         title="Free to start. Pro when you scale."
-        sub="Most SERP tools charge $99–$999/month. We let you do real keyword research on a generous free tier, and keep Pro affordable when you outgrow it."
+        sub="Most SEO tools charge $99–$999/month. FreeSERP gives you real SERP rank tracking and competitor intelligence on a generous free tier, and keeps Pro affordable when you outgrow it."
       />
 
       <Reveal style={{ display: "flex", justifyContent: "center", marginTop: 40 }}>

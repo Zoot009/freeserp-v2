@@ -3,21 +3,21 @@ import { Reveal } from "@/components/site/Reveal";
 import { SectionHead } from "@/components/site/SectionHead";
 import { SparkleIcon } from "@/components/site/icons";
 import { COLORS } from "@/components/site/constants";
-import { USE_CASES } from "./data";
+import { WHO_USES } from "./data";
 
-export function UseCases() {
+export function WhoUses() {
   return (
     <section
       id="who-uses"
-      className="fs-serp-section"
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead
-        title="Who uses this free Rank Tracker?"
-        sub="The free rank tracker is built for anyone who needs accurate ranking data without paying for enterprise tools they will not fully use."
+        tag="Built For"
+        title="Who uses this free website ranking checker"
+        sub="Built for people who need accurate ranking reports without paying for enterprise tools they will not fully use."
       />
       <div className="fs-grid-3" style={{ marginTop: 56 }}>
-        {USE_CASES.map((u, i) => (
+        {WHO_USES.map((u, i) => (
           <Reveal key={u.title} delay={i * 0.1}>
             <div
               className="fs-card"
@@ -43,7 +43,7 @@ export function UseCases() {
                 {u.img ? (
                   <Image
                     src={u.img}
-                    alt={u.alt ?? ""}
+                    alt={u.alt}
                     title={u.title}
                     width={26}
                     height={26}

@@ -7,8 +7,7 @@ export function Faq() {
   return (
     <section
       id="faq"
-      className="fs-serp-section"
-      style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
+      style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 80px", scrollMarginTop: 80 }}
     >
       <div className="fs-row fs-faq-layout" style={{ display: "flex", gap: 80, alignItems: "flex-start" }}>
         <div className="fs-faq-sidebar" style={{ flex: "0 0 33%", minWidth: 0 }}>
@@ -26,7 +25,7 @@ export function Faq() {
               Frequently asked questions
             </h2>
             <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5 }}>
-              Common questions about rank tracking, accuracy, and how the tracker works. Still stuck? Email{" "}
+              Common questions about website ranking checker accuracy and tracking. Still stuck? Email{" "}
               support@freeserp.com.
             </p>
           </Reveal>

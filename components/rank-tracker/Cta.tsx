@@ -62,7 +62,7 @@ export function Cta() {
             }}
           >
             Enter your domain, your keyword, your country, and your device. Click Check Rankings —
-            you&apos;ll see your real position in under 10 seconds.
+            the rank tracker shows your real search engine ranking in under 10 seconds.
           </p>
           <div style={{ display: "inline-flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <a

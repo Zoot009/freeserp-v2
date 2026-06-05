@@ -42,7 +42,7 @@ export function Hero() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
             <path d="M12 0 C12.3 6.6 17.4 11.7 24 12 C17.4 12.3 12.3 17.4 12 24 C11.7 17.4 6.6 12.3 0 12 C6.6 11.7 11.7 6.6 12 0 Z" />
           </svg>
-          50M+ Keywords · 190+ Countries · No Credit Card
+          50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available
         </div>
         <h1
           style={{
@@ -55,9 +55,9 @@ export function Hero() {
             padding: "0 20px",
           }}
         >
-          Free SERP — Track Keyword
+          Free SERP — Track Rankings and
           <br />
-          Rankings for Free.
+          Outrank Your Competitors.
         </h1>
         <p
           style={{
@@ -71,8 +71,8 @@ export function Hero() {
             padding: "0 20px",
           }}
         >
-          Discover high-volume keywords, track real-time search rankings, and
-          outperform competitors. No credit card required. Built for SEOs,
+          Track real-time keyword rankings, monitor daily position changes, and
+          expose every gap your competitors have over you. No credit card required. Built for SEOs,
           marketers, and developers.
         </p>
 

@@ -99,8 +99,7 @@ export function Faq() {
             Frequently asked questions
           </h2>
           <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5 }}>
-            Common questions about SERP checking, analysis, and ranking. Still stuck? Email
-            support@freeserp.com.
+            Common questions about SERP rank tracking, competitor intelligence, and outranking rivals. Still stuck? Email support@freeserp.com.
           </p>
         </Reveal>
         <div style={{ flex: 1 }}>

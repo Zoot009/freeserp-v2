@@ -2,26 +2,26 @@ import { COLORS } from "@/components/site/constants";
 
 export const FEATURES = [
   {
-    title: "Keyword Research",
-    text: "Discover millions of keywords with search volume, CPC, difficulty score, and trend data all in one place.",
+    title: "Rank Tracking",
+    text: "Monitor daily position changes for your target keywords and get alerted when rankings shift significantly. Track your entire keyword portfolio in one dashboard.",
     bg: "linear-gradient(145deg, #0c6cff 0%, #53acfe 37%, #c1deff 58%)",
     visual: "chart" as const,
   },
   {
-    title: "SERP Analysis",
-    text: "View real-time Google search results for any keyword across 190+ countries, cities, and device types.",
+    title: "SERP Intelligence",
+    text: "View real-time search results for any keyword across 190+ countries, cities, and device types. Analyze SERP features that are stealing your clicks.",
     bg: COLORS.softGray,
     visual: "nodes" as const,
   },
   {
-    title: "Daily Rank Tracking",
-    text: "Monitor daily position changes for your target keywords and get alerted when rankings shift significantly.",
+    title: "Competitor Gap Analysis",
+    text: "Reveal every keyword your rivals rank for. Find their traffic sources and exploit content gaps. Use competitor intelligence to take rankings they currently own.",
     bg: "linear-gradient(131deg, #f5f6f8 0%, #dadde3 3%, #f5f6f8 46%, #fff 55%, #f5f6f8 100%)",
     visual: "ring" as const,
   },
   {
-    title: "Competitor Spy",
-    text: "Reveal every keyword your rivals rank for. Find their traffic sources and exploit their content gaps.",
+    title: "Daily Rank Updates",
+    text: "Get automated daily rank updates across your full keyword set. Spot ranking movement the moment it happens — not at the end of the month.",
     bg: COLORS.softGray,
     visual: "tasks" as const,
   },
@@ -30,19 +30,19 @@ export const FEATURES = [
 export const BENEFITS = [
   {
     title: "01 — Enter a keyword",
-    text: "Type any keyword or domain into Free SERP. Our engine instantly pulls data from 50M+ indexed search terms across all major search engines.",
+    text: "Enter any keyword or domain. Our engine instantly pulls ranking data from 50M+ indexed search terms across all major search engines.",
   },
   {
     title: "02 — Analyze the data",
-    text: "View search volume, keyword difficulty, CPC, SERP features, and every competing page ranked in real-time for your target keyword.",
+    text: "View your real ranking. See every competing page ranked for your target keyword in real-time — search volume, difficulty, SERP features, and your exact position.",
   },
   {
     title: "03 — Track rankings",
-    text: "Pin keywords to your dashboard. Get daily updates on exactly where your pages appear in search results and spot movement instantly.",
+    text: "Pin keywords to your dashboard. Get daily rank updates and spot movement instantly.",
   },
   {
     title: "04 — Outrank rivals",
-    text: "Use competitor gap analysis to find every keyword they rank for that you don't — then take those positions with targeted content.",
+    text: "Find every keyword your competitors rank for that you do not — then take those positions with targeted content.",
   },
   {
     title: "Keyword Clusters",
@@ -177,3 +177,119 @@ export const FAQS = [
     a: "Yes — the Free plan gives you 20 SERP searches per day with no credit card. If you need more headroom, Pro ($20/month) raises the limit to 75 searches per day. Questions? Email support@freeserp.com.",
   },
 ];
+
+export const HOME_WEBSITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "FreeSERP",
+  url: "https://freeserp.com",
+  description:
+    "Free SERP rank tracking and competitor intelligence tool. Track keyword rankings daily, reveal competitor gaps, and outrank rivals. No credit card required.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://freeserp.com/?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+export const HOME_SOFTWARE_APP_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "FreeSERP",
+  description:
+    "Free SERP rank tracking and competitor intelligence platform. Track daily keyword rankings, monitor competitors, and close ranking gaps across 190+ countries.",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  url: "https://freeserp.com",
+  offers: [
+    {
+      "@type": "Offer",
+      name: "Free Tier",
+      price: "0",
+      priceCurrency: "USD",
+      description: "20 free SERP searches per day. No credit card required.",
+    },
+    {
+      "@type": "Offer",
+      name: "Pro",
+      price: "20",
+      priceCurrency: "USD",
+      billingIncrement: "month",
+      description:
+        "75 SERP searches per day with full competitor intelligence and unlimited tracking projects.",
+    },
+  ],
+  featureList: [
+    "Daily keyword rank tracking",
+    "Competitor gap analysis",
+    "Real-time SERP intelligence",
+    "190+ country targeting",
+    "Mobile and desktop rank tracking",
+    "CSV export",
+    "Free tier available",
+  ],
+};
+
+export const HOME_ORGANIZATION_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "FreeSERP",
+  url: "https://freeserp.com",
+  logo: "https://freeserp.com/logo.png",
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "support@freeserp.com",
+    contactType: "customer support",
+  },
+  sameAs: [] as string[],
+};
+
+export const HOME_FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is SERP analysis?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "SERP analysis is the process of examining the search engine results page for a target keyword to understand what types of content rank, which competitors appear, and what SERP features (like featured snippets, maps, or image packs) are present. It helps SEOs understand what Google rewards for a given query.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I do SERP analysis?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Enter your target keyword into FreeSERP, then review which domains rank in the top 10, what content format they use, which SERP features appear, and how your own domain compares. Use the competitor gap report to identify which ranking terms you are missing.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I analyze SERP features?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "FreeSERP shows which SERP features appear for each keyword — featured snippets, People Also Ask, image packs, local maps, and more. If a feature is present, it means Google is pulling from a specific content format. Use that to guide your content strategy.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I check SERP ranking?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Go to freeserp.com, enter your domain and the keyword you want to check, select your country and device, and click Check Rankings. FreeSERP returns your real ranking position in the top 100 in under 10 seconds — without browser history or personalization affecting the result.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is there a free plan?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. The free tier gives you 20 SERP searches per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 75 searches per day and unlimited project keywords.",
+      },
+    },
+  ],
+};

@@ -32,7 +32,7 @@ export function Hero() {
               margin: 0,
             }}
           >
-            Free Rank Tracker
+            Website Ranking Checker
           </h1>
           <p
             style={{
@@ -46,7 +46,7 @@ export function Hero() {
               opacity: 0.92,
             }}
           >
-            Check where any domain ranks for any keyword — across any country, on any device — completely free. No signup, no credit card, no limits on manual rank checks.
+            Check your website ranking in any country, on any device, for free. No signup, no credit card, no limits.
           </p>
         </Reveal>
 

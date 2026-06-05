@@ -12,7 +12,7 @@ export function WhyTracker() {
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead
-        title="Why use Rank Tracker ?"
+        title="Why use a Rank Tracker?"
       />
       <div
         className="fs-row fs-why-grid"
@@ -26,15 +26,15 @@ export function WhyTracker() {
       >
         <Reveal>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: 0 }}>
-            Tracking your business results online in search engines does not show your real results.
-            Search engines personalize results by your location, browser history, account, and device.
-            The results you see for your business are not the results your customers see.
+            Checking your business rankings manually in a browser does not show you real results.
+            Search engines personalize results based on your location, browser history, account, and device.
+            The rankings you see for your own business are not the rankings your customers see.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: "16px 0 0" }}>
             A rank tracker fixes this by running an unbiased query from a clean server, with no
-            personalization, from the country and device you specify. It also pulls the full top 100,
-            not just page 1, so you can see exactly how far from page 1 you are and which competitors
-            are between you and the top.
+            personalization, from the country and device you specify. It also pulls the full top 100 —
+            not just page 1 — so you can see exactly how far you are from the first page and which
+            competitors sit between you and the top.
           </p>
           <div
             style={{
