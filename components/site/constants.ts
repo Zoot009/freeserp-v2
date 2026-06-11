@@ -21,8 +21,8 @@ export type NavItem = "Free SERP Checker" | "Blog" | "Pricing";
 
 export const NAV: NavItem[] = [
   "Free SERP Checker",
-  "Blog",
   "Pricing",
+  "Blog",
 ];
 
 export function navHref(n: NavItem | string): string {
