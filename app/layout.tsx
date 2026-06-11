@@ -6,7 +6,7 @@ import "./globals.css";
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "900"],
   display: "swap",
 });
 
@@ -33,13 +33,6 @@ export default function RootLayout({
       className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Preload hero background so browser fetches it early */}
-        <link
-          rel="preload"
-          as="image"
-          href="https://framerusercontent.com/images/LTzUgqhBMU0fYD8l2vHeGvu8dQI.jpg"
-          fetchPriority="high"
-        />
         <Script
           id="gtm-script"
           strategy="afterInteractive"

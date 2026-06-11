@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal } from "@/components/site/Reveal";
 import { COLORS } from "@/components/site/constants";
 import { pushDataLayer } from "@/lib/gtm";
 
@@ -109,14 +110,14 @@ export function Hero() {
           zIndex: 1,
         }}
       >
+        <Reveal>
           <Image
             src="/home.png"
             alt="Dashboard"
             width={1427}
             height={747}
             priority
-            fetchPriority="high"
-            sizes="(max-width: 640px) 100vw, (max-width: 1360px) 100vw, 1240px"
+            sizes="(max-width: 1360px) 100vw, 1240px"
             style={{
               width: "100%",
               height: "auto",
@@ -126,6 +127,7 @@ export function Hero() {
                 "0 40px 80px rgba(8, 32, 96, .35), 0 12px 32px rgba(8, 32, 96, .25), 0 0 0 1px rgba(255,255,255,.18)",
             }}
           />
+        </Reveal>
       </div>
     </header>
   );
