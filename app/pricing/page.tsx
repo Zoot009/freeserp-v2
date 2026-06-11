@@ -1,104 +1,246 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
-import { ArrowUpRight } from "@/components/site/icons";
-import { PricingCta } from "./PricingCta";
+import { PricingAccordion } from "./PricingAccordion";
 
 const PAGE_URL = "https://freeserp.com/pricing";
-const DESCRIPTION =
-  "FreeSERP pricing plans are on the way. For now, the SERP checker is 100% free — no signup, no credit card, no limits.";
 
 export const metadata: Metadata = {
-  title: "Pricing — Coming Soon | FreeSERP",
-  description: DESCRIPTION,
+  title: "Pricing | FreeSERP",
+  description:
+    "Simple pay-as-you-go SERP check pricing. No subscriptions, no recurring charges — buy exactly what you need.",
   alternates: { canonical: PAGE_URL },
-  // Placeholder page — keep it out of search until real plans ship, so a thin
-  // "coming soon" page doesn't get indexed. Flip `index` to true once it's live.
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
   openGraph: {
-    title: "Pricing — Coming Soon | FreeSERP",
-    description: DESCRIPTION,
+    title: "Pricing | FreeSERP",
+    description: "Simple pay-as-you-go pricing for FreeSERP SERP checks.",
     url: PAGE_URL,
     siteName: "FreeSERP",
     type: "website",
   },
 };
 
+const SIGNUP_URL = "https://app.freeserp.com/signup";
+
+const FREE_FEATURES: { text: string; muted?: boolean }[] = [
+  { text: "10 SERP checks / day" },
+  { text: "Manual checks only", muted: true },
+  { text: "All locations & devices" },
+  { text: "No credit card required" },
+];
+
+function CheckIcon() {
+  return (
+    <span
+      style={{
+        display: "grid",
+        placeItems: "center",
+        width: 18,
+        height: 18,
+        flexShrink: 0,
+        borderRadius: 6,
+        background: "#eff6ff",
+        color: "#0454ff",
+        marginTop: 1,
+      }}
+    >
+      <svg width="11" height="11" viewBox="0 0 14 14" fill="none">
+        <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
+const PLANS: { price: number; checks: number; label: string; popular?: boolean }[] = [
+  { price: 1,   checks: 15,   label: "Starter"   },
+  { price: 5,   checks: 75,   label: "Basic"      },
+  { price: 10,  checks: 150,  label: "Standard"   },
+  { price: 20,  checks: 300,  label: "Popular", popular: true },
+  { price: 40,  checks: 600,  label: "Growth"     },
+  { price: 50,  checks: 750,  label: "Business"   },
+  { price: 100, checks: 1500, label: "Scale"      },
+  { price: 500, checks: 7500, label: "Enterprise" },
+];
+
+
 export default function PricingPage() {
   return (
     <>
-      {/* Nav has white text on a transparent bar, so the page needs a dark
-          hero behind it — hence the radial-gradient background on <main>. */}
-      <Nav />
-      <main
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "180px 24px 140px",
-          background: "radial-gradient(120% 80% at 50% 0%, #1a2b6b 0%, #0a0a14 55%)",
-          color: "#fff",
-        }}
-      >
-        <span
+      <Nav currentNav="Pricing" />
+
+      <main>
+        {/* ── Dark hero — keeps white nav text readable ── */}
+        <section
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            background: "rgba(255,255,255,.08)",
-            border: "1px solid rgba(255,255,255,.14)",
+            background: "radial-gradient(130% 90% at 50% 0%, #0f1f5c 0%, #0a0a14 58%)",
+            textAlign: "center",
+            padding: "164px 24px 72px",
             color: "#fff",
-            fontSize: 12,
-            fontWeight: 700,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            padding: "8px 16px",
-            borderRadius: 100,
           }}
         >
-          Pricing
-        </span>
-
-        <h1
-          style={{
-            fontSize: "clamp(44px, 8vw, 104px)",
-            fontWeight: 700,
-            letterSpacing: "-0.04em",
-            lineHeight: 1.02,
-            margin: "28px 0 0",
-          }}
-        >
-          Coming soon
-        </h1>
-
-        <p
-          style={{
-            fontSize: 18,
-            lineHeight: 1.6,
-            color: "rgba(255,255,255,.7)",
-            margin: "20px 0 0",
-            maxWidth: 540,
-          }}
-        >
-          We&apos;re putting the finishing touches on our plans. In the meantime,
-          the FreeSERP checker is 100% free — no signup, no credit card, no limits.
-        </p>
-
-        <PricingCta>
-          Try the free SERP checker
-          <span className="fs-arrow-wrap">
-            <span className="fs-arrow fs-arrow-1">
-              <ArrowUpRight />
-            </span>
-            <span className="fs-arrow fs-arrow-2">
-              <ArrowUpRight />
-            </span>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 7,
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "#7aabff",
+              marginBottom: 22,
+            }}
+          >
+            <span style={{ color: "#4a9eff", fontSize: 10 }}>◆</span> Pricing
           </span>
-        </PricingCta>
+
+          <h1
+            style={{
+              fontSize: "clamp(32px, 7vw, 52px)",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.08,
+              margin: 0,
+            }}
+          >
+            Simple plans.{" "}
+            <span style={{ color: "#4a9eff" }}>No surprises.</span>
+          </h1>
+
+          <p
+            style={{
+              fontSize: 15,
+              lineHeight: 1.65,
+              color: "rgba(255,255,255,.5)",
+              margin: "14px auto 0",
+              maxWidth: 440,
+            }}
+          >
+            Buy SERP checks once, use them at your pace. No subscriptions,
+            no monthly fees, no expiry.
+          </p>
+        </section>
+
+        {/* ── Light content body ── */}
+        <div style={{ background: "#f4f6fb" }}>
+
+          {/* Plans layout */}
+          <section style={{ maxWidth: 980, margin: "0 auto", padding: "52px 24px 56px" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                gap: 24,
+                alignItems: "stretch",
+              }}
+            >
+              {/* Left: Free plan */}
+              <div
+                style={{
+                  background: "#fff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 20,
+                  padding: 28,
+                  display: "flex",
+                  flexDirection: "column",
+                  boxShadow: "0 2px 12px rgba(0,0,0,.07)",
+                }}
+              >
+                <span
+                  style={{
+                    alignSelf: "flex-start",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.04em",
+                    padding: "4px 12px",
+                    borderRadius: 100,
+                    background: "#eff6ff",
+                    color: "#0454ff",
+                    marginBottom: 18,
+                  }}
+                >
+                  Free
+                </span>
+
+                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 6 }}>
+                  <span
+                    style={{
+                      fontSize: "clamp(42px, 8vw, 56px)",
+                      fontWeight: 700,
+                      letterSpacing: "-0.04em",
+                      lineHeight: 1,
+                      color: "#111",
+                    }}
+                  >
+                    $0
+                  </span>
+                  <span style={{ fontSize: 14, color: "#9ca3af" }}>/month</span>
+                </div>
+
+                <p style={{ fontSize: 14, color: "#9ca3af", margin: "0 0 20px" }}>
+                  Forever. No card, no trial.
+                </p>
+
+                <div style={{ height: 1, background: "#f3f4f6", marginBottom: 20 }} />
+
+                <ul
+                  style={{
+                    listStyle: "none",
+                    margin: "0 0 auto",
+                    padding: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 10,
+                  }}
+                >
+                  {FREE_FEATURES.map((f) => (
+                    <li
+                      key={f.text}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 10,
+                        fontSize: 13,
+                        color: f.muted ? "#f59e0b" : "#374151",
+                      }}
+                    >
+                      <CheckIcon />
+                      <span>{f.text}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={SIGNUP_URL}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    padding: "14px 20px",
+                    fontSize: 15,
+                    fontWeight: 600,
+                    borderRadius: 12,
+                    textDecoration: "none",
+                    background: "#f4f6fb",
+                    color: "#111",
+                    border: "1px solid #e5e7eb",
+                    marginTop: 24,
+                  }}
+                >
+                  Free Plan
+                </a>
+              </div>
+
+              {/* Right: Paid plans stepper */}
+              <PricingAccordion plans={PLANS} />
+            </div>
+          </section>
+
+
+        </div>
       </main>
+
       <Footer />
     </>
   );

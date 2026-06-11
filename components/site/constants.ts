@@ -17,13 +17,12 @@ export const COLORS = {
   green: "#0ea66f",
 } as const;
 
-export type NavItem = "Free SERP Checker" | "Features" | "How it works" | "Blog";
+export type NavItem = "Free SERP Checker" | "Blog" | "Pricing";
 
 export const NAV: NavItem[] = [
   "Free SERP Checker",
-  "Features",
-  "How it works",
   "Blog",
+  "Pricing",
 ];
 
 export function navHref(n: NavItem | string): string {
@@ -36,6 +35,8 @@ export function navHref(n: NavItem | string): string {
       return "/#how-it-works";
     case "Blog":
       return "/blog";
+    case "Pricing":
+      return "/pricing";
     default:
       return "#";
   }

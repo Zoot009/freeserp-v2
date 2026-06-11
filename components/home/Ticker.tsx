@@ -1,12 +1,14 @@
 import { COLORS } from "@/components/site/constants";
 
 const LOGOS = [
-  "vmZeygJDTzMny1LbISsT2fyXMs",
-  "6TpdvbGWLjUI9Cl5wQ2YY2RDdHM",
-  "SZa6YJ2xI3SLpPgoxDNehnSxEHM",
-  "xSlbl9OiWrQ9obNU9KQRmY3OMyY",
-  "uYFMZLVQeM7BkN8SYnR23sgD4",
-  "6wWE1Wvll7XiXTVbo1gI7mYY3Io",
+  { src: "/logos/logo-1.svg", alt: "Tata Steel" },
+  { src: "/logos/logo-2.svg", alt: "InCaps" },
+  { src: "/logos/logo-3.svg", alt: "Brand" },
+  { src: "/logos/logo-4.svg", alt: "Sony" },
+  { src: "/logos/logo-5.svg", alt: "Payoneer" },
+  { src: "/logos/logo-6.svg", alt: "HSBC" },
+  { src: "/logos/logo-7.svg", alt: "Delivery" },
+  { src: "/logos/logo-8.svg", alt: "Yamaha" },
 ];
 
 export function Ticker() {
@@ -41,15 +43,15 @@ export function Ticker() {
             alignItems: "center",
           }}
         >
-          {[...LOGOS, ...LOGOS].map((id, i) => (
+          {[...LOGOS, ...LOGOS].map((logo, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               key={i}
-              src={`https://framerusercontent.com/images/${id}.svg`}
-              alt="logo"
+              src={logo.src}
+              alt={logo.alt}
               loading="lazy"
               decoding="async"
-              style={{ height: 32, opacity: 0.7 }}
+              style={{ maxHeight: 32, maxWidth: 160, width: "auto", height: "auto", opacity: 0.7, filter: "grayscale(100%)" }}
             />
           ))}
         </div>

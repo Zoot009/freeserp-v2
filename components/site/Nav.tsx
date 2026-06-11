@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useScrolled } from "./hooks";
-import { NAV, navHref, appUrl, type NavItem } from "./constants";
+import { NAV, navHref, type NavItem } from "./constants";
 import { ArrowUpRight } from "./icons";
 import { pushDataLayer } from "@/lib/gtm";
 
@@ -84,12 +84,12 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
           </div>
 
           <a
-            href={appUrl("/signup")}
+            href="https://app.freeserp.com/signup"
             onClick={() => pushDataLayer({ event: "cta_click" })}
             className="fs-cta-btn fs-nav-cta"
             style={{ background: "#000", color: "#fff" }}
           >
-            Get started
+            Get started for free
             <span className="fs-arrow-wrap">
               <span className="fs-arrow fs-arrow-1">
                 <ArrowUpRight />
@@ -171,7 +171,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
               </a>
             ))}
             <a
-              href={appUrl("/signup")}
+              href="https://app.freeserp.com/signup"
               onClick={() => {
                 pushDataLayer({ event: "cta_click" });
                 closeMenu();
@@ -184,7 +184,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
                 justifyContent: "center",
               }}
             >
-              Get started
+              Get started for free
               <span className="fs-arrow-wrap">
                 <span className="fs-arrow fs-arrow-1">
                   <ArrowUpRight />
