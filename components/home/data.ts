@@ -217,7 +217,13 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
       name: "Pro",
       price: "20",
       priceCurrency: "USD",
-      billingIncrement: "month",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "20",
+        priceCurrency: "USD",
+        unitCode: "MON",
+        billingIncrement: 1,
+      },
       description:
         "75 SERP searches per day with full competitor intelligence and unlimited tracking projects.",
     },
