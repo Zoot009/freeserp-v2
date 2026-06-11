@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const SIGNUP_URL = "https://app.freeserp.com/signup";
 
 const FREE_FEATURES: { text: string; muted?: boolean }[] = [
-  { text: "10 SERP checks / day" },
+  { text: "5 SERP checks / day" },
   { text: "Manual checks only", muted: true },
   { text: "All locations & devices" },
   { text: "No credit card required" },
