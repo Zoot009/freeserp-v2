@@ -116,8 +116,7 @@ export default function PricingPage() {
               maxWidth: 440,
             }}
           >
-            Buy SERP checks once, use them at your pace. No subscriptions,
-            no monthly fees, no expiry.
+            No Hidded Charges for SERP Checks.
           </p>
         </section>
 

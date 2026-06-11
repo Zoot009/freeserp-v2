@@ -63,12 +63,10 @@ export const PLANS = {
       cta: "Start for Free",
       featured: false,
       features: [
-        "20 SERP searches per day",
-        "50M+ indexed keywords",
-        "190+ countries supported",
-        "Daily rank updates",
-        "Competitor gap analysis",
-        "CSV export",
+        "5 SERP checks / day",
+        "Manual checks only",
+        "190+ countries & all devices",
+        "No credit card required",
       ],
     },
     {
@@ -78,11 +76,11 @@ export const PLANS = {
       cta: "Upgrade to Pro",
       featured: true,
       features: [
-        "75 SERP searches per day",
-        "Real-time Google SERP data",
-        "AI-powered keyword clusters",
-        "Search intent grouping",
-        "API access included",
+        "300 SERP checks / month",
+        "190+ countries & all devices",
+        "Credits never expire",
+        "Real-time SERP data",
+        "CSV export",
         "Priority email support",
       ],
     },
@@ -95,12 +93,10 @@ export const PLANS = {
       cta: "Start for Free",
       featured: false,
       features: [
-        "20 SERP searches per day",
-        "50M+ indexed keywords",
-        "190+ countries supported",
-        "Daily rank updates",
-        "Competitor gap analysis",
-        "CSV export",
+        "5 SERP checks / day",
+        "Manual checks only",
+        "190+ countries & all devices",
+        "No credit card required",
       ],
     },
     {
@@ -110,11 +106,11 @@ export const PLANS = {
       cta: "Upgrade to Pro",
       featured: true,
       features: [
-        "75 SERP searches per day",
-        "Real-time Google SERP data",
-        "AI-powered keyword clusters",
-        "Search intent grouping",
-        "API access included",
+        "300 SERP checks / month",
+        "190+ countries & all devices",
+        "Credits never expire",
+        "Real-time SERP data",
+        "CSV export",
         "Priority email support",
       ],
     },
@@ -174,7 +170,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the Free plan gives you 20 SERP searches per day with no credit card. If you need more headroom, Pro ($20/month) raises the limit to 75 searches per day. Questions? Email support@freeserp.com.",
+    a: "Yes — the Free plan gives you 5 SERP checks per day with no credit card. If you need more headroom, Pro ($20/month) gives you 300 checks per month. Questions? Email support@freeserp.com.",
   },
 ];
 
@@ -210,7 +206,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
       name: "Free Tier",
       price: "0",
       priceCurrency: "USD",
-      description: "20 free SERP searches per day. No credit card required.",
+      description: "5 free SERP checks per day. No credit card required.",
     },
     {
       "@type": "Offer",
@@ -225,7 +221,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
         billingIncrement: 1,
       },
       description:
-        "75 SERP searches per day with full competitor intelligence and unlimited tracking projects.",
+        "300 SERP checks per month with full competitor intelligence and unlimited tracking projects.",
     },
   ],
   featureList: [
@@ -294,7 +290,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "Is there a free plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free tier gives you 20 SERP searches per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 75 searches per day and unlimited project keywords.",
+        text: "Yes. The free tier gives you 5 SERP checks per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 300 checks per month and unlimited project keywords.",
       },
     },
   ],

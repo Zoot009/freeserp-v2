@@ -68,7 +68,7 @@ export function Pricing() {
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>
         {PLANS[billing].map((plan, i) => (
-          <Reveal key={plan.name} delay={i * 0.1}>
+          <Reveal key={plan.name} delay={i * 0.1} style={{ height: "100%" }}>
             <div
               style={{
                 background: plan.featured
@@ -76,6 +76,8 @@ export function Pricing() {
                   : COLORS.softGray,
                 borderRadius: 24,
                 padding: 24,
+                height: "100%",
+                boxSizing: "border-box",
               }}
             >
               <div
