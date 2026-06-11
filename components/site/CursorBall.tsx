@@ -32,14 +32,15 @@ export function CursorBall() {
     let hasMoved = false;
     let inZone = false;
     let raf = 0;
+    let zoneBoundaryY = Infinity;
 
-    // Is a given viewport Y still within the hero zone (above the image's
-    // bottom edge)? Recomputed live so it stays correct while scrolling.
-    const within = (clientY: number) => {
+    const updateZoneBoundary = () => {
       const zone = document.getElementById("fs-cursor-zone");
-      if (!zone) return false;
-      return clientY <= zone.getBoundingClientRect().bottom;
+      zoneBoundaryY = zone ? zone.getBoundingClientRect().bottom : Infinity;
     };
+    updateZoneBoundary();
+
+    const within = (clientY: number) => clientY <= zoneBoundaryY;
 
     // Enter / leave the zone: show the ball + hide the native cursor,
     // or hand control back to the native cursor.
@@ -58,6 +59,7 @@ export function CursorBall() {
     };
     const onLeave = () => setZone(false);
     const onScroll = () => {
+      updateZoneBoundary();
       if (hasMoved) setZone(within(my));
     };
 
