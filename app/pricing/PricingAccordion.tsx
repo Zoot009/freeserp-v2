@@ -127,7 +127,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
         >
           ${plan.price}
         </span>
-        <span style={{ fontSize: 14, color: "#9ca3af" }}>/one-time</span>
+        <span style={{ fontSize: 14, color: "#9ca3af" }}>/month</span>
       </div>
 
       <p style={{ fontSize: 14, color: "#6b7280", margin: "0 0 22px", fontWeight: 500 }}>
