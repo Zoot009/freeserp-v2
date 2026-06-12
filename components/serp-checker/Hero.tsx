@@ -9,10 +9,6 @@ export function Hero() {
         paddingTop: 140,
         paddingBottom: 120,
         textAlign: "center",
-        backgroundImage:
-          "url(https://framerusercontent.com/images/LTzUgqhBMU0fYD8l2vHeGvu8dQI.jpg)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
         position: "relative",
       }}
     >

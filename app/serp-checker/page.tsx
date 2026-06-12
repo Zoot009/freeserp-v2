@@ -51,8 +51,16 @@ export default function SerpCheckerPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
 
       <Nav currentNav="Free SERP Checker" />
-      <Hero />
-      <Steps />
+      <div style={{
+        position: "relative",
+        overflow: "hidden",
+        backgroundImage: "url(https://framerusercontent.com/images/LTzUgqhBMU0fYD8l2vHeGvu8dQI.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "top center",
+      }}>
+        <Hero />
+        <Steps />
+      </div>
       <WhyChecker />
       <UseCases />
       <Faq />

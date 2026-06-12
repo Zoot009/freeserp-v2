@@ -23,26 +23,30 @@ export function Hero() {
       }}
     >
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            background: COLORS.blue,
-            color: "#fff",
-            padding: "9px 18px 9px 10px",
-            borderRadius: 100,
-            fontSize: 13,
-            fontWeight: 500,
-            letterSpacing: "0.02em",
-            marginBottom: 28,
-            boxShadow: "inset 0 .5px 1px rgba(255,255,255,.4)",
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
-            <path d="M12 0 C12.3 6.6 17.4 11.7 24 12 C17.4 12.3 12.3 17.4 12 24 C11.7 17.4 6.6 12.3 0 12 C6.6 11.7 11.7 6.6 12 0 Z" />
-          </svg>
-          50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available
+        <div style={{ padding: "0 24px", marginBottom: 28 }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              flexWrap: "wrap",
+              justifyContent: "center",
+              maxWidth: "100%",
+              background: COLORS.blue,
+              color: "#fff",
+              padding: "9px 18px 9px 10px",
+              borderRadius: 100,
+              fontSize: 13,
+              fontWeight: 500,
+              letterSpacing: "0.02em",
+              boxShadow: "inset 0 .5px 1px rgba(255,255,255,.4)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+              <path d="M12 0 C12.3 6.6 17.4 11.7 24 12 C17.4 12.3 12.3 17.4 12 24 C11.7 17.4 6.6 12.3 0 12 C6.6 11.7 11.7 6.6 12 0 Z" />
+            </svg>
+            <span style={{ flexShrink: 1, minWidth: 0 }}>50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available</span>
+          </div>
         </div>
         <h1
           style={{

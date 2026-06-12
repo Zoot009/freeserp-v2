@@ -6,10 +6,14 @@ export function SectionHead({
   tag,
   title,
   sub,
+  titleColor,
+  subColor,
 }: {
   tag?: string;
   title: string;
   sub?: string;
+  titleColor?: string;
+  subColor?: string;
 }) {
   return (
     <Reveal style={{ maxWidth: 700, textAlign: "center", margin: "0 auto" }}>
@@ -21,11 +25,12 @@ export function SectionHead({
           letterSpacing: "-0.04em",
           lineHeight: 1.1,
           margin: "20px 0 12px",
+          ...(titleColor ? { color: titleColor } : {}),
         }}
       >
         {title}
       </h2>
-      {sub && <p style={{ color: COLORS.gray, fontSize: 18, lineHeight: 1.5 }}>{sub}</p>}
+      {sub && <p style={{ color: subColor ?? COLORS.gray, fontSize: 18, lineHeight: 1.5 }}>{sub}</p>}
     </Reveal>
   );
 }

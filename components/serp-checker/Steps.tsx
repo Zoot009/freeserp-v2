@@ -142,6 +142,8 @@ export function Steps({ sub }: { sub?: string }) {
         <SectionHead
           title="How The Free Rank Tracker Works"
           sub={sub ?? `From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
+          titleColor="#fff"
+          subColor="rgba(255,255,255,0.65)"
         />
       </div>
 
@@ -155,19 +157,6 @@ export function Steps({ sub }: { sub?: string }) {
             }}
             style={{ position: "relative" }}
           >
-            {/* soft halo behind the frame */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                inset: "-28px -8px -56px",
-                zIndex: 0,
-                pointerEvents: "none",
-                background:
-                  "radial-gradient(60% 60% at 50% 40%, rgba(4,84,255,.16), transparent 72%)",
-                filter: "blur(18px)",
-              }}
-            />
 
             {/* ─── browser frame ─── */}
             <div
@@ -178,8 +167,6 @@ export function Steps({ sub }: { sub?: string }) {
                 overflow: "hidden",
                 border: `1px solid ${COLORS.border}`,
                 background: "#fff",
-                boxShadow:
-                  "0 40px 80px rgba(8,32,96,.22), 0 12px 32px rgba(8,32,96,.16), 0 0 0 1px rgba(255,255,255,.6)",
               }}
             >
               {/* window chrome */}

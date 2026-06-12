@@ -13,7 +13,7 @@ const LOGOS = [
 
 export function Ticker() {
   return (
-    <section className="fs-ticker-section" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
+    <section className="fs-ticker-section" style={{ width: "100%", maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px", overflow: "hidden", minWidth: 0 }}>
       <p
         style={{
           textAlign: "center",
@@ -21,6 +21,7 @@ export function Ticker() {
           fontWeight: 500,
           color: COLORS.black,
           margin: "0 0 32px",
+          padding: "0 24px",
         }}
       >
         50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available
