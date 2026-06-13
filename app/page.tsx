@@ -3,7 +3,7 @@ import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 
 export const metadata: Metadata = {
-  title: "FreeSERP — Free SERP Rank Tracking and Competitor Intelligence Tool",
+  title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
   description:
     "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
   alternates: { canonical: "https://freeserp.com" },
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   publisher: "FreeSERP",
   robots: { index: true, follow: true },
   openGraph: {
-    title: "FreeSERP — Free SERP Rank Tracking and Competitor Intelligence Tool",
+    title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
     description:
       "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
     url: "https://freeserp.com",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "FreeSERP — Free SERP Rank Tracking and Competitor Intelligence Tool",
+    title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
     description:
       "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
   },

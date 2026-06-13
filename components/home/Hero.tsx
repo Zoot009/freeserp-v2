@@ -59,7 +59,7 @@ export function Hero() {
             padding: "0 20px",
           }}
         >
-          Free SERP — Track Rankings and
+          FreeSERP — Track Rankings and
           <br />
           Outrank Your Competitors.
         </h1>

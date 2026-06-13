@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { PortableBody } from "@/components/blog/PortableBody";
@@ -109,23 +109,46 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (slug !== slug.toLowerCase()) permanentRedirect(`/blog/${slug.toLowerCase()}`);
   const post = await getPost(slug);
   if (!post) notFound();
 
   const related = await getRelatedPosts(slug, 3).catch(() => []);
 
+  const authorSlug = post.author?.name
+    ? post.author.name.toLowerCase().replace(/\s+/g, "-")
+    : null;
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
+    "@id": `${SITE}/blog/${slug}#article`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE}/blog/${slug}`,
+    },
     headline: post.title,
     description: post.excerpt || post.metaDescription,
     image: post.mainImage?.asset
-      ? urlFor(post.mainImage).width(1200).height(630).url()
+      ? {
+          "@type": "ImageObject",
+          url: urlFor(post.mainImage).width(1200).height(630).url(),
+        }
       : undefined,
     datePublished: post.publishedAt,
-    author: post.author ? { "@type": "Person", name: post.author.name } : undefined,
-    publisher: { "@type": "Organization", name: "FreeSERP" },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE}/blog/${slug}` },
+    dateModified: post._updatedAt || post.publishedAt,
+    author: authorSlug
+      ? {
+          "@type": "Person",
+          "@id": `${SITE}/author/${authorSlug}#person`,
+          name: post.author!.name,
+        }
+      : undefined,
+    publisher: { "@id": `${SITE}/#organization` },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: [".post-intro", ".key-takeaway"],
+    },
   };
 
   return (
@@ -187,7 +210,16 @@ export default async function BlogPostPage({
               color: "rgba(255,255,255,.62)",
             }}
           >
-            <span>{post.author?.name || "FreeSERP"}</span>
+            {authorSlug ? (
+              <Link
+                href={`/author/${authorSlug}`}
+                style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 3 }}
+              >
+                {post.author!.name}
+              </Link>
+            ) : (
+              <span>FreeSERP</span>
+            )}
             <span style={{ color: "rgba(255,255,255,.3)" }}>·</span>
             <span>{formatDate(post.publishedAt)}</span>
             <span style={{ color: "rgba(255,255,255,.3)" }}>·</span>
@@ -225,6 +257,7 @@ export default async function BlogPostPage({
         <article style={{ marginTop: 40 }}>
           {post.excerpt && (
             <p
+              className="post-intro"
               style={{
                 fontSize: 20,
                 lineHeight: 1.6,
@@ -234,6 +267,22 @@ export default async function BlogPostPage({
               }}
             >
               {post.excerpt}
+            </p>
+          )}
+          {(post.metaDescription || post.excerpt) && (
+            <p
+              className="key-takeaway"
+              style={{
+                fontSize: 15,
+                lineHeight: 1.6,
+                color: "#0f1018",
+                borderLeft: "3px solid #2563eb",
+                paddingLeft: 16,
+                margin: "0 0 32px",
+                fontStyle: "italic",
+              }}
+            >
+              {post.metaDescription || post.excerpt}
             </p>
           )}
           <PortableBody value={post.body} />

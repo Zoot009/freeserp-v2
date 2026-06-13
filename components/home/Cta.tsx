@@ -68,7 +68,7 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            20 free SERP searches a day, real-time ranking data, daily rank updates, and competitor intelligence — for SEOs, marketers, and developers. Upgrade to Pro for 75/day when you need more.
+            5 free SERP checks a day, real-time ranking data, daily rank updates, and competitor intelligence — for SEOs, marketers, and developers. Upgrade to Pro for 300 checks that never expire.
           </p>
           <a
             href={appUrl("/signup")}

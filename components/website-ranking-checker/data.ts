@@ -66,23 +66,23 @@ export const WHO_USES: WhoUsesItem[] = [
 export const FAQ_ITEMS = [
   {
     q: "Is the website ranking checker really free?",
-    a: "Yes—website rank free, with unlimited checks, no credit card, no trial, and no rate limit on manual checks. You can check any domain, any keyword, and any country as many times as you need without ever entering a payment method. Saved tracking projects are limited to 10 keywords per project on the free plan, with 30 days of rank history included. Paid plans unlock unlimited keywords per project and extended history for teams that need more depth.",
+    a: "Yes — unlimited checks with no credit card, no trial, and no rate limit on manual checks. Check any domain, any keyword, and any country as many times as you need. Saved projects are limited to 10 keywords on the free plan with 30 days of history; paid plans unlock unlimited keywords and extended history.",
   },
   {
     q: "How accurate is the website ranking data?",
-    a: "We pull live, depersonalized results from a clean IP in the country you select. We do not estimate or extrapolate—every position is a real query we ran the moment you clicked the button. The accuracy matches paid tools for the top 100 positions. Personalized results from your browser can show your pages 5 to 15 positions higher than their actual rank. Our website ranking checker eliminates that bias completely by querying from a neutral server with no login history, no cache, and no location tied to your account.",
+    a: "We pull live, depersonalized results from a clean IP in the country you select — no estimates, no extrapolation. Every position is a real query we ran the moment you clicked. Accuracy matches paid tools for the top 100 positions. Browser-personalized results can skew 5–15 positions high; we eliminate that bias entirely.",
   },
   {
     q: "Can I check my website ranking for any country?",
-    a: "Yes. Pick from 190+ supported countries in the location dropdown. Our global website ranking checker pulls results at the country level, so every check returns the live ranking for the exact market you select—not an averaged or estimated position. Rankings differ significantly between countries. Always check each target market separately to get an accurate picture of where you stand in each region.",
+    a: "Yes — pick from 190+ supported countries in the location dropdown. Every check returns the live ranking for the exact market you select, not an averaged or estimated position. Rankings differ significantly between countries, so check each target market separately.",
   },
   {
     q: "Does the website rank tracker check mobile and desktop separately?",
-    a: "Yes. Toggle the Device button before running the check to switch between mobile and desktop. Mobile and desktop rankings often differ by 2 to 5 positions, and for keywords with high mobile search volume those differences can be even larger. If you are optimizing for mobile users—which matters for most local and service-based businesses—always run both checks and compare.",
+    a: "Yes — toggle the Device button before running the check. Mobile and desktop rankings often differ by 2–5 positions; for keywords with high mobile search volume the gap can be larger. Always run both checks if you are optimizing for local or service-based searches.",
   },
   {
     q: "How often should I check my website ranking?",
-    a: "For active optimization work, check daily for your 5 to 10 highest-priority keywords and weekly for the rest. Rankings shift regularly because of algorithm updates, competitor activity, and content changes across the web. Set up a saved tracking project for your most important keywords and review the 30-day history chart weekly. This gives you a trend line that shows whether your rankings are stable, improving, or declining.",
+    a: "For active optimization, check daily for your 5–10 highest-priority keywords and weekly for the rest. Rankings shift because of algorithm updates, competitor activity, and content changes — checking monthly hides what is actually happening. Set up a saved tracking project and review the 30-day history chart weekly for a clear trend line.",
   },
   {
     q: "Can I use this tool as a website rank finder for competitor domains?",
@@ -90,11 +90,11 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Why is my website ranking lower than I expected?",
-    a: "The most common reasons are weak internal linking to the page, thin content compared to the top-ranking pages for that keyword, slow page speed, or a mismatch between your page content and what people are actually looking for when they search that keyword. Run the recommendation plan after a check—it analyzes the pages ranking above you and identifies which of these factors is hurting your position most.",
+    a: "The most common reasons are weak internal linking, thin content compared to top-ranking pages, slow page speed, or a mismatch between your content and search intent. Run the recommendation plan after a check — it identifies which factor is hurting your position most.",
   },
   {
     q: "Do you store my data?",
-    a: "We store the keywords and domains you save to tracked projects. We do not sell your data, run ads against your usage, or share information with third parties under any circumstances. Anonymous one-off checks—where you run a check without saving it to a project—are not logged to your account. If you want your data removed, delete your project at any time and it will be cleared from our system.",
+    a: "We store only the keywords and domains you save to tracked projects. We do not sell data, run ads against your usage, or share with third parties. Anonymous one-off checks are not logged to your account; delete any project at any time to clear it from our system.",
   },
 ];
 

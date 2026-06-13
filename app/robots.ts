@@ -8,10 +8,17 @@ export default function robots(): MetadataRoute.Robots {
   // (home, /serp-checker, /blog, /blog/[slug], /privacy, /terms). The product
   // app and its API live on app.freeserp.com, so there's nothing to disallow.
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      { userAgent: "*", allow: "/" },
+      // AI answer-engine crawlers — allow for citation
+      { userAgent: "GPTBot", allow: "/" },
+      { userAgent: "OAI-SearchBot", allow: "/" },
+      { userAgent: "ChatGPT-User", allow: "/" },
+      { userAgent: "PerplexityBot", allow: "/" },
+      { userAgent: "Google-Extended", allow: "/" },
+      { userAgent: "ClaudeBot", allow: "/" },
+      { userAgent: "Applebot-Extended", allow: "/" },
+    ],
     sitemap: `${SITE}/sitemap.xml`,
   };
 }

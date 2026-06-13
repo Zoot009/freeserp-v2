@@ -128,7 +128,7 @@ export const INTEGRATIONS = [
 
 export const TESTIMONIALS = [
   {
-    text: "I dropped a $299/mo SEO tool the day I found Free SERP. The free tier got me through my first month, and Pro at $20 is a no-brainer for the daily search headroom.",
+    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free tier got me through my first month, and Pro at $20 is a no-brainer for the daily search headroom.",
     name: "Daniel Cooper",
     role: "Indie SEO Consultant",
     img: "https://framerusercontent.com/images/KcCMMECKZOgi4RCYPbRBT2B8u0.png",
@@ -170,7 +170,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the Free plan gives you 5 SERP checks per day with no credit card. If you need more headroom, Pro ($20/month) gives you 300 checks per month. Questions? Email support@freeserp.com.",
+    a: "Yes — the Free plan gives you 5 SERP checks per day with no credit card. If you need more headroom, Pro ($20 one-time) gives you 300 checks that never expire. Questions? Email support@freeserp.com.",
   },
 ];
 
@@ -180,7 +180,7 @@ export const HOME_WEBSITE_SCHEMA = {
   name: "FreeSERP",
   url: "https://freeserp.com",
   description:
-    "Free SERP rank tracking and competitor intelligence tool. Track keyword rankings daily, reveal competitor gaps, and outrank rivals. No credit card required.",
+    "FreeSERP rank tracking and competitor intelligence tool. Track keyword rankings daily, reveal competitor gaps, and outrank rivals. No credit card required.",
   potentialAction: {
     "@type": "SearchAction",
     target: {
@@ -196,7 +196,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
   "@type": "SoftwareApplication",
   name: "FreeSERP",
   description:
-    "Free SERP rank tracking and competitor intelligence platform. Track daily keyword rankings, monitor competitors, and close ranking gaps across 190+ countries.",
+    "FreeSERP rank tracking and competitor intelligence platform. Track daily keyword rankings, monitor competitors, and close ranking gaps across 190+ countries.",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Any",
   url: "https://freeserp.com",
@@ -290,7 +290,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "Is there a free plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free tier gives you 5 SERP checks per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 300 checks per month and unlimited project keywords.",
+        text: "Yes. The free tier gives you 5 SERP checks per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 300 checks that never expire and unlimited project keywords.",
       },
     },
   ],

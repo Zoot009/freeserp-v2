@@ -25,7 +25,7 @@ export function Testimonials() {
       <SectionHead
         tag="TESTIMONIALS"
         title="Trusted by SEOs worldwide"
-        sub="From indie consultants to in-house growth teams, Free SERP is replacing paid tools that charge hundreds a month."
+        sub="From indie consultants to in-house growth teams, FreeSERP is replacing paid tools that charge hundreds a month."
       />
 
       <div
@@ -55,7 +55,7 @@ export function Testimonials() {
             <p
               style={{ fontSize: 17, lineHeight: 1.5, margin: "0 0 auto", paddingBottom: 28 }}
             >
-              &quot;Free SERP transformed the way our team approaches keyword research and
+              &quot;FreeSERP transformed the way our team approaches keyword research and
               rank tracking. Within three months we reclaimed positions on 60+ high-intent
               terms — no contracts, no per-seat fees, and zero credit card on file.&quot;
             </p>
@@ -135,7 +135,7 @@ export function Testimonials() {
             <p
               style={{ fontSize: 17, lineHeight: 1.5, margin: "0 0 auto", paddingBottom: 28 }}
             >
-              &quot;Free SERP delivers the same intelligence the $999/mo enterprise tools
+              &quot;FreeSERP delivers the same intelligence the $999/mo enterprise tools
               sell — the Free tier is genuinely useful for solo work, and Pro is the
               cheapest serious tier I&apos;ve seen.&quot;
             </p>

@@ -33,6 +33,59 @@ export default function RootLayout({
       className={`${archivo.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://freeserp.com/#organization",
+                  "name": "FreeSERP",
+                  "url": "https://freeserp.com",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://freeserp.com/logo.png",
+                    "width": 512,
+                    "height": 512,
+                  },
+                  "email": "support@freeserp.com",
+                  "description":
+                    "FreeSERP rank tracking and competitor intelligence for SEOs, marketers, and developers.",
+                  "knowsAbout": [
+                    "SERP rank tracking",
+                    "Keyword research",
+                    "Competitor analysis",
+                    "AI Overviews",
+                    "Generative Engine Optimization",
+                    "Answer Engine Optimization",
+                  ],
+                  "sameAs": [
+                    "https://in.linkedin.com/company/zootdigital",
+                    "https://www.instagram.com/zootdigitalmarketing/",
+                  ],
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://freeserp.com/#website",
+                  "url": "https://freeserp.com",
+                  "name": "FreeSERP",
+                  "publisher": { "@id": "https://freeserp.com/#organization" },
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate":
+                        "https://freeserp.com/serp-checker?keyword={search_term_string}",
+                    },
+                    "query-input": "required name=search_term_string",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         <Script
           id="gtm-script"
           strategy="afterInteractive"

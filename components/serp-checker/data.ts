@@ -216,6 +216,7 @@ export const HOWTO_SCHEMA = {
 export const FAQ_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": `${PAGE_URL}/#faq`,
   mainEntity: FAQ_ITEMS.map((f) => ({
     "@type": "Question",
     name: f.q,

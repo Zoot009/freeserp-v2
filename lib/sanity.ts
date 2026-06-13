@@ -42,6 +42,7 @@ export type BlogPostFull = {
   excerpt?: string;
   mainImage?: any;
   publishedAt: string;
+  _updatedAt?: string;
   body?: any;
   metaTitle?: string;
   metaDescription?: string;
@@ -83,7 +84,7 @@ export async function getLatestPosts(limit = 3): Promise<LatestPost[]> {
 export async function getPost(slug: string): Promise<BlogPostFull | null> {
   return client.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
-      _id, title, slug, excerpt, mainImage, publishedAt, body, metaTitle, metaDescription,
+      _id, _updatedAt, title, slug, excerpt, mainImage, publishedAt, body, metaTitle, metaDescription,
       "author": author->{name, image, bio},
       "categories": categories[]->{title, slug}
     }`,
