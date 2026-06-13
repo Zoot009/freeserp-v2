@@ -147,7 +147,7 @@ export function Steps({ sub }: { sub?: string }) {
         />
       </div>
 
-        <Reveal style={{ margin: "56px auto 0", maxWidth: 1360 }}>
+        <Reveal style={{ margin: "56px auto 0", maxWidth: 1360, padding: "0 60px" }}>
           <div
             onMouseEnter={() => {
               pausedRef.current = true;
@@ -217,7 +217,7 @@ export function Steps({ sub }: { sub?: string }) {
                       width={s.w}
                       height={s.h}
                       priority={i === 0}
-                      sizes="(max-width: 1360px) 100vw, 1360px"
+                      sizes="(max-width: 1360px) 100vw, 1240px"
                       style={{ width: "100%", height: "auto", display: "block" }}
                     />
                   </div>
