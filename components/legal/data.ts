@@ -150,6 +150,26 @@ export const PRIVACY: LegalDoc = {
       ],
     },
     {
+      heading: "Refund and Return Policy",
+      blocks: [
+        {
+          type: "p",
+          text: "FreeSERP offers subscription-based plans. We want you to be satisfied with your purchase. Please read our refund policy carefully before subscribing.",
+        },
+        {
+          type: "list",
+          items: [
+            { lead: "7-Day Money-Back Guarantee:", text: "If you are not satisfied with your paid plan, you may request a full refund within 7 days of your initial purchase or renewal date." },
+            { lead: "Eligibility:", text: "Refunds apply to first-time purchases and annual plan renewals. Monthly plan renewals are not eligible for refunds once the billing cycle has started." },
+            { lead: "Non-Refundable Items:", text: "Add-on credits, one-time purchases, and any usage already consumed beyond the free tier are non-refundable." },
+            { lead: "How to Request:", text: "To request a refund, contact our support team at support@freeserp.com with your account email and reason for the refund. We will process eligible refunds within 5–10 business days." },
+            { lead: "Cancellations:", text: "You may cancel your subscription at any time from your account settings. Cancellation stops future charges but does not automatically trigger a refund. Refund eligibility is governed by the terms above." },
+            { lead: "Digital Service:", text: "As FreeSERP is a digital software service with no physical goods, there are no physical returns. All refund requests are handled electronically." },
+          ],
+        },
+      ],
+    },
+    {
       heading: "Contact Us",
       blocks: [
         {

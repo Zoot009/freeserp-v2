@@ -14,7 +14,7 @@ const FOOTER_HREFS: Record<string, string> = {
   Dashboard: appUrl("/dashboard"),
   "Privacy Policy": "/privacy",
   "Terms of Service": "/terms",
-  "Contact Us": "mailto:support@freeserp.com",
+  "Contact Us": "/contact",
   "support@freeserp.com": "mailto:support@freeserp.com",
 };
 
