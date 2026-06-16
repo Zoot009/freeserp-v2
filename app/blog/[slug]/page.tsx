@@ -142,6 +142,8 @@ export default async function BlogPostPage({
           "@type": "Person",
           "@id": `${SITE}/author/${authorSlug}#person`,
           name: post.author!.name,
+          url: `${SITE}/author/${authorSlug}`,
+          ...(post.author!.url ? { sameAs: [post.author!.url] } : {}),
         }
       : undefined,
     publisher: { "@id": `${SITE}/#organization` },

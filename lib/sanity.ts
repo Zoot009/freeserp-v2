@@ -46,7 +46,7 @@ export type BlogPostFull = {
   body?: any;
   metaTitle?: string;
   metaDescription?: string;
-  author?: { name: string; image?: any; bio?: any };
+  author?: { name: string; image?: any; bio?: any; url?: string };
   categories?: { title: string; slug: { current: string } }[];
 };
 
@@ -85,7 +85,7 @@ export async function getPost(slug: string): Promise<BlogPostFull | null> {
   return client.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
       _id, _updatedAt, title, slug, excerpt, mainImage, publishedAt, body, metaTitle, metaDescription,
-      "author": author->{name, image, bio},
+      "author": author->{name, image, bio, url},
       "categories": categories[]->{title, slug}
     }`,
     { slug },
