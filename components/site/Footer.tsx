@@ -2,7 +2,7 @@ import { appUrl } from "./constants";
 
 const COLS = [
   { h: "Product", l: ["Features", "Rank Tracker", "Website Ranking Checker", "Blog", "Dashboard"] },
-  { h: "Legal", l: ["Privacy Policy", "Terms of Service"] },
+  { h: "Legal", l: ["Privacy Policy", "Terms of Service", "Refund Policy"] },
   { h: "Connect", l: ["Contact Us", "support@freeserp.com"] },
 ] as const;
 
@@ -14,6 +14,7 @@ const FOOTER_HREFS: Record<string, string> = {
   Dashboard: appUrl("/dashboard"),
   "Privacy Policy": "/privacy",
   "Terms of Service": "/terms",
+  "Refund Policy": "/refund-policy",
   "Contact Us": "/contact",
   "support@freeserp.com": "mailto:support@freeserp.com",
 };
