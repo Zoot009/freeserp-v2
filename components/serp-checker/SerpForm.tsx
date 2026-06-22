@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
 import { pushDataLayer } from "@/lib/gtm";
@@ -41,7 +41,6 @@ type CheckResult = {
 type Phase =
   | { kind: "idle" }
   | { kind: "loading"; keyword: string }
-  | { kind: "polling"; keyword: string; checkId: string }
   | { kind: "done"; keyword: string; domain: string; result: CheckResult }
   | { kind: "error"; message: string }
   // Hitting the anonymous-check limit is expected behaviour, not a failure —
@@ -49,8 +48,7 @@ type Phase =
   | { kind: "ratelimit"; message: string }
   | { kind: "timeout" };
 
-const POLL_INTERVAL_MS = 2500;
-const POLL_TIMEOUT_MS = 90_000;
+const CHECK_TIMEOUT_MS = 60_000;
 
 export function SerpForm() {
   const [domain, setDomain] = useState("");
@@ -59,91 +57,7 @@ export function SerpForm() {
   const [device, setDevice] = useState<Device>("desktop");
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
 
-  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const timeoutTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const abortedRef = useRef(false);
-
-  const clearTimers = () => {
-    if (pollTimerRef.current !== null) {
-      clearInterval(pollTimerRef.current);
-      pollTimerRef.current = null;
-    }
-    if (timeoutTimerRef.current !== null) {
-      clearTimeout(timeoutTimerRef.current);
-      timeoutTimerRef.current = null;
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      abortedRef.current = true;
-      clearTimers();
-    };
-  }, []);
-
-  const startPolling = (checkId: string, kw: string, dom: string) => {
-    abortedRef.current = false;
-
-    // Kick off the hard timeout
-    timeoutTimerRef.current = setTimeout(() => {
-      clearTimers();
-      if (!abortedRef.current) {
-        setPhase({ kind: "timeout" });
-      }
-    }, POLL_TIMEOUT_MS);
-
-    const doPoll = async () => {
-      if (abortedRef.current) return;
-      try {
-        const res = await fetch(`${BACKEND_URL}/api/check/${checkId}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (abortedRef.current) return;
-
-        if (!res.ok) {
-          clearTimers();
-          setPhase({ kind: "error", message: `Polling error: ${res.status} ${res.statusText}` });
-          return;
-        }
-
-        const data = (await res.json()) as {
-          status: string;
-          error?: string;
-          position?: number | null;
-          competitors?: Competitor[];
-        };
-
-        if (abortedRef.current) return;
-
-        if (data.status === "COMPLETED") {
-          clearTimers();
-          pushDataLayer({ event: "serp_check_completed" });
-          setPhase({
-            kind: "done",
-            keyword: kw,
-            domain: dom,
-            result: {
-              position: data.position ?? null,
-              competitors: data.competitors ?? [],
-            },
-          });
-        } else if (data.status === "FAILED") {
-          clearTimers();
-          setPhase({ kind: "error", message: data.error ?? "The check failed. Please try again." });
-        }
-        // Otherwise keep polling
-      } catch {
-        if (abortedRef.current) return;
-        clearTimers();
-        setPhase({ kind: "error", message: "Network error while checking results. Please try again." });
-      }
-    };
-
-    // Poll immediately, then on interval
-    doPoll();
-    pollTimerRef.current = setInterval(doPoll, POLL_INTERVAL_MS);
-  };
+  const abortRef = useRef<AbortController | null>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,15 +65,22 @@ export function SerpForm() {
     const dom = domain.trim();
     if (!kw || !dom) return;
 
-    clearTimers();
+    // Cancel any in-flight request
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
     setPhase({ kind: "loading", keyword: kw });
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword: kw, domain: dom, location: country, device }),
+        body: JSON.stringify({ keyword: kw, domain: dom, country, device }),
+        signal: controller.signal,
       });
+      clearTimeout(timeout);
 
       if (res.status === 429) {
         const data = (await res.json()) as { error?: string };
@@ -175,26 +96,38 @@ export function SerpForm() {
         return;
       }
 
-      const data = (await res.json()) as { checkId?: string };
-      if (!data.checkId) {
-        setPhase({ kind: "error", message: "Unexpected response from server. Please try again." });
-        return;
-      }
+      const data = (await res.json()) as {
+        position?: number | null;
+        results?: Array<{ position: number; domain: string; url: string; title: string; snippet: string | null }>;
+        error?: string;
+      };
 
-      setPhase({ kind: "polling", keyword: kw, checkId: data.checkId });
-      startPolling(data.checkId, kw, dom);
-    } catch {
-      setPhase({ kind: "error", message: "Could not reach the server. Check your connection and try again." });
+      pushDataLayer({ event: "serp_check_completed" });
+      setPhase({
+        kind: "done",
+        keyword: kw,
+        domain: dom,
+        result: {
+          position: data.position ?? null,
+          competitors: (data.results ?? []).map((r) => ({ ...r, snippet: r.snippet ?? "" })),
+        },
+      });
+    } catch (err) {
+      clearTimeout(timeout);
+      if ((err as Error).name === "AbortError") {
+        setPhase({ kind: "timeout" });
+      } else {
+        setPhase({ kind: "error", message: "Could not reach the server. Check your connection and try again." });
+      }
     }
   };
 
   const reset = () => {
-    abortedRef.current = true;
-    clearTimers();
+    abortRef.current?.abort();
     setPhase({ kind: "idle" });
   };
 
-  const isChecking = phase.kind === "loading" || phase.kind === "polling";
+  const isChecking = phase.kind === "loading";
   const submitDisabled = isChecking || !keyword.trim() || !domain.trim();
 
   // ─── Form (always visible) + results panel rendered below it once done ────
