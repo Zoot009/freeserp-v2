@@ -13,7 +13,7 @@ export function Compare() {
     >
       <SectionHead
         tag="Honest Comparison"
-        title="Free SERP checker vs paid tools"
+        title="Free SERP vs paid tools"
         sub="Most paid SERP checkers cost $49 to $199 per month for features you can get free if you don't need 10,000 keywords tracked daily. Here's the honest comparison."
       />
       <Reveal style={{ marginTop: 56, maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
