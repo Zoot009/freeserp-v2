@@ -83,11 +83,12 @@ export function SerpForm() {
       clearTimeout(timeout);
 
       if (res.status === 429) {
-        const data = (await res.json()) as { error?: string };
-        setPhase({
-          kind: "ratelimit",
-          message: data.error ?? "You've reached the free check limit.",
-        });
+        setPhase({ kind: "ratelimit", message: "You've reached the free check limit." });
+        return;
+      }
+
+      if (res.status === 504) {
+        setPhase({ kind: "timeout" });
         return;
       }
 
