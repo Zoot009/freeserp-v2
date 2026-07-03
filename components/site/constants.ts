@@ -61,4 +61,6 @@ export function appUrl(path = ""): string {
  * Override per-env with NEXT_PUBLIC_BACKEND_URL; the backend's ALLOWED_ORIGINS
  * must include this site's origin.
  */
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3002";
+// Defaults to the v2 (TypeScript) backend on :3003, which fetches SERPs via the
+// DataForSEO API. The legacy v1 backend on :3002 is no longer used.
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3003";

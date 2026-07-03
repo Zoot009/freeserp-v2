@@ -48,7 +48,18 @@ type Phase =
   | { kind: "ratelimit"; message: string }
   | { kind: "timeout" };
 
+// The v2 /api/check runs the DataForSEO lookup synchronously and can take up to
+// ~45s to return, so give the request a little headroom before we give up.
 const CHECK_TIMEOUT_MS = 60_000;
+
+/** A single SERP row, as returned by the v2 /api/check response. */
+type SerpRow = {
+  position: number;
+  domain: string;
+  url: string;
+  title: string;
+  snippet: string | null;
+};
 
 export function SerpForm() {
   const [domain, setDomain] = useState("");
@@ -70,6 +81,8 @@ export function SerpForm() {
     const controller = new AbortController();
     abortRef.current = controller;
 
+    // Bound the (synchronous, potentially ~45s) check so a stuck request can't
+    // hang the UI — the abort surfaces as the friendly "taking longer" notice.
     const timeout = setTimeout(() => controller.abort(), CHECK_TIMEOUT_MS);
     setPhase({ kind: "loading", keyword: kw });
 
@@ -80,7 +93,6 @@ export function SerpForm() {
         body: JSON.stringify({ keyword: kw, domain: dom, country, device }),
         signal: controller.signal,
       });
-      clearTimeout(timeout);
 
       if (res.status === 429) {
         setPhase({ kind: "ratelimit", message: "You've reached the free check limit." });
@@ -97,10 +109,11 @@ export function SerpForm() {
         return;
       }
 
+      // v2 returns the SERP inline: `results` is the top organic list (which
+      // includes the target domain when it ranks) and `position` is its rank.
       const data = (await res.json()) as {
         position?: number | null;
-        results?: Array<{ position: number; domain: string; url: string; title: string; snippet: string | null }>;
-        error?: string;
+        results?: SerpRow[];
       };
 
       pushDataLayer({ event: "serp_check_completed" });
@@ -110,16 +123,23 @@ export function SerpForm() {
         domain: dom,
         result: {
           position: data.position ?? null,
-          competitors: (data.results ?? []).map((r) => ({ ...r, snippet: r.snippet ?? "" })),
+          competitors: (data.results ?? []).map((r) => ({
+            position: r.position,
+            domain: r.domain,
+            url: r.url,
+            title: r.title,
+            snippet: r.snippet ?? "",
+          })),
         },
       });
     } catch (err) {
-      clearTimeout(timeout);
       if ((err as Error).name === "AbortError") {
         setPhase({ kind: "timeout" });
       } else {
         setPhase({ kind: "error", message: "Could not reach the server. Check your connection and try again." });
       }
+    } finally {
+      clearTimeout(timeout);
     }
   };
 
