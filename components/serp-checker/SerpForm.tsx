@@ -2,16 +2,11 @@
 
 import { useRef, useState } from "react";
 import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
-import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
+import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/components/site/locations";
+import { LockIcon, GoogleLogo } from "@/components/site/icons";
 import { pushDataLayer } from "@/lib/gtm";
 
 type Device = "desktop" | "mobile";
-
-/** "whatsmyserp.com" → "Whatsmyserp" — the site-name line, like Google's. */
-function siteName(domain: string): string {
-  const base = domain.replace(/^www\./, "").split(".")[0] || domain;
-  return base.charAt(0).toUpperCase() + base.slice(1);
-}
 
 /** A URL → "domain › path › bits" breadcrumb, like Google's result URL line. */
 function breadcrumb(url: string): string {
@@ -25,6 +20,29 @@ function breadcrumb(url: string): string {
   }
 }
 
+/** ISO timestamp → a short "scanned …" relative label. */
+function timeAgo(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (!Number.isFinite(then)) return "just now";
+  const secs = Math.max(0, Math.round((Date.now() - then) / 1000));
+  if (secs < 45) return "just now";
+  const mins = Math.round(secs / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+/** Map a 0–100 keyword-difficulty score to a label + colour. */
+function difficultyBadge(kd: number): { label: string; color: string } {
+  if (kd <= 33) return { label: "Easy", color: COLORS.green };
+  if (kd <= 66) return { label: "Medium", color: COLORS.amber };
+  return { label: "Hard", color: COLORS.red };
+}
+
+// Shown as "People also check" when the SERP returned no related searches.
+const FALLBACK_RELATED = ["free rank tracker", "serp checker api", "google position checker", "keyword rank tool"];
+
 type Competitor = {
   position: number;
   domain: string;
@@ -36,6 +54,13 @@ type Competitor = {
 type CheckResult = {
   position: number | null;
   competitors: Competitor[];
+  difficulty: number | null;
+  topDomain: string | null;
+  resultsScanned: number;
+  country: string;
+  device: Device;
+  checkedAt: string;
+  relatedSearches: string[];
 };
 
 type Phase =
@@ -110,11 +135,27 @@ export function SerpForm() {
       }
 
       // v2 returns the SERP inline: `results` is the top organic list (which
-      // includes the target domain when it ranks) and `position` is its rank.
+      // includes the target domain when it ranks), plus the rank and the metrics
+      // the results panel surfaces (difficulty, top competitor, related searches…).
       const data = (await res.json()) as {
         position?: number | null;
         results?: SerpRow[];
+        keywordDifficulty?: number | null;
+        totalResults?: number;
+        topCompetitor?: { domain: string; position: number } | null;
+        country?: string;
+        device?: Device;
+        checkedAt?: string;
+        serpFeatures?: { relatedSearches?: string[] };
       };
+
+      const rows: Competitor[] = (data.results ?? []).map((r) => ({
+        position: r.position,
+        domain: r.domain,
+        url: r.url,
+        title: r.title,
+        snippet: r.snippet ?? "",
+      }));
 
       pushDataLayer({ event: "serp_check_completed" });
       setPhase({
@@ -123,13 +164,14 @@ export function SerpForm() {
         domain: dom,
         result: {
           position: data.position ?? null,
-          competitors: (data.results ?? []).map((r) => ({
-            position: r.position,
-            domain: r.domain,
-            url: r.url,
-            title: r.title,
-            snippet: r.snippet ?? "",
-          })),
+          competitors: rows,
+          difficulty: data.keywordDifficulty ?? null,
+          topDomain: data.topCompetitor?.domain ?? rows[0]?.domain ?? null,
+          resultsScanned: data.totalResults ?? rows.length,
+          country: data.country ?? country,
+          device: data.device ?? device,
+          checkedAt: data.checkedAt ?? new Date().toISOString(),
+          relatedSearches: (data.serpFeatures?.relatedSearches ?? []).slice(0, 6),
         },
       });
     } catch (err) {
@@ -424,7 +466,14 @@ type DonePhase = {
 
 function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => void }) {
   const { keyword, domain, result } = phase;
-  const top10 = result.competitors.slice(0, 10);
+  const { position, competitors, difficulty, topDomain, resultsScanned, country, device, checkedAt, relatedSearches } =
+    result;
+  const visible = competitors.slice(0, 3);
+  const locked = competitors.slice(3, 6);
+  const kd = difficulty != null ? difficultyBadge(difficulty) : null;
+  const pills = (relatedSearches.length ? relatedSearches : FALLBACK_RELATED).slice(0, 6);
+  const signupHref = (kw: string) =>
+    appUrl(`/signup?keyword=${encodeURIComponent(kw)}&country=${encodeURIComponent(country)}`);
 
   return (
     <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
@@ -435,172 +484,106 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
           position: "relative",
           background: "#fff",
           borderRadius: 20,
-          padding: 28,
+          padding: 22,
           boxShadow: "0 20px 60px rgba(0,0,0,.18)",
           textAlign: "left",
         }}
       >
-        {/* Summary */}
-        <p
-          style={{
-            margin: "0 0 20px",
-            fontSize: 16,
-            fontWeight: 600,
-            color: COLORS.black,
-            lineHeight: 1.4,
-          }}
-        >
-          {result.position !== null ? (
+        {/* Headline */}
+        <p style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 700, color: COLORS.black, lineHeight: 1.3, letterSpacing: "-.3px" }}>
+          {position !== null ? (
             <>
               <span style={{ color: COLORS.blue }}>{domain}</span> ranks{" "}
-              <span style={{ color: COLORS.green }}>#{result.position}</span> for &ldquo;{keyword}&rdquo;
+              <span style={{ color: COLORS.green }}>#{position}</span> for &ldquo;{keyword}&rdquo;
             </>
           ) : (
             <>
               <span style={{ color: COLORS.blue }}>{domain}</span>{" "}
-              isn&apos;t in the results we scanned for &ldquo;{keyword}&rdquo;
+              {`isn't ranking in the top ${resultsScanned} for “${keyword}” yet — but here's who is.`}
             </>
           )}
         </p>
 
-        {/* Results list — styled like a Google SERP */}
-        {top10.length === 0 ? (
+        {/* Context subline */}
+        <p style={{ margin: "0 0 14px", fontSize: 13, color: COLORS.subtle }}>
+          {countryName(country)} · {device === "mobile" ? "Mobile" : "Desktop"} · scanned {timeAgo(checkedAt)}
+        </p>
+
+        {/* Stat tiles */}
+        <div
+          className="fs-serp-stats"
+          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 16 }}
+        >
+          <StatTile label="Difficulty">
+            {kd ? (
+              <>
+                {difficulty} <span style={{ fontSize: 14, fontWeight: 600, color: kd.color }}>{kd.label}</span>
+              </>
+            ) : (
+              "—"
+            )}
+          </StatTile>
+          <StatTile label="Top domain">{topDomain ?? "—"}</StatTile>
+          <StatTile label="Results scanned">{resultsScanned}</StatTile>
+        </div>
+
+        {/* Top results */}
+        <h3 style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: COLORS.black }}>Top results right now</h3>
+
+        {visible.length === 0 ? (
           <p style={{ fontSize: 14, color: COLORS.gray, margin: "0 0 20px" }}>
             No results returned for this keyword.
           </p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 20 }}>
-            {top10.map((row) => {
-              const isOwn = row.domain.toLowerCase() === domain.toLowerCase();
-              return (
-                <div
-                  key={row.position}
-                  className="fs-serp-result-row"
-                  style={{
-                    padding: "14px 16px",
-                    borderRadius: 12,
-                    background: isOwn ? COLORS.blueBg : "transparent",
-                    border: `1px solid ${isOwn ? COLORS.blue : "transparent"}`,
-                  }}
-                >
-                  {/* site line — favicon + name + URL breadcrumb */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`https://www.google.com/s2/favicons?sz=64&domain=${encodeURIComponent(row.domain)}`}
-                      alt=""
-                      width={28}
-                      height={28}
-                      onError={(e) => {
-                        e.currentTarget.style.visibility = "hidden";
-                      }}
-                      style={{
-                        flexShrink: 0,
-                        borderRadius: "50%",
-                        border: `1px solid ${COLORS.border}`,
-                        background: "#fff",
-                      }}
-                    />
-                    <div style={{ minWidth: 0, lineHeight: 1.3 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 14, color: COLORS.black }}>
-                          {siteName(row.domain)}
-                        </span>
-                        {isOwn && (
-                          <span
-                            style={{
-                              fontSize: 10,
-                              fontWeight: 700,
-                              letterSpacing: ".06em",
-                              textTransform: "uppercase",
-                              color: "#fff",
-                              background: COLORS.blue,
-                              padding: "2px 7px",
-                              borderRadius: 100,
-                            }}
-                          >
-                            Your site
-                          </span>
-                        )}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: 12.5,
-                          color: COLORS.gray,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {breadcrumb(row.url)}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* title — clickable, like a Google result link */}
-                  <a
-                    href={row.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-block",
-                      margin: "6px 0 0",
-                      fontSize: 19,
-                      fontWeight: 500,
-                      color: COLORS.blue,
-                      lineHeight: 1.3,
-                      textDecoration: "none",
-                      letterSpacing: "-.2px",
-                    }}
-                  >
-                    {row.title || row.domain}
-                  </a>
-
-                  {/* snippet */}
-                  {row.snippet && (
-                    <p
-                      style={{
-                        margin: "4px 0 0",
-                        fontSize: 14,
-                        color: COLORS.gray,
-                        lineHeight: 1.55,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {row.snippet}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
+          <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: locked.length ? 8 : 16 }}>
+            {visible.map((row, i) => (
+              <ResultRow key={row.position} row={row} rank={i + 1} own={row.domain.toLowerCase() === domain.toLowerCase()} />
+            ))}
           </div>
         )}
 
-        {/* Login gate */}
-        <div
-          style={{
-            padding: "20px 22px",
-            borderRadius: 12,
-            border: `1px solid ${COLORS.border}`,
-            background: COLORS.softGray,
-            textAlign: "center",
-          }}
-        >
-          <p style={{ margin: "0 0 14px", fontSize: 14, lineHeight: 1.5, color: COLORS.gray }}>
-            This free check scans just the first page or two of results. Log in to see the full
-            report and competitor analysis.
-          </p>
+        {/* Locked competitor preview — the rest of the SERP, blurred behind the gate */}
+        {locked.length > 0 && (
+          <div style={{ position: "relative", marginBottom: 16 }}>
+            <div className="fs-serp-locked">
+              {locked.map((row, i) => (
+                <ResultRow key={row.position} row={row} rank={i + 4} own={false} />
+              ))}
+            </div>
+            <div className="fs-serp-lock-overlay">
+              <span
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: "50%",
+                  background: "#fff",
+                  boxShadow: "0 6px 20px rgba(0,0,0,.14)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: COLORS.blue,
+                }}
+              >
+                <LockIcon size={18} />
+              </span>
+              <p style={{ margin: "10px 0 0", maxWidth: 380, fontSize: 13, fontWeight: 600, color: COLORS.black, textAlign: "center", lineHeight: 1.4 }}>
+                See all {resultsScanned} competitors, their exact positions, and the keywords they rank for.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Signup CTA */}
+        <div style={{ textAlign: "center" }}>
           <a
-            href={appUrl("/login")}
+            href={signupHref(keyword)}
+            onClick={() => pushDataLayer({ event: "cta_click" })}
             style={{
               display: "inline-block",
               background: COLORS.blue,
               color: "#fff",
-              padding: "13px 28px",
-              borderRadius: 10,
+              padding: "13px 26px",
+              borderRadius: 12,
               fontSize: 15,
               fontWeight: 600,
               textDecoration: "none",
@@ -608,12 +591,49 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
               boxShadow: "0 8px 22px rgba(4,84,255,.25)",
             }}
           >
-            Log in to view the full report
+            Start tracking &ldquo;{keyword}&rdquo; — free →
           </a>
+          <p
+            style={{
+              margin: "8px 0 0",
+              fontSize: 12.5,
+              color: COLORS.subtle,
+              display: "flex",
+              gap: 7,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <GoogleLogo size={15} /> No credit card · sign up with Google in one click
+          </p>
+          <p style={{ margin: "8px 0 0", fontSize: 12.5, color: COLORS.gray }}>
+            Join 2,400+ marketers tracking 60k+ keywords on FreeSerp
+          </p>
         </div>
 
+        {/* People also check */}
+        {pills.length > 0 && (
+          <div style={{ marginTop: 16, paddingTop: 14, borderTop: `1px solid ${COLORS.border}` }}>
+            <p style={{ margin: "0 0 8px", fontSize: 11, fontWeight: 700, color: COLORS.subtle, textTransform: "uppercase", letterSpacing: ".06em" }}>
+              People also check
+            </p>
+            <div className="fs-serp-pills">
+              {pills.map((term) => (
+                <a
+                  key={term}
+                  href={signupHref(term)}
+                  onClick={() => pushDataLayer({ event: "cta_click" })}
+                  className="fs-serp-pill"
+                >
+                  {term}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Reset */}
-        <p style={{ margin: "16px 0 0", textAlign: "center", fontSize: 13 }}>
+        <p style={{ margin: "10px 0 0", textAlign: "center", fontSize: 13 }}>
           <button
             type="button"
             onClick={onReset}
@@ -632,6 +652,74 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
             Check another keyword
           </button>
         </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Results-panel sub-parts ──────────────────────────────────────────────────
+
+function StatTile({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div style={{ border: `1px solid ${COLORS.border}`, borderRadius: 14, padding: "11px 13px", background: "#fff" }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: COLORS.subtle, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 4 }}>
+        {label}
+      </div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: COLORS.black, lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** One SERP row: display rank + title link + green URL breadcrumb. */
+function ResultRow({ row, rank, own }: { row: Competitor; rank: number; own: boolean }) {
+  return (
+    <div
+      className="fs-serp-result-row"
+      style={{
+        display: "flex",
+        gap: 14,
+        alignItems: "flex-start",
+        padding: "8px 12px",
+        borderRadius: 10,
+        background: own ? COLORS.blueBg : "transparent",
+        border: `1px solid ${own ? COLORS.blue : "transparent"}`,
+      }}
+    >
+      <span style={{ flexShrink: 0, width: 20, textAlign: "center", fontSize: 14, fontWeight: 700, color: own ? COLORS.blue : COLORS.subtle, lineHeight: "20px" }}>
+        {rank}
+      </span>
+      <div style={{ minWidth: 0 }}>
+        <a
+          href={row.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ fontSize: 15, fontWeight: 600, color: COLORS.black, textDecoration: "none", lineHeight: 1.3 }}
+        >
+          {row.title || row.domain}
+          {own && (
+            <span
+              style={{
+                marginLeft: 8,
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: ".06em",
+                textTransform: "uppercase",
+                color: "#fff",
+                background: COLORS.blue,
+                padding: "2px 7px",
+                borderRadius: 100,
+                verticalAlign: "middle",
+              }}
+            >
+              Your site
+            </span>
+          )}
+        </a>
+        <div style={{ marginTop: 2, fontSize: 13, color: COLORS.green, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {breadcrumb(row.url)}
+        </div>
       </div>
     </div>
   );

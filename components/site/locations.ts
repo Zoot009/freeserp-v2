@@ -95,3 +95,12 @@ export function flagFor(code: string): string {
   const cp = (c: string) => 0x1f1e6 + (c.toUpperCase().charCodeAt(0) - 65)
   return String.fromCodePoint(cp(code[0]), cp(code[1]))
 }
+
+const NAME_BY_CODE = new Map<string, string>(
+  [...POPULAR_LOCATIONS, ...ALL_LOCATIONS].map((l) => [l.code, l.name]),
+)
+
+/** Human country name for an ISO-3166 alpha-2 code, e.g. "in" → "India". Falls back to the upper-cased code. */
+export function countryName(code: string): string {
+  return NAME_BY_CODE.get(code.toLowerCase()) ?? code.toUpperCase()
+}
