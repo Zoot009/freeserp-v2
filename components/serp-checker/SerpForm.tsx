@@ -474,6 +474,10 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
   const pills = (relatedSearches.length ? relatedSearches : FALLBACK_RELATED).slice(0, 6);
   const signupHref = (kw: string) =>
     appUrl(`/signup?keyword=${encodeURIComponent(kw)}&country=${encodeURIComponent(country)}`);
+  // "People also check" pills send visitors to the product login page (keyword/
+  // country carried through so the app can continue that check after auth).
+  const loginHref = (kw: string) =>
+    appUrl(`/login?keyword=${encodeURIComponent(kw)}&country=${encodeURIComponent(country)}`);
 
   return (
     <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
@@ -621,7 +625,7 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
               {pills.map((term) => (
                 <a
                   key={term}
-                  href={signupHref(term)}
+                  href={loginHref(term)}
                   onClick={() => pushDataLayer({ event: "cta_click" })}
                   className="fs-serp-pill"
                 >
