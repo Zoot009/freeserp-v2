@@ -1,3 +1,5 @@
+import { utmToParams, type Utm } from "@/lib/utm";
+
 export const COLORS = {
   blue: "#0454ff",
   black: "#000",
@@ -53,6 +55,20 @@ export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://app.freeserp.
 /** Build an absolute URL into the product app, e.g. appUrl("/signup"). */
 export function appUrl(path = ""): string {
   return `${APP_URL}${path}`;
+}
+
+/**
+ * Like appUrl(), but appends the visitor's campaign UTMs so they survive the hop
+ * to the app's own origin (app.freeserp.com), where the app's UtmCapture records
+ * a touch on the /signup or /login landing. Only present UTMs are appended, so an
+ * un-tagged visitor gets the plain appUrl(path). Pure — the caller supplies the
+ * UTMs (see the useAppUrl hook, which reads them from the URL / session).
+ */
+export function appUrlWithUtm(path = "", utm: Utm = {}): string {
+  const base = appUrl(path);
+  const qs = utmToParams(utm).toString();
+  if (!qs) return base;
+  return base + (base.includes("?") ? "&" : "?") + qs;
 }
 
 /**

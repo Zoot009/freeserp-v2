@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
-import { hasAnyUtm, readUtm, recordTouch, type Utm } from "@/lib/utm"
+import { hasAnyUtm, persistUtm, readUtm, recordTouch, type Utm } from "@/lib/utm"
 import { track } from "@/lib/analytics"
 
 // Marks that this browser session's entry touch has been recorded, so the
@@ -59,6 +59,9 @@ export function UtmCapture() {
       entryHandled.current = true
       if (hasAnyUtm(entry.utm)) {
         markSessionStarted() // an attributed entry IS the session origin
+        // Stash for app-bound CTAs so the campaign carries across the origin hop
+        // even after the visitor navigates within the marketing site.
+        persistUtm(entry.utm)
         void recordTouch(
           { ...entry.utm, referrer: entry.referrer, landingPath: entry.landingPath },
           dedupeKey("entry", entry.landingPath, entry.utm),
@@ -72,6 +75,7 @@ export function UtmCapture() {
     const utm = readUtm(searchParams)
     const referrer = typeof document !== "undefined" ? document.referrer || undefined : undefined
     if (hasAnyUtm(utm)) {
+      persistUtm(utm)
       void recordTouch({ ...utm, referrer, landingPath: pathname }, dedupeKey("nav", pathname, utm))
       return
     }

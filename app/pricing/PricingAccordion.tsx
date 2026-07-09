@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { pushDataLayer } from "@/lib/gtm";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 const FEATURES = [
   "190+ countries & all devices",
@@ -44,9 +45,8 @@ function Check() {
   );
 }
 
-const SIGNUP_URL = "https://app.freeserp.com/signup";
-
 export function PricingAccordion({ plans }: { plans: Plan[] }) {
+  const appUrl = useAppUrl();
   const [index, setIndex] = useState(0);
   const plan = plans[index];
   const isFirst = index === 0;
@@ -280,7 +280,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
 
       {/* CTA */}
       <a
-        href={SIGNUP_URL}
+        href={appUrl("/signup")}
         onClick={() => pushDataLayer({ event: "cta_click" })}
         style={{
           display: "flex",

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
+import { BACKEND_URL, COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/components/site/locations";
 import { LockIcon, GoogleLogo } from "@/components/site/icons";
 import { pushDataLayer } from "@/lib/gtm";
@@ -87,6 +88,7 @@ type SerpRow = {
 };
 
 export function SerpForm() {
+  const appUrl = useAppUrl();
   const [domain, setDomain] = useState("");
   const [keyword, setKeyword] = useState("");
   const [country, setCountry] = useState("in");
@@ -465,6 +467,7 @@ type DonePhase = {
 };
 
 function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => void }) {
+  const appUrl = useAppUrl();
   const { keyword, domain, result } = phase;
   const { position, competitors, difficulty, topDomain, resultsScanned, country, device, checkedAt, relatedSearches } =
     result;

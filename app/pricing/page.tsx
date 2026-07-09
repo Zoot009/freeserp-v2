@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
+import { AppCtaLink } from "@/components/site/AppCtaLink";
 import { PricingAccordion } from "./PricingAccordion";
 
 const PAGE_URL = "https://freeserp.com/pricing";
@@ -19,8 +20,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-const SIGNUP_URL = "https://app.freeserp.com/signup";
 
 const FREE_FEATURES: { text: string; muted?: boolean }[] = [
   { text: "5 SERP checks / day" },
@@ -209,8 +208,8 @@ export default function PricingPage() {
                   ))}
                 </ul>
 
-                <a
-                  href={SIGNUP_URL}
+                <AppCtaLink
+                  path="/signup"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -228,7 +227,7 @@ export default function PricingPage() {
                   }}
                 >
                   Free Plan
-                </a>
+                </AppCtaLink>
               </div>
 
               {/* Right: Paid plans stepper */}
