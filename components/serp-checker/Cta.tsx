@@ -2,10 +2,12 @@
 
 import { Reveal } from "@/components/site/Reveal";
 import { SparkleIcon } from "@/components/site/icons";
-import { COLORS, appUrl } from "@/components/site/constants";
+import { COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
 
 export function Cta() {
+  const appUrl = useAppUrl();
   return (
     <section style={{ padding: "100px 0 80px" }}>
       <div

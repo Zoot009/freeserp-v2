@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { COLORS, appUrl } from "@/components/site/constants";
+import { COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
 import { pushDataLayer } from "@/lib/gtm";
 
 export function HeroSearch() {
+  const appUrl = useAppUrl();
   const [keyword, setKeyword] = useState("");
   const [country, setCountry] = useState("in");
   const [checking, setChecking] = useState(false);

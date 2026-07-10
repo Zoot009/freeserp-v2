@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
-import { hasAnyUtm, readUtm, recordTouch, type Utm } from "@/lib/utm"
-import { track } from "@/lib/analytics"
+import { hasAnyUtm, persistUtm, readUtm, recordTouch, type Utm } from "@/lib/utm"
+import { track, flushPageEngagement, markPage, initHeatmap } from "@/lib/analytics"
 
 // Marks that this browser session's entry touch has been recorded, so the
 // direct/organic origin (referrer + landing path) is logged once per session.
@@ -59,6 +59,9 @@ export function UtmCapture() {
       entryHandled.current = true
       if (hasAnyUtm(entry.utm)) {
         markSessionStarted() // an attributed entry IS the session origin
+        // Stash for app-bound CTAs so the campaign carries across the origin hop
+        // even after the visitor navigates within the marketing site.
+        persistUtm(entry.utm)
         void recordTouch(
           { ...entry.utm, referrer: entry.referrer, landingPath: entry.landingPath },
           dedupeKey("entry", entry.landingPath, entry.utm),
@@ -72,6 +75,7 @@ export function UtmCapture() {
     const utm = readUtm(searchParams)
     const referrer = typeof document !== "undefined" ? document.referrer || undefined : undefined
     if (hasAnyUtm(utm)) {
+      persistUtm(utm)
       void recordTouch({ ...utm, referrer, landingPath: pathname }, dedupeKey("nav", pathname, utm))
       return
     }
@@ -83,10 +87,19 @@ export function UtmCapture() {
     }
   }, [pathname, searchParams, entry])
 
-  // Behavioural page-view tracking, deduped on consecutive identical paths.
+  // Register the click-heatmap listener once for the whole session.
+  useEffect(() => {
+    initHeatmap()
+  }, [])
+
+  // Behavioural page-view tracking, deduped on consecutive identical paths. On each
+  // real navigation, flush the engagement (dwell + scroll) of the page just left and
+  // start measuring the new one.
   const lastPagePath = useRef<string | null>(null)
   useEffect(() => {
     if (lastPagePath.current === pathname) return
+    flushPageEngagement()
+    markPage(pathname)
     lastPagePath.current = pathname
     track("$pageview")
   }, [pathname])

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Reveal } from "@/components/site/Reveal";
 import { SectionHead } from "@/components/site/SectionHead";
-import { COLORS, appUrl } from "@/components/site/constants";
+import { COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
 
 const FREE_FEATURES = [
@@ -74,6 +75,7 @@ function LightCheck() {
 }
 
 export function Pricing() {
+  const appUrl = useAppUrl();
   const [index, setIndex] = useState(3);
   const plan = PAID_PLANS[index];
   const isFirst = index === 0;

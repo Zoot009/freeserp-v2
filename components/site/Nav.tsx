@@ -7,10 +7,12 @@ import { useScrolled } from "./hooks";
 import { NAV, navHref, type NavItem } from "./constants";
 import { ArrowUpRight } from "./icons";
 import { pushDataLayer } from "@/lib/gtm";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 export function Nav({ currentNav }: { currentNav?: NavItem }) {
   const scrolled = useScrolled(40);
   const [menuOpen, setMenuOpen] = useState(false);
+  const appUrl = useAppUrl();
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -84,7 +86,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
           </div>
 
           <a
-            href="https://app.freeserp.com/signup"
+            href={appUrl("/signup")}
             onClick={() => pushDataLayer({ event: "cta_click" })}
             className="fs-cta-btn fs-nav-cta"
             style={{ background: "#000", color: "#fff" }}
@@ -171,7 +173,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
               </a>
             ))}
             <a
-              href="https://app.freeserp.com/signup"
+              href={appUrl("/signup")}
               onClick={() => {
                 pushDataLayer({ event: "cta_click" });
                 closeMenu();

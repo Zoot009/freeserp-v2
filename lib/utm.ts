@@ -85,6 +85,41 @@ export function hasAnyUtm(utm: Utm): boolean {
   return Object.keys(utm).length > 0
 }
 
+// Serialize a Utm map back to utm_* query params, keeping only present keys.
+export function utmToParams(utm: Utm): URLSearchParams {
+  const params = new URLSearchParams()
+  for (const [param, field] of UTM_KEYS) {
+    const v = utm[field]
+    if (v) params.set(param, v)
+  }
+  return params
+}
+
+const UTM_SESSION_KEY = "fs_utm"
+
+// Persist the campaign-bearing UTMs for this browser session so app-bound CTAs can
+// carry them even after the visitor navigates within the marketing site (which
+// drops the original query string). Only writes when at least one UTM is present,
+// so a later un-tagged pageview never clobbers the campaign.
+export function persistUtm(utm: Utm): void {
+  if (typeof window === "undefined" || !hasAnyUtm(utm)) return
+  try {
+    sessionStorage.setItem(UTM_SESSION_KEY, JSON.stringify(utm))
+  } catch {
+    /* sessionStorage unavailable — best-effort */
+  }
+}
+
+export function readPersistedUtm(): Utm {
+  if (typeof window === "undefined") return {}
+  try {
+    const raw = sessionStorage.getItem(UTM_SESSION_KEY)
+    return raw ? (JSON.parse(raw) as Utm) : {}
+  } catch {
+    return {}
+  }
+}
+
 // Fire-and-forget a single touch to the backend (cross-origin — uses fetch with
 // credentials so an existing session cookie, if any, is attributed). `dedupeKey`
 // guards against duplicate inserts within the same tab session. Never throws —

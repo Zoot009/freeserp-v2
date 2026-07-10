@@ -1,10 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { BACKEND_URL, COLORS, appUrl } from "@/components/site/constants";
+import { BACKEND_URL, COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/components/site/locations";
 import { LockIcon, GoogleLogo } from "@/components/site/icons";
 import { pushDataLayer } from "@/lib/gtm";
+import { track } from "@/lib/analytics";
 
 type Device = "desktop" | "mobile";
 
@@ -87,6 +89,7 @@ type SerpRow = {
 };
 
 export function SerpForm() {
+  const appUrl = useAppUrl();
   const [domain, setDomain] = useState("");
   const [keyword, setKeyword] = useState("");
   const [country, setCountry] = useState("in");
@@ -158,6 +161,16 @@ export function SerpForm() {
       }));
 
       pushDataLayer({ event: "serp_check_completed" });
+      // First-party activation signal: this visitor used the free checker. SerpForm
+      // is shared by the serp-checker, rank-tracker and website-ranking-checker pages,
+      // so `tool` records which one fired it.
+      track("serp_checker_used", {
+        keyword: kw,
+        domain: dom,
+        country,
+        device,
+        tool: window.location.pathname,
+      });
       setPhase({
         kind: "done",
         keyword: kw,
@@ -465,6 +478,7 @@ type DonePhase = {
 };
 
 function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => void }) {
+  const appUrl = useAppUrl();
   const { keyword, domain, result } = phase;
   const { position, competitors, difficulty, topDomain, resultsScanned, country, device, checkedAt, relatedSearches } =
     result;

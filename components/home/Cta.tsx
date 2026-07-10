@@ -1,10 +1,12 @@
 "use client";
 
 import { Reveal } from "@/components/site/Reveal";
-import { COLORS, appUrl } from "@/components/site/constants";
+import { COLORS } from "@/components/site/constants";
+import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
 
 export function Cta() {
+  const appUrl = useAppUrl();
   return (
     <section style={{ padding: "80px 0" }}>
       <div
