@@ -27,6 +27,60 @@ export const FEATURES = [
   },
 ];
 
+export const INSIDE_APP = [
+  {
+    kicker: "RANK TRACKER",
+    title: "Catch every rank change the moment it happens",
+    text: "Every tracked keyword updates daily — average position, estimated traffic, and how many terms sit in the top 3, top 10, and top 30. No more spreadsheets, no more end-of-month surprises.",
+    link: { text: "Explore Rank Tracker →", href: "/rank-tracker" },
+    image: "/inside-app/rank-tracker.jpg",
+    alt: "FreeSERP rank tracker — keywords tracked",
+    pop: { label: "Keywords in Top 10", num: "312", badge: "26%", color: COLORS.blue },
+  },
+  {
+    kicker: "COMPETITOR ANALYSIS",
+    title: "See exactly who's outranking you",
+    text: "Pull the real top-10 competitors for any tracked keyword, compare their pages side by side, and pick which ones to analyze further.",
+    image: "/inside-app/competitor-analysis.jpg",
+    alt: "Competitor analysis — shared keywords and gaps",
+    pop: { label: "You rank higher", num: "100%", badge: "2 of 2", color: COLORS.blue },
+  },
+  {
+    kicker: "PROJECTS",
+    title: "One dashboard per domain",
+    text: "Organize keywords into projects — your site, a client's site, or a competitor you're watching. Each gets its own tracked history.",
+    image: "/inside-app/projects.jpg",
+    alt: "Projects — one dashboard per domain",
+    pop: { label: "Active projects", num: "12", badge: "3 new", color: COLORS.purple },
+  },
+  {
+    kicker: "ALERTS",
+    title: "Get notified the moment rankings move",
+    text: "No need to check the dashboard every morning — significant position changes land in your activity feed as they happen.",
+    image: "/inside-app/alerts.jpg",
+    alt: "Alerts — rank-change notifications",
+    pop: { label: "Rank movements · 7d", num: "13", badge: "8 up", color: COLORS.blue },
+  },
+  {
+    kicker: "FAVORITES",
+    title: "Pin the keywords that matter most",
+    text: "Star your highest-priority terms across every project so they're one click away, without digging through hundreds of rows.",
+    image: "/inside-app/favorites.jpg",
+    alt: "Favorites — pinned keywords",
+    narrow: true,
+    pop: { label: "Pinned keywords", num: "3", badge: "starred", color: COLORS.amber },
+  },
+  {
+    kicker: "GOOGLE SEARCH CONSOLE",
+    title: "Connect real click data to your rank data",
+    text: "Link Search Console to any project and see clicks, impressions, and CTR sit right next to FreeSERP's tracked positions — so you know which rankings are actually driving traffic. Export any of it to CSV in one click.",
+    link: { text: "See integrations →", href: "#" },
+    image: "/inside-app/search-console.jpg",
+    alt: "Tracked keyword positions",
+    pop: { label: "Clicks · 28 days", num: "9.6K", badge: "15%", color: COLORS.purple },
+  },
+];
+
 export const BENEFITS = [
   {
     title: "01 — Enter a keyword",

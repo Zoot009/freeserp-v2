@@ -2,6 +2,7 @@
 @import "../components/site/site.css";
 @import "../components/serp-checker/serp.css";
 @import "../components/blog/blog.css";
+@import "../components/home/inside-app.css";
 
 :root {
   --background: #ffffff;

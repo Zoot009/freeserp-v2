@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/site/Reveal";
 import { COLORS } from "@/components/site/constants";
 import { pushDataLayer } from "@/lib/gtm";
+import { PopCard } from "@/components/home/InsideApp";
 
 export function Hero() {
   return (
@@ -115,22 +116,32 @@ export function Hero() {
         }}
       >
         <Reveal>
-          <Image
-            src="/home.png"
-            alt="Dashboard"
-            width={1427}
-            height={747}
-            priority
-            sizes="(max-width: 1360px) 100vw, 1240px"
-            style={{
-              width: "100%",
-              height: "auto",
-              display: "block",
-              borderRadius: 18,
-              boxShadow:
-                "0 40px 80px rgba(8, 32, 96, .35), 0 12px 32px rgba(8, 32, 96, .25), 0 0 0 1px rgba(255,255,255,.18)",
-            }}
-          />
+          <div className="fs-shot">
+            <Image
+              src="/hero-dashboard.jpg"
+              alt="FreeSERP dashboard"
+              width={1600}
+              height={909}
+              priority
+              sizes="(max-width: 1360px) 100vw, 1240px"
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                borderRadius: 18,
+                boxShadow:
+                  "0 40px 80px rgba(8, 32, 96, .35), 0 12px 32px rgba(8, 32, 96, .25), 0 0 0 1px rgba(255,255,255,.18)",
+              }}
+            />
+            <PopCard
+              label="Average Position Changes"
+              num="36.0"
+              badge="2.4"
+              color={COLORS.blue}
+              position="tr"
+              width={24}
+            />
+          </div>
         </Reveal>
       </div>
     </header>
