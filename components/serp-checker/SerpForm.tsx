@@ -6,6 +6,7 @@ import { useAppUrl } from "@/lib/useAppUrl";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/components/site/locations";
 import { LockIcon, GoogleLogo } from "@/components/site/icons";
 import { pushDataLayer } from "@/lib/gtm";
+import { track } from "@/lib/analytics";
 
 type Device = "desktop" | "mobile";
 
@@ -160,6 +161,16 @@ export function SerpForm() {
       }));
 
       pushDataLayer({ event: "serp_check_completed" });
+      // First-party activation signal: this visitor used the free checker. SerpForm
+      // is shared by the serp-checker, rank-tracker and website-ranking-checker pages,
+      // so `tool` records which one fired it.
+      track("serp_checker_used", {
+        keyword: kw,
+        domain: dom,
+        country,
+        device,
+        tool: window.location.pathname,
+      });
       setPhase({
         kind: "done",
         keyword: kw,
