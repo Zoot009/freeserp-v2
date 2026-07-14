@@ -132,8 +132,8 @@ export function Steps({ sub }: { sub?: string }) {
       className="fs-steps-section"
       style={{
         position: "relative",
-        margin: "100px auto 0",
-        padding: "100px 0 100px",
+        margin: "24px auto 0",
+        padding: "72px 0 100px",
         scrollMarginTop: 80,
         overflow: "hidden",
       }}
@@ -143,11 +143,11 @@ export function Steps({ sub }: { sub?: string }) {
           title="How The Free Rank Tracker Works"
           sub={sub ?? `From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
           titleColor="#fff"
-          subColor="rgba(255,255,255,0.65)"
+          subColor="#fff"
         />
       </div>
 
-        <Reveal style={{ margin: "56px auto 0", maxWidth: 1360, padding: "0 60px" }}>
+        <Reveal style={{ margin: "24px auto 0", maxWidth: 1360, padding: "0 60px" }}>
           <div
             onMouseEnter={() => {
               pausedRef.current = true;

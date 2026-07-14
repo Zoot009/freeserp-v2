@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BACKEND_URL, COLORS } from "@/components/site/constants";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/components/site/locations";
@@ -95,6 +95,24 @@ export function SerpForm() {
   const [country, setCountry] = useState("in");
   const [device, setDevice] = useState<Device>("desktop");
   const [phase, setPhase] = useState<Phase>({ kind: "idle" });
+
+  useEffect(() => {
+    const supportedCountryCodes = new Set([...POPULAR_LOCATIONS, ...ALL_LOCATIONS].map((l) => l.code));
+    const fetchCountry = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        if (!response.ok) return;
+        const data = (await response.json()) as { country?: string };
+        const code = data.country?.toLowerCase();
+        if (code && supportedCountryCodes.has(code)) {
+          setCountry(code);
+        }
+      } catch {
+        // ignore failures and keep default country
+      }
+    };
+    fetchCountry();
+  }, []);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -399,38 +417,6 @@ export function SerpForm() {
           </div>
         )}
 
-        {/* Rate limit — an amber "heads-up" notice. Visible and attention-
-            grabbing, but not a red error: hitting the limit is expected. */}
-        {phase.kind === "ratelimit" && (
-          <div
-            style={{
-              marginTop: 16,
-              padding: "14px 16px",
-              borderRadius: 10,
-              background: COLORS.amberBg,
-              border: `1.5px solid ${COLORS.amber}`,
-              boxShadow: "0 6px 18px rgba(245,166,35,.25)",
-              fontSize: 13.5,
-              lineHeight: 1.5,
-              color: COLORS.amberText,
-              display: "flex",
-              gap: 10,
-              alignItems: "flex-start",
-            }}
-          >
-            <span>
-              <strong style={{ fontWeight: 600 }}>{phase.message}</strong>{" "}
-              <a
-                href={appUrl("/signup")}
-                onClick={() => pushDataLayer({ event: "cta_click" })}
-                style={{ color: COLORS.blue, fontWeight: 700, textDecoration: "underline" }}
-              >
-                Sign up for more checks
-              </a>
-            </span>
-          </div>
-        )}
-
         {/* Timeout */}
         {phase.kind === "timeout" && (
           <div
@@ -464,7 +450,271 @@ export function SerpForm() {
           <ResultsPanel phase={phase} onReset={reset} />
         </div>
       )}
+
+      {/* Free-limit teaser — hitting the daily anonymous quota is expected
+          behaviour, not an error. A plausible-looking result sits behind the
+          popup (top rows sharp, like the real report; a couple more rows
+          blurred underneath, same "locked preview" treatment as the real
+          results panel) so the visitor sees there's something worth
+          unlocking, rather than staring at an empty error state. */}
+      {phase.kind === "ratelimit" && (
+        <div style={{ marginTop: 24, position: "relative", maxWidth: 920, margin: "24px auto 0" }}>
+          <FakeResultsPreview domain={domain.trim() || "yoursite.com"} keyword={keyword.trim() || "your keyword"} country={country} device={device} />
+          <SignupTeaserModal keyword={keyword} country={country} onClose={reset} />
+        </div>
+      )}
     </>
+  );
+}
+
+/** A plausible-looking (but fake) result, blurred behind the signup teaser modal. */
+function buildTeaserResult(domain: string, keyword: string, country: string, device: Device): CheckResult {
+  const slug = keyword.trim().toLowerCase().replace(/\s+/g, "-") || "topic";
+  return {
+    position: null,
+    difficulty: 58,
+    topDomain: "leadingbrand.com",
+    resultsScanned: 100,
+    country,
+    device,
+    checkedAt: new Date().toISOString(),
+    relatedSearches: [],
+    competitors: [
+      {
+        position: 1,
+        domain: "leadingbrand.com",
+        url: `https://leadingbrand.com/${slug}`,
+        title: `The Complete Guide to ${keyword}`,
+        snippet: `Everything you need to know about ${keyword}, updated for 2026.`,
+      },
+      {
+        position: 2,
+        domain: "topcompetitor.io",
+        url: `https://topcompetitor.io/blog/${slug}`,
+        title: `${keyword} — Compared & Ranked`,
+        snippet: `We compared the top options for ${keyword} so you don't have to.`,
+      },
+      {
+        position: 3,
+        domain: domain,
+        url: `https://${domain}/${slug}`,
+        title: `Best ${keyword} in 2026`,
+        snippet: `Our picks for the best ${keyword}, tested and reviewed.`,
+      },
+      {
+        position: 4,
+        domain: "risingstar.co",
+        url: `https://risingstar.co/${slug}`,
+        title: `${keyword}: What Actually Works`,
+        snippet: `A practical breakdown of ${keyword}, with real examples.`,
+      },
+      {
+        position: 5,
+        domain: "nichehub.com",
+        url: `https://nichehub.com/${slug}`,
+        title: `${keyword} — Full Breakdown`,
+        snippet: `Everything worth knowing about ${keyword} in one place.`,
+      },
+    ],
+  };
+}
+
+function FakeResultsPreview({ domain, keyword, country, device }: { domain: string; keyword: string; country: string; device: Device }) {
+  const result = buildTeaserResult(domain, keyword, country, device);
+  const { competitors, difficulty, topDomain, resultsScanned } = result;
+  const kd = difficulty != null ? difficultyBadge(difficulty) : null;
+  const visible = competitors.slice(0, 3);
+  const locked = competitors.slice(3, 5);
+
+  return (
+    // animation: "none" freezes the card-wrap/halo/float animations that the
+    // hero demo normally uses — the dim+blur overlay on top is static, so a
+    // moving card would drift out of alignment with it.
+    <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto", animation: "none" }}>
+      <div className="fs-serp-halo" aria-hidden="true" style={{ animation: "none", opacity: 0.55 }} />
+      <div
+        className="fs-serp-card"
+        style={{
+          position: "relative",
+          background: "#fff",
+          borderRadius: 20,
+          padding: 22,
+          boxShadow: "0 20px 60px rgba(0,0,0,.18)",
+          textAlign: "left",
+          animation: "none",
+        }}
+      >
+        <p style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 700, color: COLORS.black, lineHeight: 1.3 }}>
+          <span style={{ color: COLORS.blue }}>{domain}</span> ranks for &ldquo;{keyword}&rdquo;
+        </p>
+        <p style={{ margin: "0 0 14px", fontSize: 13, color: COLORS.subtle }}>
+          {countryName(country)} · {device === "mobile" ? "Mobile" : "Desktop"} · scanned just now
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 16 }}>
+          <StatTile label="Difficulty">
+            {kd ? (
+              <>
+                {difficulty} <span style={{ fontSize: 14, fontWeight: 600, color: kd.color }}>{kd.label}</span>
+              </>
+            ) : (
+              "—"
+            )}
+          </StatTile>
+          <StatTile label="Top domain">{topDomain ?? "—"}</StatTile>
+          <StatTile label="Results scanned">{resultsScanned}</StatTile>
+        </div>
+        <h3 style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 700, color: COLORS.black }}>Top results right now</h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 8 }}>
+          {visible.map((row, i) => (
+            <ResultRow key={row.position} row={row} rank={i + 1} own={row.domain.toLowerCase() === domain.toLowerCase()} />
+          ))}
+        </div>
+
+        {/* Locked preview — same blurred "see more" treatment as the real
+            results panel, just below the sharp top results. */}
+        <div style={{ position: "relative" }}>
+          <div className="fs-serp-locked">
+            {locked.map((row, i) => (
+              <ResultRow key={row.position} row={row} rank={i + 4} own={false} />
+            ))}
+          </div>
+          <div className="fs-serp-lock-overlay">
+            <span
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: "50%",
+                background: "#fff",
+                boxShadow: "0 6px 20px rgba(0,0,0,.14)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: COLORS.blue,
+              }}
+            >
+              <LockIcon size={18} />
+            </span>
+            <p style={{ margin: "10px 0 0", maxWidth: 380, fontSize: 13, fontWeight: 600, color: COLORS.black, textAlign: "center", lineHeight: 1.4 }}>
+              See all {resultsScanned} competitors and your exact position.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SignupTeaserModal({ keyword, country, onClose }: { keyword: string; country: string; onClose: () => void }) {
+  const appUrl = useAppUrl();
+  const qs = `keyword=${encodeURIComponent(keyword)}&country=${encodeURIComponent(country)}`;
+  const signupHref = appUrl(`/signup?${qs}`);
+  const loginHref = appUrl(`/login?${qs}`);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 1000,
+        background: "rgba(10,10,20,.6)",
+        backdropFilter: "blur(2px)",
+        WebkitBackdropFilter: "blur(2px)",
+        borderRadius: 20,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          position: "relative",
+          background: "#fff",
+          borderRadius: 20,
+          padding: "36px 30px",
+          maxWidth: 400,
+          width: "100%",
+          textAlign: "center",
+          boxShadow: "0 30px 80px rgba(0,0,0,.35)",
+        }}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            background: "none",
+            border: "none",
+            fontSize: 18,
+            lineHeight: 1,
+            color: COLORS.subtle,
+            cursor: "pointer",
+            padding: 4,
+          }}
+        >
+          ✕
+        </button>
+        <span
+          style={{
+            display: "inline-flex",
+            width: 50,
+            height: 50,
+            borderRadius: "50%",
+            background: COLORS.blueBg,
+            color: COLORS.blue,
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 16,
+          }}
+        >
+          <LockIcon size={22} />
+        </span>
+        <h3 style={{ margin: "0 0 8px", fontSize: 19, fontWeight: 700, color: COLORS.black, letterSpacing: "-.2px" }}>
+          You&apos;ve used today&apos;s 2 free checks
+        </h3>
+        <p style={{ margin: "0 0 22px", fontSize: 13.5, lineHeight: 1.55, color: COLORS.gray }}>
+          Sign up free to unlock this full report and get <strong style={{ color: COLORS.black }}>unlimited SERP checks</strong> —
+          no credit card required.
+        </p>
+        <a
+          href={signupHref}
+          onClick={() => pushDataLayer({ event: "cta_click" })}
+          style={{
+            display: "inline-block",
+            width: "100%",
+            background: COLORS.blue,
+            color: "#fff",
+            padding: "14px 24px",
+            borderRadius: 12,
+            fontSize: 15,
+            fontWeight: 600,
+            textDecoration: "none",
+            letterSpacing: "-.1px",
+            boxShadow: "0 8px 22px rgba(4,84,255,.25)",
+          }}
+        >
+          Sign up free — unlock full access
+        </a>
+        <p
+          style={{ margin: "10px 0 0", fontSize: 12.5, color: COLORS.subtle, display: "flex", gap: 7, alignItems: "center", justifyContent: "center" }}
+        >
+          <GoogleLogo size={15} /> Sign up with Google in one click
+        </p>
+        <p style={{ margin: "16px 0 0", fontSize: 12.5, color: COLORS.gray }}>
+          Already have an account?{" "}
+          <a href={loginHref} onClick={() => pushDataLayer({ event: "cta_click" })} style={{ color: COLORS.blue, fontWeight: 600, textDecoration: "underline" }}>
+            Log in
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }
 
