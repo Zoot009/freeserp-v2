@@ -1,0 +1,159 @@
+import type { Dictionary } from "./types";
+
+const en: Dictionary = {
+  meta: {
+    title: "FreeSerp — Track your rankings in real time",
+    description:
+      "Find the keywords and competitors impacting your search visibility — and outrank them fast, with daily updates.",
+  },
+  header: {
+    getStarted: "Get started free",
+    tryFree: "Sign up for free",
+  },
+  hero: {
+    headline1: "Track your rankings",
+    headlineHighlight: "in real time",
+    subheading:
+      "Find the keywords and competitors impacting your search visibility — and outrank them fast, with daily updates.",
+    inputPlaceholder: "Enter your domain",
+    ctaButton: "Check rankings free",
+    disclaimer: "Free forever · 5 SERP checks a day · No credit card required",
+    liveDemo: "Live demo",
+    demoAlt:
+      "FreeSerp product demo: entering a domain and keyword to check search rankings",
+  },
+  logoStrip: {
+    trustLine: "2M+ marketers already track with FreeSERP",
+    heading: "See where you rank in google search",
+    steps: [
+      {
+        step: "STEP #1",
+        title: "Enter your domain",
+        body: "Enter any domain or keyword you want to track.",
+      },
+      {
+        step: "STEP #2",
+        title: "Pick keywords & scope",
+        body: "Choose the keywords, countries, and devices to monitor.",
+      },
+      {
+        step: "STEP #3",
+        title: "Get your positions",
+        body: "See your visibility score and top-10 coverage — and what to fix first.",
+      },
+    ],
+  },
+  visibility: {
+    visibilityScore: "Visibility score",
+    scorePct: "68%",
+    visibilityDelta: "+4%",
+    top10Coverage: "Top-10 coverage",
+    coveragePct: "24%",
+    noChange: "no change",
+    trackedKeywords: "Tracked keywords",
+    trackedRows: [
+      { label: "Winning", val: "312", color: "#16a34a" },
+      { label: "Losing", val: "48", color: "#ef4444" },
+      { label: "New", val: "12", color: "#f59e0b" },
+      { label: "Lost", val: "5", color: "#9aa2b5" },
+    ],
+    heading: "Track 50M+ keywords across 190+ countries",
+    bullets: [
+      "See your visibility score and top-10 coverage side by side",
+      "Benchmark your positions against competitors on every shared keyword",
+      "Fix the keywords slipping first with prioritized, daily-updated data",
+    ],
+  },
+  competitors: {
+    heading: "Catch every competitor outranking you",
+    bullets: [
+      "See exactly who ranks above you for each keyword",
+      "Track shared keywords, content gaps, and where you win",
+      "Spot rivals gaining ground before it costs you traffic",
+    ],
+    rankReport: "Rank report",
+    filters: ["All 112", "Winning 20", "Losing 24"],
+    movement: "MOVEMENT",
+    issueRows: [
+      { lead: "12 keywords", rest: "entered the top 10" },
+      { lead: "8 keywords", rest: "dropped out of the top 20" },
+      { lead: "5 competitors", rest: "gained on shared terms" },
+    ],
+    view: "View",
+    aboutTitle: "About this movement",
+    aboutBody:
+      "Positions shift daily as competitors publish and Google re-ranks.",
+    respondTitle: "How to respond",
+    respondBody:
+      "Refresh the slipping page and target the competitor's gap keywords.",
+  },
+  thematic: {
+    heading: "Thematic reports",
+    items: [
+      { label: "Rank Tracking", pct: "97%", delta: "+4%", positive: true },
+      { label: "SERP Features", pct: "85%", delta: "-11%", positive: false },
+      { label: "Coverage", pct: "95%", delta: "", positive: true },
+      { label: "Daily Updates", pct: "98%", delta: "+4%", positive: true },
+      { label: "Competitor Gaps", pct: "92%", delta: "+1%", positive: true },
+      { label: "Traffic Est.", pct: "97%", delta: "+2%", positive: true },
+    ],
+    viewDetails: "View details →",
+    heading2: "Monitor and improve your rankings",
+    bullets: [
+      "Access detailed reports on coverage, SERP features, competitors, and traffic",
+      "Schedule daily auto-checks and get alerts before you slip",
+      "Export reports to share progress with clients or stakeholders",
+    ],
+  },
+  stats: {
+    headingLine1: "Marketers all over the world",
+    headingLine2: "trust FreeSERP",
+    items: [
+      {
+        n: "50M+",
+        bold: "Keywords indexed",
+        rest: "across every major search engine",
+      },
+      {
+        n: "190+",
+        bold: "Countries & devices",
+        rest: "with city-level targeting",
+      },
+      {
+        n: "2 min",
+        bold: "From first check",
+        rest: "to daily rank tracking",
+      },
+    ],
+  },
+  testimonial: {
+    quote:
+      "We dropped a $299/mo tool the day we found FreeSERP. Daily rank tracking across 14 countries, competitor gaps, and CSV exports — for a fraction of the price.",
+    name: "Daniel Cooper",
+    role: "Indie SEO Consultant",
+    stat1Val: "+100%",
+    stat1Label: "ranking wins",
+    stat2Val: "^336%",
+    stat2Label: "keyword visibility growth",
+    stat3Val: "Millions",
+    stat3Label: "of ranks tracked",
+  },
+  finalCta: {
+    heading: "Check your rankings now",
+    body: "Search plays by new rules. Most sites don't know where they stand. Find out before it costs you traffic.",
+    button: "Start free",
+    badges: [
+      "#1 RANK TRACKER",
+      "#1 SERP CHECKER",
+      "BEST VALUE SEO TOOL",
+      "BEST FREE TIER 2026",
+      "TOP RATED BY USERS",
+    ],
+    copyright: "© 2026 FreeSERP. All rights reserved.",
+    legal: "Legal Info",
+    privacy: "Privacy Policy",
+    doNotSell: "Do not sell my personal info",
+  },
+};
+
+export default en;

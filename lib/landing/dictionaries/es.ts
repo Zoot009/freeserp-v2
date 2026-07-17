@@ -1,0 +1,175 @@
+import type { Dictionary } from "./types";
+
+const es: Dictionary = {
+  meta: {
+    title: "FreeSerp — Sigue tus posiciones en tiempo real",
+    description:
+      "Encuentra las palabras clave y competidores que afectan tu visibilidad en buscadores, y supéralos rápido con actualizaciones diarias.",
+  },
+  header: {
+    getStarted: "Empieza gratis",
+    tryFree: "Regístrate gratis",
+  },
+  hero: {
+    headline1: "Sigue tus posiciones",
+    headlineHighlight: "en tiempo real",
+    subheading:
+      "Encuentra las palabras clave y competidores que afectan tu visibilidad en buscadores, y supéralos rápido con actualizaciones diarias.",
+    inputPlaceholder: "Ingresa tu dominio",
+    ctaButton: "Comprobar posiciones gratis",
+    disclaimer:
+      "Gratis para siempre · 5 comprobaciones SERP al día · Sin tarjeta de crédito",
+    liveDemo: "Demo en vivo",
+    demoAlt:
+      "Demostración de FreeSerp: ingresar un dominio y palabra clave para comprobar posiciones de búsqueda",
+  },
+  logoStrip: {
+    trustLine: "Más de 2M de marketers ya confían en FreeSERP",
+    heading: "Descubre tu posición en la búsqueda de Google",
+    steps: [
+      {
+        step: "PASO #1",
+        title: "Ingresa tu dominio",
+        body: "Ingresa cualquier dominio o palabra clave que quieras seguir.",
+      },
+      {
+        step: "PASO #2",
+        title: "Elige palabras clave y alcance",
+        body: "Elige las palabras clave, países y dispositivos a monitorear.",
+      },
+      {
+        step: "PASO #3",
+        title: "Obtén tus posiciones",
+        body: "Consulta tu puntuación de visibilidad y cobertura en el top 10, y qué corregir primero.",
+      },
+    ],
+  },
+  visibility: {
+    visibilityScore: "Puntuación de visibilidad",
+    scorePct: "68%",
+    visibilityDelta: "+4%",
+    top10Coverage: "Cobertura top 10",
+    coveragePct: "24%",
+    noChange: "sin cambios",
+    trackedKeywords: "Palabras clave seguidas",
+    trackedRows: [
+      { label: "Ganando", val: "312", color: "#16a34a" },
+      { label: "Perdiendo", val: "48", color: "#ef4444" },
+      { label: "Nuevas", val: "12", color: "#f59e0b" },
+      { label: "Perdidas", val: "5", color: "#9aa2b5" },
+    ],
+    heading: "Sigue más de 50M de palabras clave en más de 190 países",
+    bullets: [
+      "Consulta tu puntuación de visibilidad y cobertura en el top 10 lado a lado",
+      "Compara tus posiciones con la competencia en cada palabra clave compartida",
+      "Corrige primero las palabras clave que están cayendo, con datos priorizados y actualizados a diario",
+    ],
+  },
+  competitors: {
+    heading: "Detecta a cada competidor que te supera",
+    bullets: [
+      "Ve exactamente quién te supera en cada palabra clave",
+      "Sigue palabras clave compartidas, brechas de contenido y dónde ganas",
+      "Detecta rivales que avanzan antes de que te cueste tráfico",
+    ],
+    rankReport: "Informe de posiciones",
+    filters: ["Todas 112", "Ganando 20", "Perdiendo 24"],
+    movement: "MOVIMIENTO",
+    issueRows: [
+      { lead: "12 palabras clave", rest: "entraron al top 10" },
+      { lead: "8 palabras clave", rest: "salieron del top 20" },
+      { lead: "5 competidores", rest: "avanzaron en términos compartidos" },
+    ],
+    view: "Ver",
+    aboutTitle: "Sobre este movimiento",
+    aboutBody:
+      "Las posiciones cambian a diario a medida que los competidores publican contenido y Google reordena resultados.",
+    respondTitle: "Cómo responder",
+    respondBody:
+      "Actualiza la página que está cayendo y apunta a las palabras clave de brecha de la competencia.",
+  },
+  thematic: {
+    heading: "Informes temáticos",
+    items: [
+      {
+        label: "Seguimiento de posiciones",
+        pct: "97%",
+        delta: "+4%",
+        positive: true,
+      },
+      { label: "Funciones SERP", pct: "85%", delta: "-11%", positive: false },
+      { label: "Cobertura", pct: "95%", delta: "", positive: true },
+      {
+        label: "Actualizaciones diarias",
+        pct: "98%",
+        delta: "+4%",
+        positive: true,
+      },
+      {
+        label: "Brechas de competencia",
+        pct: "92%",
+        delta: "+1%",
+        positive: true,
+      },
+      { label: "Est. de tráfico", pct: "97%", delta: "+2%", positive: true },
+    ],
+    viewDetails: "Ver detalles →",
+    heading2: "Monitorea y mejora tus posiciones",
+    bullets: [
+      "Accede a informes detallados de cobertura, funciones SERP, competidores y tráfico",
+      "Programa comprobaciones diarias automáticas y recibe alertas antes de caer",
+      "Exporta informes para compartir el progreso con clientes o interesados",
+    ],
+  },
+  stats: {
+    headingLine1: "Marketers de todo el mundo",
+    headingLine2: "confían en FreeSERP",
+    items: [
+      {
+        n: "50M+",
+        bold: "Palabras clave indexadas",
+        rest: "en cada buscador principal",
+      },
+      {
+        n: "190+",
+        bold: "Países y dispositivos",
+        rest: "con segmentación a nivel ciudad",
+      },
+      {
+        n: "2 min",
+        bold: "Desde la primera comprobación",
+        rest: "hasta el seguimiento diario",
+      },
+    ],
+  },
+  testimonial: {
+    quote:
+      "Dejamos una herramienta de $299/mes el día que encontramos FreeSERP. Seguimiento diario de posiciones en 14 países, brechas de competencia y exportaciones CSV, por una fracción del precio.",
+    name: "Daniel Cooper",
+    role: "Consultor SEO independiente",
+    stat1Val: "+100%",
+    stat1Label: "victorias en posicionamiento",
+    stat2Val: "^336%",
+    stat2Label: "crecimiento en visibilidad de palabras clave",
+    stat3Val: "Millones",
+    stat3Label: "de posiciones seguidas",
+  },
+  finalCta: {
+    heading: "Comprueba tus posiciones ahora",
+    body: "La búsqueda juega con reglas nuevas. La mayoría de los sitios no saben en qué posición están. Descúbrelo antes de que te cueste tráfico.",
+    button: "Empieza gratis",
+    badges: [
+      "N.º 1 EN SEGUIMIENTO DE POSICIONES",
+      "N.º 1 EN VERIFICADOR SERP",
+      "MEJOR RELACIÓN CALIDAD-PRECIO EN SEO",
+      "MEJOR PLAN GRATUITO 2026",
+      "MEJOR VALORADO POR USUARIOS",
+    ],
+    copyright: "© 2026 FreeSERP. Todos los derechos reservados.",
+    legal: "Aviso legal",
+    privacy: "Política de privacidad",
+    doNotSell: "No vender mi información personal",
+  },
+};
+
+export default es;

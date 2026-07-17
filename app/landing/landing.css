@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+/* --font-sans / --font-mono intentionally NOT redeclared here — the parent's
+   app/globals.css already owns those tokens (Archivo / Geist Mono). Redeclaring
+   them would create two conflicting Tailwind-generated `.font-sans` rules with
+   an unstable cascade order. The one place that needs Jakarta explicitly
+   (Hero's search input) binds directly to --font-jakarta instead of font-sans. */
+@theme inline {
+  --color-accent: #2f6bff;
+  --color-accent-dark: #1c4fd6;
+  --color-mint: #1fc79a;
+}
+
+.landing-scope {
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  color: #0b1020;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.landing-scope ::selection {
+  background: rgba(47, 107, 255, 0.2);
+}
+
+.landing-scope .text-emboss {
+  text-shadow: 0 2px 8px rgba(20, 30, 80, 0.1);
+}
+
+/* subtle dot grid, used behind the hero */
+.landing-scope .bg-dot-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(11, 16, 32, 0.14) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* film-grain style noise overlay for texture on dark sections */
+.landing-scope .bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.landing-scope .glow-ring {
+  box-shadow:
+    0 0 0 1px rgba(47, 107, 255, 0.08),
+    0 30px 80px -30px rgba(47, 107, 255, 0.45);
+}
+
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.05);
+  }
+}
+
+.landing-scope .animate-aurora {
+  animation: aurora-drift 14s ease-in-out infinite;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.landing-scope .animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.landing-scope .animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.landing-scope .group\/marquee:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes waveform-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.72);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.landing-scope .animate-waveform {
+  animation: waveform-pulse 2.4s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-scope .animate-aurora,
+  .landing-scope .animate-float,
+  .landing-scope .animate-marquee,
+  .landing-scope .animate-waveform {
+    animation: none;
+  }
+}

@@ -1,0 +1,159 @@
+import type { Dictionary } from "./types";
+
+const fr: Dictionary = {
+  meta: {
+    title: "FreeSerp — Suivez votre classement en temps réel",
+    description:
+      "Trouvez les mots-clés et concurrents qui impactent votre visibilité dans les moteurs de recherche, et devancez-les rapidement grâce à des mises à jour quotidiennes.",
+  },
+  header: {
+    getStarted: "Commencer gratuitement",
+    tryFree: "Inscrivez-vous gratuitement",
+  },
+  hero: {
+    headline1: "Suivez votre classement",
+    headlineHighlight: "en temps réel",
+    subheading:
+      "Trouvez les mots-clés et concurrents qui impactent votre visibilité dans les moteurs de recherche, et devancez-les rapidement grâce à des mises à jour quotidiennes.",
+    inputPlaceholder: "Entrez votre domaine",
+    ctaButton: "Vérifier gratuitement mon classement",
+    disclaimer: "Gratuit à vie · 5 vérifications SERP par jour · Sans carte bancaire",
+    liveDemo: "Démo en direct",
+    demoAlt:
+      "Démonstration FreeSerp : saisie d'un domaine et d'un mot-clé pour vérifier le classement dans les résultats de recherche",
+  },
+  logoStrip: {
+    trustLine: "Plus de 2M de marketeurs font déjà confiance à FreeSERP",
+    heading: "Découvrez votre classement sur Google",
+    steps: [
+      {
+        step: "ÉTAPE #1",
+        title: "Entrez votre domaine",
+        body: "Entrez le domaine ou le mot-clé que vous souhaitez suivre.",
+      },
+      {
+        step: "ÉTAPE #2",
+        title: "Choisissez mots-clés et périmètre",
+        body: "Choisissez les mots-clés, pays et appareils à surveiller.",
+      },
+      {
+        step: "ÉTAPE #3",
+        title: "Obtenez vos positions",
+        body: "Consultez votre score de visibilité et votre couverture du top 10, et ce qu'il faut corriger en premier.",
+      },
+    ],
+  },
+  visibility: {
+    visibilityScore: "Score de visibilité",
+    scorePct: "68%",
+    visibilityDelta: "+4%",
+    top10Coverage: "Couverture top 10",
+    coveragePct: "24%",
+    noChange: "aucun changement",
+    trackedKeywords: "Mots-clés suivis",
+    trackedRows: [
+      { label: "En hausse", val: "312", color: "#16a34a" },
+      { label: "En baisse", val: "48", color: "#ef4444" },
+      { label: "Nouveaux", val: "12", color: "#f59e0b" },
+      { label: "Perdus", val: "5", color: "#9aa2b5" },
+    ],
+    heading: "Suivez plus de 50M de mots-clés dans plus de 190 pays",
+    bullets: [
+      "Consultez votre score de visibilité et votre couverture du top 10 côte à côte",
+      "Comparez vos positions à celles de la concurrence sur chaque mot-clé partagé",
+      "Corrigez en priorité les mots-clés en chute, grâce à des données actualisées chaque jour",
+    ],
+  },
+  competitors: {
+    heading: "Repérez chaque concurrent qui vous devance",
+    bullets: [
+      "Voyez exactement qui vous devance sur chaque mot-clé",
+      "Suivez les mots-clés partagés, les écarts de contenu et vos points forts",
+      "Repérez les concurrents qui progressent avant que cela ne vous coûte du trafic",
+    ],
+    rankReport: "Rapport de classement",
+    filters: ["Tous 112", "En hausse 20", "En baisse 24"],
+    movement: "MOUVEMENT",
+    issueRows: [
+      { lead: "12 mots-clés", rest: "sont entrés dans le top 10" },
+      { lead: "8 mots-clés", rest: "sont sortis du top 20" },
+      { lead: "5 concurrents", rest: "ont progressé sur des termes partagés" },
+    ],
+    view: "Voir",
+    aboutTitle: "À propos de ce mouvement",
+    aboutBody:
+      "Les positions évoluent chaque jour à mesure que les concurrents publient du contenu et que Google réorganise les résultats.",
+    respondTitle: "Comment réagir",
+    respondBody:
+      "Actualisez la page en baisse et ciblez les mots-clés d'écart de vos concurrents.",
+  },
+  thematic: {
+    heading: "Rapports thématiques",
+    items: [
+      { label: "Suivi du classement", pct: "97%", delta: "+4%", positive: true },
+      { label: "Fonctionnalités SERP", pct: "85%", delta: "-11%", positive: false },
+      { label: "Couverture", pct: "95%", delta: "", positive: true },
+      { label: "Mises à jour quotidiennes", pct: "98%", delta: "+4%", positive: true },
+      { label: "Écarts concurrentiels", pct: "92%", delta: "+1%", positive: true },
+      { label: "Est. de trafic", pct: "97%", delta: "+2%", positive: true },
+    ],
+    viewDetails: "Voir les détails →",
+    heading2: "Suivez et améliorez votre classement",
+    bullets: [
+      "Accédez à des rapports détaillés sur la couverture, les fonctionnalités SERP, les concurrents et le trafic",
+      "Programmez des vérifications automatiques quotidiennes et recevez des alertes avant de chuter",
+      "Exportez des rapports à partager avec vos clients ou parties prenantes",
+    ],
+  },
+  stats: {
+    headingLine1: "Des marketeurs du monde entier",
+    headingLine2: "font confiance à FreeSERP",
+    items: [
+      {
+        n: "50M+",
+        bold: "Mots-clés indexés",
+        rest: "sur tous les principaux moteurs de recherche",
+      },
+      {
+        n: "190+",
+        bold: "Pays et appareils",
+        rest: "avec ciblage au niveau de la ville",
+      },
+      {
+        n: "2 min",
+        bold: "De la première vérification",
+        rest: "au suivi quotidien du classement",
+      },
+    ],
+  },
+  testimonial: {
+    quote:
+      "Nous avons abandonné un outil à 299 $/mois le jour où nous avons trouvé FreeSERP. Suivi quotidien du classement dans 14 pays, écarts concurrentiels et exports CSV, pour une fraction du prix.",
+    name: "Daniel Cooper",
+    role: "Consultant SEO indépendant",
+    stat1Val: "+100%",
+    stat1Label: "de gains de classement",
+    stat2Val: "^336%",
+    stat2Label: "de croissance de visibilité des mots-clés",
+    stat3Val: "Millions",
+    stat3Label: "de positions suivies",
+  },
+  finalCta: {
+    heading: "Vérifiez votre classement maintenant",
+    body: "La recherche obéit à de nouvelles règles. La plupart des sites ignorent où ils en sont. Découvrez-le avant que cela ne vous coûte du trafic.",
+    button: "Commencer gratuitement",
+    badges: [
+      "N°1 DU SUIVI DE CLASSEMENT",
+      "N°1 DES VÉRIFICATEURS SERP",
+      "MEILLEUR RAPPORT QUALITÉ-PRIX SEO",
+      "MEILLEURE OFFRE GRATUITE 2026",
+      "LE MIEUX NOTÉ PAR LES UTILISATEURS",
+    ],
+    copyright: "© 2026 FreeSERP. Tous droits réservés.",
+    legal: "Mentions légales",
+    privacy: "Politique de confidentialité",
+    doNotSell: "Ne pas vendre mes informations personnelles",
+  },
+};
+
+export default fr;
