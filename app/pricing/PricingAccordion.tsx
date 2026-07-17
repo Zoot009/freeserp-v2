@@ -5,9 +5,10 @@ import { pushDataLayer } from "@/lib/gtm";
 import { useAppUrl } from "@/lib/useAppUrl";
 
 const FEATURES = [
-  "190+ countries & all devices",
-  "Credits never expire",
-  "Real-time SERP data",
+  "Automated recurring rank checks",
+  "AI analysis for every section — 2/day per worker",
+  "Internal link analysis for all competitors",
+  "Priority support",
 ];
 
 type Plan = {
@@ -49,6 +50,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
   const appUrl = useAppUrl();
   const [index, setIndex] = useState(0);
   const plan = plans[index];
+  const workers = plan.checks / 15; // 1 worker = 15 rank checks / day
   const isFirst = index === 0;
   const isLast = index === plans.length - 1;
 
@@ -131,7 +133,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
       </div>
 
       <p style={{ fontSize: 14, color: "#6b7280", margin: "0 0 22px", fontWeight: 500 }}>
-        {plan.checks.toLocaleString()} SERP checks
+        {workers.toLocaleString()} workers · {plan.checks.toLocaleString()} rank checks / day
       </p>
 
       {/* Stepper box */}
@@ -160,10 +162,10 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
               textTransform: "uppercase" as const,
             }}
           >
-            SERP CHECKS
+            WORKERS
           </span>
           <span style={{ fontSize: 12, color: "#9ca3af" }}>
-            {plan.checks.toLocaleString()} · ${plan.price} one-time
+            {plan.checks.toLocaleString()} checks/day · ${plan.price}/mo
           </span>
         </div>
 
@@ -209,7 +211,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
             }}
           >
             <span style={{ fontSize: 20, fontWeight: 600, color: "#111" }}>
-              {plan.checks.toLocaleString()}
+              {workers.toLocaleString()}
             </span>
           </div>
 
@@ -246,7 +248,7 @@ export function PricingAccordion({ plans }: { plans: Plan[] }) {
             textAlign: "center",
           }}
         >
-          Choose from {plans.length} pack sizes.
+          Choose from {plans.length} worker tiers. Cancel anytime — or save with annual billing at $10/worker/year.
         </p>
       </div>
 

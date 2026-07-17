@@ -24,7 +24,7 @@ export function Ticker() {
           padding: "0 24px",
         }}
       >
-        50M+ Keywords · 190 Countries · Daily Updates · Free Tier Available
+        50M+ Keywords · 190 Countries · Daily Updates · Free Trial Available
       </p>
       <div
         style={{

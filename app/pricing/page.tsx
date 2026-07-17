@@ -9,12 +9,12 @@ const PAGE_URL = "https://freeserp.com/pricing";
 export const metadata: Metadata = {
   title: "Pricing | FreeSERP",
   description:
-    "Simple pay-as-you-go SERP check pricing. No subscriptions, no recurring charges — buy exactly what you need.",
+    "Simple worker subscription pricing, monthly or annual. From $5/mo (5 workers = 75 rank checks/day). Free: 3 checks in a 7-day trial, no card.",
   alternates: { canonical: PAGE_URL },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Pricing | FreeSERP",
-    description: "Simple pay-as-you-go pricing for FreeSERP SERP checks.",
+    description: "Worker subscriptions from $5/mo — 5 workers, 75 rank checks a day. Free 7-day trial with 3 checks.",
     url: PAGE_URL,
     siteName: "FreeSERP",
     type: "website",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const FREE_FEATURES: { text: string; muted?: boolean }[] = [
-  { text: "5 SERP checks / day" },
+  { text: "3 rank checks in a 7-day trial" },
   { text: "Manual checks only", muted: true },
   { text: "All locations & devices" },
   { text: "No credit card required" },
@@ -50,9 +50,9 @@ function CheckIcon() {
   );
 }
 
+// 1 worker = 15 rank checks / day · $1/worker/month (or $10/worker/year)
 const PLANS: { price: number; checks: number; label: string; popular?: boolean }[] = [
-  { price: 1,   checks: 15,   label: "Starter"   },
-  { price: 5,   checks: 75,   label: "Basic"      },
+  { price: 5,   checks: 75,   label: "Starter"    },
   { price: 10,  checks: 150,  label: "Standard"   },
   { price: 20,  checks: 300,  label: "Popular", popular: true },
   { price: 40,  checks: 600,  label: "Growth"     },
@@ -115,7 +115,7 @@ export default function PricingPage() {
               maxWidth: 440,
             }}
           >
-            No Hidded Charges for SERP Checks.
+            Worker subscriptions from $5/month — 5 workers, 75 rank checks a day. Cancel anytime.
           </p>
         </section>
 
@@ -172,11 +172,11 @@ export default function PricingPage() {
                   >
                     $0
                   </span>
-                  <span style={{ fontSize: 14, color: "#9ca3af" }}>/month</span>
+                  <span style={{ fontSize: 14, color: "#9ca3af" }}>/7-day trial</span>
                 </div>
 
                 <p style={{ fontSize: 14, color: "#9ca3af", margin: "0 0 20px" }}>
-                  Forever. No card, no trial.
+                  3 rank checks to try it out. No card required.
                 </p>
 
                 <div style={{ height: 1, background: "#f3f4f6", marginBottom: 20 }} />
@@ -226,7 +226,7 @@ export default function PricingPage() {
                     marginTop: 24,
                   }}
                 >
-                  Free Plan
+                  Start Free Trial
                 </AppCtaLink>
               </div>
 

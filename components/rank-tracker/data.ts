@@ -26,7 +26,7 @@ export type UseCase = { title: string; desc: string; img?: string; alt?: string 
 export const USE_CASES: UseCase[] = [
   {
     title: "Solo SEOs and Freelancers",
-    desc: "Track 5–20 client keywords without a subscription. Export ranking data as a PDF or CSV to send with monthly reports. The rank tracker gives you a clean, professional ranking snapshot in seconds.",
+    desc: "Track 5–20 client keywords without an Ahrefs or Semrush subscription. Export ranking data as a PDF or CSV to send with monthly reports. The rank tracker gives you a clean, professional ranking snapshot in seconds.",
     img: "/serp-image/user.png",
     alt: "rank-tracker — for solo SEOs and freelancers",
   },
@@ -49,7 +49,7 @@ export type FAQ = { q: string; a: string };
 export const FAQ_ITEMS: FAQ[] = [
   {
     q: "Is the rank tracker really free?",
-    a: "Yes — unlimited manual rank checks with no credit card, no trial, and no rate limits. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes, to start — you get 3 free rank checks in a 7-day trial with no credit card. After that, worker plans start at $5/month: each worker adds 15 daily checks, so 5 workers give you 75 rank checks a day. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank tracking data?",
@@ -105,7 +105,7 @@ export const SOFTWARE_APP_SCHEMA = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Unlimited manual rank checks. No credit card required.",
+    description: "3 free rank checks in a 7-day trial. No credit card required.",
   },
   featureList: [
     "Check domain ranking for any keyword",

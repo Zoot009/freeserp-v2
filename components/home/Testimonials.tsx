@@ -136,8 +136,8 @@ export function Testimonials() {
               style={{ fontSize: 17, lineHeight: 1.5, margin: "0 0 auto", paddingBottom: 28 }}
             >
               &quot;FreeSERP delivers the same intelligence the $999/mo enterprise tools
-              sell — the Free tier is genuinely useful for solo work, and Pro is the
-              cheapest serious tier I&apos;ve seen.&quot;
+              sell — the trial won me over fast, and $1 per worker a month is the
+              cheapest serious pricing I&apos;ve seen.&quot;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               <Image

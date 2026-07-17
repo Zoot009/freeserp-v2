@@ -184,16 +184,16 @@ export function Compare() {
           >
             <Image
               src="/serp-image/question.png"
-              alt="serp-checker — when the free plan is enough"
-              title="When is the free plan enough?"
+              alt="serp-checker — when the free trial is enough"
+              title="When is the free trial enough?"
               width={20}
               height={20}
               style={{ display: "block" }}
             />
           </div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: COLORS.gray }}>
-            If you track fewer than 100 keywords, free is enough. If you run an agency with
-            hundreds of clients, you&apos;ll outgrow it.
+            The free 7-day trial is enough to see your real rankings. Tracking daily? Start
+            at 5 workers ($5/mo, 75 checks a day) and scale to 500 as you grow.
           </p>
         </div>
       </Reveal>

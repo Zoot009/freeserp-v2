@@ -14,7 +14,7 @@ export function Features() {
       <SectionHead
         tag="WHAT WE OFFER"
         title="Every signal that moves rankings"
-        sub="Enterprise-grade SERP rank tracking and competitor intelligence — with a generous free tier and affordable Pro."
+        sub="Enterprise-grade SERP rank tracking and competitor intelligence — with a free trial and worker plans from $5/month."
       />
       <div className="fs-grid-2" style={{ marginTop: 56 }}>
         {FEATURES.map((f, i) => (
