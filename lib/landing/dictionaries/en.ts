@@ -11,7 +11,7 @@ const en: Dictionary = {
     tryFree: "Sign up for free",
   },
   hero: {
-    headline1: "Track your rankings",
+    headline1: "Track your website rankings",
     headlineHighlight: "in real time",
     subheading:
       "Find the keywords and competitors impacting your search visibility — and outrank them fast, with daily updates.",
