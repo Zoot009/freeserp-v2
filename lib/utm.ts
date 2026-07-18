@@ -42,6 +42,16 @@ function readVisitorCookie(): string | null {
   return m ? decodeURIComponent(m[1]) : null
 }
 
+// Read-only: true if the visitor cookie already existed, without creating one.
+// Callers must read this via a lazy useState initializer (evaluated at render time),
+// not inside a useEffect — UtmCapture (mounted globally) may create the cookie in its
+// own effect during the same commit, and React runs all render-phase code before any
+// passive effect fires, so a render-time read is the only reliable way to distinguish
+// "cookie already existed" from "cookie just got created this load".
+export function hasExistingVisitorId(): boolean {
+  return readVisitorCookie() !== null
+}
+
 // Read (or lazily create) the anonymous, first-party visitor id (shared cookie).
 // Migrates any pre-existing localStorage id; falls back to an ephemeral id when
 // both cookies and storage are unavailable so a touch can still fire.

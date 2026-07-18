@@ -1,4 +1,5 @@
 import Header from "@/components/landing1/Header";
+import UrgencyBanner from "@/components/landing1/UrgencyBanner";
 import Hero from "@/components/landing1/Hero";
 import LogoStripSteps from "@/components/landing1/LogoStripSteps";
 import FeatureVisibility from "@/components/landing1/FeatureVisibility";
@@ -21,8 +22,9 @@ export default async function Landing1Home({
 
   return (
     <div className="w-full overflow-x-hidden">
+      <UrgencyBanner dict={dict.urgency} />
       <Header dict={dict.header} />
-      <Hero dict={dict.hero} />
+      <Hero dict={dict.hero} personalization={dict.personalization} locale={lang} />
       <LogoStripSteps dict={dict.logoStrip} />
       <FeatureVisibility dict={dict.visibility} />
       <FeatureCompetitors dict={dict.competitors} />

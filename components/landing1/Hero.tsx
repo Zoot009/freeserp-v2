@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
+import PersonalizedNote from "@/components/landing1/ui/PersonalizedNote";
 
 const container = {
   hidden: {},
@@ -29,6 +30,13 @@ type HeroDict = {
   disclaimer: string;
   liveDemo: string;
   demoAlt: string;
+};
+
+type PersonalizationDict = {
+  leadReturning: string;
+  leadSource: string;
+  mainLocation: string;
+  mainDefault: string;
 };
 
 const WAVEFORM_BARS = Array.from({ length: 90 }, (_, i) => ({
@@ -185,7 +193,15 @@ function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
   );
 }
 
-export default function Hero({ dict }: { dict: HeroDict }) {
+export default function Hero({
+  dict,
+  personalization,
+  locale,
+}: {
+  dict: HeroDict;
+  personalization: PersonalizationDict;
+  locale: string;
+}) {
   return (
     <section
       id="top"
@@ -249,6 +265,7 @@ export default function Hero({ dict }: { dict: HeroDict }) {
         <motion.p variants={item} className="mt-5 text-sm text-[#6b7286]">
           {dict.disclaimer}
         </motion.p>
+        <PersonalizedNote dict={personalization} locale={locale} />
 
         <TiltCard liveDemo={dict.liveDemo} demoAlt={dict.demoAlt} />
       </motion.div>

@@ -126,6 +126,17 @@ const nl: Dictionary = {
       },
     ],
   },
+  personalization: {
+    leadReturning: "Welkom terug",
+    leadSource: "Fijn dat je ons vond via {source}",
+    mainLocation: "sluit je aan bij marketeers in {country} die al volgen met FreeSERP",
+    mainDefault: "ontdek waarom marketeers voor FreeSERP kiezen",
+  },
+  urgency: {
+    countdownLabel: "Nieuwe maand begint over",
+    momentumLine: "{count}+ SERP-checks uitgevoerd in de laatste 24 uur",
+    momentumFallback: "1000+",
+  },
   testimonial: {
     quote:
       "We stapten over van een tool van $299/maand op de dag dat we FreeSERP vonden. Dagelijkse ranking tracking in 14 landen, concurrentiegaten en CSV-exports — voor een fractie van de prijs.",

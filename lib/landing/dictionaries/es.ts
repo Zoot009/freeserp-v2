@@ -142,6 +142,17 @@ const es: Dictionary = {
       },
     ],
   },
+  personalization: {
+    leadReturning: "Bienvenido de nuevo",
+    leadSource: "Nos alegra que nos encontraras vía {source}",
+    mainLocation: "únete a los marketers en {country} que ya siguen sus posiciones con FreeSERP",
+    mainDefault: "descubre por qué los marketers eligen FreeSERP",
+  },
+  urgency: {
+    countdownLabel: "El nuevo mes empieza en",
+    momentumLine: "{count}+ comprobaciones SERP en las últimas 24 horas",
+    momentumFallback: "1000+",
+  },
   testimonial: {
     quote:
       "Dejamos una herramienta de $299/mes el día que encontramos FreeSERP. Seguimiento diario de posiciones en 14 países, brechas de competencia y exportaciones CSV, por una fracción del precio.",

@@ -126,6 +126,17 @@ const fr: Dictionary = {
       },
     ],
   },
+  personalization: {
+    leadReturning: "Content de vous revoir",
+    leadSource: "Ravis que vous nous ayez trouvés via {source}",
+    mainLocation: "rejoignez les marketeurs de {country} qui suivent déjà leur classement avec FreeSERP",
+    mainDefault: "découvrez pourquoi les marketeurs choisissent FreeSERP",
+  },
+  urgency: {
+    countdownLabel: "Le nouveau mois commence dans",
+    momentumLine: "{count}+ vérifications SERP effectuées ces dernières 24 heures",
+    momentumFallback: "1000+",
+  },
   testimonial: {
     quote:
       "Nous avons abandonné un outil à 299 $/mois le jour où nous avons trouvé FreeSERP. Suivi quotidien du classement dans 14 pays, écarts concurrentiels et exports CSV, pour une fraction du prix.",

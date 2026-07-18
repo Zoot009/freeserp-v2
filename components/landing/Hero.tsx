@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
+import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
 
 const container = {
   hidden: {},
@@ -27,6 +28,13 @@ type HeroDict = {
   disclaimer: string;
   liveDemo: string;
   demoAlt: string;
+};
+
+type PersonalizationDict = {
+  leadReturning: string;
+  leadSource: string;
+  mainLocation: string;
+  mainDefault: string;
 };
 
 const WAVEFORM_BARS = Array.from({ length: 90 }, (_, i) => ({
@@ -77,7 +85,15 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
   );
 }
 
-export default function Hero({ dict }: { dict: HeroDict }) {
+export default function Hero({
+  dict,
+  personalization,
+  locale,
+}: {
+  dict: HeroDict;
+  personalization: PersonalizationDict;
+  locale: string;
+}) {
   return (
     <section
       id="top"
@@ -158,6 +174,7 @@ export default function Hero({ dict }: { dict: HeroDict }) {
         <motion.p variants={item} className="mt-5 text-sm text-[#6b7286]">
           {dict.disclaimer}
         </motion.p>
+        <PersonalizedNote dict={personalization} locale={locale} />
 
         <TiltCard liveDemo={dict.liveDemo} demoAlt={dict.demoAlt} />
       </motion.div>

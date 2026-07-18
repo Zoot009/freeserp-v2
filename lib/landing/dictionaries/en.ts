@@ -126,6 +126,17 @@ const en: Dictionary = {
       },
     ],
   },
+  personalization: {
+    leadReturning: "Welcome back",
+    leadSource: "Glad you found us via {source}",
+    mainLocation: "join marketers in {country} already tracking with FreeSERP",
+    mainDefault: "see why marketers switch to FreeSERP",
+  },
+  urgency: {
+    countdownLabel: "New month starts in",
+    momentumLine: "{count}+ SERP checks run in the last 24 hours",
+    momentumFallback: "1,000+",
+  },
   testimonial: {
     quote:
       "We dropped a $299/mo tool the day we found FreeSERP. Daily rank tracking across 14 countries, competitor gaps, and CSV exports — for a fraction of the price.",

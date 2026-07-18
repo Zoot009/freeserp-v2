@@ -59,6 +59,17 @@ export type Dictionary = {
     headingLine2: string;
     items: { n: string; bold: string; rest: string }[];
   };
+  personalization: {
+    leadReturning: string;
+    leadSource: string;
+    mainLocation: string;
+    mainDefault: string;
+  };
+  urgency: {
+    countdownLabel: string;
+    momentumLine: string;
+    momentumFallback: string;
+  };
   testimonial: {
     quote: string;
     name: string;
