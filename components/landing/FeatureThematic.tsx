@@ -26,7 +26,7 @@ export default function FeatureThematic({ dict }: { dict: ThematicDict }) {
               {dict.items.map((t) => (
                 <RevealItem key={t.label}>
                   <div className="group h-full rounded-xl border border-[#eceef4] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/30 hover:shadow-[0_14px_30px_-16px_rgba(20,40,100,0.35)] sm:p-3.5">
-                    <div className="mb-2.5 text-xs font-semibold text-[#5a6172]">
+                    <div className="mb-2.5 min-h-8 text-xs font-semibold text-[#5a6172]">
                       {t.label}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:flex-nowrap sm:gap-2.25">
