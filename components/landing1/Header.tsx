@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 type HeaderDict = {
   getStarted: string;
@@ -12,6 +13,7 @@ type HeaderDict = {
 
 export default function Header({ dict }: { dict: HeaderDict }) {
   const [scrolled, setScrolled] = useState(false);
+  const appUrl = useAppUrl();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 400);
@@ -42,7 +44,7 @@ export default function Header({ dict }: { dict: HeaderDict }) {
                 </span>
               </a>
               <a
-                href="https://app.freeserp.com/"
+                href={appUrl("/signup")}
                 className="group flex shrink-0 items-center gap-1.5 rounded-full bg-[#0b1020] px-[22px] py-3 text-[14.5px] font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent hover:shadow-[0_10px_30px_-8px_rgba(47,107,255,0.6)]"
               >
                 {dict.getStarted}
@@ -59,7 +61,7 @@ export default function Header({ dict }: { dict: HeaderDict }) {
             className="fixed inset-x-0 bottom-0 z-100 border-t border-black/5 bg-white/80 px-4 py-3 shadow-[0_-8px_30px_-15px_rgba(11,16,32,0.15)] backdrop-blur-xl sm:hidden"
           >
             <a
-              href="https://app.freeserp.com/"
+              href={appUrl("/signup")}
               className="group flex items-center justify-center gap-1.5 rounded-full bg-[#0b1020] px-4 py-3 text-[14px] font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent hover:shadow-[0_10px_30px_-8px_rgba(47,107,255,0.6)]"
             >
               {dict.tryFree}

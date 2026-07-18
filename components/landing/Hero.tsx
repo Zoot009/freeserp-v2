@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 const container = {
   hidden: {},
@@ -94,6 +95,7 @@ export default function Hero({
   personalization: PersonalizationDict;
   locale: string;
 }) {
+  const appUrl = useAppUrl();
   return (
     <section
       id="top"
@@ -164,7 +166,7 @@ export default function Hero({
             />
           </div>
           <a
-            href="https://app.freeserp.com/"
+            href={appUrl("/signup")}
             className="group flex items-center justify-center gap-1.5 rounded-[100px] bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)]"
           >
             {dict.ctaButton}

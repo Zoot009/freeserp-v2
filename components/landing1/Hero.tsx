@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
 import PersonalizedNote from "@/components/landing1/ui/PersonalizedNote";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 const container = {
   hidden: {},
@@ -88,7 +89,7 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
 }
 
 /** Multi-field SERP-checker form — replaces the single domain-search pill. */
-function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
+function RankCheckerForm({ ctaButton, signupHref }: { ctaButton: string; signupHref: string }) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
   const [country, setCountry] = useState("in");
 
@@ -183,7 +184,7 @@ function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
         </div>
       </div>
       <a
-        href="https://app.freeserp.com/"
+        href={signupHref}
         className="group mt-5 flex items-center justify-center gap-1.5 rounded-full bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)]"
       >
         {ctaButton}
@@ -202,6 +203,7 @@ export default function Hero({
   personalization: PersonalizationDict;
   locale: string;
 }) {
+  const appUrl = useAppUrl();
   return (
     <section
       id="top"
@@ -260,7 +262,7 @@ export default function Hero({
           {dict.subheading}
         </motion.p>
 
-        <RankCheckerForm ctaButton="Check Rankings" />
+        <RankCheckerForm ctaButton="Check Rankings" signupHref={appUrl("/signup")} />
 
         <motion.p variants={item} className="mt-5 text-sm text-[#6b7286]">
           {dict.disclaimer}

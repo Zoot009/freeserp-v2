@@ -1,6 +1,9 @@
+"use client";
+
 import { ArrowRight, Award } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/landing/ui/Reveal";
 import { LogoMark } from "@/components/landing/ui/Logo";
+import { useAppUrl } from "@/lib/useAppUrl";
 
 type FinalCtaDict = {
   heading: string;
@@ -14,6 +17,7 @@ type FinalCtaDict = {
 };
 
 export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
+  const appUrl = useAppUrl();
   return (
     <section className="mt-24">
       <div className="bg-noise relative overflow-hidden bg-[#0b1020] px-6 pt-24 pb-14 text-center text-white">
@@ -42,7 +46,7 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
               className="animate-cta-pulse pointer-events-none absolute inset-0 rounded-full"
             />
             <a
-              href="https://app.freeserp.com/"
+              href={appUrl("/signup")}
               className="group relative inline-flex items-center gap-2 rounded-full bg-accent px-9 py-[15px] text-base font-bold text-white shadow-[0_12px_28px_rgba(47,107,255,0.4)] transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_18px_44px_-8px_rgba(47,107,255,0.65)]"
             >
               {dict.button}
