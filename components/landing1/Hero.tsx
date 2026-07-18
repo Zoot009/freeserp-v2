@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
-import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
+import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
 
 const container = {
   hidden: {},
@@ -112,27 +112,41 @@ function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
           <span className="text-xs font-bold tracking-wide text-[#5a6172] uppercase">
             Country
           </span>
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            aria-label="Country"
-            className="mt-1.5 w-full cursor-pointer appearance-none rounded-lg border border-[#e6e9f2] bg-white px-3.5 py-2.5 font-[family-name:var(--font-jakarta)] text-sm text-[#0b1020] outline-none"
-          >
-            <optgroup label="Popular">
-              {POPULAR_LOCATIONS.map((l) => (
-                <option key={`p-${l.code}`} value={l.code}>
-                  {l.name} {flagFor(l.code)}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label="All countries">
-              {ALL_LOCATIONS.map((l) => (
-                <option key={l.code} value={l.code}>
-                  {l.name} {flagFor(l.code)}
-                </option>
-              ))}
-            </optgroup>
-          </select>
+          <div className="relative mt-1.5">
+            {/* Regional-indicator flag emoji don't render as flags on Windows
+                (Chrome/Edge show the raw two-letter code instead), so use a
+                real flag image here rather than flagFor()'s emoji. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://flagcdn.com/${country.toLowerCase()}.svg`}
+              alt=""
+              aria-hidden
+              width={20}
+              height={15}
+              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 rounded-[2px]"
+            />
+            <select
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              aria-label="Country"
+              className="w-full cursor-pointer appearance-none rounded-lg border border-[#e6e9f2] bg-white py-2.5 pr-3.5 pl-9 font-[family-name:var(--font-jakarta)] text-sm text-[#0b1020] outline-none"
+            >
+              <optgroup label="Popular">
+                {POPULAR_LOCATIONS.map((l) => (
+                  <option key={`p-${l.code}`} value={l.code}>
+                    {l.name}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="All countries">
+                {ALL_LOCATIONS.map((l) => (
+                  <option key={l.code} value={l.code}>
+                    {l.name}
+                  </option>
+                ))}
+              </optgroup>
+            </select>
+          </div>
         </label>
         <div>
           <span className="block text-xs font-bold tracking-wide text-[#5a6172] uppercase">
