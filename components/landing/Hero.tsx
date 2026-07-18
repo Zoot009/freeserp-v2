@@ -57,8 +57,8 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
   return (
     <motion.div variants={item} className="relative -mx-6 mt-16 max-w-240 sm:mx-auto">
       <WaveformBackdrop />
-      <div className="relative rounded-[22px] bg-linear-to-br from-accent/55 to-accent-dark/50 p-1.5">
-        <div className="relative overflow-hidden rounded-[18px] bg-white">
+      <div className="relative rounded-none bg-linear-to-br from-accent/55 to-accent-dark/50 p-0 sm:rounded-[22px] sm:p-1.5">
+        <div className="relative overflow-hidden rounded-none border border-black bg-white sm:rounded-[18px]">
           <span className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-[#0f9d6e] shadow-sm backdrop-blur-sm">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fc79a]" />
             {liveDemo}
