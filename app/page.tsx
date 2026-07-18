@@ -5,7 +5,7 @@ import { Footer } from "@/components/site/Footer";
 export const metadata: Metadata = {
   title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
   description:
-    "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
+    "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free trial available. No credit card required.",
   alternates: { canonical: "https://freeserp.com" },
   authors: [{ name: "FreeSERP" }],
   creator: "FreeSERP",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
     description:
-      "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
+      "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free trial available. No credit card required.",
     url: "https://freeserp.com",
     siteName: "FreeSERP",
     type: "website",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FreeSERP — Rank Tracking and Competitor Intelligence Tool",
     description:
-      "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free tier available. No credit card required.",
+      "FreeSERP tracks your keyword rankings daily, reveals where competitors outrank you, and gives you the data to close the gap. Free trial available. No credit card required.",
   },
 };
 import { Hero } from "@/components/home/Hero";

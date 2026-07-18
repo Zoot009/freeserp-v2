@@ -8,24 +8,24 @@ import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
 
 const FREE_FEATURES = [
-  "5 SERP checks / day",
+  "3 rank checks in a 7-day trial",
   "Manual checks only",
   "190+ countries & all devices",
   "No credit card required",
 ];
 
 const PAID_FEATURES = [
+  "Automated recurring checks",
+  "AI analysis for every section — 2/day per worker",
+  "Internal link analysis for all competitors",
   "190+ countries & all devices",
-  "Credits never expire",
-  "Real-time SERP data",
-  "CSV export",
-  "Priority email support",
-  "API access",
+  "Priority support",
+  "Cancel anytime",
 ];
 
+// 1 worker = 15 rank checks / day · $1/worker/month (or $10/worker/year)
 const PAID_PLANS = [
-  { price: 1,   checks: 15,   label: "Starter"                },
-  { price: 5,   checks: 75,   label: "Basic"                  },
+  { price: 5,   checks: 75,   label: "Starter"                },
   { price: 10,  checks: 150,  label: "Standard"               },
   { price: 20,  checks: 300,  label: "Popular", popular: true },
   { price: 40,  checks: 600,  label: "Growth"                 },
@@ -76,8 +76,9 @@ function LightCheck() {
 
 export function Pricing() {
   const appUrl = useAppUrl();
-  const [index, setIndex] = useState(3);
+  const [index, setIndex] = useState(2);
   const plan = PAID_PLANS[index];
+  const workers = plan.checks / 15; // 1 worker = 15 rank checks / day
   const isFirst = index === 0;
   const isLast = index === PAID_PLANS.length - 1;
 
@@ -86,7 +87,7 @@ export function Pricing() {
       <SectionHead
         tag="PRICING"
         title="Simple plans. No surprises."
-        sub="No hidden charges for SERP checks. Start free, buy credits only when you need them."
+        sub="No hidden charges. Start with a free 7-day trial, then add workers only when you need more daily checks."
       />
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>
@@ -113,7 +114,7 @@ export function Pricing() {
                 Free
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 32px" }}>
-                Start researching keywords and tracking rankings with no credit card. Built for solo SEOs and side projects.
+                Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for kicking the tires before you commit.
               </p>
               <div
                 style={{
@@ -145,7 +146,7 @@ export function Pricing() {
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{ fontSize: 24, fontWeight: 600 }}>$</span>
                   <span style={{ fontSize: 48, fontWeight: 700, letterSpacing: "-0.04em" }}>0</span>
-                  <span style={{ fontSize: 18, fontWeight: 600 }}>/month</span>
+                  <span style={{ fontSize: 18, fontWeight: 600 }}>/7 days</span>
                 </div>
               </div>
             </div>
@@ -193,7 +194,7 @@ export function Pricing() {
                 {plan.label}
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 24px" }}>
-                {plan.checks.toLocaleString()} SERP checks · one-time payment. Credits never expire.
+                {workers.toLocaleString()} workers · {plan.checks.toLocaleString()} rank checks a day. Cancel anytime — or save with annual billing at $10/worker/year.
               </p>
 
               {/* Stepper */}
@@ -240,7 +241,7 @@ export function Pricing() {
                   }}
                 >
                   <span style={{ fontSize: 18, fontWeight: 600, color: "#111" }}>
-                    {plan.checks.toLocaleString()} checks
+                    {plan.checks.toLocaleString()} checks / day
                   </span>
                 </div>
                 <button
@@ -298,7 +299,7 @@ export function Pricing() {
                   <span style={{ fontSize: 48, fontWeight: 700, letterSpacing: "-0.04em" }}>
                     {plan.price}
                   </span>
-                  <span style={{ fontSize: 18, fontWeight: 600 }}>/one-time</span>
+                  <span style={{ fontSize: 18, fontWeight: 600 }}>/mo</span>
                 </div>
               </div>
             </div>

@@ -113,29 +113,29 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "Start researching keywords and tracking rankings with no credit card. Built for solo SEOs and side projects.",
+      desc: "Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "5 SERP checks / day",
+        "3 rank checks in a 7-day trial",
         "Manual checks only",
         "190+ countries & all devices",
         "No credit card required",
       ],
     },
     {
-      name: "Pro",
-      price: 20,
-      desc: "Higher daily limits and full SERP intelligence for agencies, in-house teams, and serious operators.",
-      cta: "Upgrade to Pro",
+      name: "Workers",
+      price: 5,
+      desc: "1 worker = 15 rank checks a day. Start at 5 workers for $5/month and scale up to 500 as you grow.",
+      cta: "Get Workers",
       featured: true,
       features: [
-        "300 SERP checks / month",
-        "190+ countries & all devices",
-        "Credits never expire",
-        "Real-time SERP data",
-        "CSV export",
-        "Priority email support",
+        "75 rank checks / day (5 workers)",
+        "Automated recurring checks",
+        "AI analysis for every section — 2/day per worker",
+        "Internal link analysis for all competitors",
+        "Priority support",
+        "Cancel anytime",
       ],
     },
   ],
@@ -143,29 +143,29 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "Start researching keywords and tracking rankings with no credit card. Built for solo SEOs and side projects.",
+      desc: "Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "5 SERP checks / day",
+        "3 rank checks in a 7-day trial",
         "Manual checks only",
         "190+ countries & all devices",
         "No credit card required",
       ],
     },
     {
-      name: "Pro",
-      price: 200,
-      desc: "Higher daily limits and full SERP intelligence for agencies, in-house teams, and serious operators.",
-      cta: "Upgrade to Pro",
+      name: "Workers",
+      price: 50,
+      desc: "1 worker = 15 rank checks a day. 5 workers for $50/year — around 2 months free versus monthly billing.",
+      cta: "Get Workers",
       featured: true,
       features: [
-        "300 SERP checks / month",
-        "190+ countries & all devices",
-        "Credits never expire",
-        "Real-time SERP data",
-        "CSV export",
-        "Priority email support",
+        "75 rank checks / day (5 workers)",
+        "Automated recurring checks",
+        "AI analysis for every section — 2/day per worker",
+        "Internal link analysis for all competitors",
+        "Priority support",
+        "Cancel anytime",
       ],
     },
   ],
@@ -182,7 +182,7 @@ export const INTEGRATIONS = [
 
 export const TESTIMONIALS = [
   {
-    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free tier got me through my first month, and Pro at $20 is a no-brainer for the daily search headroom.",
+    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free trial sold me in a week, and $5/mo for 75 daily checks is a no-brainer for the search headroom.",
     name: "Daniel Cooper",
     role: "Indie SEO Consultant",
     img: "https://framerusercontent.com/images/KcCMMECKZOgi4RCYPbRBT2B8u0.png",
@@ -224,7 +224,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the Free plan gives you 5 SERP checks per day with no credit card. If you need more headroom, Pro ($20 one-time) gives you 300 checks that never expire. Questions? Email support@freeserp.com.",
+    a: "Yes — the free 7-day trial gives you 3 rank checks with no credit card. If you need more headroom, worker subscriptions start at $5/month for 5 workers (75 checks a day), billed monthly or annually. Questions? Email support@freeserp.com.",
   },
 ];
 
@@ -257,25 +257,25 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
   offers: [
     {
       "@type": "Offer",
-      name: "Free Tier",
+      name: "Free Trial",
       price: "0",
       priceCurrency: "USD",
-      description: "5 free SERP checks per day. No credit card required.",
+      description: "3 free rank checks in a 7-day trial. No credit card required.",
     },
     {
       "@type": "Offer",
-      name: "Pro",
-      price: "20",
+      name: "Workers",
+      price: "5",
       priceCurrency: "USD",
       priceSpecification: {
         "@type": "UnitPriceSpecification",
-        price: "20",
+        price: "5",
         priceCurrency: "USD",
         unitCode: "MON",
         billingIncrement: 1,
       },
       description:
-        "300 SERP checks per month with full competitor intelligence and unlimited tracking projects.",
+        "Worker subscription from $5/month — 5 workers, 75 rank checks per day. Scale up to 500 workers, or save with annual billing at $10/worker/year.",
     },
   ],
   featureList: [
@@ -285,7 +285,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
     "190+ country targeting",
     "Mobile and desktop rank tracking",
     "CSV export",
-    "Free tier available",
+    "Free trial available",
   ],
 };
 
@@ -344,7 +344,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "Is there a free plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free tier gives you 5 SERP checks per day with no credit card and no signup required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Upgrade to Pro for 300 checks that never expire and unlimited project keywords.",
+        text: "Yes. The free 7-day trial gives you 3 rank checks with no credit card required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Paid worker subscriptions start at $5/month for 5 workers — 75 rank checks per day — with automated recurring checks and unlimited project keywords.",
       },
     },
   ],

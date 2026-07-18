@@ -44,7 +44,7 @@ export function Cta() {
                 fill="#fff"
               />
             </svg>
-            Free tier · No credit card · Pro from $20/mo
+            Free trial · No credit card · Plans from $5/mo
           </div>
           <h2
             style={{
@@ -70,7 +70,7 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            5 free SERP checks a day, real-time ranking data, daily rank updates, and competitor intelligence — for SEOs, marketers, and developers. Upgrade to Pro for 300 checks that never expire.
+            3 free rank checks in a 7-day trial, real-time ranking data, and competitor intelligence — for SEOs, marketers, and developers. Subscribe to workers from $5/month for 75 automated checks a day.
           </p>
           <a
             href={appUrl("/signup")}
