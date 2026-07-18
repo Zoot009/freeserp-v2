@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
-import { Reveal } from "@/components/landing/ui/Reveal";
+import { Reveal, RevealGroup, RevealItem } from "@/components/landing/ui/Reveal";
+import { AnimatedCounter } from "@/components/landing/ui/AnimatedCounter";
 
 type CompetitorsDict = {
   heading: string;
@@ -54,7 +55,7 @@ export default function FeatureCompetitors({ dict }: { dict: CompetitorsDict }) 
                         : "rounded-lg bg-[#f5f6fa] px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap text-[#5a6172]"
                     }
                   >
-                    {f}
+                    <AnimatedCounter value={f} />
                   </span>
                 ))}
               </div>
@@ -62,25 +63,26 @@ export default function FeatureCompetitors({ dict }: { dict: CompetitorsDict }) 
             <div className="mb-2 text-[12.5px] font-bold text-[#8a91a3]">
               {dict.movement}
             </div>
-            {dict.issueRows.map((i) => (
-              <div
-                key={i.lead}
-                className="flex justify-between gap-3 border-b border-[#f0f1f5] py-[11px] text-sm"
-              >
-                <span className="text-[#2b3145]">
-                  <a href="#top" className="font-bold">
-                    {i.lead}
-                  </a>{" "}
-                  {i.rest}
-                </span>
-                <a
-                  href="#top"
-                  className="text-[13px] font-semibold whitespace-nowrap text-accent"
-                >
-                  {dict.view}
-                </a>
-              </div>
-            ))}
+            <RevealGroup className="flex flex-col" stagger={0.08}>
+              {dict.issueRows.map((i) => (
+                <RevealItem key={i.lead}>
+                  <div className="flex justify-between gap-3 border-b border-[#f0f1f5] py-[11px] text-sm">
+                    <span className="text-[#2b3145]">
+                      <a href="#top" className="font-bold">
+                        <AnimatedCounter value={i.lead} />
+                      </a>{" "}
+                      {i.rest}
+                    </span>
+                    <a
+                      href="#top"
+                      className="text-[13px] font-semibold whitespace-nowrap text-accent"
+                    >
+                      {dict.view}
+                    </a>
+                  </div>
+                </RevealItem>
+              ))}
+            </RevealGroup>
             <div className="mt-4 grid grid-cols-1 gap-4 rounded-xl bg-[#eaf7f1] p-4 sm:grid-cols-2">
               <div>
                 <div className="text-xs font-extrabold text-[#0b1020]">

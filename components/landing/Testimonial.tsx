@@ -1,5 +1,6 @@
 import { Quote, Star } from "lucide-react";
 import { Reveal } from "@/components/landing/ui/Reveal";
+import { AnimatedCounter } from "@/components/landing/ui/AnimatedCounter";
 
 type TestimonialDict = {
   quote: string;
@@ -46,7 +47,7 @@ export default function Testimonial({ dict }: { dict: TestimonialDict }) {
             <Reveal delay={0.05}>
               <div className="h-full rounded-[20px] bg-[#f5f6fa] p-7.5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_40px_-24px_rgba(20,40,100,0.28)]">
                 <div className="text-[36px] font-extrabold tracking-[-0.03em] text-[#10131a] sm:text-[44px]">
-                  {dict.stat1Val}
+                  <AnimatedCounter value={dict.stat1Val} />
                 </div>
                 <div className="mt-2 text-sm text-[#5a6172]">
                   {dict.stat1Label}
@@ -56,7 +57,7 @@ export default function Testimonial({ dict }: { dict: TestimonialDict }) {
             <Reveal delay={0.1}>
               <div className="h-full rounded-[20px] bg-[#f5f6fa] p-7.5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_40px_-24px_rgba(20,40,100,0.28)]">
                 <div className="text-[36px] font-extrabold tracking-[-0.03em] text-[#10131a] sm:text-[44px]">
-                  {dict.stat2Val}
+                  <AnimatedCounter value={dict.stat2Val} />
                 </div>
                 <div className="mt-2 text-sm text-[#5a6172]">
                   {dict.stat2Label}
@@ -67,7 +68,7 @@ export default function Testimonial({ dict }: { dict: TestimonialDict }) {
           <Reveal delay={0.15}>
             <div className="relative h-full overflow-hidden rounded-[20px] bg-[#f5f6fa] p-7.5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_20px_40px_-24px_rgba(20,40,100,0.28)]">
               <div className="text-[36px] font-extrabold tracking-[-0.03em] text-[#10131a] sm:text-[44px]">
-                {dict.stat3Val}
+                <AnimatedCounter value={dict.stat3Val} />
               </div>
               <div className="mt-2 text-sm text-[#5a6172]">
                 {dict.stat3Label}

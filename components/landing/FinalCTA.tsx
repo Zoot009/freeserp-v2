@@ -19,7 +19,7 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
       <div className="bg-noise relative overflow-hidden bg-[#0b1020] px-6 pt-24 pb-14 text-center text-white">
         <div
           aria-hidden
-          className="pointer-events-none absolute top-0 left-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(47,107,255,0.35),transparent)] blur-3xl"
+          className="animate-aurora pointer-events-none absolute top-0 left-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(47,107,255,0.35),transparent)] blur-3xl"
         />
 
         <Reveal className="relative flex justify-center">
@@ -36,13 +36,19 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
           </p>
         </Reveal>
         <Reveal delay={0.15}>
-          <a
-            href="https://app.freeserp.com/"
-            className="group relative mt-7.5 inline-flex items-center gap-2 rounded-full bg-accent px-9 py-[15px] text-base font-bold text-white shadow-[0_12px_28px_rgba(47,107,255,0.4)] transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_18px_44px_-8px_rgba(47,107,255,0.65)]"
-          >
-            {dict.button}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </a>
+          <div className="relative mt-7.5 inline-flex">
+            <span
+              aria-hidden
+              className="animate-cta-pulse pointer-events-none absolute inset-0 rounded-full"
+            />
+            <a
+              href="https://app.freeserp.com/"
+              className="group relative inline-flex items-center gap-2 rounded-full bg-accent px-9 py-[15px] text-base font-bold text-white shadow-[0_12px_28px_rgba(47,107,255,0.4)] transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_18px_44px_-8px_rgba(47,107,255,0.65)]"
+            >
+              {dict.button}
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          </div>
         </Reveal>
 
         <RevealGroup

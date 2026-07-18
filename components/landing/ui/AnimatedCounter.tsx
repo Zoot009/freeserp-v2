@@ -4,27 +4,31 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView, animate } from "framer-motion";
 
 /**
- * Animates a numeric prefix within a label like "50M+", "190+", "2 min".
- * Splits the leading digits from the trailing unit/suffix so only the
- * number counts up, and the "M+" / " min" stays static.
+ * Animates the numeric run within a label like "50M+", "190+", "2 min",
+ * "+100%", or "^336%". Splits any leading non-digit prefix (+, ^, currency
+ * signs, ...) and trailing unit/suffix from the digits so only the number
+ * counts up, while prefix/suffix stay static. Labels with no digits at all
+ * (e.g. "Millions") render unchanged, un-animated.
  */
 export function AnimatedCounter({ value }: { value: string }) {
-  const { target, suffix, isInteger } = useMemo(() => {
-    const match = value.match(/^(\d+(?:\.\d+)?)(.*)$/);
+  const { prefix, target, suffix, isInteger } = useMemo(() => {
+    const match = value.match(/^([^\d]*)(\d+(?:\.\d+)?)(.*)$/);
     return {
-      target: match ? parseFloat(match[1]) : null,
-      suffix: match ? match[2] : "",
-      isInteger: match ? Number.isInteger(parseFloat(match[1])) : true,
+      prefix: match ? match[1] : "",
+      target: match ? parseFloat(match[2]) : null,
+      suffix: match ? match[3] : "",
+      isInteger: match ? Number.isInteger(parseFloat(match[2])) : true,
     };
   }, [value]);
 
+  const start = target === null ? 0 : Math.min(1, target);
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [display, setDisplay] = useState(target === null ? value : "0");
+  const [display, setDisplay] = useState(target === null ? value : String(start));
 
   useEffect(() => {
     if (!inView || target === null) return;
-    const controls = animate(0, target, {
+    const controls = animate(start, target, {
       duration: 2,
       ease: "easeOut",
       onUpdate(v) {
@@ -32,7 +36,7 @@ export function AnimatedCounter({ value }: { value: string }) {
       },
     });
     return () => controls.stop();
-  }, [inView, target, isInteger]);
+  }, [inView, target, isInteger, start]);
 
   if (target === null) {
     return <span>{value}</span>;
@@ -40,6 +44,7 @@ export function AnimatedCounter({ value }: { value: string }) {
 
   return (
     <span ref={ref} className="tabular-nums">
+      {prefix}
       {display}
       {suffix}
     </span>

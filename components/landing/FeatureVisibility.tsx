@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { Reveal } from "@/components/landing/ui/Reveal";
+import { AnimatedRing } from "@/components/landing/ui/AnimatedRing";
 
 type VisibilityDict = {
   visibilityScore: string;
@@ -25,45 +26,21 @@ export default function FeatureVisibility({ dict }: { dict: VisibilityDict }) {
                 <div className="mb-3.5 text-[13px] font-bold text-[#0b1020] sm:text-[15px]">
                   {dict.visibilityScore}
                 </div>
-                <div
-                  className="mx-auto flex h-26 w-26 items-center justify-center rounded-full sm:h-32.5 sm:w-32.5"
-                  style={{
-                    background: `conic-gradient(var(--color-accent) 0 ${
-                      parseInt(dict.scorePct) / 100
-                    }turn, #e6e9f2 ${parseInt(dict.scorePct) / 100}turn 1turn)`,
-                  }}
-                >
-                  <div className="flex h-19 w-19 flex-col items-center justify-center rounded-full bg-white sm:h-24 sm:w-24">
-                    <span className="text-[20px] font-extrabold text-[#0b1020] sm:text-[26px]">
-                      {dict.scorePct}
-                    </span>
-                    <span className="text-[11px] font-bold text-[#16a34a]">
-                      {dict.visibilityDelta}
-                    </span>
-                  </div>
-                </div>
+                <AnimatedRing pct={dict.scorePct} color="var(--color-accent)">
+                  <span className="text-[11px] font-bold text-[#16a34a]">
+                    {dict.visibilityDelta}
+                  </span>
+                </AnimatedRing>
               </div>
               <div className="text-center">
                 <div className="mb-3.5 text-[13px] font-bold text-[#0b1020] sm:text-[15px]">
                   {dict.top10Coverage}
                 </div>
-                <div
-                  className="mx-auto flex h-26 w-26 items-center justify-center rounded-full sm:h-32.5 sm:w-32.5"
-                  style={{
-                    background: `conic-gradient(#f59e0b 0 ${
-                      parseInt(dict.coveragePct) / 100
-                    }turn, #e6e9f2 ${parseInt(dict.coveragePct) / 100}turn 1turn)`,
-                  }}
-                >
-                  <div className="flex h-19 w-19 flex-col items-center justify-center rounded-full bg-white sm:h-24 sm:w-24">
-                    <span className="text-[20px] font-extrabold text-[#0b1020] sm:text-[26px]">
-                      {dict.coveragePct}
-                    </span>
-                    <span className="text-[11px] font-bold text-[#8a91a3]">
-                      {dict.noChange}
-                    </span>
-                  </div>
-                </div>
+                <AnimatedRing pct={dict.coveragePct} color="#f59e0b">
+                  <span className="text-[11px] font-bold text-[#8a91a3]">
+                    {dict.noChange}
+                  </span>
+                </AnimatedRing>
               </div>
             </div>
             <div className="mt-[22px] flex flex-col gap-[11px]">

@@ -113,11 +113,31 @@
   transform-origin: bottom;
 }
 
+/* Pulsing "beacon" ring around the final CTA button — draws the eye to the
+   button itself (not the headline copy) so the surrounding text stays fully
+   readable while still calling out the primary action. */
+@keyframes cta-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(47, 107, 255, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(47, 107, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 107, 255, 0);
+  }
+}
+
+.landing-scope .animate-cta-pulse {
+  animation: cta-pulse-ring 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-scope .animate-aurora,
   .landing-scope .animate-float,
   .landing-scope .animate-marquee,
-  .landing-scope .animate-waveform {
+  .landing-scope .animate-waveform,
+  .landing-scope .animate-cta-pulse {
     animation: none;
   }
 }

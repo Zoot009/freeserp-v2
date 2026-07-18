@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/landing/ui/Reveal";
+import { AnimatedMiniRing } from "@/components/landing/ui/AnimatedRing";
 
 type ThematicDict = {
   heading: string;
@@ -29,19 +30,7 @@ export default function FeatureThematic({ dict }: { dict: ThematicDict }) {
                       {t.label}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:flex-nowrap sm:gap-2.25">
-                      <div
-                        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full sm:h-8.5 sm:w-8.5"
-                        style={{
-                          background: `conic-gradient(var(--color-accent) 0 ${
-                            parseInt(t.pct) / 100
-                          }turn, #e6e9f2 ${parseInt(t.pct) / 100}turn 1turn)`,
-                        }}
-                      >
-                        <div className="h-4.5 w-4.5 rounded-full bg-white sm:h-5.5 sm:w-5.5" />
-                      </div>
-                      <span className="text-sm font-extrabold text-[#0b1020] sm:text-[17px]">
-                        {t.pct}
-                      </span>
+                      <AnimatedMiniRing pct={t.pct} color="var(--color-accent)" />
                       {t.delta && (
                         <span
                           className={`text-[11px] font-bold ${
