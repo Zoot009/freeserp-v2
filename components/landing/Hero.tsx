@@ -55,7 +55,7 @@ function WaveformBackdrop() {
 
 function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) {
   return (
-    <motion.div variants={item} className="relative mx-auto mt-16 max-w-[820px]">
+    <motion.div variants={item} className="relative -mx-6 mt-16 max-w-240 sm:mx-auto">
       <WaveformBackdrop />
       <div className="relative rounded-[22px] bg-linear-to-br from-accent/55 to-accent-dark/50 p-1.5">
         <div className="relative overflow-hidden rounded-[18px] bg-white">

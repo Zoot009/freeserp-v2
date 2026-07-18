@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
+import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor } from "@/components/site/locations";
 
 const container = {
   hidden: {},
@@ -56,7 +57,7 @@ function WaveformBackdrop() {
 
 function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) {
   return (
-    <motion.div variants={item} className="relative mx-auto mt-16 max-w-[820px]">
+    <motion.div variants={item} className="relative -mx-6 mt-16 max-w-240 sm:mx-auto">
       <WaveformBackdrop />
       <div className="relative rounded-[22px] bg-linear-to-br from-accent/55 to-accent-dark/50 p-1.5">
         <div className="relative overflow-hidden rounded-[18px] bg-white">
@@ -81,6 +82,7 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
 /** Multi-field SERP-checker form — replaces the single domain-search pill. */
 function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [country, setCountry] = useState("in");
 
   return (
     <motion.div
@@ -110,11 +112,27 @@ function RankCheckerForm({ ctaButton }: { ctaButton: string }) {
           <span className="text-xs font-bold tracking-wide text-[#5a6172] uppercase">
             Country
           </span>
-          <input
-            defaultValue="India IN"
-            readOnly
-            className="mt-1.5 w-full rounded-lg border border-[#e6e9f2] bg-white px-3.5 py-2.5 font-[family-name:var(--font-jakarta)] text-sm text-[#0b1020] outline-none"
-          />
+          <select
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            aria-label="Country"
+            className="mt-1.5 w-full cursor-pointer appearance-none rounded-lg border border-[#e6e9f2] bg-white px-3.5 py-2.5 font-[family-name:var(--font-jakarta)] text-sm text-[#0b1020] outline-none"
+          >
+            <optgroup label="Popular">
+              {POPULAR_LOCATIONS.map((l) => (
+                <option key={`p-${l.code}`} value={l.code}>
+                  {l.name} {flagFor(l.code)}
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="All countries">
+              {ALL_LOCATIONS.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.name} {flagFor(l.code)}
+                </option>
+              ))}
+            </optgroup>
+          </select>
         </label>
         <div>
           <span className="block text-xs font-bold tracking-wide text-[#5a6172] uppercase">
