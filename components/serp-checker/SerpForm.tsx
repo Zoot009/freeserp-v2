@@ -743,12 +743,27 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
   const loginHref = (kw: string) =>
     appUrl(`/login?keyword=${encodeURIComponent(kw)}&country=${encodeURIComponent(country)}`);
 
+  // Card-wide click-through to signup. The locked competitor preview pulls more
+  // clicks than the CTA button does, so a click on any inert part of the card
+  // falls through to the same destination. Anything that is already a control
+  // (CTA, "people also check" pills, the reset button) keeps its own behaviour,
+  // and a click that ends a text selection is left alone.
+  const onCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof Element && e.target.closest("a, button, input, select, textarea, label")) return;
+    if (window.getSelection()?.toString()) return;
+    pushDataLayer({ event: "cta_click" });
+    track("serp_card_click_through", { keyword, country, device });
+    window.location.href = signupHref(keyword);
+  };
+
   return (
     <div className="fs-serp-card-wrap" style={{ position: "relative", maxWidth: 920, margin: "0 auto" }}>
       <div className="fs-serp-halo" aria-hidden="true" />
       <div
         className="fs-serp-card"
+        onClick={onCardClick}
         style={{
+          cursor: "pointer",
           position: "relative",
           background: "#fff",
           borderRadius: 20,
