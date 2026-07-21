@@ -8,11 +8,16 @@ import { NAV, navHref, type NavItem } from "./constants";
 import { ArrowUpRight } from "./icons";
 import { pushDataLayer } from "@/lib/gtm";
 import { useAppUrl } from "@/lib/useAppUrl";
+import { useSession } from "@/lib/useSession";
 
 export function Nav({ currentNav }: { currentNav?: NavItem }) {
   const scrolled = useScrolled(40);
   const [menuOpen, setMenuOpen] = useState(false);
   const appUrl = useAppUrl();
+  // Signed-in visitors get sent to their dashboard rather than asked to sign up.
+  const { authed } = useSession();
+  const ctaLabel = authed ? "Go to dashboard" : "Get started for free";
+  const ctaHref = appUrl(authed ? "/dashboard" : "/signup");
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -86,12 +91,12 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
           </div>
 
           <a
-            href={appUrl("/signup")}
+            href={ctaHref}
             onClick={() => pushDataLayer({ event: "cta_click" })}
             className="fs-cta-btn fs-nav-cta"
             style={{ background: "#000", color: "#fff" }}
           >
-            Get started for free
+            {ctaLabel}
             <span className="fs-arrow-wrap">
               <span className="fs-arrow fs-arrow-1">
                 <ArrowUpRight />
@@ -173,7 +178,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
               </a>
             ))}
             <a
-              href={appUrl("/signup")}
+              href={ctaHref}
               onClick={() => {
                 pushDataLayer({ event: "cta_click" });
                 closeMenu();
@@ -186,7 +191,7 @@ export function Nav({ currentNav }: { currentNav?: NavItem }) {
                 justifyContent: "center",
               }}
             >
-              Get started for free
+              {ctaLabel}
               <span className="fs-arrow-wrap">
                 <span className="fs-arrow fs-arrow-1">
                   <ArrowUpRight />
