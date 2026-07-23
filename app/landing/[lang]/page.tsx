@@ -24,7 +24,7 @@ export default async function LandingHome({
     <div className="w-full overflow-x-hidden">
       <UrgencyBanner dict={dict.urgency} />
       <Header dict={dict.header} />
-      <Hero dict={dict.hero} personalization={dict.personalization} locale={lang} />
+      <Hero dict={dict.hero} personalization={dict.personalization} preview={dict.preview} locale={lang} />
       <LogoStripSteps dict={dict.logoStrip} />
       <FeatureVisibility dict={dict.visibility} />
       <FeatureCompetitors dict={dict.competitors} />

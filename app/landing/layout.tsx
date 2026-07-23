@@ -1,4 +1,5 @@
 import "./landing.css";
+import "./preview.css";
 
 export default function LandingSegmentLayout({
   children,

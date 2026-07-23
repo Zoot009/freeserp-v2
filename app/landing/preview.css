@@ -1,0 +1,1376 @@
+/* Landing-page dashboard preview.
+ *
+ * A faithful replica of the app's project dashboard, scoped to `.fsp` so it can
+ * never leak into the landing page around it.
+ *
+ * LIGHT THEME. The app's default is light (freeserp-frontend-v2
+ * components/theme-provider.tsx: `initialTheme = 'light'`) — dark is opt-in per
+ * user via a `theme` cookie. So light is what a visitor arriving from this page
+ * actually sees after signing up.
+ *
+ * Everything below mirrors freeserp-frontend-v2/app/dashboard.css. Tokens are
+ * copied verbatim from its `.fs-app` (light) block. Component rules reproduce
+ * the same paddings, radii and sizes; where a number looks oddly specific it is
+ * because it came from that file, not from taste. Re-copy on redesign.
+ *
+ * Note .card/.stat-strip/.tbl/.pos-badge/.chip have NO dark overrides in the
+ * source — they are entirely token-driven, which is why this file only needs the
+ * light token values to match.
+ */
+
+.fsp {
+  --brand: #2d5bff;
+  --brand-soft: #eef2ff;
+  --brand-deep: #1e40d8;
+
+  --bg: #ffffff;
+  --bg-sub: #f7f8fa;
+  --bg-elev: #ffffff;
+  --bg-inset: #f2f4f7;
+
+  --border: #e7e9ee;
+  --border-strong: #d7dbe3;
+
+  --text: #0b0d12;
+  --text-soft: #4b5363;
+  --text-mute: #8a93a4;
+
+  --pos: #16a34a;
+  --pos-soft: #e8f7ee;
+  --neg: #dc2626;
+  --neg-soft: #fcebeb;
+  --warn: #c28b00;
+  --warn-soft: #fbf3dc;
+
+  --meter-checks: #2d5bff;
+  --meter-ai: #0d9488;
+  --black: #0b0d12;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --page-pad: 28px;
+
+  --shadow-sm: 0 1px 2px rgba(11, 13, 18, 0.04);
+  --shadow-md: 0 6px 24px -8px rgba(11, 13, 18, 0.08), 0 2px 4px rgba(11, 13, 18, 0.04);
+
+  --fsp-mono: var(--font-geist-mono), "Geist Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  color: var(--text);
+  background: var(--bg-sub);
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.fsp *,
+.fsp *::before,
+.fsp *::after {
+  box-sizing: border-box;
+}
+
+/* ---- Full-screen takeover ------------------------------------------------ */
+
+/* Above the landing chrome, not just above the page. Header.tsx pins its
+   scrolled desktop bar AND its mobile bottom CTA at z-100, both `fixed`, so
+   anything below 100 lets a white marketing bar float over the dashboard. */
+.fsp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Reserve the scrollbar track. Skeleton and filled state are height-matched,
+     but on a short viewport even a few px of mismatch would toggle the scrollbar
+     on and shift the whole replica sideways at the exact moment of the swap. */
+  scrollbar-gutter: stable;
+}
+
+/* ---- Preview bar --------------------------------------------------------- */
+
+/* Sits ABOVE the replica rather than inside its top bar, so the dashboard chrome
+   below stays a faithful copy with nothing bolted on. */
+.fsp-previewbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---- App shell: 64px collapsed rail + main column ------------------------ */
+
+.fsp-app {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  min-height: 100dvh;
+}
+
+.fsp-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 10px;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+}
+
+/* Collapsed brand row: the logo and wordmark are hidden at 64px, leaving only
+   the blue toggle square — exactly what the real rail shows. */
+.fsp-rail-brand {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 14px;
+}
+
+.fsp-rail-toggle {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.fsp-rail-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  border-radius: var(--r-sm);
+  color: var(--text-soft);
+}
+
+/* The section headings ("RANK TRACKER WORKSPACE" / "OTHER TOOLS") are hidden in
+   the collapsed rail; the group break survives as a top margin instead. */
+.fsp-rail-item.group {
+  margin-top: 8px;
+}
+
+.fsp-rail-item.active {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.fsp-rail-spacer {
+  flex: 1;
+}
+
+.fsp-rail-user {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0 8px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.fsp-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  /* Hard-coded in the source too — identical in both themes. */
+  background: linear-gradient(135deg, #2d5bff, #6a8aff);
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.fsp-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ---- Global top bar ------------------------------------------------------ */
+
+.fsp-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.fsp-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text-mute);
+  min-width: 0;
+}
+
+.fsp-crumb {
+  padding: 4px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.fsp-crumb.cur {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.fsp-sep {
+  display: inline-flex;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* margin-left:auto here is what pushes the entire right-hand cluster over. */
+.fsp-search {
+  position: relative;
+  width: 320px;
+  margin-left: auto;
+  flex-shrink: 1;
+}
+
+.fsp-search .ic {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-mute);
+  display: inline-flex;
+}
+
+.fsp-search input {
+  width: 100%;
+  background: var(--bg-inset);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 10px 7px 32px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+}
+
+.fsp-usage {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 8px 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fsp-plan {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.fsp-ring-val {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.fsp-icon-btn {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-soft);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.fsp-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fsp-lang .caret {
+  display: inline-flex;
+  color: var(--text-mute);
+}
+
+.fsp-bell-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--brand);
+  border-radius: 50%;
+}
+
+/* ---- Page ---------------------------------------------------------------- */
+
+.fsp-page {
+  padding: 28px var(--page-pad) 60px;
+  min-width: 0;
+}
+
+.fsp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-mute);
+  margin-bottom: 12px;
+}
+
+.fsp-page-h {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.fsp-ident {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* A full circle, not a rounded square — the app's Favicon component is round. */
+.fsp-favicon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--brand);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.fsp-h1 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.fsp-domain {
+  font-size: 11.5px;
+  color: var(--text-mute);
+  font-family: var(--fsp-mono);
+}
+
+.fsp-actions-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Auto-check card — the app renders it for paid plans; the preview always shows
+   it so the header height is stable between skeleton and filled state. */
+.fsp-autocheck {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  min-width: 300px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-elev);
+}
+
+.fsp-autocheck .divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border);
+}
+
+.fsp-ac-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mute);
+  margin-bottom: 4px;
+}
+
+.fsp-ac-val {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fsp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 13px 7px 10px;
+  border-radius: 8px;
+  background: var(--bg-inset);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-soft);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.fsp-track-sw {
+  width: 30px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.fsp-track-sw > i {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.fsp-btns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.fsp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fsp-btn.primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Segmented icon group — bell / share / delete. */
+.fsp-icon-group {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.fsp-icon-group > span {
+  width: 38px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--text-soft);
+  border-left: 1px solid var(--border);
+}
+
+.fsp-icon-group > span:first-child {
+  border-left: none;
+}
+
+/* ---- Stat strip (8 cells) ------------------------------------------------ */
+
+.fsp-strip {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  padding: 20px 10px;
+  row-gap: 20px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(130% 170% at 100% 0%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 58%),
+    linear-gradient(180deg, color-mix(in srgb, var(--brand) 3%, var(--bg-elev)), var(--bg-elev));
+}
+
+.fsp-cell {
+  flex: 1 1 150px;
+  min-width: 150px;
+  padding: 4px 22px;
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fsp-cell:first-child {
+  border-left: none;
+  padding-left: 10px;
+}
+
+.fsp-lbl {
+  font-size: 11px;
+  color: var(--text-mute);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fsp-val {
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsp-val .fsp-of {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-mute);
+}
+
+.fsp-tiny {
+  font-size: 11.5px;
+  color: var(--text-mute);
+}
+
+.fsp-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: var(--bg-inset);
+  overflow: hidden;
+  margin-top: 7px;
+  max-width: 120px;
+}
+
+.fsp-bar > i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--pos);
+}
+
+/* ---- Two-column body ----------------------------------------------------- */
+
+.fsp-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+/* Matches the app's own breakpoint, not a guess. */
+@media (max-width: 1100px) {
+  .fsp-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.fsp-rail-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+
+.fsp-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+}
+
+.fsp-card-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.fsp-card-t {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fsp-pill-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-inset);
+  border-radius: 8px;
+}
+
+.fsp-pill-toggle > span {
+  padding: 3px 8px;
+  font-size: 11.5px;
+  border-radius: 6px;
+  color: var(--text-mute);
+}
+
+.fsp-pill-toggle > span.on {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.fsp-hero-n {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsp-insight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  font-size: 13px;
+}
+
+.fsp-insight-row + .fsp-insight-row {
+  border-top: 1px solid var(--border);
+}
+
+.fsp-dd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ---- SERP card: toolbar + table ------------------------------------------ */
+
+.fsp-serp-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 0;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.fsp-serp-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fsp-serp-search {
+  position: relative;
+  width: 240px;
+}
+
+.fsp-serp-search .ic {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-mute);
+  display: inline-flex;
+}
+
+.fsp-serp-search input {
+  width: 100%;
+  height: 34px;
+  padding: 0 12px 0 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+}
+
+.fsp-device {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: auto;
+  padding: 3px;
+  background: var(--bg-inset);
+  border-radius: 8px;
+}
+
+.fsp-device > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  border-radius: 6px;
+  color: var(--text-mute);
+  white-space: nowrap;
+}
+
+.fsp-device > span.on {
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.fsp-table-wrap {
+  overflow-x: auto;
+}
+
+.fsp-tbl {
+  width: 100%;
+  min-width: 980px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.fsp-tbl th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11.5px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 10px 12px;
+  background: var(--bg-sub);
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.fsp-tbl td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--text);
+}
+
+.fsp-tbl tr:last-child td {
+  border-bottom: none;
+}
+
+.fsp-check {
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--bg);
+  display: inline-block;
+}
+
+.fsp-kw {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.fsp-url {
+  color: var(--text-mute);
+  font-size: 12px;
+  font-family: var(--fsp-mono);
+  display: inline-block;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Keeps the row at its full 55px even when the cell holds the much smaller
+   "100+" chip instead of a 30px rank tile — otherwise unranked rows collapse to
+   ~43px and the table shows two different row heights. */
+.fsp-pos-cell {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+.fsp-pos {
+  display: inline-grid;
+  place-items: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  background: var(--bg-inset);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsp-pos.top3 {
+  background: var(--brand);
+  color: #fff;
+}
+
+.fsp-pos.top10 {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.fsp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 5px;
+  background: var(--bg-inset);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+.fsp-chip.pos {
+  background: var(--pos-soft);
+  color: var(--pos);
+}
+
+/* P.S / K.S — fixed-width slots so the "/" lines up down the column. */
+.fsp-psks {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+}
+
+.fsp-psks .slot {
+  min-width: 34px;
+  display: inline-flex;
+}
+
+.fsp-psks .slot.ps {
+  justify-content: flex-end;
+}
+
+.fsp-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--pos);
+  flex-shrink: 0;
+}
+
+.fsp-act {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fsp-act-btn {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-soft);
+  flex-shrink: 0;
+}
+
+/* A 135deg gradient, not the flat .btn.primary blue — and its glow is
+   hard-coded for a white surface rather than following a theme token. */
+.fsp-rank-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2d5bff, #1e40d8);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(45, 91, 255, 0.4);
+}
+
+/* Fixed slot so "#7", "#29" and "#100+" all yield the same button width. */
+.fsp-rank-cta .from {
+  display: inline-block;
+  min-width: 36px;
+  text-align: center;
+}
+
+/* The destination rank is the one bold element in the pill. */
+.fsp-rank-cta .to {
+  font-weight: 700;
+}
+
+/* ---- Blur + fill --------------------------------------------------------- */
+
+/* The data is NEVER readable — the blur is on from the first frame it exists.
+   What animates is what's BEHIND it: each value pops in at its own random-ish
+   moment (see .fsp-fill), so through the blur the visitor watches shapes
+   appearing one by one, like a crawl filling the table. */
+
+/* Stat values and rail cards: a partial blur. Labels stay crisp so the visitor
+   still reads WHAT is measured — only the number is withheld. */
+.fsp-soft {
+  filter: blur(5px);
+  opacity: 0.9;
+  user-select: none;
+}
+
+/* Table row content: heavier, so nothing is legible. Applied per-cell rather
+   than to the <tr>, so the trend arrow can stay crisp inside a blurred row. */
+.fsp-hard {
+  filter: blur(6px);
+  opacity: 0.8;
+  user-select: none;
+}
+
+/* One value arriving behind the blur. The mid-animation dip is a flicker — a
+   value landing, wavering, then settling — which through the blur reads as
+   churn rather than a clean fade. Each element sets its own animation-delay
+   inline; until the delay elapses `both` keeps it invisible. */
+@keyframes fsp-fill {
+  0% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 0.85;
+  }
+  72% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fsp-fill {
+  animation: fsp-fill 0.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fsp-fill {
+    animation: none;
+  }
+}
+
+/* The one element deliberately NOT blurred inside a blurred row: direction of
+   travel is the whole story the table is telling. */
+.fsp-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.fsp-trend.up {
+  color: var(--pos);
+}
+
+.fsp-trend.down {
+  color: var(--neg);
+}
+
+/* ---- Loading bar (skeleton phase) ---------------------------------------- */
+
+/* A plain top-of-page load bar — the same affordance a browser or a router
+   shows. It reports that the view is still assembling; it does not claim to be
+   measuring anything. */
+.fsp-loadbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: color-mix(in srgb, var(--brand) 12%, transparent);
+  overflow: hidden;
+  z-index: 5;
+}
+
+.fsp-loadbar > i {
+  display: block;
+  height: 100%;
+  width: 40%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  animation: fsp-slide 1.15s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes fsp-slide {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(360%);
+  }
+}
+
+/* ---- Reveal -------------------------------------------------------------- */
+
+/* Rows arrive in sequence rather than all at once, so the swap from skeleton
+   reads as content landing instead of a hard cut. Purely presentational — the
+   delay is per-row index, set inline. */
+@keyframes fsp-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fsp-rise {
+  animation: fsp-rise 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* A single light sweep across the table as it lands. */
+@keyframes fsp-sweep {
+  from {
+    transform: translateX(-60%);
+    opacity: 0.55;
+  }
+  to {
+    transform: translateX(160%);
+    opacity: 0;
+  }
+}
+
+.fsp-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fsp-sweep > i {
+  display: block;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(45, 91, 255, 0.09), transparent);
+  animation: fsp-sweep 1.1s ease-out both;
+}
+
+/* ---- Unlock card --------------------------------------------------------- */
+
+/* The whole table is the trigger. It reads as inert-but-interactive: blurred
+   content the visitor can see is there, which invites the click that reveals
+   the unlock card. */
+.fsp-tablearea {
+  position: relative;
+  cursor: pointer;
+}
+
+/* The prompt, centred over the table once the blur has landed. Appears only in
+   the locked state, so it reads as the reason the data just got curtained.
+   pointer-events: none — the click falls through to the table, which opens the
+   unlock card. Its own keyframes (not fsp-rise) because the centring transform
+   and the entrance animation share the transform property. */
+@keyframes fsp-hint-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 10px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.fsp-hint {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fsp-hint-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  /* After the blur transition (0.7s) has mostly settled. */
+  animation-delay: 0.55s;
+}
+
+.fsp-hint .zap {
+  color: var(--brand);
+  display: inline-flex;
+}
+
+/* Anchored INSIDE the table, not a full-screen dialog — the surrounding
+   dashboard stays visible, so the card reads as gating this data rather than
+   interrupting the page. */
+.fsp-unlock-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
+}
+
+/* Kept deliberately compact: the two-column body it centres over is only
+   ~360px tall with a 4-row table, so every vertical px here is overflow. */
+.fsp-unlock {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: 0 24px 60px -24px rgba(11, 13, 18, 0.18);
+  padding: 18px 22px 14px;
+  text-align: center;
+  cursor: default;
+}
+
+.fsp-unlock-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.fsp-unlock-t {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.fsp-unlock-s {
+  font-size: 13.5px;
+  color: var(--text-soft);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.fsp-unlock-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0 14px;
+  text-align: left;
+}
+
+.fsp-unlock-list > span {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.fsp-unlock-list .tick {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--pos-soft);
+  color: var(--pos);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.fsp-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 12px 22px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #2d5bff, #1e40d8);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  /* Tuned for a white surface — the dashboard's own precedent for a brand glow
+     on white is `0 4px 14px rgba(45,91,255,0.4)`. */
+  box-shadow: 0 4px 14px rgba(45, 91, 255, 0.4);
+}
+
+.fsp-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(45, 91, 255, 0.45);
+}
+
+.fsp-cta-note {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-mute);
+  margin-top: 12px;
+}
+
+.fsp-unlock-dismiss {
+  display: block;
+  margin: 10px auto 0;
+  background: none;
+  border: none;
+  color: var(--text-mute);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.fsp-unlock-dismiss:hover {
+  color: var(--text-soft);
+}
+
+.fsp-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-soft);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.fsp-close:hover {
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+/* ---- Skeleton ------------------------------------------------------------- */
+
+/* The app's own skeleton, ported verbatim from dashboard.css `.fs-app .skeleton`
+   — a 1.4s sliding shimmer, NOT a pulse. Same gradient stops, same 400px
+   background-size, same default radius, so the loading state of this replica is
+   pixel-identical to the loading state of the real product. */
+@keyframes fsp-shim {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+.fsp-sk {
+  background: linear-gradient(90deg, var(--bg-inset) 25%, var(--bg-sub) 37%, var(--bg-inset) 63%);
+  background-size: 400px 100%;
+  animation: fsp-shim 1.4s ease-in-out infinite;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* Bars drawn ON the table header, which is filled with --bg-sub (#F7F8FA). The
+   standard skeleton base (--bg-inset #F2F4F7) is only a few steps off that fill
+   and effectively disappears, so those bars get a darker ramp. */
+.fsp-sk.on-sub {
+  background: linear-gradient(90deg, #e3e7ee 25%, #eef1f5 37%, #e3e7ee 63%);
+  background-size: 400px 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fsp-sk {
+    animation: none;
+  }
+  .fsp-cta {
+    transition: none;
+  }
+}
+
+/* ---- Small screens -------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .fsp-app {
+    grid-template-columns: 1fr;
+  }
+  .fsp-rail {
+    display: none;
+  }
+  .fsp-topbar {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .fsp-search,
+  .fsp-lang {
+    display: none;
+  }
+  .fsp-page-h {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fsp-actions-col {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 640px) {
+  .fsp {
+    --page-pad: 16px;
+  }
+  .fsp-h1 {
+    font-size: 21px;
+  }
+  .fsp-cell {
+    padding: 4px 14px;
+  }
+}

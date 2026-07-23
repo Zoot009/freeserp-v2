@@ -16,6 +16,79 @@ export type Dictionary = {
     disclaimer: string;
     liveDemo: string;
     demoAlt: string;
+    invalidDomain: string;
+  };
+  /** Copy for the sample-dashboard preview shown after the hero's domain form. */
+  preview: {
+    // Loading skeleton. The skeleton itself is silent and decorative; this is
+    // the only thing a screen reader announces for it.
+    loadingAria: string;
+    // Chrome
+    close: string;
+    crumbWorkspace: string;
+    crumbProjects: string;
+    crumbKeywords: string;
+    topSearch: string;
+    allProjects: string;
+    autoCheck: string;
+    autoCheckOff: string;
+    autoCheckSub: string;
+    addKeywords: string;
+    language: string;
+    // Stat strip
+    statSeoScore: string;
+    statSeoScoreSub: string;
+    statKeywords: string;
+    statKeywordsSub: string;
+    statAvgPosition: string;
+    statAvgPositionSub: string;
+    statTop3: string;
+    statTop10: string;
+    statTraffic: string;
+    statTrafficSub: string;
+    statDomainAuthority: string;
+    statBacklinks: string;
+    statBacklinksSub: string;
+    // Table
+    tableTitle: string;
+    tableSearch: string;
+    tableShowing: string;
+    deviceDesktop: string;
+    deviceMobile: string;
+    colKeyword: string;
+    colPosition: string;
+    colFirstCheck: string;
+    colVolume: string;
+    colUrl: string;
+    colScores: string;
+    colLastChecked: string;
+    colActions: string;
+    rankCta: string;
+    // Left rail
+    railTitle: string;
+    railVs: string;
+    railGained: string;
+    railLost: string;
+    railNoChange: string;
+    competitorsTitle: string;
+    addCompetitor: string;
+    competitorAvg: string;
+    // Unlock — the table itself is the trigger, so it needs a visible affordance
+    hintClick: string;
+    modalTitle: string;
+    modalSubtitle: string;
+    modalPoint1: string;
+    modalPoint2: string;
+    modalPoint3: string;
+    modalCta: string;
+    modalNote: string;
+    modalDismiss: string;
+    /**
+     * Short disclosure that the figures behind the modal are illustrative.
+     * No check is run for a visitor who has not signed up, so the preview must
+     * not be presented as a measurement of their site.
+     */
+    modalDisclosure: string;
   };
   logoStrip: {
     trustLine: string;
