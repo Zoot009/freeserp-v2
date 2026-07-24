@@ -41,11 +41,13 @@ export const PREVIEW_PARAM = "domain";
  *               blur pop in one by one at scattered moments — through the blur
  *               that reads as a crawl progressively filling the dashboard.
  *               Nothing is ever legible.
- *   locked   -> the fill has played out; the centred prompt appears and the
- *               table becomes the click-to-unlock trigger
+ *   locked   -> the fill has played out; the data blurs and the unlock card
+ *               opens over it
  *
- * The unlock card itself opens on CLICK (state `unlocked`), never on a timer —
- * a prompt that covers the dashboard uninvited hides the thing it is selling.
+ * The card opens at the END of the sequence rather than on arrival: by then the
+ * visitor has watched the dashboard fill in, so the prompt lands on something
+ * they already want instead of covering it before they have seen it. Dismissing
+ * it leaves the blurred dashboard, and clicking the data reopens it.
  */
 const HOLD_MS = 2400;
 /**
@@ -192,9 +194,14 @@ export default function PreviewOverlay({
       clearTimers();
       timersRef.current.push(
         setTimeout(() => setPhase("reveal"), HOLD_MS),
-        // Locking only blurs the data and arms the click target. The card is
-        // opened by the visitor clicking the blurred data, never on a timer.
-        setTimeout(() => setPhase("locked"), HOLD_MS + FILL_MS),
+        // The crawl finishing is the moment to ask: the dashboard has been seen
+        // filling in, so the card lands on a page the visitor already wants.
+        // Dismissing it leaves the blurred dashboard, and clicking the data
+        // brings the card back — see `armed` in PreviewDashboard.
+        setTimeout(() => {
+          setPhase("locked");
+          setUnlocked(true);
+        }, HOLD_MS + FILL_MS),
       );
 
       if (push) {

@@ -150,9 +150,9 @@ function Stat({
         {children}
       </span>
     );
-  // The caption and meter take the class directly rather than a wrapper: both
-  // are flex items here, and a shrink-to-fit wrapper would collapse the meter
-  // (it has a max-width but no width of its own) to nothing.
+  // The meter takes the class directly rather than through a wrapper: it is a
+  // flex item here, and a shrink-to-fit wrapper would collapse it to nothing
+  // (it has a max-width but no width of its own).
   const veiled = clear ? "" : " fsp-soft";
 
   return (
@@ -172,7 +172,11 @@ function Stat({
               </Veil>
             )}
           </div>
-          {sub && <span className={`fsp-tiny${veiled}`}>{sub}</span>}
+          {/* Never veiled. Like the " / 100" above, the caption is not the
+              measurement — it says what unit the hidden number is in ("monthly,
+              modelled", "site-wide"). Blurring it withheld nothing and only
+              made the cell look broken. */}
+          {sub && <span className="fsp-tiny">{sub}</span>}
           {bar != null && (
             <div className={`fsp-bar${veiled}`}>
               <i style={{ width: `${bar}%` }} />
