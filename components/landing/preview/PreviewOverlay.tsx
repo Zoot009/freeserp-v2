@@ -144,6 +144,8 @@ export default function PreviewOverlay({
       clearTimers();
       timersRef.current.push(
         setTimeout(() => setPhase("reveal"), HOLD_MS),
+        // Locking only blurs the data and arms the click target. The card is
+        // opened by the visitor clicking the blurred data, never on a timer.
         setTimeout(() => setPhase("locked"), HOLD_MS + FILL_MS),
       );
 

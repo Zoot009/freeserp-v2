@@ -365,11 +365,31 @@ export default function PreviewDashboard({
   locked: boolean;
   unlockOpen: boolean;
   onRequestUnlock: () => void;
-  /** The unlock card, rendered inside the table box when open. */
+  /** The unlock card, rendered over the body when open. */
   children?: React.ReactNode;
 }) {
+  // Once the data is blurred, clicking ANY of it — a stat value, a rank badge,
+  // a row — opens the unlock card. The handler sits on the whole body rather
+  // than the table alone so every obscured number is a live target.
+  const armed = locked && !unlockOpen;
   return (
-    <div>
+    <div
+      className={armed ? "fsp-armed" : undefined}
+      onClick={armed ? onRequestUnlock : undefined}
+      role={armed ? "button" : undefined}
+      tabIndex={armed ? 0 : undefined}
+      onKeyDown={
+        armed
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onRequestUnlock();
+              }
+            }
+          : undefined
+      }
+      aria-label={armed ? dict.hintClick : undefined}
+    >
       {/* Stat strip — labels crisp, values blurred */}
       <div className="fsp-strip">
         <Stat
@@ -509,27 +529,9 @@ export default function PreviewDashboard({
             </span>
           </div>
 
-          {/* The table is the trigger: once locked, clicking anywhere on it
-              opens the unlock card, which is anchored inside this box. Before
-              the lock lands there is nothing to unlock, so no click handler. */}
-          <div
-            className="fsp-tablearea"
-            style={locked ? undefined : { cursor: "default" }}
-            onClick={locked ? onRequestUnlock : undefined}
-            role={locked ? "button" : undefined}
-            tabIndex={locked ? 0 : undefined}
-            onKeyDown={
-              locked
-                ? (e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      onRequestUnlock();
-                    }
-                  }
-                : undefined
-            }
-            aria-label={locked ? dict.hintClick : undefined}
-          >
+          {/* The click target is the whole blurred body (see the root element),
+              so clicking any obscured number opens the card. */}
+          <div className="fsp-tablearea">
             <div className="fsp-table-wrap">
               <table className="fsp-tbl">
                 <Cols />
@@ -569,18 +571,6 @@ export default function PreviewDashboard({
             <span className="fsp-sweep" aria-hidden>
               <i />
             </span>
-
-            {/* Centred over the freshly-blurred table — appears WITH the lock,
-                so it reads as the reason the data was curtained. Hidden again
-                once the card is open. */}
-            {locked && !unlockOpen && (
-              <span className="fsp-hint">
-                <span className="zap">
-                  <Ic.zap size={14} />
-                </span>
-                {dict.hintClick}
-              </span>
-            )}
 
           </div>
         </div>

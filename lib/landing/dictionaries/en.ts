@@ -81,7 +81,7 @@ const en: Dictionary = {
     modalCta: "Sign up free to unlock",
     modalNote: "Free forever · No credit card required",
     modalDismiss: "Keep looking around",
-    modalDisclosure: "Preview shown with sample data. Your real rankings are checked after sign-up.",
+    modalDisclosure: "",
   },
   logoStrip: {
     trustLine: "2M+ marketers already track with FreeSERP",
