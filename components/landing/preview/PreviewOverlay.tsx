@@ -58,6 +58,9 @@ const FILL_MS = 6200;
 
 type Phase = "skeleton" | "reveal" | "locked";
 
+/** Lifecycle of a slot backed by a live lookup. */
+export type LiveStatus = "loading" | "ready" | "unavailable";
+
 export type PreviewOverlayDict = PreviewDict;
 
 export type PreviewController = {
@@ -90,8 +93,14 @@ export default function PreviewOverlay({
   const [favicon, setFavicon] = useState<string | null>(null);
   // The one genuinely measured figure. Null until the audit lands — or forever,
   // if it can't be had, in which case the sample score stays.
+  // Three states, not two. A slot backed by a live lookup must never show
+  // blurred SAMPLE data while that lookup is in flight — it would flash a fake
+  // number and then replace it with the real one. While loading it shows a
+  // shimmer; only a lookup that actually failed falls back to the sample.
   const [pageScore, setPageScore] = useState<PageScore | null>(null);
+  const [scoreStatus, setScoreStatus] = useState<LiveStatus>("loading");
   const [realRank, setRealRank] = useState<RealRank | null>(null);
+  const [rankStatus, setRankStatus] = useState<LiveStatus>("loading");
   const scoreAbortRef = useRef<AbortController | null>(null);
   const appUrl = useAppUrl();
 
@@ -132,7 +141,9 @@ export default function PreviewOverlay({
       setFlag(null);
       setFavicon(null);
       setPageScore(null);
+      setScoreStatus("loading");
       setRealRank(null);
+      setRankStatus("loading");
 
       // One abort for every live lookup this preview starts, so closing it (or
       // opening another domain) stops work nobody will see.
@@ -155,7 +166,9 @@ export default function PreviewOverlay({
         if (scoreAbort.signal.aborted) return;
         setFlag(flagOf(code));
         void fetchRealRank(preview.domain, code, scoreAbort.signal).then((rank) => {
-          if (!scoreAbort.signal.aborted) setRealRank(rank);
+          if (scoreAbort.signal.aborted) return;
+          setRealRank(rank);
+          setRankStatus(rank ? "ready" : "unavailable");
         });
       });
 
@@ -165,7 +178,9 @@ export default function PreviewOverlay({
       // exactly when a real number arriving looks right. If it never arrives,
       // the sample score simply stays.
       void fetchPageScore(preview.domain, scoreAbort.signal).then((real) => {
-        if (!scoreAbort.signal.aborted) setPageScore(real);
+        if (scoreAbort.signal.aborted) return;
+        setPageScore(real);
+        setScoreStatus(real ? "ready" : "unavailable");
       });
 
       const iconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(preview.domain)}&sz=64`;
@@ -306,7 +321,9 @@ export default function PreviewOverlay({
                   flag={flag}
                   checkedAt={checkedAt}
                   pageScore={pageScore}
+                  scoreStatus={scoreStatus}
                   realRank={realRank}
+                  rankStatus={rankStatus}
                   locked={phase === "locked"}
                   unlockOpen={unlocked}
                   onRequestUnlock={() => setUnlocked(true)}

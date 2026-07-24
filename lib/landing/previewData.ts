@@ -111,12 +111,12 @@ export function buildPreview(rawDomain: string): PreviewData | null {
 
   const keywords: PreviewKeyword[] = [
     {
-      // The full domain, not just the brand label — this is the one row whose
-      // rank we measure for real (POST /api/public/rank searches the domain as
-      // a navigational query), so the keyword shown has to be exactly what was
-      // searched. The sample position below is only the fallback for when that
-      // lookup is unavailable.
-      keyword: domain,
+      // The brand label — this is the one row whose rank we measure for real
+      // (POST /api/public/rank searches the brand as a navigational query), and
+      // the backend derives it the same way, so the keyword shown is exactly
+      // what was searched. The sample position below is only the fallback for
+      // when that lookup is unavailable.
+      keyword: brand,
       position: brandPos,
       volume: pick(domain, "brandvol", 12, 74) * 100,
       url: `www.${domain}/`,

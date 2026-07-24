@@ -209,6 +209,19 @@ function Blur({
  * NOT aria-hidden, unlike Blur: these figures are genuine, so a screen reader
  * should read them.
  */
+/**
+ * A slot whose live lookup is still in flight: a shimmer bar, not blurred
+ * sample data.
+ *
+ * This distinction matters. Blur means "real data, withheld until you sign up".
+ * Showing a blurred INVENTED number in a slot that is about to be replaced by a
+ * measured one would flash a fake figure and then swap it — so those slots wait
+ * here instead, and only fall back to the blurred sample if the lookup fails.
+ */
+function Pending({ w, h = 14, r = 5 }: { w: number | string; h?: number; r?: number }) {
+  return <span className="fsp-sk" style={{ display: "inline-block", width: w, height: h, borderRadius: r }} />;
+}
+
 function Clear({
   children,
   delay,
@@ -413,7 +426,9 @@ export default function PreviewDashboard({
   flag,
   checkedAt,
   pageScore,
+  scoreStatus,
   realRank,
+  rankStatus,
   locked,
   unlockOpen,
   onRequestUnlock,
@@ -425,8 +440,12 @@ export default function PreviewDashboard({
   checkedAt: string;
   /** The real audited Page Score, once it lands. Null = fall back to sample. */
   pageScore: { score: number; grade: string | null } | null;
+  /** Lifecycle of that audit — "loading" shows a shimmer, never a fake score. */
+  scoreStatus: "loading" | "ready" | "unavailable";
   /** The real measured rank for the visitor's own domain. Null = sample row. */
   realRank: { keyword: string; position: number | null; url: string | null; volume: number | null } | null;
+  /** Lifecycle of that lookup — "loading" shows a shimmer row. */
+  rankStatus: "loading" | "ready" | "unavailable";
   /**
    * The data is blurred from the first frame regardless — this only gates the
    * centred prompt and the click-to-unlock, which arrive after the behind-the-
@@ -462,17 +481,27 @@ export default function PreviewDashboard({
     >
       {/* Stat strip — labels crisp, values blurred */}
       <div className="fsp-strip">
-        {/* The ONE measured figure. When the real audit lands we show it clear
-            and say so; until (or unless) it does, the sample score stays
-            blurred like everything else, so a slow or unavailable audit costs
-            the visitor nothing. */}
-        <Stat
-          label={dict.statSeoScore}
-          value={pageScore ? pageScore.score : data.seoScore}
-          sub={pageScore ? dict.statSeoScoreReal : dict.statSeoScoreSub}
-          gauge={pageScore ? pageScore.score : data.seoScore}
-          clear={!!pageScore}
-        />
+        {/* A measured figure. While the audit is in flight this shows a shimmer
+            rather than a blurred invented score — a slot about to hold a real
+            number must never flash a fake one first. Only a failed audit falls
+            back to the blurred sample. */}
+        {scoreStatus === "loading" ? (
+          <div className="fsp-cell">
+            <div className="fsp-lbl">{dict.statSeoScore}</div>
+            <div className="fsp-statbody">
+              <Pending w={54} h={26} r={6} />
+              <Pending w={84} h={9} r={4} />
+            </div>
+          </div>
+        ) : (
+          <Stat
+            label={dict.statSeoScore}
+            value={pageScore ? pageScore.score : data.seoScore}
+            sub={pageScore ? dict.statSeoScoreReal : dict.statSeoScoreSub}
+            gauge={pageScore ? pageScore.score : data.seoScore}
+            clear={!!pageScore}
+          />
+        )}
         <Stat
           label={dict.statKeywords}
           value={data.keywordsTracked}
@@ -636,7 +665,41 @@ export default function PreviewDashboard({
                       scattered moments behind the blur (see Blur's delay).
                       aria-hidden throughout: these figures are illustrative, and
                       a screen reader must not recite them as measurements. */}
+                  {/* Row 1 while its live rank is still in flight. Shimmer, not
+                      blurred sample data — the slot is about to hold measured
+                      values and must not flash invented ones first. */}
+                  {rankStatus === "loading" && (
+                    <tr className="fsp-rise" aria-hidden>
+                      <td>
+                        <Pending w={13} h={13} r={3} />
+                      </td>
+                      <td>
+                        <Pending w={140} h={11} />
+                      </td>
+                      <td>
+                        <Pending w={34} h={30} r={8} />
+                      </td>
+                      <td>
+                        <Pending w={46} h={11} r={4} />
+                      </td>
+                      <td>
+                        <Pending w={168} h={10} r={4} />
+                      </td>
+                      <td>
+                        <Pending w={74} h={20} r={5} />
+                      </td>
+                      <td>
+                        <Pending w={80} h={10} r={4} />
+                      </td>
+                      <td>
+                        <Pending w={120} h={28} r={8} />
+                      </td>
+                    </tr>
+                  )}
                   {data.keywords.map((kw, i) => {
+                    // Row 1 is withheld entirely while its measurement is in
+                    // flight; the placeholder above stands in for it.
+                    if (i === 0 && rankStatus === "loading") return null;
                     // Row 1 is the only measured row: we searched the visitor's
                     // own domain through Scrape.do and audited their homepage.
                     // Volume and keyword score stay null — we have not measured
