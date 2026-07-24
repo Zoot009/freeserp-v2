@@ -1483,28 +1483,25 @@
     padding: 0;
     row-gap: 0;
   }
+  /* Only SEO Score and Keywords tracked survive on a phone. The remaining five
+     turned the strip into four rows of mostly-blurred numbers that pushed the
+     rank table — the thing worth seeing — well below the fold. Applies to the
+     skeleton too, which uses the same classes, so the two stay in step. */
+  .fsp-cell:nth-child(n + 3) {
+    display: none;
+  }
+  /* One row of two, so no horizontal rules: the surviving left cell simply
+     carries the centre divider. */
   .fsp-cell {
     min-width: 0;
-    padding: 14px 14px;
+    padding: 14px;
     gap: 6px;
     border-left: none;
-    border-top: 1px solid var(--border);
-  }
-  /* First row keeps no top rule; the left column carries the centre divider. */
-  .fsp-cell:first-child,
-  .fsp-cell:nth-child(2) {
     border-top: none;
-  }
-  .fsp-cell:nth-child(odd) {
-    border-right: 1px solid var(--border);
-  }
-  /* The strip has an odd number of cells, so the last one sits alone in the
-     left column — its centre divider would dangle into empty space. */
-  .fsp-cell:last-child:nth-child(odd) {
-    border-right: none;
   }
   .fsp-cell:first-child {
     padding-left: 14px;
+    border-right: 1px solid var(--border);
   }
   .fsp-val {
     font-size: 22px;
