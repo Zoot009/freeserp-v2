@@ -63,6 +63,12 @@
   line-height: 1.45;
   letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
+  /* MUST be reset here. The overlay is rendered inside the Hero <section>,
+     which carries Tailwind's `text-center`, and text-align inherits down the
+     DOM regardless of position: fixed. Without this every td and stat footnote
+     is silently centred while the th stays left (it sets its own text-align),
+     which reads as the whole table being misaligned. */
+  text-align: left;
 }
 
 .fsp *,
@@ -559,6 +565,19 @@
 .fsp-cell:first-child {
   border-left: none;
   padding-left: 10px;
+}
+
+/* The real strip spaces label / value / footnote with the cell's own 7px flex
+   gap. Here the value and footnote sit one level deeper (inside the blur and
+   fill wrappers), so the gap has to be re-declared on them or the caption ends
+   up jammed against the number. Scoped to the strip — the rail cards use
+   .fsp-soft too and must keep their own layout. */
+.fsp-cell .fsp-soft,
+.fsp-cell .fsp-soft > .fsp-fill {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
 }
 
 .fsp-lbl {
