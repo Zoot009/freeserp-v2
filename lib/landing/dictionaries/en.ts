@@ -38,6 +38,7 @@ const en: Dictionary = {
     language: "English",
     statSeoScore: "SEO Score",
     statSeoScoreSub: "avg. keyword score",
+    statSeoScoreReal: "live score for your homepage",
     statKeywords: "Keywords tracked",
     statKeywordsSub: "{count} in top 3",
     statTop3: "Top 3 keywords",

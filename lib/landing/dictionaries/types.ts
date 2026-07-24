@@ -38,6 +38,7 @@ export type Dictionary = {
     // Stat strip
     statSeoScore: string;
     statSeoScoreSub: string;
+    statSeoScoreReal: string;
     statKeywords: string;
     statKeywordsSub: string;
     statTop3: string;

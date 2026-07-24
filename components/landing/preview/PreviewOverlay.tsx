@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { buildPreview, normalizeDomain, type PreviewData } from "@/lib/landing/previewData";
 import { savePendingDomain } from "@/lib/landing/pendingDomain";
 import { getVisitorCountry } from "@/lib/landing/geo";
+import { fetchPageScore, type PageScore } from "@/lib/landing/pageScore";
 import { useAppUrl } from "@/lib/useAppUrl";
 import PreviewShell from "./PreviewShell";
 import PreviewSkeleton from "./PreviewSkeleton";
@@ -86,6 +87,10 @@ export default function PreviewOverlay({
   const [flag, setFlag] = useState<string | null>(null);
   const [checkedAt, setCheckedAt] = useState("");
   const [favicon, setFavicon] = useState<string | null>(null);
+  // The one genuinely measured figure. Null until the audit lands — or forever,
+  // if it can't be had, in which case the sample score stays.
+  const [pageScore, setPageScore] = useState<PageScore | null>(null);
+  const scoreAbortRef = useRef<AbortController | null>(null);
   const appUrl = useAppUrl();
 
   // Whether WE pushed the history entry. Determines how close() unwinds: a
@@ -109,6 +114,7 @@ export default function PreviewOverlay({
     url.searchParams.delete(PREVIEW_PARAM);
     window.history.replaceState(null, "", url.pathname + url.search + url.hash);
     clearTimers();
+    scoreAbortRef.current?.abort();
     setData(null);
     setPhase("skeleton");
   }, [clearTimers]);
@@ -123,6 +129,7 @@ export default function PreviewOverlay({
       setUnlocked(false);
       setFlag(null);
       setFavicon(null);
+      setPageScore(null);
 
       // Saved as soon as the preview opens, not at CTA click: a visitor who
       // browses away and signs up days later should still land in a project
@@ -134,6 +141,18 @@ export default function PreviewOverlay({
         new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" }).format(new Date()),
       );
       void getVisitorCountry().then((code) => setFlag(flagOf(code)));
+
+      // Kick the real audit off HERE, at the top of the skeleton, so it has the
+      // whole loading sequence to complete. Cached domains come back instantly;
+      // an uncached one takes a few seconds and lands mid-crawl, which is
+      // exactly when a real number arriving looks right. If it never arrives,
+      // the sample score simply stays.
+      scoreAbortRef.current?.abort();
+      const scoreAbort = new AbortController();
+      scoreAbortRef.current = scoreAbort;
+      void fetchPageScore(preview.domain, scoreAbort.signal).then((real) => {
+        if (!scoreAbort.signal.aborted) setPageScore(real);
+      });
 
       const iconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(preview.domain)}&sz=64`;
       const img = new Image();
@@ -272,6 +291,7 @@ export default function PreviewOverlay({
                   dict={dict}
                   flag={flag}
                   checkedAt={checkedAt}
+                  pageScore={pageScore}
                   locked={phase === "locked"}
                   unlockOpen={unlocked}
                   onRequestUnlock={() => setUnlocked(true)}

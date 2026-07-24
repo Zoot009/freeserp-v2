@@ -38,6 +38,7 @@ const nl: Dictionary = {
     language: "Nederlands",
     statSeoScore: "SEO-score",
     statSeoScoreSub: "gem. zoekwoordscore",
+    statSeoScoreReal: "live score van je homepage",
     statKeywords: "Gevolgde zoekwoorden",
     statKeywordsSub: "{count} in top 3",
     statTop3: "Top 3-zoekwoorden",

@@ -42,6 +42,8 @@ export type PreviewDict = {
   // Stat strip
   statSeoScore: string;
   statSeoScoreSub: string;
+  /** Caption used when the score shown is a real audit of the visitor's site. */
+  statSeoScoreReal: string;
   statKeywords: string;
   statKeywordsSub: string;
   statTop3: string;
@@ -354,6 +356,7 @@ export default function PreviewDashboard({
   dict,
   flag,
   checkedAt,
+  pageScore,
   locked,
   unlockOpen,
   onRequestUnlock,
@@ -363,6 +366,8 @@ export default function PreviewDashboard({
   dict: PreviewDict;
   flag: string | null;
   checkedAt: string;
+  /** The real audited Page Score, once it lands. Null = fall back to sample. */
+  pageScore: { score: number; grade: string | null } | null;
   /**
    * The data is blurred from the first frame regardless — this only gates the
    * centred prompt and the click-to-unlock, which arrive after the behind-the-
@@ -398,11 +403,16 @@ export default function PreviewDashboard({
     >
       {/* Stat strip — labels crisp, values blurred */}
       <div className="fsp-strip">
+        {/* The ONE measured figure. When the real audit lands we show it clear
+            and say so; until (or unless) it does, the sample score stays
+            blurred like everything else, so a slow or unavailable audit costs
+            the visitor nothing. */}
         <Stat
           label={dict.statSeoScore}
-          value={data.seoScore}
-          sub={dict.statSeoScoreSub}
-          gauge={data.seoScore}
+          value={pageScore ? pageScore.score : data.seoScore}
+          sub={pageScore ? dict.statSeoScoreReal : dict.statSeoScoreSub}
+          gauge={pageScore ? pageScore.score : data.seoScore}
+          clear={!!pageScore}
         />
         <Stat
           label={dict.statKeywords}

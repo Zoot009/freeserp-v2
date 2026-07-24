@@ -39,6 +39,7 @@ const es: Dictionary = {
     language: "Español",
     statSeoScore: "Puntuación SEO",
     statSeoScoreSub: "puntuación media de palabras clave",
+    statSeoScoreReal: "puntuación real de tu página de inicio",
     statKeywords: "Palabras clave rastreadas",
     statKeywordsSub: "{count} en el top 3",
     statTop3: "Palabras clave top 3",
