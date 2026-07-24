@@ -1471,6 +1471,11 @@
   .fsp-cell:nth-child(odd) {
     border-right: 1px solid var(--border);
   }
+  /* The strip has an odd number of cells, so the last one sits alone in the
+     left column — its centre divider would dangle into empty space. */
+  .fsp-cell:last-child:nth-child(odd) {
+    border-right: none;
+  }
   .fsp-cell:first-child {
     padding-left: 14px;
   }

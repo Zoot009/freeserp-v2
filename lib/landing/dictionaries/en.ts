@@ -40,8 +40,6 @@ const en: Dictionary = {
     statSeoScoreSub: "avg. keyword score",
     statKeywords: "Keywords tracked",
     statKeywordsSub: "{count} in top 3",
-    statAvgPosition: "Avg. position",
-    statAvgPositionSub: "{count} ranked",
     statTop3: "Top 3 keywords",
     statTop10: "In top 10",
     statTraffic: "Est. traffic",

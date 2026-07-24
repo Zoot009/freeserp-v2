@@ -41,8 +41,6 @@ const es: Dictionary = {
     statSeoScoreSub: "puntuación media de palabras clave",
     statKeywords: "Palabras clave rastreadas",
     statKeywordsSub: "{count} en el top 3",
-    statAvgPosition: "Posición media",
-    statAvgPositionSub: "{count} posicionadas",
     statTop3: "Palabras clave top 3",
     statTop10: "En el top 10",
     statTraffic: "Tráfico est.",

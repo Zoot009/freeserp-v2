@@ -44,8 +44,6 @@ export type PreviewDict = {
   statSeoScoreSub: string;
   statKeywords: string;
   statKeywordsSub: string;
-  statAvgPosition: string;
-  statAvgPositionSub: string;
   statTop3: string;
   statTop10: string;
   statTraffic: string;
@@ -412,20 +410,21 @@ export default function PreviewDashboard({
           sub={renderTemplate(dict.statKeywordsSub, { count: String(data.top3) })}
           clear
         />
-        <Stat
-          label={dict.statAvgPosition}
-          value={data.avgPosition.toFixed(1)}
-          sub={renderTemplate(dict.statAvgPositionSub, { count: String(data.top10) })}
-        />
+        {/* Coverage counts render clear alongside the tracked total — they are
+            all derived from the same four keywords, so the strip reads as a
+            consistent summary rather than three blurs around one legible cell.
+            The specifics (positions, volumes, scores) stay gated in the table. */}
         <Stat
           label={dict.statTop3}
           value={data.top3}
           sub={`${Math.round((data.top3 / data.keywordsTracked) * 100)}%`}
+          clear
         />
         <Stat
           label={dict.statTop10}
           value={data.top10}
           sub={`${Math.round((data.top10 / data.keywordsTracked) * 100)}%`}
+          clear
         />
         <Stat label={dict.statTraffic} value={compactNumber(data.estTraffic)} sub={dict.statTrafficSub} />
         <Stat

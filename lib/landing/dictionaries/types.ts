@@ -40,8 +40,6 @@ export type Dictionary = {
     statSeoScoreSub: string;
     statKeywords: string;
     statKeywordsSub: string;
-    statAvgPosition: string;
-    statAvgPositionSub: string;
     statTop3: string;
     statTop10: string;
     statTraffic: string;

@@ -40,8 +40,6 @@ const nl: Dictionary = {
     statSeoScoreSub: "gem. zoekwoordscore",
     statKeywords: "Gevolgde zoekwoorden",
     statKeywordsSub: "{count} in top 3",
-    statAvgPosition: "Gem. positie",
-    statAvgPositionSub: "{count} gerangschikt",
     statTop3: "Top 3-zoekwoorden",
     statTop10: "In top 10",
     statTraffic: "Gesch. verkeer",

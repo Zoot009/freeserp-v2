@@ -40,8 +40,6 @@ const fr: Dictionary = {
     statSeoScoreSub: "score moyen des mots-clés",
     statKeywords: "Mots-clés suivis",
     statKeywordsSub: "{count} dans le top 3",
-    statAvgPosition: "Position moyenne",
-    statAvgPositionSub: "{count} positionnés",
     statTop3: "Mots-clés top 3",
     statTop10: "Dans le top 10",
     statTraffic: "Trafic est.",

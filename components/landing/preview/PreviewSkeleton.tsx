@@ -50,15 +50,17 @@ function Slot({ h, children }: { h: number; children: React.ReactNode }) {
 // Per-cell label and footnote widths — varied so the strip doesn't read as a
 // row of identical stamps. Order matches the real strip's eight cells.
 const CELLS: { label: number; foot: number | null }[] = [
-  { label: 68, foot: 84 }, // SEO Score
+  { label: 68, foot: 84 }, // SEO Score — carries the gauge
   { label: 100, foot: 76 }, // Keywords tracked
-  { label: 88, foot: 92 }, // Avg. position
   { label: 96, foot: 34 }, // Top 3
   { label: 66, foot: 34 }, // In top 10
   { label: 78, foot: 96 }, // Est. traffic
   { label: 104, foot: null }, // Domain authority — meter instead of a footnote
   { label: 66, foot: 62 }, // Backlinks
 ];
+
+/** Index of the Domain Authority cell — the one that draws a meter. */
+const METER_CELL = 5;
 
 // Header bar widths only — the column TRACKS come from the shared <Cols/>, so
 // the skeleton and the filled table are guaranteed to size identically.
@@ -83,7 +85,7 @@ export default function PreviewSkeleton() {
             <Slot h={17}>
               <B w={c.label} h={9} />
             </Slot>
-            {i === 6 ? (
+            {i === METER_CELL ? (
               <>
                 {/* Domain authority: value + "/ 100" suffix, then the meter bar */}
                 <Slot h={28}>
