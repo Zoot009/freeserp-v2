@@ -323,6 +323,7 @@ function Row({
   checkedAt,
   dict,
   scorePending = false,
+  scoresVeiled = false,
   real = false,
 }: {
   kw: RowKeyword;
@@ -335,6 +336,13 @@ function Row({
    * on the measured row — a sample row has nothing being computed.
    */
   scorePending?: boolean;
+  /**
+   * The audit did not land, so P.S / K.S hold sample figures even on the
+   * measured row. That cell is then veiled like any other sample data — the
+   * alternative was a bare dash next to a blurred SEO Score in the strip, which
+   * read as two different answers to the same question.
+   */
+  scoresVeiled?: boolean;
   /**
    * This row's figures were actually measured, so nothing in it is blurred.
    * Only row 1 qualifies: we search the visitor's own domain through Scrape.do
@@ -352,6 +360,9 @@ function Row({
     base + CELL_STEP[cell]! + fillDelay(`${kw.keyword}:${cell}`, 0, 90);
   // On the measured row the wrapper still paces the fill, it just doesn't blur.
   const Cell = real ? Clear : Blur;
+  // P.S / K.S get their own wrapper: the rank can be measured while the audit
+  // behind those two scores never lands, leaving sample figures in that one cell.
+  const ScoreCell = real && !scoresVeiled ? Clear : Blur;
   /** Values we have not measured render as an em dash, never as an invention. */
   const dash = <span style={{ color: 'var(--text-mute)' }}>—</span>;
   return (
@@ -400,7 +411,9 @@ function Row({
         </Cell>
       </td>
       <td>
-        <Cell delay={d(5)}>
+        {/* Veiled independently of the rest of the row: the rank can be measured
+            while the audit behind these two scores never arrives. */}
+        <ScoreCell delay={d(5)}>
           <span className="fsp-psks">
             <span className="slot ps">
               {scorePending ? (
@@ -416,7 +429,7 @@ function Row({
               {kw.keywordScore != null ? <span className="fsp-chip">{kw.keywordScore}</span> : dash}
             </span>
           </span>
-        </Cell>
+        </ScoreCell>
       </td>
       <td>
         <Cell delay={d(6)} style={{ gap: 6, whiteSpace: 'nowrap' }}>
@@ -805,8 +818,11 @@ export default function PreviewDashboard({
                           position: realRank!.position,
                           url: realRank!.url,
                           volume: realRank!.volume,
-                          pageScore: pageScore?.score ?? null,
-                          keywordScore: null,
+                          // Audited score when we have one; otherwise keep the
+                          // sample figures and let the cell stay veiled, so this
+                          // never shows a bare dash beside a blurred SEO Score.
+                          pageScore: pageScore?.score ?? kw.pageScore,
+                          keywordScore: pageScore ? null : kw.keywordScore,
                         }
                       : kw;
                     return (
@@ -827,6 +843,7 @@ export default function PreviewDashboard({
                           // measured row may sit with a real position while its
                           // P.S is still being computed.
                           scorePending={measured && scoreStatus === "loading"}
+                          scoresVeiled={scoreStatus !== "ready"}
                           real={measured}
                         />
                       </tr>
