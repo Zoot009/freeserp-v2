@@ -56,7 +56,6 @@ const es: Dictionary = {
     deviceMobile: "Móvil ({count})",
     colKeyword: "Palabra clave",
     colPosition: "Posición",
-    colFirstCheck: "Primera revisión",
     colVolume: "Volumen",
     colUrl: "URL",
     colScores: "P.S / K.S",

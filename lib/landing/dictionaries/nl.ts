@@ -55,7 +55,6 @@ const nl: Dictionary = {
     deviceMobile: "Mobiel ({count})",
     colKeyword: "Zoekwoord",
     colPosition: "Positie",
-    colFirstCheck: "Eerste controle",
     colVolume: "Volume",
     colUrl: "URL",
     colScores: "P.S / K.S",

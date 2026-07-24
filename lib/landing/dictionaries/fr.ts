@@ -55,7 +55,6 @@ const fr: Dictionary = {
     deviceMobile: "Mobile ({count})",
     colKeyword: "Mot-clé",
     colPosition: "Position",
-    colFirstCheck: "Premier contrôle",
     colVolume: "Volume",
     colUrl: "URL",
     colScores: "P.S / K.S",

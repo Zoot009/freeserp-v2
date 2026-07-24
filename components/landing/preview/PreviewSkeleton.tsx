@@ -64,7 +64,7 @@ const METER_CELL = 5;
 
 // Header bar widths only — the column TRACKS come from the shared <Cols/>, so
 // the skeleton and the filled table are guaranteed to size identically.
-const TH_BARS = [66, 62, 78, 52, 30, 74, 84, 60];
+const TH_BARS = [66, 62, 52, 30, 74, 84, 60];
 
 // Four rows, because previewData builds exactly four keywords. The last is the
 // unranked one, whose "100+" badge is wider and whose URL is an em dash.
@@ -212,12 +212,8 @@ export default function PreviewSkeleton() {
                         <B w={r.kw} h={11} r={5} />
                       </span>
                     </td>
-                    {/* 30px tall in both columns — this block is what sets the
-                        55px row height, so it must never shrink for the
-                        unranked rows. */}
-                    <td>
-                      <B w={r.pos} h={30} r={8} />
-                    </td>
+                    {/* 30px tall — this block is what sets the 55px row height,
+                        so it must never shrink for the unranked rows. */}
                     <td>
                       <B w={r.pos} h={30} r={8} />
                     </td>

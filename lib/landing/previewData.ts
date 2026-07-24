@@ -16,7 +16,6 @@ export type PreviewKeyword = {
   keyword: string
   /** Current rank. `null` renders as the "100+" badge, same as the real table. */
   position: number | null
-  firstPosition: number | null
   volume: number
   url: string | null
   pageScore: number
@@ -112,9 +111,13 @@ export function buildPreview(rawDomain: string): PreviewData | null {
 
   const keywords: PreviewKeyword[] = [
     {
-      keyword: brand,
+      // The full domain, not just the brand label — this is the one row whose
+      // rank we measure for real (POST /api/public/rank searches the domain as
+      // a navigational query), so the keyword shown has to be exactly what was
+      // searched. The sample position below is only the fallback for when that
+      // lookup is unavailable.
+      keyword: domain,
       position: brandPos,
-      firstPosition: brandPos + pick(domain, "brandfirst", 0, 2),
       volume: pick(domain, "brandvol", 12, 74) * 100,
       url: `www.${domain}/`,
       pageScore: pick(domain, "brandps", 71, 92),
@@ -124,7 +127,6 @@ export function buildPreview(rawDomain: string): PreviewData | null {
     {
       keyword: `${brand} review`,
       position: kw2Pos,
-      firstPosition: kw2Pos + pick(domain, "kw2first", 1, 6),
       volume: pick(domain, "kw2vol", 8, 41) * 100,
       url: `www.${domain}/reviews`,
       pageScore: pick(domain, "kw2ps", 58, 84),
@@ -136,7 +138,6 @@ export function buildPreview(rawDomain: string): PreviewData | null {
     {
       keyword: `${brand} pricing`,
       position: kw3Pos,
-      firstPosition: kw3Pos + pick(domain, "kw3first", 2, 11),
       volume: pick(domain, "kw3vol", 5, 26) * 100,
       url: `www.${domain}/pricing`,
       pageScore: pick(domain, "kw3ps", 49, 77),
@@ -149,7 +150,6 @@ export function buildPreview(rawDomain: string): PreviewData | null {
       // — and it's the row that implies there's work to do here.
       keyword: `best ${brand} alternative`,
       position: null,
-      firstPosition: null,
       volume: pick(domain, "kw4vol", 21, 96) * 100,
       url: null,
       pageScore: pick(domain, "kw4ps", 38, 63),

@@ -56,7 +56,6 @@ export type Dictionary = {
     deviceMobile: string;
     colKeyword: string;
     colPosition: string;
-    colFirstCheck: string;
     colVolume: string;
     colUrl: string;
     colScores: string;

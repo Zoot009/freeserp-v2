@@ -6,6 +6,7 @@ import { buildPreview, normalizeDomain, type PreviewData } from "@/lib/landing/p
 import { savePendingDomain } from "@/lib/landing/pendingDomain";
 import { getVisitorCountry } from "@/lib/landing/geo";
 import { fetchPageScore, type PageScore } from "@/lib/landing/pageScore";
+import { fetchRealRank, type RealRank } from "@/lib/landing/rank";
 import { useAppUrl } from "@/lib/useAppUrl";
 import PreviewShell from "./PreviewShell";
 import PreviewSkeleton from "./PreviewSkeleton";
@@ -90,6 +91,7 @@ export default function PreviewOverlay({
   // The one genuinely measured figure. Null until the audit lands — or forever,
   // if it can't be had, in which case the sample score stays.
   const [pageScore, setPageScore] = useState<PageScore | null>(null);
+  const [realRank, setRealRank] = useState<RealRank | null>(null);
   const scoreAbortRef = useRef<AbortController | null>(null);
   const appUrl = useAppUrl();
 
@@ -130,6 +132,13 @@ export default function PreviewOverlay({
       setFlag(null);
       setFavicon(null);
       setPageScore(null);
+      setRealRank(null);
+
+      // One abort for every live lookup this preview starts, so closing it (or
+      // opening another domain) stops work nobody will see.
+      scoreAbortRef.current?.abort();
+      const scoreAbort = new AbortController();
+      scoreAbortRef.current = scoreAbort;
 
       // Saved as soon as the preview opens, not at CTA click: a visitor who
       // browses away and signs up days later should still land in a project
@@ -140,16 +149,21 @@ export default function PreviewOverlay({
       setCheckedAt(
         new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" }).format(new Date()),
       );
-      void getVisitorCountry().then((code) => setFlag(flagOf(code)));
+      // Geo first: the flag column and the SERP country come from the same
+      // answer, so the rank we measure matches the flag we draw beside it.
+      void getVisitorCountry().then((code) => {
+        if (scoreAbort.signal.aborted) return;
+        setFlag(flagOf(code));
+        void fetchRealRank(preview.domain, code, scoreAbort.signal).then((rank) => {
+          if (!scoreAbort.signal.aborted) setRealRank(rank);
+        });
+      });
 
       // Kick the real audit off HERE, at the top of the skeleton, so it has the
       // whole loading sequence to complete. Cached domains come back instantly;
       // an uncached one takes a few seconds and lands mid-crawl, which is
       // exactly when a real number arriving looks right. If it never arrives,
       // the sample score simply stays.
-      scoreAbortRef.current?.abort();
-      const scoreAbort = new AbortController();
-      scoreAbortRef.current = scoreAbort;
       void fetchPageScore(preview.domain, scoreAbort.signal).then((real) => {
         if (!scoreAbort.signal.aborted) setPageScore(real);
       });
@@ -292,6 +306,7 @@ export default function PreviewOverlay({
                   flag={flag}
                   checkedAt={checkedAt}
                   pageScore={pageScore}
+                  realRank={realRank}
                   locked={phase === "locked"}
                   unlockOpen={unlocked}
                   onRequestUnlock={() => setUnlocked(true)}

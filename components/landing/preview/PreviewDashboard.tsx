@@ -61,7 +61,6 @@ export type PreviewDict = {
   deviceMobile: string;
   colKeyword: string;
   colPosition: string;
-  colFirstCheck: string;
   colVolume: string;
   colUrl: string;
   colScores: string;
@@ -203,6 +202,40 @@ function Blur({
 }
 
 /**
+ * Same API as Blur, minus the blur — for the measured row. Keeps the identical
+ * wrapper structure so the two rows stay pixel-aligned, and keeps the fill
+ * delay so the real values still land in step with the crawl.
+ *
+ * NOT aria-hidden, unlike Blur: these figures are genuine, so a screen reader
+ * should read them.
+ */
+function Clear({
+  children,
+  delay,
+  style,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <span style={{ display: "inline-flex" }}>
+      <span
+        className={delay != null ? "fsp-fill" : undefined}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          ...(delay != null ? { animationDelay: `${delay}ms` } : null),
+          ...style,
+        }}
+      >
+        {children}
+      </span>
+    </span>
+  );
+}
+
+/**
  * One tracked keyword.
  *
  * Every cell is blurred EXCEPT the movement arrow. The blur is applied per-cell
@@ -220,7 +253,18 @@ function Blur({
  * on re-render.
  */
 const ROW_MS = 1250;
-const CELL_STEP = [0, 0, 560, 700, 840, 980, 1120, 1260, 1400] as const;
+const CELL_STEP = [0, 0, 560, 700, 840, 980, 1120, 1260] as const;
+
+/**
+ * A row as rendered. Widens the three fields the measured row cannot supply —
+ * we have not looked up search volume or run a keyword analysis, so those show
+ * an em dash rather than a number we made up.
+ */
+type RowKeyword = Omit<PreviewData["keywords"][number], "volume" | "pageScore" | "keywordScore"> & {
+  volume: number | null;
+  pageScore: number | null;
+  keywordScore: number | null;
+};
 
 function Row({
   kw,
@@ -228,82 +272,93 @@ function Row({
   flag,
   checkedAt,
   dict,
+  real = false,
 }: {
-  kw: PreviewData["keywords"][number];
+  kw: RowKeyword;
   index: number;
   flag: string | null;
   checkedAt: string;
   dict: PreviewDict;
+  /**
+   * This row's figures were actually measured, so nothing in it is blurred.
+   * Only row 1 qualifies: we search the visitor's own domain through Scrape.do
+   * and audit their homepage, so keyword, position, first check, URL, page
+   * score and timestamp are all true. Volume and keyword score render as "—"
+   * because we genuinely have not measured them — exactly what the real
+   * dashboard shows for a keyword that was only just added.
+   */
+  real?: boolean;
 }) {
   const up = kw.delta > 0;
   const showCta = kw.position == null || kw.position > 3;
   const base = index * ROW_MS;
   const d = (cell: number) =>
     base + CELL_STEP[cell]! + fillDelay(`${kw.keyword}:${cell}`, 0, 90);
+  // On the measured row the wrapper still paces the fill, it just doesn't blur.
+  const Cell = real ? Clear : Blur;
+  /** Values we have not measured render as an em dash, never as an invention. */
+  const dash = <span style={{ color: 'var(--text-mute)' }}>—</span>;
   return (
     <>
       <td>
-        <Blur delay={d(0)}>
+        <Cell delay={d(0)}>
           <span className="fsp-check" />
-        </Blur>
+        </Cell>
       </td>
       <td>
-        <span style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-          <Blur delay={d(1)} style={{ gap: 8, minWidth: 0 }}>
-            <span style={{ minWidth: 18, display: "inline-flex" }}>{flag}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          <Cell delay={d(1)} style={{ gap: 8, minWidth: 0 }}>
+            <span style={{ minWidth: 18, display: 'inline-flex' }}>{flag}</span>
             <span className="fsp-kw">{kw.keyword}</span>
-          </Blur>
-          {/* Crisp, but it still ARRIVES like the rest — shortly after its
-              keyword is discovered, before the metric cells land. */}
-          <span
-            className={`fsp-trend fsp-fill ${up ? "up" : "down"}`}
-            style={{ animationDelay: `${d(1) + 380}ms` }}
-          >
-            {up ? "▲" : "▼"} {Math.abs(kw.delta)}
-          </span>
+          </Cell>
+          {/* Movement is only meaningful against a previous check. The measured
+              row is a first check, so there is nothing to compare it to yet. */}
+          {!real && (
+            <span
+              className={`fsp-trend fsp-fill ${up ? "up" : "down"}`}
+              style={{ animationDelay: `${d(1) + 380}ms` }}
+            >
+              {up ? '▲' : '▼'} {Math.abs(kw.delta)}
+            </span>
+          )}
         </span>
       </td>
       <td>
-        <Blur delay={d(2)}>
+        <Cell delay={d(2)}>
           <PositionBadge position={kw.position} />
-        </Blur>
+        </Cell>
       </td>
       <td>
-        <Blur delay={d(3)}>
-          <PositionBadge position={kw.firstPosition} />
-        </Blur>
+        <Cell delay={d(3)} style={{ fontVariantNumeric: 'tabular-nums' }}>
+          {kw.volume != null ? kw.volume.toLocaleString() : dash}
+        </Cell>
       </td>
       <td>
-        <Blur delay={d(4)} style={{ fontVariantNumeric: "tabular-nums" }}>
-          {kw.volume.toLocaleString()}
-        </Blur>
+        <Cell delay={d(4)}>
+          {kw.url ? <span className="fsp-url">{kw.url}</span> : dash}
+        </Cell>
       </td>
       <td>
-        <Blur delay={d(5)}>
-          <span className="fsp-url">{kw.url ?? "—"}</span>
-        </Blur>
-      </td>
-      <td>
-        <Blur delay={d(6)}>
+        <Cell delay={d(5)}>
           <span className="fsp-psks">
             <span className="slot ps">
-              <span className="fsp-chip">{kw.pageScore}</span>
+              {kw.pageScore != null ? <span className="fsp-chip">{kw.pageScore}</span> : dash}
             </span>
-            <span style={{ color: "var(--text-mute)" }}>/</span>
+            <span style={{ color: 'var(--text-mute)' }}>/</span>
             <span className="slot">
-              <span className="fsp-chip">{kw.keywordScore}</span>
+              {kw.keywordScore != null ? <span className="fsp-chip">{kw.keywordScore}</span> : dash}
             </span>
           </span>
-        </Blur>
+        </Cell>
       </td>
       <td>
-        <Blur delay={d(7)} style={{ gap: 6, whiteSpace: "nowrap" }}>
+        <Cell delay={d(6)} style={{ gap: 6, whiteSpace: 'nowrap' }}>
           <span className="fsp-tiny">{checkedAt}</span>
           <i className="fsp-dot" />
-        </Blur>
+        </Cell>
       </td>
       <td>
-        <Blur delay={d(8)}>
+        <Cell delay={d(7)}>
           <span className="fsp-act">
             <span className="fsp-act-btn">
               <Ic.star />
@@ -317,16 +372,12 @@ function Row({
             {showCta && (
               <span className="fsp-rank-cta">
                 {dict.rankCta}
-                {/* Fixed-width slot so the arrow lines up down the column whether
-                    the current rank is "#7" or "#100+". */}
                 <span className="from">{kw.position == null ? "#100+" : `#${kw.position}`}</span>
-                {/* A literal arrow, as in the app — it sits on the text baseline
-                    and reads lighter than a stroked SVG would. */}
                 →<span className="to">#1</span>
               </span>
             )}
           </span>
-        </Blur>
+        </Cell>
       </td>
     </>
   );
@@ -339,7 +390,7 @@ function Row({
  * the SAME track sizes — which is what makes the columns line up, and what
  * guarantees the skeleton and the filled table have identical geometry.
  */
-export const COLS: (number | string)[] = [40, "auto", 120, 100, 100, "22%", 120, 140, 190];
+export const COLS: (number | string)[] = [40, "auto", 120, 100, "22%", 120, 140, 190];
 
 export function Cols() {
   return (
@@ -357,6 +408,7 @@ export default function PreviewDashboard({
   flag,
   checkedAt,
   pageScore,
+  realRank,
   locked,
   unlockOpen,
   onRequestUnlock,
@@ -368,6 +420,8 @@ export default function PreviewDashboard({
   checkedAt: string;
   /** The real audited Page Score, once it lands. Null = fall back to sample. */
   pageScore: { score: number; grade: string | null } | null;
+  /** The real measured rank for the visitor's own domain. Null = sample row. */
+  realRank: { keyword: string; position: number | null; url: string | null } | null;
   /**
    * The data is blurred from the first frame regardless — this only gates the
    * centred prompt and the click-to-unlock, which arrive after the behind-the-
@@ -560,7 +614,6 @@ export default function PreviewDashboard({
                     </th>
                     <th>{dict.colKeyword}</th>
                     <th>{dict.colPosition}</th>
-                    <th>{dict.colFirstCheck}</th>
                     <th>{dict.colVolume}</th>
                     <th>{dict.colUrl}</th>
                     <th>
@@ -578,11 +631,42 @@ export default function PreviewDashboard({
                       scattered moments behind the blur (see Blur's delay).
                       aria-hidden throughout: these figures are illustrative, and
                       a screen reader must not recite them as measurements. */}
-                  {data.keywords.map((kw, i) => (
-                    <tr key={kw.keyword} className="fsp-rise" aria-hidden>
-                      <Row kw={kw} index={i} flag={flag} checkedAt={checkedAt} dict={dict} />
-                    </tr>
-                  ))}
+                  {data.keywords.map((kw, i) => {
+                    // Row 1 is the only measured row: we searched the visitor's
+                    // own domain through Scrape.do and audited their homepage.
+                    // Volume and keyword score stay null — we have not measured
+                    // those, so they render as "—" rather than as an invention.
+                    const measured = i === 0 && realRank != null;
+                    const row = measured
+                      ? {
+                          ...kw,
+                          keyword: realRank!.keyword,
+                          position: realRank!.position,
+                          url: realRank!.url,
+                          volume: null,
+                          pageScore: pageScore?.score ?? null,
+                          keywordScore: null,
+                        }
+                      : kw;
+                    return (
+                      <tr
+                        key={kw.keyword}
+                        className="fsp-rise"
+                        // Only the fabricated rows are hidden from assistive
+                        // tech; the measured one is genuine and may be read.
+                        aria-hidden={measured ? undefined : true}
+                      >
+                        <Row
+                          kw={row}
+                          index={i}
+                          flag={flag}
+                          checkedAt={checkedAt}
+                          dict={dict}
+                          real={measured}
+                        />
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
