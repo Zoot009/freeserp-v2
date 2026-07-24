@@ -637,6 +637,16 @@
   .fsp-layout {
     grid-template-columns: minmax(0, 1fr);
   }
+  /* Stacked, the table leads and the insight cards follow. Source order keeps
+     the rail first (it is the left column on desktop), so once the columns
+     collapse the rank table — the thing the visitor came to see — would
+     otherwise sit below two summary cards. */
+  .fsp-serp-card {
+    order: 1;
+  }
+  .fsp-rail-col {
+    order: 2;
+  }
 }
 
 .fsp-rail-col {
@@ -1423,6 +1433,17 @@
   }
   .fsp-h1 {
     font-size: 20px;
+  }
+
+  /* Keep the current page fully readable — a long project name truncates with
+     an ellipsis instead of the trail being clipped mid-word. */
+  .fsp-crumb.cur {
+    flex-shrink: 0;
+  }
+  .fsp-crumbs > .fsp-crumb:not(.cur) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Stat strip becomes a clean 2-column grid rather than a ragged flex-wrap
