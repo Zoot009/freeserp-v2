@@ -250,6 +250,15 @@ function Pending({ w, h = 14, r = 5 }: { w: number | string; h?: number; r?: num
   return <span className="fsp-sk" style={{ display: "inline-block", width: w, height: h, borderRadius: r }} />;
 }
 
+/**
+ * For a single value still being computed, where a shimmer bar would be
+ * misread as the value itself. The shimmer stands in for layout; this stands in
+ * for work in progress.
+ */
+function Spinner({ size = 14 }: { size?: number }) {
+  return <span className="fsp-spin" style={{ width: size, height: size }} aria-hidden />;
+}
+
 function Clear({
   children,
   delay,
@@ -313,6 +322,7 @@ function Row({
   flag,
   checkedAt,
   dict,
+  scorePending = false,
   real = false,
 }: {
   kw: RowKeyword;
@@ -320,6 +330,11 @@ function Row({
   flag: string | null;
   checkedAt: string;
   dict: PreviewDict;
+  /**
+   * The page-score audit backing this row's P.S is still running. Only ever set
+   * on the measured row — a sample row has nothing being computed.
+   */
+  scorePending?: boolean;
   /**
    * This row's figures were actually measured, so nothing in it is blurred.
    * Only row 1 qualifies: we search the visitor's own domain through Scrape.do
@@ -388,7 +403,13 @@ function Row({
         <Cell delay={d(5)}>
           <span className="fsp-psks">
             <span className="slot ps">
-              {kw.pageScore != null ? <span className="fsp-chip">{kw.pageScore}</span> : dash}
+              {scorePending ? (
+                <Spinner size={13} />
+              ) : kw.pageScore != null ? (
+                <span className="fsp-chip">{kw.pageScore}</span>
+              ) : (
+                dash
+              )}
             </span>
             <span style={{ color: 'var(--text-mute)' }}>/</span>
             <span className="slot">
@@ -529,7 +550,11 @@ export default function PreviewDashboard({
           <div className="fsp-cell">
             <div className="fsp-lbl">{dict.statSeoScore}</div>
             <div className="fsp-statbody">
-              <Pending w={54} h={26} r={6} />
+              {/* 48px tall to match the gauge it will be replaced by, so the
+                  whole strip does not shrink when the score lands. */}
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 10, height: 48 }}>
+                <Spinner size={22} />
+              </span>
               <Pending w={84} h={9} r={4} />
             </div>
           </div>
@@ -798,6 +823,10 @@ export default function PreviewDashboard({
                           flag={flag}
                           checkedAt={checkedAt}
                           dict={dict}
+                          // The rank can land before the audit does, so the
+                          // measured row may sit with a real position while its
+                          // P.S is still being computed.
+                          scorePending={measured && scoreStatus === "loading"}
                           real={measured}
                         />
                       </tr>
