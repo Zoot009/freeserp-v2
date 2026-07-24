@@ -118,13 +118,15 @@ export default function PreviewShell({
         <div className="fsp-main">
           {/* Global top bar */}
           <div className="fsp-topbar">
+            {/* The two leading crumbs + their separators drop out on mobile,
+                leaving just "brand › Keywords" so the trail fits a phone. */}
             <div className="fsp-crumbs">
-              <span className="fsp-crumb">{dict.crumbWorkspace}</span>
-              <span className="fsp-sep">
+              <span className="fsp-crumb hide-sm">{dict.crumbWorkspace}</span>
+              <span className="fsp-sep hide-sm">
                 <Ic.chevR />
               </span>
-              <span className="fsp-crumb">{dict.crumbProjects}</span>
-              <span className="fsp-sep">
+              <span className="fsp-crumb hide-sm">{dict.crumbProjects}</span>
+              <span className="fsp-sep hide-sm">
                 <Ic.chevR />
               </span>
               <span className="fsp-crumb">{brand}</span>
@@ -150,7 +152,7 @@ export default function PreviewShell({
               </span>
             </span>
 
-            <span className="fsp-icon-btn" aria-hidden>
+            <span className="fsp-icon-btn hide-sm" aria-hidden>
               <Ic.moon />
             </span>
 

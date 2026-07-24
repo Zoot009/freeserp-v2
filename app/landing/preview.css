@@ -1339,38 +1339,149 @@
 
 /* ---- Small screens -------------------------------------------------------- */
 
+/* ---- Tablet / small laptop ----------------------------------------------- */
+
 @media (max-width: 768px) {
+  /* Rail off — the real app hides it and shows a hamburger; the preview just
+     drops it, giving the content the full width. */
   .fsp-app {
     grid-template-columns: 1fr;
   }
   .fsp-rail {
     display: none;
   }
+
+  /* Compact top bar: search, language and the theme toggle are decorative in
+     the preview and are the first to go so the crumb + usage + bell still fit.
+     The two leading breadcrumbs drop via .hide-sm (see PreviewShell). */
   .fsp-topbar {
     padding: 10px 14px;
     gap: 8px;
   }
   .fsp-search,
-  .fsp-lang {
+  .fsp-lang,
+  .fsp-topbar .hide-sm {
     display: none;
   }
+  .fsp-crumbs {
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+
+  .fsp-page {
+    padding: 18px 16px 56px;
+  }
+
+  /* Header stacks: identity on top, the auto-check card + buttons below, both
+     full width instead of hugging the right edge. */
   .fsp-page-h {
     flex-direction: column;
     align-items: stretch;
+    gap: 14px;
   }
   .fsp-actions-col {
     align-items: stretch;
   }
+  .fsp-autocheck {
+    min-width: 0;
+    justify-content: space-between;
+  }
+  .fsp-btns {
+    flex-wrap: wrap;
+  }
+  .fsp-btn.primary {
+    flex: 1;
+    justify-content: center;
+  }
 }
+
+/* ---- Phone --------------------------------------------------------------- */
 
 @media (max-width: 640px) {
   .fsp {
     --page-pad: 16px;
   }
+  .fsp-previewbar {
+    padding: 10px 14px;
+  }
   .fsp-h1 {
-    font-size: 21px;
+    font-size: 20px;
+  }
+
+  /* Stat strip becomes a clean 2-column grid rather than a ragged flex-wrap
+     where stray left-borders land mid-row. One centre divider, hairline row
+     rules. Skeleton and filled share these classes, so both restyle together. */
+  .fsp-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    row-gap: 0;
   }
   .fsp-cell {
-    padding: 4px 14px;
+    min-width: 0;
+    padding: 14px 14px;
+    gap: 6px;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+  /* First row keeps no top rule; the left column carries the centre divider. */
+  .fsp-cell:first-child,
+  .fsp-cell:nth-child(2) {
+    border-top: none;
+  }
+  .fsp-cell:nth-child(odd) {
+    border-right: 1px solid var(--border);
+  }
+  .fsp-cell:first-child {
+    padding-left: 14px;
+  }
+  .fsp-val {
+    font-size: 22px;
+  }
+  /* The SEO gauge is a fixed 76px SVG; let it scale down inside a narrow grid
+     cell (e.g. 320px phones) instead of forcing horizontal overflow. */
+  .fsp-cell svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Table toolbar: title on its own line, search full width, device toggle
+     below — instead of everything crushing onto one row. */
+  .fsp-serp-h {
+    gap: 10px;
+  }
+  .fsp-serp-search {
+    width: 100%;
+    order: 3;
+  }
+  .fsp-device {
+    margin-left: 0;
+    order: 4;
+  }
+
+  /* The "almost there" pill: wrap and constrain rather than overflow a phone
+     with nowrap text. */
+  .fsp-hint {
+    white-space: normal;
+    max-width: 80vw;
+    text-align: center;
+    justify-content: center;
+    line-height: 1.35;
+  }
+
+  /* Unlock card: pin to the viewport centre. On desktop it centres over the
+     two-column body, but on a phone that body is a tall single column, so an
+     absolute centre lands far below the fold. Fixed keeps it in view.
+     (No transformed ancestor exists — the overlay animates opacity only — so
+     fixed resolves against the viewport as intended.) */
+  .fsp-unlock-bg {
+    position: fixed;
+    padding: 20px;
+  }
+  .fsp-unlock {
+    padding: 18px 18px 14px;
+  }
+  .fsp-unlock-t {
+    font-size: 17px;
   }
 }
