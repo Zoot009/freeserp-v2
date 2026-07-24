@@ -71,6 +71,7 @@ export type Dictionary = {
     competitorsTitle: string;
     addCompetitor: string;
     competitorAvg: string;
+    competitorPos: string;
     // Unlock — the table itself is the trigger, so it needs a visible affordance
     hintClick: string;
     modalTitle: string;

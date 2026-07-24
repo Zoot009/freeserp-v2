@@ -69,6 +69,7 @@ const en: Dictionary = {
     competitorsTitle: "Competitors",
     addCompetitor: "+ Add competitor",
     competitorAvg: "avg position #{pos}",
+    competitorPos: "ranks #{pos}",
     hintClick: "Almost there — sign up to view your rankings",
     modalTitle: "Your {domain} dashboard is ready",
     modalSubtitle:

@@ -70,6 +70,7 @@ const es: Dictionary = {
     competitorsTitle: "Competidores",
     addCompetitor: "+ Añadir competidor",
     competitorAvg: "posición media #{pos}",
+    competitorPos: "posición #{pos}",
     hintClick: "Casi listo — regístrate para ver tus posiciones",
     modalTitle: "Tu panel de {domain} está listo",
     modalSubtitle:

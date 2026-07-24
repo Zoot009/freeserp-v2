@@ -69,6 +69,7 @@ const nl: Dictionary = {
     competitorsTitle: "Concurrenten",
     addCompetitor: "+ Concurrent toevoegen",
     competitorAvg: "gem. positie #{pos}",
+    competitorPos: "positie #{pos}",
     hintClick: "Bijna klaar — meld je aan om je posities te bekijken",
     modalTitle: "Je {domain}-dashboard is klaar",
     modalSubtitle:

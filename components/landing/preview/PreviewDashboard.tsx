@@ -76,6 +76,8 @@ export type PreviewDict = {
   competitorsTitle: string;
   addCompetitor: string;
   competitorAvg: string;
+  /** Label for a rival whose position we actually measured on this SERP. */
+  competitorPos: string;
   // Unlock
   hintClick: string;
   modalTitle: string;
@@ -469,7 +471,13 @@ export default function PreviewDashboard({
   /** Lifecycle of that audit — "loading" shows a shimmer, never a fake score. */
   scoreStatus: "loading" | "ready" | "unavailable";
   /** The real measured rank for the visitor's own domain. Null = sample row. */
-  realRank: { keyword: string; position: number | null; url: string | null; volume: number | null } | null;
+  realRank: {
+    keyword: string;
+    position: number | null;
+    url: string | null;
+    volume: number | null;
+    competitors: { domain: string; position: number }[];
+  } | null;
   /** Lifecycle of that lookup — "loading" shows a shimmer row. */
   rankStatus: "loading" | "ready" | "unavailable";
   /**
@@ -487,6 +495,12 @@ export default function PreviewDashboard({
   // a row — opens the unlock card. The handler sits on the whole body rather
   // than the table alone so every obscured number is a live target.
   const armed = locked && !unlockOpen;
+  // Measured rivals when we have them, otherwise the sample stand-in.
+  const rivals =
+    realRank?.competitors.length
+      ? realRank.competitors
+      : [{ domain: data.competitor, position: data.competitorAvgPosition }];
+
   return (
     <div
       className={armed ? "fsp-armed" : undefined}
@@ -608,32 +622,60 @@ export default function PreviewDashboard({
           <div className="fsp-card" aria-hidden>
             <div className="fsp-card-h">
               <span className="fsp-card-t">{dict.competitorsTitle}</span>
-              <span className="fsp-tiny">1</span>
+              <span className="fsp-tiny">{rivals.length}</span>
             </div>
-            <span className="fsp-dd">
+            <span className="fsp-dd" aria-hidden>
               {dict.addCompetitor}
               <Ic.chevD />
             </span>
-            <div
-              className="fsp-soft fsp-fill"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                marginTop: 12,
-                animationDelay: `${fillDelay("rail:competitor", 5100, 800)}ms`,
-              }}
-            >
-              <span className="fsp-favicon" style={{ width: 28, height: 28, fontSize: 12, borderRadius: 8 }}>
-                {data.competitor.charAt(0)}
-              </span>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 500 }}>{data.competitor}</div>
-                <span className="fsp-chip pos" style={{ marginTop: 3 }}>
-                  {renderTemplate(dict.competitorAvg, { pos: String(data.competitorAvgPosition) })}
-                </span>
+
+            {/* Real rivals cost nothing: they are the other domains on the SERP
+                we already fetched to find the visitor's own rank. The top one
+                is shown clear as proof, the rest stay gated. */}
+            {rankStatus === "loading" ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 12 }}>
+                <Pending w={28} h={28} r={8} />
+                <div>
+                  <Pending w={96} h={11} />
+                  <div style={{ marginTop: 5 }}>
+                    <Pending w={84} h={18} r={5} />
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              rivals.map((c, i) => {
+                const proven = realRank != null && i === 0;
+                return (
+                  <div
+                    key={c.domain}
+                    className={`fsp-fill${proven ? "" : " fsp-soft"}`}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 10,
+                      marginTop: 12,
+                      animationDelay: `${fillDelay(`rail:comp:${c.domain}`, 5100, 800)}ms`,
+                    }}
+                    aria-hidden={proven ? undefined : true}
+                  >
+                    <span
+                      className="fsp-favicon"
+                      style={{ width: 28, height: 28, fontSize: 12, borderRadius: 8 }}
+                    >
+                      {c.domain.charAt(0)}
+                    </span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 500 }}>{c.domain}</div>
+                      <span className="fsp-chip pos" style={{ marginTop: 3 }}>
+                        {renderTemplate(realRank ? dict.competitorPos : dict.competitorAvg, {
+                          pos: String(c.position),
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 

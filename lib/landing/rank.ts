@@ -24,6 +24,8 @@ export type RealRank = {
   url: string | null
   /** Monthly search volume, or null when it could not be measured. */
   volume: number | null
+  /** Domains ranking alongside them on this keyword, from the same SERP. */
+  competitors: { domain: string; position: number }[]
 }
 
 type ApiResponse =
@@ -33,6 +35,7 @@ type ApiResponse =
       position: number | null
       url: string | null
       volume: number | null
+      competitors: { domain: string; position: number }[]
       cached: boolean
     }
   | { status: "unavailable" }
@@ -67,6 +70,7 @@ export async function fetchRealRank(
       position: body.position,
       url: body.url ?? null,
       volume: body.volume ?? null,
+      competitors: body.competitors ?? [],
     }
   } catch {
     return null
