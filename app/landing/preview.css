@@ -568,12 +568,13 @@
 }
 
 /* The real strip spaces label / value / footnote with the cell's own 7px flex
-   gap. Here the value and footnote sit one level deeper (inside the blur and
-   fill wrappers), so the gap has to be re-declared on them or the caption ends
-   up jammed against the number. Scoped to the strip — the rail cards use
-   .fsp-soft too and must keep their own layout. */
-.fsp-cell .fsp-soft,
-.fsp-cell .fsp-soft > .fsp-fill {
+   gap. Here the value and footnote sit one level deeper (inside the wrappers),
+   so the gap has to be re-declared on them or the caption ends up jammed
+   against the number.
+   Keyed to .fsp-statbody rather than .fsp-soft so the layout survives on the
+   one cell that renders unblurred (see Stat's `clear` prop). */
+.fsp-cell .fsp-statbody,
+.fsp-cell .fsp-statbody > .fsp-fill {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

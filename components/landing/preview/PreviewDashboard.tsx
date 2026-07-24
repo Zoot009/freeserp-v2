@@ -114,6 +114,7 @@ function Stat({
   suffix,
   bar,
   gauge,
+  clear = false,
 }: {
   label: string;
   value: string | number;
@@ -121,6 +122,13 @@ function Stat({
   suffix?: string;
   bar?: number;
   gauge?: number;
+  /**
+   * Render this cell unblurred. Used for the tracked-keyword count, which the
+   * table already states in plain text ("Showing 4 of 4") — blurring a number
+   * the visitor can read two inches away just looks broken. It doubles as proof
+   * the dashboard is real rather than a static image.
+   */
+  clear?: boolean;
 }) {
   // Aggregates trickle in over the back half of the crawl (2.0-5.2s) — totals
   // updating WHILE rows are still landing is what a real pipeline looks like.
@@ -128,7 +136,7 @@ function Stat({
   return (
     <div className="fsp-cell">
       <div className="fsp-lbl">{label}</div>
-      <div className="fsp-soft">
+      <div className={`fsp-statbody${clear ? "" : " fsp-soft"}`}>
         <div className="fsp-fill" style={{ animationDelay: `${delay}ms` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div className="fsp-val">
@@ -402,6 +410,7 @@ export default function PreviewDashboard({
           label={dict.statKeywords}
           value={data.keywordsTracked}
           sub={renderTemplate(dict.statKeywordsSub, { count: String(data.top3) })}
+          clear
         />
         <Stat
           label={dict.statAvgPosition}
