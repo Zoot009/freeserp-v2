@@ -204,11 +204,10 @@ export default function PreviewSkeleton() {
                       <B w={13} h={13} r={3} />
                     </td>
                     <td>
-                      {/* The flag slot is reserved in BOTH states — geo resolves
-                          async, and inserting the emoji later would shove the
-                          keyword text sideways. */}
+                      {/* No flag placeholder: the filled row only draws a flag
+                          when geo actually resolved, so reserving space here
+                          would make the keyword jump left on swap. */}
                       <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <B w={16} h={16} r={999} style={{ minWidth: 18 }} />
                         <B w={r.kw} h={11} r={5} />
                       </span>
                     </td>

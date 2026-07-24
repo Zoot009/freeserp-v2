@@ -308,7 +308,12 @@ function Row({
       <td>
         <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
           <Cell delay={d(1)} style={{ gap: 8, minWidth: 0 }}>
-            <span style={{ minWidth: 18, display: 'inline-flex' }}>{flag}</span>
+            {/* Rendered only when there IS a flag. Reserving the slot
+                unconditionally left an empty 26px indent whenever geo could not
+                be resolved, pushing every keyword out of line with its column
+                header. Geo resolves during the skeleton hold, before this table
+                mounts, so there is nothing left to shift. */}
+            {flag && <span style={{ display: 'inline-flex' }}>{flag}</span>}
             <span className="fsp-kw">{kw.keyword}</span>
           </Cell>
           {/* Movement is only meaningful against a previous check. The measured
@@ -421,7 +426,7 @@ export default function PreviewDashboard({
   /** The real audited Page Score, once it lands. Null = fall back to sample. */
   pageScore: { score: number; grade: string | null } | null;
   /** The real measured rank for the visitor's own domain. Null = sample row. */
-  realRank: { keyword: string; position: number | null; url: string | null } | null;
+  realRank: { keyword: string; position: number | null; url: string | null; volume: number | null } | null;
   /**
    * The data is blurred from the first frame regardless — this only gates the
    * centred prompt and the click-to-unlock, which arrive after the behind-the-
@@ -643,7 +648,7 @@ export default function PreviewDashboard({
                           keyword: realRank!.keyword,
                           position: realRank!.position,
                           url: realRank!.url,
-                          volume: null,
+                          volume: realRank!.volume,
                           pageScore: pageScore?.score ?? null,
                           keywordScore: null,
                         }

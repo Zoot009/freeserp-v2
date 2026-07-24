@@ -22,10 +22,19 @@ export type RealRank = {
   position: number | null
   /** The actual ranking URL Google returned, so the row can show it truthfully. */
   url: string | null
+  /** Monthly search volume, or null when it could not be measured. */
+  volume: number | null
 }
 
 type ApiResponse =
-  | { status: "ready"; keyword: string; position: number | null; url: string | null; cached: boolean }
+  | {
+      status: "ready"
+      keyword: string
+      position: number | null
+      url: string | null
+      volume: number | null
+      cached: boolean
+    }
   | { status: "unavailable" }
 
 const REQUEST_TIMEOUT_MS = 12_000
@@ -53,7 +62,12 @@ export async function fetchRealRank(
     if (!res.ok) return null
     const body = (await res.json()) as ApiResponse
     if (body.status !== "ready") return null
-    return { keyword: body.keyword, position: body.position, url: body.url ?? null }
+    return {
+      keyword: body.keyword,
+      position: body.position,
+      url: body.url ?? null,
+      volume: body.volume ?? null,
+    }
   } catch {
     return null
   } finally {
