@@ -132,21 +132,47 @@ function Stat({
   // Aggregates trickle in over the back half of the crawl (2.0-5.2s) — totals
   // updating WHILE rows are still landing is what a real pipeline looks like.
   const delay = fillDelay(`stat:${label}`, 2000, 3200);
+
+  /**
+   * Blurs one piece of the cell rather than the whole body.
+   *
+   * Applied per-element so fixed scaffolding can stay legible next to a hidden
+   * figure — the " / 100" on Domain Authority is not data, it is the axis the
+   * data is measured against, and blurring it just made the cell look broken.
+   */
+  const Veil = ({ children }: { children: React.ReactNode }) =>
+    clear ? (
+      <>{children}</>
+    ) : (
+      <span className="fsp-soft" style={{ display: "inline-flex", alignItems: "center" }}>
+        {children}
+      </span>
+    );
+  // The caption and meter take the class directly rather than a wrapper: both
+  // are flex items here, and a shrink-to-fit wrapper would collapse the meter
+  // (it has a max-width but no width of its own) to nothing.
+  const veiled = clear ? "" : " fsp-soft";
+
   return (
     <div className="fsp-cell">
       <div className="fsp-lbl">{label}</div>
-      <div className={`fsp-statbody${clear ? "" : " fsp-soft"}`}>
+      <div className="fsp-statbody">
         <div className="fsp-fill" style={{ animationDelay: `${delay}ms` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div className="fsp-val">
-              {value}
+              <Veil>{value}</Veil>
+              {/* Outside the veil on purpose — the denominator is context. */}
               {suffix && <span className="fsp-of">{suffix}</span>}
             </div>
-            {gauge != null && <ScoreGauge score={gauge} />}
+            {gauge != null && (
+              <Veil>
+                <ScoreGauge score={gauge} />
+              </Veil>
+            )}
           </div>
-          {sub && <span className="fsp-tiny">{sub}</span>}
+          {sub && <span className={`fsp-tiny${veiled}`}>{sub}</span>}
           {bar != null && (
-            <div className="fsp-bar">
+            <div className={`fsp-bar${veiled}`}>
               <i style={{ width: `${bar}%` }} />
             </div>
           )}
