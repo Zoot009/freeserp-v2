@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Ic } from "./icons";
 import { renderTemplate } from "@/lib/landing/template";
 import type { PreviewDict } from "./PreviewDashboard";
@@ -32,20 +31,9 @@ export default function PreviewModal({
   onDismiss: () => void;
 }) {
   return (
-    <motion.div
-      className="fsp-unlock-bg"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={onDismiss}
-    >
-      <motion.div
+    <div className="fsp-unlock-bg" onClick={onDismiss}>
+      <div
         className="fsp-unlock"
-        initial={{ opacity: 0, scale: 0.96, y: 6 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
         // Clicks inside the card must not fall through to the dismiss handler.
         onClick={(e) => e.stopPropagation()}
         role="dialog"
@@ -90,7 +78,7 @@ export default function PreviewModal({
         <span className="fsp-cta-note" style={{ marginTop: 12, opacity: 0.8 }}>
           {dict.modalDisclosure}
         </span>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }

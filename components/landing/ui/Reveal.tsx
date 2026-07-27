@@ -1,20 +1,7 @@
-"use client";
-
-import { motion, Variants } from "framer-motion";
 import { ReactNode } from "react";
-
-const variants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
 
 export function Reveal({
   children,
-  delay = 0,
   className,
   as = "div",
 }: {
@@ -23,44 +10,19 @@ export function Reveal({
   className?: string;
   as?: "div" | "span";
 }) {
-  const MotionTag = as === "span" ? motion.span : motion.div;
-  return (
-    <MotionTag
-      className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      variants={variants}
-      transition={{ delay }}
-    >
-      {children}
-    </MotionTag>
-  );
+  const Tag = as;
+  return <Tag className={className}>{children}</Tag>;
 }
 
 export function RevealGroup({
   children,
   className,
-  stagger = 0.08,
 }: {
   children: ReactNode;
   className?: string;
   stagger?: number;
 }) {
-  return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: stagger } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
 export function RevealItem({
@@ -70,9 +32,5 @@ export function RevealItem({
   children: ReactNode;
   className?: string;
 }) {
-  return (
-    <motion.div className={className} variants={variants}>
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }

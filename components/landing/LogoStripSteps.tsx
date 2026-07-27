@@ -18,17 +18,15 @@ export default function LogoStripSteps({ dict }: { dict: LogoStripDict }) {
       </div>
 
       <Reveal>
-        <div className="group/marquee relative mt-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="animate-marquee flex w-max items-center gap-16">
-            {[...brands, ...brands].map((b, i) => (
-              <img
-                key={`${b.name}-${i}`}
-                src={b.logo}
-                alt={b.name}
-                className="h-7 w-auto shrink-0 grayscale opacity-60 transition-all duration-300 hover:opacity-100 hover:grayscale-0"
-              />
-            ))}
-          </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-16 gap-y-6">
+          {brands.map((b) => (
+            <img
+              key={b.name}
+              src={b.logo}
+              alt={b.name}
+              className="h-7 w-auto shrink-0 grayscale opacity-60 transition-all duration-300 hover:opacity-100 hover:grayscale-0"
+            />
+          ))}
         </div>
       </Reveal>
 
