@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
 import PersonalizedNote from "@/components/landing1/ui/PersonalizedNote";
+import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { useAppUrl } from "@/lib/useAppUrl";
 
 const container = {
@@ -74,21 +75,8 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* Video (WebM 0.9MB / MP4 1.7MB) in place of the old 25.6MB GIF. */}
-          <video
-            width={900}
-            height={500}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-label={demoAlt}
-            className="block h-auto w-full"
-          >
-            <source src="/freeserpchecker.webm" type="video/webm" />
-            <source src="/freeserpchecker.mp4" type="video/mp4" />
-          </video>
+          {/* Loaded only once it scrolls near — see LazyDemoVideo. */}
+          <LazyDemoVideo label={demoAlt} className="block h-auto w-full" />
         </div>
       </div>
     </motion.div>

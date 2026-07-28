@@ -6,6 +6,7 @@ import { ArrowRight, Loader2, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
 import { domainExists } from "@/lib/landing/domainCheck";
+import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { normalizeDomain } from "@/lib/landing/previewData";
 import type { PreviewController, PreviewOverlayDict } from "@/components/landing/preview/PreviewOverlay";
 
@@ -71,28 +72,11 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* A video, not the old 25.6MB GIF: WebM 0.9MB / MP4 1.7MB of the same
-              clip, decoding far more cheaply. preload="none" + off-screen
-              autoplay keeps it off the initial load until the visitor scrolls
-              near; width/height reserve the box so nothing shifts when it
-              starts. */}
-          <video
-            width={900}
-            height={500}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="none"
-            aria-label={demoAlt}
-            className="block h-auto w-full"
-          >
-            {/* WebM first (0.9MB, VP9) for Chrome/Firefox/Edge; MP4 (1.7MB,
-                H.264) is the universal fallback for Safari. Both replace the old
-                25.6MB GIF. */}
-            <source src="/freeserpchecker.webm" type="video/webm" />
-            <source src="/freeserpchecker.mp4" type="video/mp4" />
-          </video>
+          {/* The demo clip (WebM 0.9MB / MP4 1.7MB), loaded only once it scrolls
+              near — see LazyDemoVideo. autoplay would otherwise override
+              preload="none" and fetch it on initial load. width/height reserve
+              the box so nothing shifts when it starts. */}
+          <LazyDemoVideo label={demoAlt} className="block h-auto w-full" />
         </div>
       </div>
     </div>
