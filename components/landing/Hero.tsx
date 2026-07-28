@@ -1,14 +1,22 @@
 "use client";
 
 import { useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { ArrowRight, Loader2, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
 import { domainExists } from "@/lib/landing/domainCheck";
-import PreviewOverlay, {
-  type PreviewController,
-  type PreviewOverlayDict,
-} from "@/components/landing/preview/PreviewOverlay";
+import { normalizeDomain } from "@/lib/landing/previewData";
+import type { PreviewController, PreviewOverlayDict } from "@/components/landing/preview/PreviewOverlay";
+
+// The preview overlay pulls in framer-motion and the entire replica dashboard —
+// none of which is needed until the visitor actually submits a domain. Loading
+// it lazily keeps it out of the landing page's initial bundle, so the hero is
+// interactive fast; the chunk streams in after hydration. ssr:false because it
+// is client-only (window/history) and never renders on the server anyway.
+const PreviewOverlay = dynamic(() => import("@/components/landing/preview/PreviewOverlay"), {
+  ssr: false,
+});
 
 type HeroDict = {
   headline1: string;
@@ -66,6 +74,12 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             alt={demoAlt}
             width={900}
             height={500}
+            /* This GIF is ~26MB and sits below the fold. Eagerly loading it made
+               the whole page wait on 26MB before settling; lazy defers it until
+               the visitor scrolls near, so the hero paints immediately. The
+               width/height keep its box reserved so nothing shifts when it lands. */
+            loading="lazy"
+            decoding="async"
             className="block h-auto w-full"
           />
         </div>
@@ -96,9 +110,10 @@ export default function Hero({
     e.preventDefault();
     if (checking) return;
 
-    // 1. Format gate (instant, offline). tryOpen returns false for anything that
-    //    isn't a plausible host, so a typo shows a hint without a round-trip.
-    if (!previewRef.current?.canOpen(domain)) {
+    // 1. Format gate (instant, offline). normalizeDomain is a pure helper — used
+    //    directly rather than through the controller, so this check works even
+    //    before the lazily-loaded preview chunk has finished streaming in.
+    if (normalizeDomain(domain) == null) {
       setError("format");
       return;
     }
