@@ -88,9 +88,17 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* GTM loaded lazyOnload (browser-idle), NOT afterInteractive.
+            This container is what injects the heavy third-party tags —
+            ContentSquare (~158KB), LogRocket (~270KB), Facebook Pixel (~200KB)
+            and duplicate GA loads — which together were ~500KB of unused JS and
+            ~2.3s of main-thread script evaluation on the critical path. Idle
+            loading moves all of it AFTER the page is interactive.
+            The direct gtag.js below stays afterInteractive so Google Ads /
+            GA4 conversion tracking still fires promptly. */}
         <Script
           id="gtm-script"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
