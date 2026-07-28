@@ -15,16 +15,104 @@ export interface Utm {
   utmCampaign?: string
   utmContent?: string
   utmTerm?: string
+  // Meta (Facebook) ad identifiers, expanded by Meta's dynamic macros in the ad's
+  // URL-parameters template. Deliberately NOT folded into utm_* — those slots hold
+  // human-readable names and drive Campaign.slug matching in the admin, while
+  // these are the numeric join key to the imported ad-delivery rows.
+  metaCampaignId?: string
+  metaAdsetId?: string
+  metaAdId?: string
+  metaPlacement?: string
+  metaSiteSource?: string
+  // Meta's own click id, appended automatically to ad clicks. Not a join key (the
+  // Marketing API never exposes it) — it exists so we can measure how much Meta
+  // traffic arrived with unusable ad ids.
+  fbclid?: string
+  // EVERY other query param the landing URL carried, verbatim. The fields above
+  // are the ones promoted to indexed columns because they drive joins; this keeps
+  // the rest so a new ad parameter starts being recorded the moment someone adds
+  // it to a link, with no code change. Sensitive keys are dropped (see below).
+  params?: Record<string, string>
 }
 
+// Every Utm field except `params`, which holds a record rather than a string.
+// Keeps the lookup tables below assignable now that Utm is no longer all-strings.
+type StringUtmKey = Exclude<keyof Utm, "params">
+
 // UTM query-param name → our camelCase field.
-const UTM_KEYS: Array<[string, keyof Utm]> = [
+const UTM_KEYS: Array<[string, StringUtmKey]> = [
   ["utm_source", "utmSource"],
   ["utm_medium", "utmMedium"],
   ["utm_campaign", "utmCampaign"],
   ["utm_content", "utmContent"],
   ["utm_term", "utmTerm"],
 ]
+
+// Meta params, kept in their own table so the five standard slots stay untouched.
+//
+// Each field lists the query-param ALIASES we accept, most specific first. Ad URL
+// templates in the wild use the bare Meta names (ad_id, adset_id, campaign_id,
+// placement) — that's what Meta's own docs suggest — so we detect those without
+// anyone having to rewrite live ads. The fs_meta_* forms are our canonical
+// spelling: unambiguous, collision-proof against a genuine ?campaign_id= elsewhere
+// on the site, and what utmToParams emits when forwarding to the app.
+//
+// `pattern` rejects values that could never join: Meta does not always expand its
+// macros (boosted-post organic reach, some dynamic-creative formats), so a literal
+// "{{ad.id}}" genuinely arrives in the wild. Storing it would silently poison every
+// per-ad rollup, so we drop it and let the row count as unattributed instead.
+// A failed pattern falls through to the NEXT alias rather than giving up, so
+// ?fs_meta_ad_id={{ad.id}}&ad_id=120210987654321 still resolves to the real id.
+const META_ID_RE = /^\d{1,25}$/
+const FBCLID_RE = /^[A-Za-z0-9_.-]{1,255}$/
+const META_KEYS: Array<[readonly string[], StringUtmKey, RegExp | null]> = [
+  [["fs_meta_campaign_id", "campaign_id"], "metaCampaignId", META_ID_RE],
+  [["fs_meta_adset_id", "adset_id"], "metaAdsetId", META_ID_RE],
+  [["fs_meta_ad_id", "ad_id"], "metaAdId", META_ID_RE],
+  // Free-form Meta labels (e.g. "Facebook_Mobile_Feed", "fb") — bounded, not matched.
+  [["fs_meta_placement", "placement"], "metaPlacement", null],
+  [["fs_meta_source", "site_source_name"], "metaSiteSource", null],
+  [["fbclid"], "fbclid", FBCLID_RE],
+]
+
+// Query params we never store, whatever a link carries. Campaign URLs do pick up
+// auth material in practice — a reset token pasted into a shared link, an address
+// from a mail-merge — and an append-only attribution log is the last place that
+// should come to rest. Matches whole underscore-delimited words so `utm_content`
+// and `ad_id` are unaffected while `access_token` and `user_email` are dropped.
+const SENSITIVE_KEY_RE =
+  /(^|_)(password|passwd|pwd|secret|token|jwt|auth|session|sid|otp|pin|apikey|api|key|signature|sig|email|mail|phone|tel|mobile|card|cvv|iban|ssn)(_|$)/i
+
+// Bounds, so a crafted URL can't push an unbounded blob into every touch row.
+// A macro Meta never substituted, e.g. a literal "{{placement}}". The id fields
+// reject these via their digits-only pattern; the free-form ones (placement,
+// site_source_name) have no pattern, so they need an explicit guard or the
+// literal braces end up on display in the admin.
+const UNEXPANDED_MACRO_RE = /\{\{.*?\}\}/
+
+const MAX_PARAMS = 40
+const MAX_KEY_LEN = 64
+const MAX_VALUE_LEN = 512
+
+// What counts as a MARKETING param — i.e. enough to say "this visit came from a
+// campaign" and record a touch. Pattern-based rather than a fixed list so a newly
+// invented `utm_placement` or `ttclid` is recognised without a code change.
+// Deliberately does NOT match app params like `domain`, which the preview overlay
+// pushes into the URL; treating that as a campaign would log a touch on every
+// preview open.
+const MARKETING_KEY_RE =
+  /^(utm_|fs_meta_)|clid$|^(gclid|ref|referrer|source|campaign|medium|affiliate|partner|promo|coupon|ad_id|adset_id|campaign_id|placement)$/i
+
+// The spelling we EMIT when forwarding to app.freeserp.com — always canonical,
+// regardless of which alias the ad link arrived with.
+const META_CANONICAL: Record<string, string> = {
+  metaCampaignId: "fs_meta_campaign_id",
+  metaAdsetId: "fs_meta_adset_id",
+  metaAdId: "fs_meta_ad_id",
+  metaPlacement: "fs_meta_placement",
+  metaSiteSource: "fs_meta_source",
+  fbclid: "fbclid",
+}
 
 // Cookie attributes for the shared visitor id. Scoped to ".freeserp.com" in prod so
 // the marketing site and the app (app.freeserp.com) read the SAME id; on localhost/IP
@@ -81,26 +169,77 @@ export function getVisitorId(): string {
   return id
 }
 
-// Pull the five standard UTM params, keeping only present, non-empty keys.
+// Pull the five standard UTM params plus the Meta ad params, keeping only
+// present, non-empty keys. Meta values that fail their format check are dropped
+// rather than stored (see META_KEYS) — an unexpanded macro must not become a
+// join key that can never match.
 export function readUtm(params: URLSearchParams): Utm {
   const utm: Utm = {}
   for (const [param, field] of UTM_KEYS) {
     const v = params.get(param)?.trim()
     if (v) utm[field] = v
   }
+  for (const [aliases, field, pattern] of META_KEYS) {
+    for (const param of aliases) {
+      const v = params.get(param)?.trim()
+      if (!v) continue
+      if (pattern && !pattern.test(v)) continue // unusable — try the next alias
+      if (!pattern && UNEXPANDED_MACRO_RE.test(v)) continue // macro never expanded
+      utm[field] = pattern ? v : v.slice(0, 200)
+      break
+    }
+  }
+
+  // Sweep up everything else. Promoted fields are kept here too, so `params` is a
+  // faithful record of the link as it arrived rather than "the leftovers".
+  const extra: Record<string, string> = {}
+  let count = 0
+  for (const [rawKey, rawValue] of params) {
+    if (count >= MAX_PARAMS) break
+    const key = rawKey.trim().slice(0, MAX_KEY_LEN)
+    const value = rawValue.trim()
+    if (!key || !value) continue
+    if (SENSITIVE_KEY_RE.test(key)) continue
+    if (key in extra) continue // first occurrence wins on repeated keys
+    extra[key] = value.slice(0, MAX_VALUE_LEN)
+    count += 1
+  }
+  if (count > 0) utm.params = extra
+
   return utm
 }
 
+// Whether this visit looks like it came from a campaign, and so is worth recording
+// as a touch. Checks the promoted fields first, then falls back to pattern-matching
+// the raw params — which is what lets a brand-new parameter register as marketing
+// traffic without anyone editing this file.
 export function hasAnyUtm(utm: Utm): boolean {
-  return Object.keys(utm).length > 0
+  for (const k of Object.keys(utm)) {
+    if (k !== 'params') return true
+  }
+  return Object.keys(utm.params ?? {}).some((k) => MARKETING_KEY_RE.test(k))
 }
 
-// Serialize a Utm map back to utm_* query params, keeping only present keys.
+// Serialize a Utm map back to query params, keeping only present keys. The Meta
+// params ride along to app.freeserp.com so the app-side capture records a touch
+// carrying the ad id too — that way the signup→ad join survives even if the
+// anonymous visitorId → userId back-fill misses (cleared cookies, ITP expiry).
 export function utmToParams(utm: Utm): URLSearchParams {
   const params = new URLSearchParams()
   for (const [param, field] of UTM_KEYS) {
     const v = utm[field]
     if (v) params.set(param, v)
+  }
+  for (const [, field] of META_KEYS) {
+    const v = utm[field]
+    if (v) params.set(META_CANONICAL[field], v)
+  }
+  // Carry any OTHER marketing param across the origin hop too, so a parameter we
+  // don't have a typed column for still reaches the app's own capture. Filtered to
+  // marketing-shaped keys rather than everything: app URLs shouldn't inherit
+  // arbitrary query string from the marketing site.
+  for (const [k, v] of Object.entries(utm.params ?? {})) {
+    if (!params.has(k) && MARKETING_KEY_RE.test(k)) params.set(k, v)
   }
   return params
 }

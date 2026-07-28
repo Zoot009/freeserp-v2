@@ -24,8 +24,20 @@ function markSessionStarted() {
   }
 }
 
+// metaAdId participates so two DIFFERENT ads clicked in the same tab session each
+// record a touch — Meta ads in one campaign share every utm_* value, so without it
+// the second ad's click would be deduped away and its landing lost.
 function dedupeKey(prefix: string, path: string, utm: Utm) {
-  return [prefix, path, utm.utmSource, utm.utmMedium, utm.utmCampaign, utm.utmContent, utm.utmTerm]
+  return [
+    prefix,
+    path,
+    utm.utmSource,
+    utm.utmMedium,
+    utm.utmCampaign,
+    utm.utmContent,
+    utm.utmTerm,
+    utm.metaAdId,
+  ]
     .map((p) => p ?? "")
     .join("|")
 }

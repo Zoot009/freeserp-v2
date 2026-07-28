@@ -1,15 +1,14 @@
 // Session-replay recorder (rrweb) for the marketing site. Mirrors the app's
 // lib/replay.ts, keyed by the shared *.freeserp.com visitorId (lib/utm.ts) and the
 // same per-tab sessionId as lib/analytics.ts, so a recorded session lines up with
-// that visitor's row in the admin Overview table. Gated on its own opt-in banner
-// (lib/replay-consent.ts) — separate from the site's existing consent-free
-// analytics, so adding replay doesn't change that posture.
+// that visitor's row in the admin Overview table. Recording starts on page load,
+// matching the site's existing consent-free analytics posture — form fields are
+// masked at capture time (maskAllInputs below), which is the only PII control here.
 "use client"
 
 import type { eventWithTime } from "rrweb"
 import { getVisitorId } from "@/lib/utm"
 import { getSessionId } from "@/lib/analytics"
-import { getReplayConsent, REPLAY_CONSENT_EVENT } from "@/lib/replay-consent"
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || ""
 const FLUSH_INTERVAL_MS = 15000
@@ -19,7 +18,7 @@ const RETRY_DELAY_MS = 1000
 let stopRecordingFn: (() => void) | null = null
 let flushTimer: ReturnType<typeof setInterval> | null = null
 let retryTimer: ReturnType<typeof setTimeout> | null = null
-let buffer: eventWithTime[] = []
+const buffer: eventWithTime[] = []
 let initialized = false
 
 function send(useBeacon: boolean) {
@@ -72,30 +71,11 @@ async function startRecording() {
   if (!flushTimer) flushTimer = setInterval(() => send(false), FLUSH_INTERVAL_MS)
 }
 
-function stopRecording() {
-  stopRecordingFn?.()
-  stopRecordingFn = null
-  if (flushTimer) {
-    clearInterval(flushTimer)
-    flushTimer = null
-  }
-  if (retryTimer) {
-    clearTimeout(retryTimer)
-    retryTimer = null
-  }
-  buffer = []
-}
-
 export function initSessionReplay(): void {
   if (typeof window === "undefined" || initialized) return
   initialized = true
 
-  if (getReplayConsent() === "granted") void startRecording()
-
-  window.addEventListener(REPLAY_CONSENT_EVENT, () => {
-    if (getReplayConsent() === "granted") void startRecording()
-    else stopRecording()
-  })
+  void startRecording()
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") send(true)

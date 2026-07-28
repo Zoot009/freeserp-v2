@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { initSessionReplay } from "@/lib/replay"
 
 // Mounts the rrweb session-replay recorder once, globally. Renders nothing —
-// initSessionReplay itself gates on the replay-consent banner's choice.
+// recording begins as soon as this mounts, with no consent prompt.
 export function SessionReplay() {
   useEffect(() => {
     initSessionReplay()
