@@ -68,18 +68,24 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF must stay unoptimized to keep playing */}
-          <img
-            src="/freeserpchecker.gif"
-            alt={demoAlt}
+          {/* A video, not the 26MB GIF: H.264 MP4 of the same demo is ~10-20x
+              smaller and decodes far more cheaply. preload="none" + off-screen
+              autoplay keeps it from downloading until the visitor scrolls near,
+              so it never touches the initial load. width/height reserve the box
+              so nothing shifts when it starts. Produce the file with:
+                ffmpeg -i public/freeserpchecker.gif -movflags +faststart \
+                  -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" \
+                  public/freeserpchecker.mp4 */}
+          <video
+            src="/freeserpchecker.mp4"
             width={900}
             height={500}
-            /* This GIF is ~26MB and sits below the fold. Eagerly loading it made
-               the whole page wait on 26MB before settling; lazy defers it until
-               the visitor scrolls near, so the hero paints immediately. The
-               width/height keep its box reserved so nothing shifts when it lands. */
-            loading="lazy"
-            decoding="async"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-label={demoAlt}
             className="block h-auto w-full"
           />
         </div>
