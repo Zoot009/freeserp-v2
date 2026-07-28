@@ -1,6 +1,12 @@
 "use client";
 
+// The replica dashboard's styles, imported HERE rather than in the landing
+// layout so they load lazily with this dynamically-imported component instead of
+// render-blocking every landing page paint. Everything under it (skeleton,
+// dashboard, modal) shares these .fsp-* rules.
+import "@/app/landing/preview.css";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { buildPreview, normalizeDomain, type PreviewData } from "@/lib/landing/previewData";
 import { savePendingDomain } from "@/lib/landing/pendingDomain";
 import { getVisitorCountry } from "@/lib/landing/geo";
@@ -8,12 +14,12 @@ import { fetchPageScore, type PageScore } from "@/lib/landing/pageScore";
 import { fetchRealRank, type RealRank } from "@/lib/landing/rank";
 import { useAppUrl } from "@/lib/useAppUrl";
 import PreviewShell from "./PreviewShell";
+import PreviewSkeleton from "./PreviewSkeleton";
 import PreviewModal from "./PreviewModal";
 import PreviewDashboard, { type PreviewDict } from "./PreviewDashboard";
 
 /**
- * Full-screen takeover showing the sample dashboard, fully filled and blurred,
- * as soon as a domain is submitted.
+ * Full-screen takeover: dashboard skeleton, then the filled sample dashboard.
  *
  * History behaviour — the preview is a state the visitor can back out of, so it
  * gets a history entry (`?domain=`). Consequences, all deliberate:
@@ -25,13 +31,39 @@ import PreviewDashboard, { type PreviewDict } from "./PreviewDashboard";
  * state on an otherwise static page — Next explicitly supports the native
  * History API here, and it avoids making the landing route dynamic.
  *
- * Three genuinely async pieces (visitor country for the flag column, the locale
- * date string, and the favicon image) are kicked off immediately and swap in
- * as they resolve — the rest of the dashboard renders right away using
- * buildPreview()'s synchronous sample data.
+ * The hold is not theatre for its own sake: the three genuinely async pieces
+ * (visitor country for the flag column, the locale date string, and the favicon
+ * image) are resolved DURING it. Previously they landed after the dashboard
+ * mounted and each one visibly reflowed a column.
  */
 
 export const PREVIEW_PARAM = "domain";
+
+/**
+ * Three phases:
+ *   skeleton -> the shell is up, body is shimmer bars, a load bar runs on top
+ *   reveal   -> the table appears ALREADY BLURRED, and the values behind the
+ *               blur pop in one by one at scattered moments — through the blur
+ *               that reads as a crawl progressively filling the dashboard.
+ *               Nothing is ever legible.
+ *   locked   -> the fill has played out; the data blurs and the unlock card
+ *               opens over it
+ *
+ * The card opens at the END of the sequence rather than on arrival: by then the
+ * visitor has watched the dashboard fill in, so the prompt lands on something
+ * they already want instead of covering it before they have seen it. Dismissing
+ * it leaves the blurred dashboard, and clicking the data reopens it.
+ */
+const HOLD_MS = 2400;
+/**
+ * The crawl window. Rows land sequentially at ROW_MS (1.25s) apart with their
+ * cells pacing left-to-right inside each row, and the rail summaries close it
+ * out around 5.9s — long on purpose, because a check that visibly takes time
+ * is what makes it read as real work rather than a canned animation.
+ */
+const FILL_MS = 6200;
+
+type Phase = "skeleton" | "reveal" | "locked";
 
 /** Lifecycle of a slot backed by a live lookup. */
 export type LiveStatus = "loading" | "ready" | "unavailable";
@@ -39,6 +71,9 @@ export type LiveStatus = "loading" | "ready" | "unavailable";
 export type PreviewOverlayDict = PreviewDict;
 
 export type PreviewController = {
+  /** Format-only check: is this a plausible host? No side effects. */
+  canOpen: (rawDomain: string) => boolean;
+  /** Open the preview. Returns false if the input wasn't a plausible host. */
   open: (rawDomain: string) => boolean;
 };
 
@@ -61,6 +96,7 @@ export default function PreviewOverlay({
   controllerRef: React.RefObject<PreviewController | null>;
 }) {
   const [data, setData] = useState<PreviewData | null>(null);
+  const [phase, setPhase] = useState<Phase>("skeleton");
   const [unlocked, setUnlocked] = useState(false);
   const [flag, setFlag] = useState<string | null>(null);
   const [checkedAt, setCheckedAt] = useState("");
@@ -82,6 +118,12 @@ export default function PreviewOverlay({
   // pushed entry is popped with back(), whereas a preview opened straight from a
   // shared URL has nothing of ours to pop.
   const pushedRef = useRef(false);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  }, []);
 
   const close = useCallback(() => {
     if (pushedRef.current) {
@@ -92,9 +134,11 @@ export default function PreviewOverlay({
     const url = new URL(window.location.href);
     url.searchParams.delete(PREVIEW_PARAM);
     window.history.replaceState(null, "", url.pathname + url.search + url.hash);
+    clearTimers();
     scoreAbortRef.current?.abort();
     setData(null);
-  }, []);
+    setPhase("skeleton");
+  }, [clearTimers]);
 
   const start = useCallback(
     (rawDomain: string, push: boolean) => {
@@ -102,6 +146,7 @@ export default function PreviewOverlay({
       if (!preview) return false;
 
       setData(preview);
+      setPhase("skeleton");
       setUnlocked(false);
       setFlag(null);
       setFavicon(null);
@@ -121,6 +166,7 @@ export default function PreviewOverlay({
       // named after the domain they looked up.
       savePendingDomain(preview.domain);
 
+      // --- resolved during the hold, so the filled state paints complete ---
       setCheckedAt(
         new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" }).format(new Date()),
       );
@@ -136,6 +182,11 @@ export default function PreviewOverlay({
         });
       });
 
+      // Kick the real audit off HERE, at the top of the skeleton, so it has the
+      // whole loading sequence to complete. Cached domains come back instantly;
+      // an uncached one takes a few seconds and lands mid-crawl, which is
+      // exactly when a real number arriving looks right. If it never arrives,
+      // the sample score simply stays.
       void fetchPageScore(preview.domain, scoreAbort.signal).then((real) => {
         if (scoreAbort.signal.aborted) return;
         setPageScore(real);
@@ -148,6 +199,19 @@ export default function PreviewOverlay({
       img.onerror = () => setFavicon(null); // falls back to the initial tile
       img.src = iconUrl;
 
+      clearTimers();
+      timersRef.current.push(
+        setTimeout(() => setPhase("reveal"), HOLD_MS),
+        // The crawl finishing is the moment to ask: the dashboard has been seen
+        // filling in, so the card lands on a page the visitor already wants.
+        // Dismissing it leaves the blurred dashboard, and clicking the data
+        // brings the card back — see `armed` in PreviewDashboard.
+        setTimeout(() => {
+          setPhase("locked");
+          setUnlocked(true);
+        }, HOLD_MS + FILL_MS),
+      );
+
       if (push) {
         const url = new URL(window.location.href);
         url.searchParams.set(PREVIEW_PARAM, preview.domain);
@@ -156,12 +220,17 @@ export default function PreviewOverlay({
       }
       return true;
     },
-    [locale],
+    [locale, clearTimers],
   );
 
   useEffect(() => {
-    controllerRef.current = { open: (raw) => start(raw, true) };
+    controllerRef.current = {
+      canOpen: (raw) => normalizeDomain(raw) != null,
+      open: (raw) => start(raw, true),
+    };
   }, [controllerRef, start]);
+
+  useEffect(() => clearTimers, [clearTimers]);
 
   // Arriving with ?domain= already set (shared link, reload, or a back-forward
   // into the preview) opens it without pushing another entry.
@@ -179,12 +248,14 @@ export default function PreviewOverlay({
       if (domain && normalizeDomain(domain)) {
         start(domain, false);
       } else {
+        clearTimers();
         setData(null);
+        setPhase("skeleton");
       }
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [start]);
+  }, [start, clearTimers]);
 
   // Lock the page behind the overlay so a scroll gesture moves the dashboard,
   // not the landing page underneath it.
@@ -206,38 +277,96 @@ export default function PreviewOverlay({
     return () => window.removeEventListener("keydown", onKey);
   }, [data, close]);
 
-  if (!data) return null;
-
   return (
-    <div className="fsp fsp-overlay" role="dialog" aria-modal="true" aria-label={dict.tableTitle}>
-      <PreviewShell dict={dict} domain={data.domain} brand={data.brand} favicon={favicon} onClose={close}>
-        <PreviewDashboard
-          data={data}
-          dict={dict}
-          flag={flag}
-          checkedAt={checkedAt}
-          pageScore={pageScore}
-          scoreStatus={scoreStatus}
-          realRank={realRank}
-          rankStatus={rankStatus}
-          locked
-          unlockOpen={unlocked}
-          onRequestUnlock={() => setUnlocked(true)}
+    <AnimatePresence>
+      {data && (
+        <motion.div
+          key="fsp"
+          className="fsp fsp-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          role="dialog"
+          aria-modal="true"
+          aria-busy={phase === "skeleton"}
+          aria-label={dict.tableTitle}
         >
-          {unlocked && (
-            <PreviewModal
-              dict={dict}
-              domain={data.domain}
-              onDismiss={() => setUnlocked(false)}
-              signupHref={appUrl(
-                // The domain also rides in the query string: cookies can be
-                // blocked, and the app reads either channel.
-                `/signup?${PREVIEW_PARAM}=${encodeURIComponent(data.domain)}`,
-              )}
-            />
+          {/* The only thing announced during the hold — the skeleton itself is
+              aria-hidden, so without this the wait would be silent. */}
+          <span
+            aria-live="polite"
+            style={{
+              position: "absolute",
+              width: 1,
+              height: 1,
+              overflow: "hidden",
+              clip: "rect(0 0 0 0)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {phase === "skeleton" ? dict.loadingAria : ""}
+          </span>
+
+          {phase === "skeleton" && (
+            <span className="fsp-loadbar" aria-hidden>
+              <i />
+            </span>
           )}
-        </PreviewDashboard>
-      </PreviewShell>
-    </div>
+
+          <PreviewShell
+            dict={dict}
+            domain={data.domain}
+            brand={data.brand}
+            favicon={favicon}
+            onClose={close}
+          >
+            {/* Cross-fade in place. No slide: a 14px entrance after a
+                pixel-matched skeleton reintroduces the exact jump the skeleton
+                exists to prevent. Rows do their own staggered rise inside. */}
+            <motion.div
+              key={phase === "skeleton" ? "skeleton" : "filled"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {phase === "skeleton" ? (
+                <PreviewSkeleton />
+              ) : (
+                <PreviewDashboard
+                  data={data}
+                  dict={dict}
+                  flag={flag}
+                  checkedAt={checkedAt}
+                  pageScore={pageScore}
+                  scoreStatus={scoreStatus}
+                  realRank={realRank}
+                  rankStatus={rankStatus}
+                  locked={phase === "locked"}
+                  unlockOpen={unlocked}
+                  onRequestUnlock={() => setUnlocked(true)}
+                >
+                  <AnimatePresence>
+                    {unlocked && (
+                      <PreviewModal
+                        key="unlock"
+                        dict={dict}
+                        domain={data.domain}
+                        onDismiss={() => setUnlocked(false)}
+                        signupHref={appUrl(
+                          // The domain also rides in the query string: cookies
+                          // can be blocked, and the app reads either channel.
+                          `/signup?${PREVIEW_PARAM}=${encodeURIComponent(data.domain)}`,
+                        )}
+                      />
+                    )}
+                  </AnimatePresence>
+                </PreviewDashboard>
+              )}
+            </motion.div>
+          </PreviewShell>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

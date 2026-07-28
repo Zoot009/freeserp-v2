@@ -22,6 +22,8 @@ const nl: Dictionary = {
     demoAlt:
       "FreeSerp productdemo: een domein en zoekwoord invoeren om zoekresultaten te controleren",
     invalidDomain: "Voer een domein in zoals voorbeeld.com om je voorbeeld te zien",
+    notFound: "We konden dat domein niet vinden — controleer de spelling en probeer opnieuw",
+    checking: "Controleren…",
   },
   preview: {
     loadingAria: "Voorbeeld van je dashboard wordt geladen",

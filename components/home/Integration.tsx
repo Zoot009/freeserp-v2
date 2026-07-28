@@ -56,6 +56,8 @@ export function Integration() {
               <img
                 src={i.img}
                 alt={i.name}
+                width={24}
+                height={24}
                 loading="lazy"
                 decoding="async"
                 style={{ width: 24, height: 24 }}

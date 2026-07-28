@@ -22,6 +22,8 @@ const en: Dictionary = {
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",
     invalidDomain: "Enter a domain like example.com to see your preview",
+    notFound: "We couldn't find that domain — check the spelling and try again",
+    checking: "Checking…",
   },
   preview: {
     loadingAria: "Loading your dashboard preview",

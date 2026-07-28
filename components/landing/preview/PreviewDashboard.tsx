@@ -6,7 +6,7 @@ import { compactNumber, type PreviewData } from "@/lib/landing/previewData";
 
 /**
  * The filled dashboard body — stat strip, insight rail, and the rank-tracking
- * table. Renders inside PreviewShell.
+ * table. Renders inside PreviewShell, in place of PreviewSkeleton.
  *
  * Two rules govern this component:
  *
@@ -131,6 +131,10 @@ function Stat({
    */
   clear?: boolean;
 }) {
+  // Aggregates trickle in over the back half of the crawl (2.0-5.2s) — totals
+  // updating WHILE rows are still landing is what a real pipeline looks like.
+  const delay = fillDelay(`stat:${label}`, 2000, 3200);
+
   /**
    * Blurs one piece of the cell rather than the whole body.
    *
@@ -155,59 +159,88 @@ function Stat({
     <div className="fsp-cell">
       <div className="fsp-lbl">{label}</div>
       <div className="fsp-statbody">
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div className="fsp-val">
-            <Veil>{value}</Veil>
-            {/* Outside the veil on purpose — the denominator is context. */}
-            {suffix && <span className="fsp-of">{suffix}</span>}
+        <div className="fsp-fill" style={{ animationDelay: `${delay}ms` }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div className="fsp-val">
+              <Veil>{value}</Veil>
+              {/* Outside the veil on purpose — the denominator is context. */}
+              {suffix && <span className="fsp-of">{suffix}</span>}
+            </div>
+            {gauge != null && (
+              <Veil>
+                <ScoreGauge score={gauge} />
+              </Veil>
+            )}
           </div>
-          {gauge != null && (
-            <Veil>
-              <ScoreGauge score={gauge} />
-            </Veil>
+          {/* Never veiled. Like the " / 100" above, the caption is not the
+              measurement — it says what unit the hidden number is in ("monthly,
+              modelled", "site-wide"). Blurring it withheld nothing and only
+              made the cell look broken. */}
+          {sub && <span className="fsp-tiny">{sub}</span>}
+          {bar != null && (
+            <div className={`fsp-bar${veiled}`}>
+              <i style={{ width: `${bar}%` }} />
+            </div>
           )}
         </div>
-        {/* Never veiled. Like the " / 100" above, the caption is not the
-            measurement — it says what unit the hidden number is in ("monthly,
-            modelled", "site-wide"). Blurring it withheld nothing and only
-            made the cell look broken. */}
-        {sub && <span className="fsp-tiny">{sub}</span>}
-        {bar != null && (
-          <div className={`fsp-bar${veiled}`}>
-            <i style={{ width: `${bar}%` }} />
-          </div>
-        )}
       </div>
     </div>
   );
 }
 
 /**
- * Obscures a cell's contents while leaving the cell itself in place.
+ * Deterministic pseudo-random delay (FNV-1a over the seed). Deliberately NOT
+ * Math.random(): re-renders (the flag resolving, the favicon landing) must not
+ * reshuffle delays and restart every fill animation mid-flight.
  */
-function Blur({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+function fillDelay(seed: string, min: number, spread: number): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return min + ((h >>> 0) % spread);
+}
+
+/**
+ * Obscures a cell's contents while leaving the cell itself in place. With a
+ * `delay`, the content pops in behind the blur at that moment — the per-value
+ * arrival is what creates the "something is crawling" illusion.
+ */
+function Blur({
+  children,
+  delay,
+  style,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+}) {
   return (
     <span className="fsp-hard" style={{ display: "inline-flex" }} aria-hidden>
-      <span style={{ display: "inline-flex", alignItems: "center", ...style }}>{children}</span>
+      <span
+        className={delay != null ? "fsp-fill" : undefined}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          ...(delay != null ? { animationDelay: `${delay}ms` } : null),
+          ...style,
+        }}
+      >
+        {children}
+      </span>
     </span>
   );
 }
 
 /**
  * Same API as Blur, minus the blur — for the measured row. Keeps the identical
- * wrapper structure so the two rows stay pixel-aligned.
+ * wrapper structure so the two rows stay pixel-aligned, and keeps the fill
+ * delay so the real values still land in step with the crawl.
  *
  * NOT aria-hidden, unlike Blur: these figures are genuine, so a screen reader
  * should read them.
  */
-function Clear({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
-  return (
-    <span style={{ display: "inline-flex" }}>
-      <span style={{ display: "inline-flex", alignItems: "center", ...style }}>{children}</span>
-    </span>
-  );
-}
-
 /**
  * A slot whose live lookup is still in flight: a shimmer bar, not blurred
  * sample data.
@@ -230,6 +263,32 @@ function Spinner({ size = 14 }: { size?: number }) {
   return <span className="fsp-spin" style={{ width: size, height: size }} aria-hidden />;
 }
 
+function Clear({
+  children,
+  delay,
+  style,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <span style={{ display: "inline-flex" }}>
+      <span
+        className={delay != null ? "fsp-fill" : undefined}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          ...(delay != null ? { animationDelay: `${delay}ms` } : null),
+          ...style,
+        }}
+      >
+        {children}
+      </span>
+    </span>
+  );
+}
+
 /**
  * One tracked keyword.
  *
@@ -238,6 +297,17 @@ function Spinner({ size = 14 }: { size?: number }) {
  * otherwise unreadable row — the table then communicates direction of travel
  * (some keywords climbing, some falling) without exposing a single figure.
  */
+/**
+ * Per-row pacing of the behind-the-blur fill. A real crawler works through
+ * keywords IN ORDER — row N starts only after row N-1 has mostly landed, and
+ * within a row the keyword is discovered first, then its metrics arrive left
+ * to right (position, volume, URL, scores…). ROW_MS is the stride between
+ * rows; the step offsets pace the cells inside one row. Deterministic jitter
+ * (seeded, not random) keeps it from looking metronomic without reshuffling
+ * on re-render.
+ */
+const ROW_MS = 1250;
+const CELL_STEP = [0, 0, 560, 700, 840, 980, 1120, 1260] as const;
 
 /**
  * A row as rendered. Widens the three fields the measured row cannot supply —
@@ -252,6 +322,7 @@ type RowKeyword = Omit<PreviewData["keywords"][number], "volume" | "pageScore" |
 
 function Row({
   kw,
+  index,
   flag,
   checkedAt,
   dict,
@@ -260,6 +331,7 @@ function Row({
   real = false,
 }: {
   kw: RowKeyword;
+  index: number;
   flag: string | null;
   checkedAt: string;
   dict: PreviewDict;
@@ -287,7 +359,10 @@ function Row({
 }) {
   const up = kw.delta > 0;
   const showCta = kw.position == null || kw.position > 3;
-  // On the measured row the wrapper still keeps the layout, it just doesn't blur.
+  const base = index * ROW_MS;
+  const d = (cell: number) =>
+    base + CELL_STEP[cell]! + fillDelay(`${kw.keyword}:${cell}`, 0, 90);
+  // On the measured row the wrapper still paces the fill, it just doesn't blur.
   const Cell = real ? Clear : Blur;
   // P.S / K.S get their own wrapper: the rank can be measured while the audit
   // behind those two scores never lands, leaving sample figures in that one cell.
@@ -297,48 +372,52 @@ function Row({
   return (
     <>
       <td>
-        <Cell>
+        <Cell delay={d(0)}>
           <span className="fsp-check" />
         </Cell>
       </td>
       <td>
         <span style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-          <Cell style={{ gap: 8, minWidth: 0 }}>
+          <Cell delay={d(1)} style={{ gap: 8, minWidth: 0 }}>
             {/* Rendered only when there IS a flag. Reserving the slot
                 unconditionally left an empty 26px indent whenever geo could not
                 be resolved, pushing every keyword out of line with its column
-                header. */}
+                header. Geo resolves during the skeleton hold, before this table
+                mounts, so there is nothing left to shift. */}
             {flag && <span style={{ display: 'inline-flex' }}>{flag}</span>}
             <span className="fsp-kw">{kw.keyword}</span>
           </Cell>
           {/* Movement is only meaningful against a previous check. The measured
               row is a first check, so there is nothing to compare it to yet. */}
           {!real && (
-            <span className={`fsp-trend ${up ? "up" : "down"}`}>
+            <span
+              className={`fsp-trend fsp-fill ${up ? "up" : "down"}`}
+              style={{ animationDelay: `${d(1) + 380}ms` }}
+            >
               {up ? '▲' : '▼'} {Math.abs(kw.delta)}
             </span>
           )}
         </span>
       </td>
       <td>
-        <Cell>
+        <Cell delay={d(2)}>
           <PositionBadge position={kw.position} />
         </Cell>
       </td>
       <td>
-        <Cell style={{ fontVariantNumeric: 'tabular-nums' }}>
+        <Cell delay={d(3)} style={{ fontVariantNumeric: 'tabular-nums' }}>
           {kw.volume != null ? kw.volume.toLocaleString() : dash}
         </Cell>
       </td>
       <td>
-        <Cell>
+        <Cell delay={d(4)}>
           {kw.url ? <span className="fsp-url">{kw.url}</span> : dash}
         </Cell>
       </td>
       <td>
         {/* Veiled independently of the rest of the row: the rank can be measured
             while the audit behind these two scores never arrives. */}
-        <ScoreCell>
+        <ScoreCell delay={d(5)}>
           <span className="fsp-psks">
             <span className="slot ps">
               {scorePending ? (
@@ -357,13 +436,13 @@ function Row({
         </ScoreCell>
       </td>
       <td>
-        <Cell style={{ gap: 6, whiteSpace: 'nowrap' }}>
+        <Cell delay={d(6)} style={{ gap: 6, whiteSpace: 'nowrap' }}>
           <span className="fsp-tiny">{checkedAt}</span>
           <i className="fsp-dot" />
         </Cell>
       </td>
       <td>
-        <Cell>
+        <Cell delay={d(7)}>
           <span className="fsp-act">
             <span className="fsp-act-btn">
               <Ic.star />
@@ -426,7 +505,7 @@ export default function PreviewDashboard({
   flag: string | null;
   checkedAt: string;
   /** The real audited Page Score, once it lands. Null = fall back to sample. */
-  pageScore: { score: number; grade: string | null } | null;
+  pageScore: { score: number; grade: string | null; onPageScore: number | null } | null;
   /** Lifecycle of that audit — "loading" shows a shimmer, never a fake score. */
   scoreStatus: "loading" | "ready" | "unavailable";
   /** The real measured rank for the visitor's own domain. Null = sample row. */
@@ -555,6 +634,9 @@ export default function PreviewDashboard({
               </span>
             </div>
             <div className="fsp-soft">
+              {/* Derived summaries land near the end, once the rows they
+                  summarise have finished arriving. */}
+              <div className="fsp-fill" style={{ animationDelay: `${fillDelay("rail:improved", 4600, 900)}ms` }}>
               <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
                 <span className="fsp-hero-n">{data.top3}</span>
                 <span className="fsp-tiny">{dict.railVs}</span>
@@ -574,6 +656,7 @@ export default function PreviewDashboard({
                     {data.keywordsTracked - data.top3} →
                   </span>
                 </div>
+              </div>
               </div>
             </div>
           </div>
@@ -607,12 +690,13 @@ export default function PreviewDashboard({
                 return (
                   <div
                     key={c.domain}
-                    className={proven ? undefined : "fsp-soft"}
+                    className={`fsp-fill${proven ? "" : " fsp-soft"}`}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: 10,
                       marginTop: 12,
+                      animationDelay: `${fillDelay(`rail:comp:${c.domain}`, 5100, 800)}ms`,
                     }}
                     aria-hidden={proven ? undefined : true}
                   >
@@ -687,13 +771,15 @@ export default function PreviewDashboard({
                   </tr>
                 </thead>
                 <tbody>
-                  {/* aria-hidden throughout: these figures are illustrative, and
+                  {/* Row STRUCTURE appears at once; the values inside pop in at
+                      scattered moments behind the blur (see Blur's delay).
+                      aria-hidden throughout: these figures are illustrative, and
                       a screen reader must not recite them as measurements. */}
                   {/* Row 1 while its live rank is still in flight. Shimmer, not
                       blurred sample data — the slot is about to hold measured
                       values and must not flash invented ones first. */}
                   {rankStatus === "loading" && (
-                    <tr aria-hidden>
+                    <tr className="fsp-rise" aria-hidden>
                       <td>
                         <Pending w={13} h={13} r={3} />
                       </td>
@@ -726,9 +812,14 @@ export default function PreviewDashboard({
                     if (i === 0 && rankStatus === "loading") return null;
                     // Row 1 is the only measured row: we searched the visitor's
                     // own domain through Scrape.do and audited their homepage.
-                    // Volume and keyword score stay null — we have not measured
-                    // those, so they render as "—" rather than as an invention.
+                    // Volume stays null when unmeasured (renders "—" rather than
+                    // an invention).
                     const measured = i === 0 && realRank != null;
+                    // K.S is the audit's on-page score, but ONLY when the site
+                    // actually ranks for the keyword — an optimisation score for
+                    // a page that isn't ranking would be a claim we can't stand
+                    // behind. Not ranking -> "—".
+                    const isRanking = realRank?.position != null;
                     const row = measured
                       ? {
                           ...kw,
@@ -740,18 +831,20 @@ export default function PreviewDashboard({
                           // sample figures and let the cell stay veiled, so this
                           // never shows a bare dash beside a blurred SEO Score.
                           pageScore: pageScore?.score ?? kw.pageScore,
-                          keywordScore: pageScore ? null : kw.keywordScore,
+                          keywordScore: pageScore ? (isRanking ? pageScore.onPageScore : null) : kw.keywordScore,
                         }
                       : kw;
                     return (
                       <tr
                         key={kw.keyword}
+                        className="fsp-rise"
                         // Only the fabricated rows are hidden from assistive
                         // tech; the measured one is genuine and may be read.
                         aria-hidden={measured ? undefined : true}
                       >
                         <Row
                           kw={row}
+                          index={i}
                           flag={flag}
                           checkedAt={checkedAt}
                           dict={dict}
@@ -768,6 +861,10 @@ export default function PreviewDashboard({
                 </tbody>
               </table>
             </div>
+            <span className="fsp-sweep" aria-hidden>
+              <i />
+            </span>
+
           </div>
         </div>
       </div>

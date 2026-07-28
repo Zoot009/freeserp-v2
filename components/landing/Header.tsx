@@ -25,7 +25,12 @@ export default function Header({ dict }: { dict: HeaderDict }) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-100 hidden border-b border-black/5 bg-white/80 shadow-[0_8px_30px_-15px_rgba(11,16,32,0.15)] backdrop-blur-xl sm:block">
+      {/* Solid, NOT backdrop-blur. This header only mounts after 400px of
+          scroll — i.e. always over moving content — so a backdrop-blur here
+          re-sampled and re-blurred the whole page behind it on every scroll
+          frame, which was the main source of the scroll jank. A solid fill with
+          a shadow reads the same and composites for free. */}
+      <header className="fixed inset-x-0 top-0 z-100 hidden border-b border-black/5 bg-white shadow-[0_8px_30px_-15px_rgba(11,16,32,0.15)] sm:block">
         <div className="mx-auto flex max-w-[1160px] items-center justify-between gap-3 px-6 py-3.5">
           <a
             href="#top"
@@ -46,7 +51,7 @@ export default function Header({ dict }: { dict: HeaderDict }) {
         </div>
       </header>
 
-      <div className="fixed inset-x-0 bottom-0 z-100 border-t border-black/5 bg-white/80 px-4 py-3 shadow-[0_-8px_30px_-15px_rgba(11,16,32,0.15)] backdrop-blur-xl sm:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-100 border-t border-black/5 bg-white px-4 py-3 shadow-[0_-8px_30px_-15px_rgba(11,16,32,0.15)] sm:hidden">
         <a
           href={appUrl("/signup")}
           className="group flex items-center justify-center gap-1.5 rounded-full bg-[#0b1020] px-4 py-3 text-[14px] font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent hover:shadow-[0_10px_30px_-8px_rgba(47,107,255,0.6)]"

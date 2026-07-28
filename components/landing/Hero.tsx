@@ -1,13 +1,23 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
+import dynamic from "next/dynamic";
+import { ArrowRight, Loader2, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
-import PreviewOverlay, {
-  type PreviewController,
-  type PreviewOverlayDict,
-} from "@/components/landing/preview/PreviewOverlay";
+import { domainExists } from "@/lib/landing/domainCheck";
+import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
+import { normalizeDomain } from "@/lib/landing/previewData";
+import type { PreviewController, PreviewOverlayDict } from "@/components/landing/preview/PreviewOverlay";
+
+// The preview overlay pulls in framer-motion and the entire replica dashboard —
+// none of which is needed until the visitor actually submits a domain. Loading
+// it lazily keeps it out of the landing page's initial bundle, so the hero is
+// interactive fast; the chunk streams in after hydration. ssr:false because it
+// is client-only (window/history) and never renders on the server anyway.
+const PreviewOverlay = dynamic(() => import("@/components/landing/preview/PreviewOverlay"), {
+  ssr: false,
+});
 
 type HeroDict = {
   headline1: string;
@@ -19,6 +29,8 @@ type HeroDict = {
   liveDemo: string;
   demoAlt: string;
   invalidDomain: string;
+  notFound: string;
+  checking: string;
 };
 
 type PersonalizationDict = {
@@ -34,7 +46,10 @@ function WaveformBackdrop() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -inset-y-10 left-1/2 z-0 flex w-screen -translate-x-1/2 gap-[3px] overflow-hidden sm:-inset-y-14"
+      /* hidden on phones: this is 90 gradient bars painting behind the demo
+         card, purely decorative, and the extra DOM + paint is a real cost on a
+         weak mobile GPU for something a small screen barely shows. */
+      className="pointer-events-none absolute -inset-y-10 left-1/2 z-0 hidden w-screen -translate-x-1/2 gap-[3px] overflow-hidden sm:-inset-y-14 sm:flex"
     >
       {WAVEFORM_BARS.map((_, i) => (
         <span
@@ -57,14 +72,11 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF must stay unoptimized to keep playing */}
-          <img
-            src="/freeserpchecker.gif"
-            alt={demoAlt}
-            width={900}
-            height={500}
-            className="block h-auto w-full"
-          />
+          {/* The demo clip (WebM 0.9MB / MP4 1.7MB), loaded only once it scrolls
+              near — see LazyDemoVideo. autoplay would otherwise override
+              preload="none" and fetch it on initial load. width/height reserve
+              the box so nothing shifts when it starts. */}
+          <LazyDemoVideo label={demoAlt} className="block h-auto w-full" />
         </div>
       </div>
     </div>
@@ -83,16 +95,40 @@ export default function Hero({
   locale: string;
 }) {
   const [domain, setDomain] = useState("");
-  const [invalid, setInvalid] = useState(false);
+  // "format" — not a plausible host at all (a typo like "hello world").
+  // "notfound" — a well-formed domain that does not resolve in DNS (gibberish).
+  const [error, setError] = useState<null | "format" | "notfound">(null);
+  const [checking, setChecking] = useState(false);
   const previewRef = useRef<PreviewController | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // open() returns false for anything that isn't a plausible host, so a typo
-    // shows an inline hint instead of previewing a nonsense domain.
-    const opened = previewRef.current?.open(domain) ?? false;
-    setInvalid(!opened);
+    if (checking) return;
+
+    // 1. Format gate (instant, offline). normalizeDomain is a pure helper — used
+    //    directly rather than through the controller, so this check works even
+    //    before the lazily-loaded preview chunk has finished streaming in.
+    if (normalizeDomain(domain) == null) {
+      setError("format");
+      return;
+    }
+
+    // 2. Existence gate: a well-formed domain still has to be a real, resolvable
+    //    site. domainExists fails OPEN, so a backend hiccup never blocks a real
+    //    visitor — only a definitive "does not resolve" is turned away.
+    setError(null);
+    setChecking(true);
+    const exists = await domainExists(domain);
+    setChecking(false);
+    if (!exists) {
+      setError("notfound");
+      return;
+    }
+    previewRef.current?.open(domain);
   }
+
+  const message =
+    error === "format" ? dict.invalidDomain : error === "notfound" ? dict.notFound : dict.disclaimer;
 
   return (
     <section
@@ -146,7 +182,7 @@ export default function Hero({
               value={domain}
               onChange={(e) => {
                 setDomain(e.target.value);
-                if (invalid) setInvalid(false);
+                if (error) setError(null);
               }}
               // type="text", not "url": people type "site.com", which a url input
               // rejects for lacking a scheme. normalizeDomain does the validating.
@@ -154,7 +190,7 @@ export default function Hero({
               inputMode="url"
               autoComplete="url"
               spellCheck={false}
-              aria-invalid={invalid}
+              aria-invalid={!!error}
               aria-label={dict.inputPlaceholder}
               placeholder={dict.inputPlaceholder}
               className="w-full rounded-[100px] border-none bg-transparent py-4.5 font-[family-name:var(--font-jakarta)] text-base text-[#0b1020] outline-none placeholder:text-[#9aa2b5]"
@@ -162,17 +198,27 @@ export default function Hero({
           </div>
           <button
             type="submit"
-            className="group flex items-center justify-center gap-1.5 rounded-[100px] bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)]"
+            disabled={checking}
+            className="group flex items-center justify-center gap-1.5 rounded-[100px] bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)] disabled:cursor-wait disabled:opacity-80"
           >
-            {dict.ctaButton}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            {checking ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {dict.checking}
+              </>
+            ) : (
+              <>
+                {dict.ctaButton}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </>
+            )}
           </button>
         </form>
         <p
-          className={`mt-5 text-sm ${invalid ? "font-semibold text-[#c02626]" : "text-[#6b7286]"}`}
-          role={invalid ? "alert" : undefined}
+          className={`mt-5 text-sm ${error ? "font-semibold text-[#c02626]" : "text-[#6b7286]"}`}
+          role={error ? "alert" : undefined}
         >
-          {invalid ? dict.invalidDomain : dict.disclaimer}
+          {message}
         </p>
         <PersonalizedNote dict={personalization} locale={locale} />
 
