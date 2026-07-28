@@ -68,16 +68,12 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* A video, not the 26MB GIF: H.264 MP4 of the same demo is ~10-20x
-              smaller and decodes far more cheaply. preload="none" + off-screen
-              autoplay keeps it from downloading until the visitor scrolls near,
-              so it never touches the initial load. width/height reserve the box
-              so nothing shifts when it starts. Produce the file with:
-                ffmpeg -i public/freeserpchecker.gif -movflags +faststart \
-                  -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" \
-                  public/freeserpchecker.mp4 */}
+          {/* A video, not the old 25.6MB GIF: WebM 0.9MB / MP4 1.7MB of the same
+              clip, decoding far more cheaply. preload="none" + off-screen
+              autoplay keeps it off the initial load until the visitor scrolls
+              near; width/height reserve the box so nothing shifts when it
+              starts. */}
           <video
-            src="/freeserpchecker.mp4"
             width={900}
             height={500}
             autoPlay
@@ -87,7 +83,13 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             preload="none"
             aria-label={demoAlt}
             className="block h-auto w-full"
-          />
+          >
+            {/* WebM first (0.9MB, VP9) for Chrome/Firefox/Edge; MP4 (1.7MB,
+                H.264) is the universal fallback for Safari. Both replace the old
+                25.6MB GIF. */}
+            <source src="/freeserpchecker.webm" type="video/webm" />
+            <source src="/freeserpchecker.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
     </div>

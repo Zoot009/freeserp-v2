@@ -74,14 +74,21 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF must stay unoptimized to keep playing */}
-          <img
-            src="/freeserpchecker.gif"
-            alt={demoAlt}
+          {/* Video (WebM 0.9MB / MP4 1.7MB) in place of the old 25.6MB GIF. */}
+          <video
             width={900}
             height={500}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-label={demoAlt}
             className="block h-auto w-full"
-          />
+          >
+            <source src="/freeserpchecker.webm" type="video/webm" />
+            <source src="/freeserpchecker.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
     </motion.div>
