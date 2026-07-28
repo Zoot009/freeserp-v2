@@ -426,7 +426,7 @@ export default function PreviewDashboard({
   flag: string | null;
   checkedAt: string;
   /** The real audited Page Score, once it lands. Null = fall back to sample. */
-  pageScore: { score: number; grade: string | null } | null;
+  pageScore: { score: number; grade: string | null; onPageScore: number | null } | null;
   /** Lifecycle of that audit — "loading" shows a shimmer, never a fake score. */
   scoreStatus: "loading" | "ready" | "unavailable";
   /** The real measured rank for the visitor's own domain. Null = sample row. */
@@ -726,9 +726,13 @@ export default function PreviewDashboard({
                     if (i === 0 && rankStatus === "loading") return null;
                     // Row 1 is the only measured row: we searched the visitor's
                     // own domain through Scrape.do and audited their homepage.
-                    // Volume and keyword score stay null — we have not measured
-                    // those, so they render as "—" rather than as an invention.
+                    // Volume stays null when unmeasured (renders "—").
                     const measured = i === 0 && realRank != null;
+                    // K.S is the audit's on-page score, but ONLY when the site
+                    // actually ranks for the keyword — an optimisation score for
+                    // a page that isn't ranking would be a claim we can't stand
+                    // behind. Not ranking -> "—".
+                    const isRanking = realRank?.position != null;
                     const row = measured
                       ? {
                           ...kw,
@@ -740,7 +744,7 @@ export default function PreviewDashboard({
                           // sample figures and let the cell stay veiled, so this
                           // never shows a bare dash beside a blurred SEO Score.
                           pageScore: pageScore?.score ?? kw.pageScore,
-                          keywordScore: pageScore ? null : kw.keywordScore,
+                          keywordScore: pageScore ? (isRanking ? pageScore.onPageScore : null) : kw.keywordScore,
                         }
                       : kw;
                     return (

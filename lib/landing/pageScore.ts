@@ -18,10 +18,15 @@ import { BACKEND_URL } from "@/components/site/constants"
 // falls back to the sample score. A marketing page must not break because an
 // upstream audit was unavailable.
 
-export type PageScore = { score: number; grade: string | null }
+export type PageScore = {
+  score: number
+  grade: string | null
+  /** On-page optimisation sub-score — the K.S, shown only when the site ranks. */
+  onPageScore: number | null
+}
 
 type ApiResponse =
-  | { status: "ready"; score: number; grade: string | null; cached: boolean }
+  | { status: "ready"; score: number; grade: string | null; onPageScore: number | null; cached: boolean }
   | { status: "pending" }
   | { status: "unavailable" }
 
@@ -66,7 +71,8 @@ export async function fetchPageScore(domain: string, external?: AbortSignal): Pr
     clearTimeout(timer)
 
     if (!body) return null
-    if (body.status === "ready") return { score: body.score, grade: body.grade }
+    if (body.status === "ready")
+      return { score: body.score, grade: body.grade, onPageScore: body.onPageScore ?? null }
     if (body.status === "unavailable") return null
 
     // pending — wait, then poll again.

@@ -40,7 +40,12 @@ type ApiResponse =
     }
   | { status: "unavailable" }
 
-const REQUEST_TIMEOUT_MS = 12_000
+// A deep search reaches all ten pages when the domain isn't in the top 20, and
+// Scrape.do's residential fetches are slow — a full ten-page lookup measured
+// ~30s. The request is held open for that whole time, so this must outlast it,
+// or a genuinely deep rank would be aborted and thrown away right before it
+// arrived. A top-20 result still returns in ~3s; only the deep case waits.
+const REQUEST_TIMEOUT_MS = 40_000
 
 export async function fetchRealRank(
   domain: string,
