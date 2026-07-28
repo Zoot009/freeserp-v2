@@ -1,5 +1,10 @@
 "use client";
 
+// The replica dashboard's styles, imported HERE rather than in the landing
+// layout so they load lazily with this dynamically-imported component instead of
+// render-blocking every landing page paint. Everything under it (skeleton,
+// dashboard, modal) shares these .fsp-* rules.
+import "@/app/landing/preview.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { buildPreview, normalizeDomain, type PreviewData } from "@/lib/landing/previewData";
