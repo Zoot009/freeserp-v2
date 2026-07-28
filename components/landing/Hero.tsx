@@ -9,6 +9,7 @@ import PreviewOverlay, {
   type PreviewController,
   type PreviewOverlayDict,
 } from "@/components/landing/preview/PreviewOverlay";
+import { trackLanding } from "@/components/landing/track";
 
 const container = {
   hidden: {},
@@ -112,6 +113,14 @@ export default function Hero({
     // shows an inline hint instead of previewing a nonsense domain.
     const opened = previewRef.current?.open(domain) ?? false;
     setInvalid(!opened);
+    // One event with a `valid` flag rather than two names, so the invalid rate is
+    // a single FILTER instead of a second name to keep in sync everywhere. The raw
+    // string is only kept when it parsed as a domain — a failed submit is often a
+    // mistyped email, which we have no reason to store.
+    trackLanding("hero_domain_submitted", {
+      valid: opened,
+      ...(opened ? { domain: domain.trim() } : {}),
+    });
   }
 
   return (

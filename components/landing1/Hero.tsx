@@ -7,6 +7,7 @@ import { LogoMark } from "@/components/landing1/ui/Logo";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
 import PersonalizedNote from "@/components/landing1/ui/PersonalizedNote";
 import { useAppUrl } from "@/lib/useAppUrl";
+import { trackLandingAndFlush } from "@/components/landing/track";
 
 const container = {
   hidden: {},
@@ -185,6 +186,12 @@ function RankCheckerForm({ ctaButton, signupHref }: { ctaButton: string; signupH
       </div>
       <a
         href={signupHref}
+                onClick={(e) =>
+                  trackLandingAndFlush("signup_cta_click", {
+                    placement: "hero_landing1",
+                    href: e.currentTarget.getAttribute("href"),
+                  })
+                }
         className="group mt-5 flex items-center justify-center gap-1.5 rounded-full bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)]"
       >
         {ctaButton}

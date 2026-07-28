@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import { useAppUrl } from "@/lib/useAppUrl";
+import { trackLandingAndFlush } from "@/components/landing/track";
 
 type HeaderDict = {
   getStarted: string;
@@ -45,6 +46,12 @@ export default function Header({ dict }: { dict: HeaderDict }) {
               </a>
               <a
                 href={appUrl("/signup")}
+                onClick={(e) =>
+                  trackLandingAndFlush("signup_cta_click", {
+                    placement: "header_desktop",
+                    href: e.currentTarget.getAttribute("href"),
+                  })
+                }
                 className="group flex shrink-0 items-center gap-1.5 rounded-full bg-[#0b1020] px-[22px] py-3 text-[14.5px] font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent hover:shadow-[0_10px_30px_-8px_rgba(47,107,255,0.6)]"
               >
                 {dict.getStarted}
@@ -62,6 +69,12 @@ export default function Header({ dict }: { dict: HeaderDict }) {
           >
             <a
               href={appUrl("/signup")}
+              onClick={(e) =>
+                trackLandingAndFlush("signup_cta_click", {
+                  placement: "header_mobile",
+                  href: e.currentTarget.getAttribute("href"),
+                })
+              }
               className="group flex items-center justify-center gap-1.5 rounded-full bg-[#0b1020] px-4 py-3 text-[14px] font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent hover:shadow-[0_10px_30px_-8px_rgba(47,107,255,0.6)]"
             >
               {dict.tryFree}
