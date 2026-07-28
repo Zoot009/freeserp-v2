@@ -45,7 +45,10 @@ function WaveformBackdrop() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -inset-y-10 left-1/2 z-0 flex w-screen -translate-x-1/2 gap-[3px] overflow-hidden sm:-inset-y-14"
+      /* hidden on phones: this is 90 gradient bars painting behind the demo
+         card, purely decorative, and the extra DOM + paint is a real cost on a
+         weak mobile GPU for something a small screen barely shows. */
+      className="pointer-events-none absolute -inset-y-10 left-1/2 z-0 hidden w-screen -translate-x-1/2 gap-[3px] overflow-hidden sm:-inset-y-14 sm:flex"
     >
       {WAVEFORM_BARS.map((_, i) => (
         <span
