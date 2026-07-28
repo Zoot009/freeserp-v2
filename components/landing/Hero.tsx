@@ -101,6 +101,8 @@ export default function Hero({
   const [error, setError] = useState<null | "format" | "notfound">(null);
   const [checking, setChecking] = useState(false);
   const previewRef = useRef<PreviewController | null>(null);
+  // One form_start per page load, not per keystroke.
+  const formStartedRef = useRef(false);
 
   // Every exit from this function emits exactly one hero_domain_submitted, with a
   // `valid` flag and a `reason` rather than three separate event names — the
@@ -196,6 +198,15 @@ export default function Hero({
             <input
               value={domain}
               onChange={(e) => {
+                // Form start = the first keystroke, fired once per page load.
+                // Focus would be noisier (tab-through, autofocus, a stray tap all
+                // count as focus without intent); typing is the earliest point the
+                // visitor has actually committed to the form. The gap between this
+                // and hero_domain_submitted is the abandonment we care about.
+                if (!formStartedRef.current) {
+                  formStartedRef.current = true;
+                  trackLanding("form_start", { form: "hero_domain" });
+                }
                 setDomain(e.target.value);
                 if (error) setError(null);
               }}
