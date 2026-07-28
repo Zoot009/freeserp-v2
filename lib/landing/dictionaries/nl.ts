@@ -22,6 +22,8 @@ const nl: Dictionary = {
     demoAlt:
       "FreeSerp productdemo: een domein en zoekwoord invoeren om zoekresultaten te controleren",
     invalidDomain: "Voer een domein in zoals voorbeeld.com om je voorbeeld te zien",
+    notFound: "We konden dat domein niet vinden — controleer de spelling en probeer opnieuw",
+    checking: "Controleren…",
   },
   preview: {
     loadingAria: "Voorbeeld van je dashboard wordt geladen",
@@ -38,10 +40,9 @@ const nl: Dictionary = {
     language: "Nederlands",
     statSeoScore: "SEO-score",
     statSeoScoreSub: "gem. zoekwoordscore",
+    statSeoScoreReal: "live score van je homepage",
     statKeywords: "Gevolgde zoekwoorden",
     statKeywordsSub: "{count} in top 3",
-    statAvgPosition: "Gem. positie",
-    statAvgPositionSub: "{count} gerangschikt",
     statTop3: "Top 3-zoekwoorden",
     statTop10: "In top 10",
     statTraffic: "Gesch. verkeer",
@@ -56,7 +57,6 @@ const nl: Dictionary = {
     deviceMobile: "Mobiel ({count})",
     colKeyword: "Zoekwoord",
     colPosition: "Positie",
-    colFirstCheck: "Eerste controle",
     colVolume: "Volume",
     colUrl: "URL",
     colScores: "P.S / K.S",
@@ -71,6 +71,7 @@ const nl: Dictionary = {
     competitorsTitle: "Concurrenten",
     addCompetitor: "+ Concurrent toevoegen",
     competitorAvg: "gem. positie #{pos}",
+    competitorPos: "positie #{pos}",
     hintClick: "Bijna klaar — meld je aan om je posities te bekijken",
     modalTitle: "Je {domain}-dashboard is klaar",
     modalSubtitle:

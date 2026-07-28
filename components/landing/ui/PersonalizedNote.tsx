@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { hasExistingVisitorId, readPersistedUtm, readUtm } from "@/lib/utm";
 import { getVisitorCountry, countryDisplayName } from "@/lib/landing/geo";
 import { renderTemplate } from "@/lib/landing/template";
@@ -87,14 +86,5 @@ export default function PersonalizedNote({
   const main = countryName ? renderTemplate(dict.mainLocation, { country: countryName }) : dict.mainDefault;
   const text = lead ? `${lead} — ${main}` : capitalize(main);
 
-  return (
-    <motion.p
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="mt-3 text-sm font-semibold text-accent-dark"
-    >
-      {text}
-    </motion.p>
-  );
+  return <p className="mt-3 text-sm font-semibold text-accent-dark">{text}</p>;
 }

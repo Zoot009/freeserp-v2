@@ -17,6 +17,10 @@ export type Dictionary = {
     liveDemo: string;
     demoAlt: string;
     invalidDomain: string;
+    /** A well-formed domain that doesn't resolve — gibberish the user typed. */
+    notFound: string;
+    /** Button label while the domain's existence is being checked. */
+    checking: string;
   };
   /** Copy for the sample-dashboard preview shown after the hero's domain form. */
   preview: {
@@ -38,10 +42,9 @@ export type Dictionary = {
     // Stat strip
     statSeoScore: string;
     statSeoScoreSub: string;
+    statSeoScoreReal: string;
     statKeywords: string;
     statKeywordsSub: string;
-    statAvgPosition: string;
-    statAvgPositionSub: string;
     statTop3: string;
     statTop10: string;
     statTraffic: string;
@@ -57,7 +60,6 @@ export type Dictionary = {
     deviceMobile: string;
     colKeyword: string;
     colPosition: string;
-    colFirstCheck: string;
     colVolume: string;
     colUrl: string;
     colScores: string;
@@ -73,6 +75,7 @@ export type Dictionary = {
     competitorsTitle: string;
     addCompetitor: string;
     competitorAvg: string;
+    competitorPos: string;
     // Unlock — the table itself is the trigger, so it needs a visible affordance
     hintClick: string;
     modalTitle: string;

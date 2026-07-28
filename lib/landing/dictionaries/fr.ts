@@ -22,6 +22,8 @@ const fr: Dictionary = {
     demoAlt:
       "Démonstration FreeSerp : saisie d'un domaine et d'un mot-clé pour vérifier le classement dans les résultats de recherche",
     invalidDomain: "Saisissez un domaine comme exemple.com pour voir votre aperçu",
+    notFound: "Domaine introuvable — vérifiez l'orthographe et réessayez",
+    checking: "Vérification…",
   },
   preview: {
     loadingAria: "Chargement de l'aperçu de votre tableau de bord",
@@ -38,10 +40,9 @@ const fr: Dictionary = {
     language: "Français",
     statSeoScore: "Score SEO",
     statSeoScoreSub: "score moyen des mots-clés",
+    statSeoScoreReal: "score réel de votre page d'accueil",
     statKeywords: "Mots-clés suivis",
     statKeywordsSub: "{count} dans le top 3",
-    statAvgPosition: "Position moyenne",
-    statAvgPositionSub: "{count} positionnés",
     statTop3: "Mots-clés top 3",
     statTop10: "Dans le top 10",
     statTraffic: "Trafic est.",
@@ -56,7 +57,6 @@ const fr: Dictionary = {
     deviceMobile: "Mobile ({count})",
     colKeyword: "Mot-clé",
     colPosition: "Position",
-    colFirstCheck: "Premier contrôle",
     colVolume: "Volume",
     colUrl: "URL",
     colScores: "P.S / K.S",
@@ -71,6 +71,7 @@ const fr: Dictionary = {
     competitorsTitle: "Concurrents",
     addCompetitor: "+ Ajouter un concurrent",
     competitorAvg: "position moyenne #{pos}",
+    competitorPos: "position #{pos}",
     hintClick: "Presque fini — inscrivez-vous pour voir vos positions",
     modalTitle: "Votre tableau de bord {domain} est prêt",
     modalSubtitle:

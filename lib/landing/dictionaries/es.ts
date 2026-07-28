@@ -23,6 +23,8 @@ const es: Dictionary = {
     demoAlt:
       "Demostración de FreeSerp: ingresar un dominio y palabra clave para comprobar posiciones de búsqueda",
     invalidDomain: "Ingresa un dominio como ejemplo.com para ver tu vista previa",
+    notFound: "No encontramos ese dominio — revisa la ortografía e inténtalo de nuevo",
+    checking: "Comprobando…",
   },
   preview: {
     loadingAria: "Cargando la vista previa de tu panel",
@@ -39,10 +41,9 @@ const es: Dictionary = {
     language: "Español",
     statSeoScore: "Puntuación SEO",
     statSeoScoreSub: "puntuación media de palabras clave",
+    statSeoScoreReal: "puntuación real de tu página de inicio",
     statKeywords: "Palabras clave rastreadas",
     statKeywordsSub: "{count} en el top 3",
-    statAvgPosition: "Posición media",
-    statAvgPositionSub: "{count} posicionadas",
     statTop3: "Palabras clave top 3",
     statTop10: "En el top 10",
     statTraffic: "Tráfico est.",
@@ -57,7 +58,6 @@ const es: Dictionary = {
     deviceMobile: "Móvil ({count})",
     colKeyword: "Palabra clave",
     colPosition: "Posición",
-    colFirstCheck: "Primera revisión",
     colVolume: "Volumen",
     colUrl: "URL",
     colScores: "P.S / K.S",
@@ -72,6 +72,7 @@ const es: Dictionary = {
     competitorsTitle: "Competidores",
     addCompetitor: "+ Añadir competidor",
     competitorAvg: "posición media #{pos}",
+    competitorPos: "posición #{pos}",
     hintClick: "Casi listo — regístrate para ver tus posiciones",
     modalTitle: "Tu panel de {domain} está listo",
     modalSubtitle:

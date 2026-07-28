@@ -24,7 +24,7 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
       <div className="bg-noise relative overflow-hidden bg-[#0b1020] px-6 pt-24 pb-14 text-center text-white">
         <div
           aria-hidden
-          className="animate-aurora pointer-events-none absolute top-0 left-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(47,107,255,0.35),transparent)] blur-3xl"
+          className="pointer-events-none absolute top-0 left-1/2 h-[420px] w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(47,107,255,0.35),transparent)] blur-3xl"
         />
 
         <Reveal className="relative flex justify-center">
@@ -42,10 +42,6 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
         </Reveal>
         <Reveal delay={0.15}>
           <div className="relative mt-7.5 inline-flex">
-            <span
-              aria-hidden
-              className="animate-cta-pulse pointer-events-none absolute inset-0 rounded-full"
-            />
             <a
               href={appUrl("/signup")}
               onClick={(e) =>

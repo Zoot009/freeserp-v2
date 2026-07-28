@@ -103,7 +103,7 @@ export function InsideApp() {
       <SectionHead
         tag="INSIDE THE APP"
         title="Everything you need after the first check"
-        sub="The Free SERP Checker is the front door. Once you're tracking keywords, this is the dashboard that does the daily work for you."
+        sub="This is the front door. Once you're tracking keywords, this is the dashboard that does the daily work for you."
       />
 
       {/* Big: Rank Tracker */}

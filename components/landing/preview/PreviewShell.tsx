@@ -174,6 +174,10 @@ export default function PreviewShell({
             <div className="fsp-page-h">
               <div style={{ minWidth: 0 }}>
                 <span className="fsp-back">← {dict.allProjects}</span>
+                {/* Favicon + title + pencil share one centred row, so the
+                    favicon aligns to the title line rather than floating at the
+                    optical centre of the two-line block. The domain is indented
+                    below to sit under the title. */}
                 <div className="fsp-ident">
                   <span className="fsp-favicon">
                     {favicon ? (
@@ -183,27 +187,14 @@ export default function PreviewShell({
                       brand.charAt(0)
                     )}
                   </span>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span className="fsp-h1">{brand}</span>
-                      {/* 26x26 and borderless at .6 opacity — not the 34x34
-                          outlined default the other icon buttons use. */}
-                      <span
-                        style={{
-                          width: 26,
-                          height: 26,
-                          display: "grid",
-                          placeItems: "center",
-                          color: "var(--text-mute)",
-                          opacity: 0.6,
-                        }}
-                      >
-                        <Ic.pencil />
-                      </span>
-                    </div>
-                    <div className="fsp-domain">{domain}</div>
-                  </div>
+                  <span className="fsp-h1">{brand}</span>
+                  {/* 26x26 and borderless at .6 opacity — not the 34x34 outlined
+                      default the other icon buttons use. */}
+                  <span className="fsp-edit">
+                    <Ic.pencil />
+                  </span>
                 </div>
+                <div className="fsp-domain">{domain}</div>
               </div>
 
               <div className="fsp-actions-col" aria-hidden>

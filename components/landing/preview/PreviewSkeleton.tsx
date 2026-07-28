@@ -50,9 +50,8 @@ function Slot({ h, children }: { h: number; children: React.ReactNode }) {
 // Per-cell label and footnote widths — varied so the strip doesn't read as a
 // row of identical stamps. Order matches the real strip's eight cells.
 const CELLS: { label: number; foot: number | null }[] = [
-  { label: 68, foot: 84 }, // SEO Score
+  { label: 68, foot: 84 }, // SEO Score — carries the gauge
   { label: 100, foot: 76 }, // Keywords tracked
-  { label: 88, foot: 92 }, // Avg. position
   { label: 96, foot: 34 }, // Top 3
   { label: 66, foot: 34 }, // In top 10
   { label: 78, foot: 96 }, // Est. traffic
@@ -60,9 +59,12 @@ const CELLS: { label: number; foot: number | null }[] = [
   { label: 66, foot: 62 }, // Backlinks
 ];
 
+/** Index of the Domain Authority cell — the one that draws a meter. */
+const METER_CELL = 5;
+
 // Header bar widths only — the column TRACKS come from the shared <Cols/>, so
 // the skeleton and the filled table are guaranteed to size identically.
-const TH_BARS = [66, 62, 78, 52, 30, 74, 84, 60];
+const TH_BARS = [66, 62, 52, 30, 74, 84, 60];
 
 // Four rows, because previewData builds exactly four keywords. The last is the
 // unranked one, whose "100+" badge is wider and whose URL is an em dash.
@@ -83,7 +85,7 @@ export default function PreviewSkeleton() {
             <Slot h={17}>
               <B w={c.label} h={9} />
             </Slot>
-            {i === 6 ? (
+            {i === METER_CELL ? (
               <>
                 {/* Domain authority: value + "/ 100" suffix, then the meter bar */}
                 <Slot h={28}>
@@ -202,20 +204,15 @@ export default function PreviewSkeleton() {
                       <B w={13} h={13} r={3} />
                     </td>
                     <td>
-                      {/* The flag slot is reserved in BOTH states — geo resolves
-                          async, and inserting the emoji later would shove the
-                          keyword text sideways. */}
+                      {/* No flag placeholder: the filled row only draws a flag
+                          when geo actually resolved, so reserving space here
+                          would make the keyword jump left on swap. */}
                       <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <B w={16} h={16} r={999} style={{ minWidth: 18 }} />
                         <B w={r.kw} h={11} r={5} />
                       </span>
                     </td>
-                    {/* 30px tall in both columns — this block is what sets the
-                        55px row height, so it must never shrink for the
-                        unranked rows. */}
-                    <td>
-                      <B w={r.pos} h={30} r={8} />
-                    </td>
+                    {/* 30px tall — this block is what sets the 55px row height,
+                        so it must never shrink for the unranked rows. */}
                     <td>
                       <B w={r.pos} h={30} r={8} />
                     </td>

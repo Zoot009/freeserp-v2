@@ -22,6 +22,8 @@ const en: Dictionary = {
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",
     invalidDomain: "Enter a domain like example.com to see your preview",
+    notFound: "We couldn't find that domain — check the spelling and try again",
+    checking: "Checking…",
   },
   preview: {
     loadingAria: "Loading your dashboard preview",
@@ -38,10 +40,9 @@ const en: Dictionary = {
     language: "English",
     statSeoScore: "SEO Score",
     statSeoScoreSub: "avg. keyword score",
+    statSeoScoreReal: "",
     statKeywords: "Keywords tracked",
     statKeywordsSub: "{count} in top 3",
-    statAvgPosition: "Avg. position",
-    statAvgPositionSub: "{count} ranked",
     statTop3: "Top 3 keywords",
     statTop10: "In top 10",
     statTraffic: "Est. traffic",
@@ -56,7 +57,6 @@ const en: Dictionary = {
     deviceMobile: "Mobile ({count})",
     colKeyword: "Keyword",
     colPosition: "Position",
-    colFirstCheck: "First check",
     colVolume: "Volume",
     colUrl: "URL",
     colScores: "P.S / K.S",
@@ -71,6 +71,7 @@ const en: Dictionary = {
     competitorsTitle: "Competitors",
     addCompetitor: "+ Add competitor",
     competitorAvg: "avg position #{pos}",
+    competitorPos: "ranks #{pos}",
     hintClick: "Almost there — sign up to view your rankings",
     modalTitle: "Your {domain} dashboard is ready",
     modalSubtitle:
@@ -81,7 +82,7 @@ const en: Dictionary = {
     modalCta: "Sign up free to unlock",
     modalNote: "Free forever · No credit card required",
     modalDismiss: "Keep looking around",
-    modalDisclosure: "Preview shown with sample data. Your real rankings are checked after sign-up.",
+    modalDisclosure: "",
   },
   logoStrip: {
     trustLine: "2M+ marketers already track with FreeSERP",

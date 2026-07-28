@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { LogoMark } from "@/components/landing1/ui/Logo";
 import { POPULAR_LOCATIONS, ALL_LOCATIONS } from "@/components/site/locations";
 import PersonalizedNote from "@/components/landing1/ui/PersonalizedNote";
+import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { trackLandingAndFlush } from "@/components/landing/track";
 
@@ -75,14 +76,8 @@ function TiltCard({ liveDemo, demoAlt }: { liveDemo: string; demoAlt: string }) 
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#1fc79a]" />
             {liveDemo}
           </span>
-          {/* eslint-disable-next-line @next/next/no-img-element -- animated GIF must stay unoptimized to keep playing */}
-          <img
-            src="/freeserpchecker.gif"
-            alt={demoAlt}
-            width={900}
-            height={500}
-            className="block h-auto w-full"
-          />
+          {/* Loaded only once it scrolls near — see LazyDemoVideo. */}
+          <LazyDemoVideo label={demoAlt} className="block h-auto w-full" />
         </div>
       </div>
     </motion.div>

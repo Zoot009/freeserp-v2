@@ -1,10 +1,17 @@
 "use client";
 
+// The replica dashboard's styles, imported HERE rather than in the landing
+// layout so they load lazily with this dynamically-imported component instead of
+// render-blocking every landing page paint. Everything under it (skeleton,
+// dashboard, modal) shares these .fsp-* rules.
+import "@/app/landing/preview.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { buildPreview, normalizeDomain, type PreviewData } from "@/lib/landing/previewData";
 import { savePendingDomain } from "@/lib/landing/pendingDomain";
 import { getVisitorCountry } from "@/lib/landing/geo";
+import { fetchPageScore, type PageScore } from "@/lib/landing/pageScore";
+import { fetchRealRank, type RealRank } from "@/lib/landing/rank";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { trackLanding } from "@/components/landing/track";
 import PreviewShell from "./PreviewShell";
@@ -40,11 +47,13 @@ export const PREVIEW_PARAM = "domain";
  *               blur pop in one by one at scattered moments — through the blur
  *               that reads as a crawl progressively filling the dashboard.
  *               Nothing is ever legible.
- *   locked   -> the fill has played out; the centred prompt appears and the
- *               table becomes the click-to-unlock trigger
+ *   locked   -> the fill has played out; the data blurs and the unlock card
+ *               opens over it
  *
- * The unlock card itself opens on CLICK (state `unlocked`), never on a timer —
- * a prompt that covers the dashboard uninvited hides the thing it is selling.
+ * The card opens at the END of the sequence rather than on arrival: by then the
+ * visitor has watched the dashboard fill in, so the prompt lands on something
+ * they already want instead of covering it before they have seen it. Dismissing
+ * it leaves the blurred dashboard, and clicking the data reopens it.
  */
 const HOLD_MS = 2400;
 /**
@@ -57,9 +66,15 @@ const FILL_MS = 6200;
 
 type Phase = "skeleton" | "reveal" | "locked";
 
+/** Lifecycle of a slot backed by a live lookup. */
+export type LiveStatus = "loading" | "ready" | "unavailable";
+
 export type PreviewOverlayDict = PreviewDict;
 
 export type PreviewController = {
+  /** Format-only check: is this a plausible host? No side effects. */
+  canOpen: (rawDomain: string) => boolean;
+  /** Open the preview. Returns false if the input wasn't a plausible host. */
   open: (rawDomain: string) => boolean;
 };
 
@@ -87,6 +102,17 @@ export default function PreviewOverlay({
   const [flag, setFlag] = useState<string | null>(null);
   const [checkedAt, setCheckedAt] = useState("");
   const [favicon, setFavicon] = useState<string | null>(null);
+  // The one genuinely measured figure. Null until the audit lands — or forever,
+  // if it can't be had, in which case the sample score stays.
+  // Three states, not two. A slot backed by a live lookup must never show
+  // blurred SAMPLE data while that lookup is in flight — it would flash a fake
+  // number and then replace it with the real one. While loading it shows a
+  // shimmer; only a lookup that actually failed falls back to the sample.
+  const [pageScore, setPageScore] = useState<PageScore | null>(null);
+  const [scoreStatus, setScoreStatus] = useState<LiveStatus>("loading");
+  const [realRank, setRealRank] = useState<RealRank | null>(null);
+  const [rankStatus, setRankStatus] = useState<LiveStatus>("loading");
+  const scoreAbortRef = useRef<AbortController | null>(null);
   const appUrl = useAppUrl();
 
   // Whether WE pushed the history entry. Determines how close() unwinds: a
@@ -138,6 +164,7 @@ export default function PreviewOverlay({
     url.searchParams.delete(PREVIEW_PARAM);
     window.history.replaceState(null, "", url.pathname + url.search + url.hash);
     clearTimers();
+    scoreAbortRef.current?.abort();
     setData(null);
     setPhase("skeleton");
   }, [clearTimers, emitClosed]);
@@ -152,6 +179,16 @@ export default function PreviewOverlay({
       setUnlocked(false);
       setFlag(null);
       setFavicon(null);
+      setPageScore(null);
+      setScoreStatus("loading");
+      setRealRank(null);
+      setRankStatus("loading");
+
+      // One abort for every live lookup this preview starts, so closing it (or
+      // opening another domain) stops work nobody will see.
+      scoreAbortRef.current?.abort();
+      const scoreAbort = new AbortController();
+      scoreAbortRef.current = scoreAbort;
 
       // `push` distinguishes the two ways in: true = the hero form was submitted,
       // false = the preview was restored from ?domain= (shared link, reload, or a
@@ -170,7 +207,28 @@ export default function PreviewOverlay({
       setCheckedAt(
         new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" }).format(new Date()),
       );
-      void getVisitorCountry().then((code) => setFlag(flagOf(code)));
+      // Geo first: the flag column and the SERP country come from the same
+      // answer, so the rank we measure matches the flag we draw beside it.
+      void getVisitorCountry().then((code) => {
+        if (scoreAbort.signal.aborted) return;
+        setFlag(flagOf(code));
+        void fetchRealRank(preview.domain, code, scoreAbort.signal).then((rank) => {
+          if (scoreAbort.signal.aborted) return;
+          setRealRank(rank);
+          setRankStatus(rank ? "ready" : "unavailable");
+        });
+      });
+
+      // Kick the real audit off HERE, at the top of the skeleton, so it has the
+      // whole loading sequence to complete. Cached domains come back instantly;
+      // an uncached one takes a few seconds and lands mid-crawl, which is
+      // exactly when a real number arriving looks right. If it never arrives,
+      // the sample score simply stays.
+      void fetchPageScore(preview.domain, scoreAbort.signal).then((real) => {
+        if (scoreAbort.signal.aborted) return;
+        setPageScore(real);
+        setScoreStatus(real ? "ready" : "unavailable");
+      });
 
       const iconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(preview.domain)}&sz=64`;
       const img = new Image();
@@ -181,8 +239,19 @@ export default function PreviewOverlay({
       clearTimers();
       timersRef.current.push(
         setTimeout(() => setPhase("reveal"), HOLD_MS),
+        // The crawl finishing is the moment to ask: the dashboard has been seen
+        // filling in, so the card lands on a page the visitor already wants.
+        // Dismissing it leaves the blurred dashboard, and clicking the data
+        // brings the card back — see `armed` in PreviewDashboard.
         setTimeout(() => {
           setPhase("locked");
+          setUnlocked(true);
+          // The card now opens on its own here, so this — not a click — is what
+          // makes the unlock prompt seen. unlockShown therefore means "reached
+          // the end of the sequence", which is also exactly what preview_locked
+          // records; it stays on preview_closed so the close event alone tells
+          // you whether the visitor ever got as far as the ask.
+          unlockShownRef.current = true;
           // No dwellMs here: reaching `locked` is a fixed HOLD_MS + FILL_MS timer,
           // so the duration would be the same constant on every row. The event
           // firing at all is the signal — the visitor sat through the whole hold
@@ -203,7 +272,10 @@ export default function PreviewOverlay({
   );
 
   useEffect(() => {
-    controllerRef.current = { open: (raw) => start(raw, true) };
+    controllerRef.current = {
+      canOpen: (raw) => normalizeDomain(raw) != null,
+      open: (raw) => start(raw, true),
+    };
   }, [controllerRef, start]);
 
   useEffect(() => clearTimers, [clearTimers]);
@@ -318,13 +390,20 @@ export default function PreviewOverlay({
                   dict={dict}
                   flag={flag}
                   checkedAt={checkedAt}
+                  pageScore={pageScore}
+                  scoreStatus={scoreStatus}
+                  realRank={realRank}
+                  rankStatus={rankStatus}
                   locked={phase === "locked"}
                   unlockOpen={unlocked}
-                  // Wrapped here rather than in PreviewDashboard so the click and
-                  // the keyboard (Enter/Space) paths are both covered by one edit.
+                  // Now that the card opens itself at `locked`, this path is only
+                  // reached by a visitor who DISMISSED it and then clicked the
+                  // blurred data to bring it back — a stronger signal than the
+                  // automatic open, so it keeps its own event. Wrapped here rather
+                  // than in PreviewDashboard so the click and the keyboard
+                  // (Enter/Space) paths are both covered by one edit.
                   onRequestUnlock={() => {
-                    unlockShownRef.current = true;
-                    trackLanding("preview_unlock_requested", {
+                    trackLanding("preview_unlock_reopened", {
                       domain: data.domain,
                       dwellMs: openRef.current ? Date.now() - openRef.current.openedAt : undefined,
                     });
