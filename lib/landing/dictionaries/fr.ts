@@ -22,6 +22,8 @@ const fr: Dictionary = {
     demoAlt:
       "Démonstration FreeSerp : saisie d'un domaine et d'un mot-clé pour vérifier le classement dans les résultats de recherche",
     invalidDomain: "Saisissez un domaine comme exemple.com pour voir votre aperçu",
+    notFound: "Domaine introuvable — vérifiez l'orthographe et réessayez",
+    checking: "Vérification…",
   },
   preview: {
     loadingAria: "Chargement de l'aperçu de votre tableau de bord",

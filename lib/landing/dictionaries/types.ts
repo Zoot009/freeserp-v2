@@ -17,6 +17,10 @@ export type Dictionary = {
     liveDemo: string;
     demoAlt: string;
     invalidDomain: string;
+    /** A well-formed domain that doesn't resolve — gibberish the user typed. */
+    notFound: string;
+    /** Button label while the domain's existence is being checked. */
+    checking: string;
   };
   /** Copy for the sample-dashboard preview shown after the hero's domain form. */
   preview: {

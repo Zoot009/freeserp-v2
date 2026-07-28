@@ -23,6 +23,8 @@ const es: Dictionary = {
     demoAlt:
       "Demostración de FreeSerp: ingresar un dominio y palabra clave para comprobar posiciones de búsqueda",
     invalidDomain: "Ingresa un dominio como ejemplo.com para ver tu vista previa",
+    notFound: "No encontramos ese dominio — revisa la ortografía e inténtalo de nuevo",
+    checking: "Comprobando…",
   },
   preview: {
     loadingAria: "Cargando la vista previa de tu panel",

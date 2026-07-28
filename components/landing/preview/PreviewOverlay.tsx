@@ -39,6 +39,9 @@ export type LiveStatus = "loading" | "ready" | "unavailable";
 export type PreviewOverlayDict = PreviewDict;
 
 export type PreviewController = {
+  /** Format-only check: is this a plausible host? No side effects. */
+  canOpen: (rawDomain: string) => boolean;
+  /** Open the preview. Returns false if the input wasn't a plausible host. */
   open: (rawDomain: string) => boolean;
 };
 
@@ -160,7 +163,10 @@ export default function PreviewOverlay({
   );
 
   useEffect(() => {
-    controllerRef.current = { open: (raw) => start(raw, true) };
+    controllerRef.current = {
+      canOpen: (raw) => normalizeDomain(raw) != null,
+      open: (raw) => start(raw, true),
+    };
   }, [controllerRef, start]);
 
   // Arriving with ?domain= already set (shared link, reload, or a back-forward

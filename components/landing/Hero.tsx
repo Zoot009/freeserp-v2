@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Loader2, Search } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
+import { domainExists } from "@/lib/landing/domainCheck";
 import PreviewOverlay, {
   type PreviewController,
   type PreviewOverlayDict,
@@ -19,6 +20,8 @@ type HeroDict = {
   liveDemo: string;
   demoAlt: string;
   invalidDomain: string;
+  notFound: string;
+  checking: string;
 };
 
 type PersonalizationDict = {
@@ -83,16 +86,39 @@ export default function Hero({
   locale: string;
 }) {
   const [domain, setDomain] = useState("");
-  const [invalid, setInvalid] = useState(false);
+  // "format" — not a plausible host at all (a typo like "hello world").
+  // "notfound" — a well-formed domain that does not resolve in DNS (gibberish).
+  const [error, setError] = useState<null | "format" | "notfound">(null);
+  const [checking, setChecking] = useState(false);
   const previewRef = useRef<PreviewController | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // open() returns false for anything that isn't a plausible host, so a typo
-    // shows an inline hint instead of previewing a nonsense domain.
-    const opened = previewRef.current?.open(domain) ?? false;
-    setInvalid(!opened);
+    if (checking) return;
+
+    // 1. Format gate (instant, offline). tryOpen returns false for anything that
+    //    isn't a plausible host, so a typo shows a hint without a round-trip.
+    if (!previewRef.current?.canOpen(domain)) {
+      setError("format");
+      return;
+    }
+
+    // 2. Existence gate: a well-formed domain still has to be a real, resolvable
+    //    site. domainExists fails OPEN, so a backend hiccup never blocks a real
+    //    visitor — only a definitive "does not resolve" is turned away.
+    setError(null);
+    setChecking(true);
+    const exists = await domainExists(domain);
+    setChecking(false);
+    if (!exists) {
+      setError("notfound");
+      return;
+    }
+    previewRef.current?.open(domain);
   }
+
+  const message =
+    error === "format" ? dict.invalidDomain : error === "notfound" ? dict.notFound : dict.disclaimer;
 
   return (
     <section
@@ -146,7 +172,7 @@ export default function Hero({
               value={domain}
               onChange={(e) => {
                 setDomain(e.target.value);
-                if (invalid) setInvalid(false);
+                if (error) setError(null);
               }}
               // type="text", not "url": people type "site.com", which a url input
               // rejects for lacking a scheme. normalizeDomain does the validating.
@@ -154,7 +180,7 @@ export default function Hero({
               inputMode="url"
               autoComplete="url"
               spellCheck={false}
-              aria-invalid={invalid}
+              aria-invalid={!!error}
               aria-label={dict.inputPlaceholder}
               placeholder={dict.inputPlaceholder}
               className="w-full rounded-[100px] border-none bg-transparent py-4.5 font-[family-name:var(--font-jakarta)] text-base text-[#0b1020] outline-none placeholder:text-[#9aa2b5]"
@@ -162,17 +188,27 @@ export default function Hero({
           </div>
           <button
             type="submit"
-            className="group flex items-center justify-center gap-1.5 rounded-[100px] bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)]"
+            disabled={checking}
+            className="group flex items-center justify-center gap-1.5 rounded-[100px] bg-accent px-8 py-4 text-base font-bold whitespace-nowrap text-white transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_16px_40px_-12px_rgba(47,107,255,0.65)] disabled:cursor-wait disabled:opacity-80"
           >
-            {dict.ctaButton}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            {checking ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {dict.checking}
+              </>
+            ) : (
+              <>
+                {dict.ctaButton}
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </>
+            )}
           </button>
         </form>
         <p
-          className={`mt-5 text-sm ${invalid ? "font-semibold text-[#c02626]" : "text-[#6b7286]"}`}
-          role={invalid ? "alert" : undefined}
+          className={`mt-5 text-sm ${error ? "font-semibold text-[#c02626]" : "text-[#6b7286]"}`}
+          role={error ? "alert" : undefined}
         >
-          {invalid ? dict.invalidDomain : dict.disclaimer}
+          {message}
         </p>
         <PersonalizedNote dict={personalization} locale={locale} />
 
