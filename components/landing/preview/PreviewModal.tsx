@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Ic } from "./icons";
 import { renderTemplate } from "@/lib/landing/template";
+import { trackLandingAndFlush } from "@/components/landing/track";
 import type { PreviewDict } from "./PreviewDashboard";
 
 /**
@@ -77,7 +78,17 @@ export default function PreviewModal({
           ))}
         </div>
 
-        <a className="fsp-cta" href={signupHref}>
+        <a
+          className="fsp-cta"
+          href={signupHref}
+          onClick={() =>
+            trackLandingAndFlush("signup_cta_click", {
+              placement: "preview_modal",
+              href: signupHref,
+              domain,
+            })
+          }
+        >
           {dict.modalCta}
           <Ic.arrowR size={15} />
         </a>

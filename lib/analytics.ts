@@ -46,7 +46,8 @@ let pageMaxScrollPct = 0
 let engagementPath = typeof window !== "undefined" ? window.location.pathname : ""
 let scrollTicking = false
 
-function getSessionId(): string {
+// Exported so lib/replay.ts can tag its rrweb chunks with the same session id.
+export function getSessionId(): string {
   if (typeof window === "undefined") return ""
   try {
     let id = sessionStorage.getItem(SESSION_ID_KEY)

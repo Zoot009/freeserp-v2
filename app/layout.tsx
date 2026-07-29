@@ -3,6 +3,8 @@ import { Suspense } from "react";
 import { Archivo, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { UtmCapture } from "@/components/site/UtmCapture";
+import { SessionReplay } from "@/components/site/SessionReplay";
+import { CookieNotice } from "@/components/site/CookieNotice";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -122,6 +124,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <Suspense fallback={null}>
           <UtmCapture />
         </Suspense>
+        <SessionReplay />
+        <CookieNotice />
         {/* gtag.js — single loader, multiple config() calls for both the
             Google Ads (AW-) and Google Analytics 4 (G-) tags. This is Google's
             recommended pattern when running more than one tag on a page. */}

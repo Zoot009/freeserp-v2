@@ -13,6 +13,7 @@ import { getVisitorCountry } from "@/lib/landing/geo";
 import { fetchPageScore, type PageScore } from "@/lib/landing/pageScore";
 import { fetchRealRank, type RealRank } from "@/lib/landing/rank";
 import { useAppUrl } from "@/lib/useAppUrl";
+import { trackLanding } from "@/components/landing/track";
 import PreviewShell from "./PreviewShell";
 import PreviewSkeleton from "./PreviewSkeleton";
 import PreviewModal from "./PreviewModal";
@@ -130,12 +131,40 @@ export default function PreviewOverlay({
   const pushedRef = useRef(false);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
+  // Open preview being measured: domain + when it opened. Also acts as the
+  // "already reported closed" latch — emitClosed() nulls it, so the two paths
+  // that can both run for one dismissal (close() calling history.back(), then the
+  // popstate handler it triggers) emit exactly one preview_closed between them.
+  const openRef = useRef<{ domain: string; openedAt: number } | null>(null);
+  const unlockShownRef = useRef(false);
+  // close() and the popstate handler are stable callbacks that must not re-create
+  // on every phase change, so the phase they report is mirrored into a ref.
+  const phaseRef = useRef<Phase>("skeleton");
+
+  useEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
+
   const clearTimers = useCallback(() => {
     timersRef.current.forEach(clearTimeout);
     timersRef.current = [];
   }, []);
 
+  // Idempotent: a second call for the same dismissal is a no-op.
+  const emitClosed = useCallback(() => {
+    const open = openRef.current;
+    if (!open) return;
+    openRef.current = null;
+    trackLanding("preview_closed", {
+      domain: open.domain,
+      phase: phaseRef.current,
+      dwellMs: Date.now() - open.openedAt,
+      unlockShown: unlockShownRef.current,
+    });
+  }, []);
+
   const close = useCallback(() => {
+    emitClosed();
     if (pushedRef.current) {
       pushedRef.current = false;
       window.history.back(); // fires popstate, which clears state below
@@ -148,7 +177,7 @@ export default function PreviewOverlay({
     scoreAbortRef.current?.abort();
     setData(null);
     setPhase("skeleton");
-  }, [clearTimers]);
+  }, [clearTimers, emitClosed]);
 
   const start = useCallback(
     (rawDomain: string, push: boolean) => {
@@ -171,6 +200,14 @@ export default function PreviewOverlay({
       scoreAbortRef.current?.abort();
       const scoreAbort = new AbortController();
       scoreAbortRef.current = scoreAbort;
+
+      // `push` distinguishes the two ways in: true = the hero form was submitted,
+      // false = the preview was restored from ?domain= (shared link, reload, or a
+      // back-forward into it). Without it, restores would inflate hero conversion.
+      phaseRef.current = "skeleton";
+      unlockShownRef.current = false;
+      openRef.current = { domain: preview.domain, openedAt: Date.now() };
+      trackLanding("preview_opened", { domain: preview.domain, source: push ? "submit" : "url" });
 
       // Saved as soon as the preview opens, not at CTA click: a visitor who
       // browses away and signs up days later should still land in a project
@@ -218,6 +255,12 @@ export default function PreviewOverlay({
         setTimeout(() => {
           setPhase("locked");
           setScanning(true);
+          // Reaching `locked` = the visitor sat through the whole HOLD_MS +
+          // FILL_MS crawl, the single biggest drop-off on the page. No dwellMs:
+          // it is a fixed timer, so the event firing at all is the signal. Fires
+          // as the data locks and the scan beat starts — not when the card rises,
+          // which is now SCAN_MS behind it.
+          trackLanding("preview_locked", { domain: preview.domain });
         }, HOLD_MS + FILL_MS),
         // The beat is done, so the card rises — the dashboard has been seen
         // filling in and the scan has visibly completed, so the ask lands on a
@@ -226,6 +269,10 @@ export default function PreviewOverlay({
         setTimeout(() => {
           setScanning(false);
           setUnlocked(true);
+          // The card opens on its own here — this, not a click, is what makes the
+          // unlock prompt seen, so unlockShown flips as it rises. preview_closed
+          // reports it, so a close event alone tells you if they reached the ask.
+          unlockShownRef.current = true;
         }, HOLD_MS + FILL_MS + SCAN_MS),
       );
 
@@ -265,6 +312,10 @@ export default function PreviewOverlay({
       if (domain && normalizeDomain(domain)) {
         start(domain, false);
       } else {
+        // Covers the browser Back button, which dismisses the preview without
+        // going through close(). When close() DID run it already emitted, and
+        // emitClosed() is a no-op the second time.
+        emitClosed();
         clearTimers();
         setData(null);
         setPhase("skeleton");
@@ -272,7 +323,7 @@ export default function PreviewOverlay({
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [start, clearTimers]);
+  }, [start, clearTimers, emitClosed]);
 
   // Lock the page behind the overlay so a scroll gesture moves the dashboard,
   // not the landing page underneath it.
@@ -362,7 +413,19 @@ export default function PreviewOverlay({
                   locked={phase === "locked"}
                   scanning={scanning}
                   unlockOpen={unlocked}
-                  onRequestUnlock={() => setUnlocked(true)}
+                  // Now that the card opens itself at `locked`, this path is only
+                  // reached by a visitor who DISMISSED it and then clicked the
+                  // blurred data to bring it back — a stronger signal than the
+                  // automatic open, so it keeps its own event. Wrapped here rather
+                  // than in PreviewDashboard so the click and the keyboard
+                  // (Enter/Space) paths are both covered by one edit.
+                  onRequestUnlock={() => {
+                    trackLanding("preview_unlock_reopened", {
+                      domain: data.domain,
+                      dwellMs: openRef.current ? Date.now() - openRef.current.openedAt : undefined,
+                    });
+                    setUnlocked(true);
+                  }}
                 >
                   <AnimatePresence>
                     {unlocked && (

@@ -8,6 +8,7 @@ import PersonalizedNote from "@/components/landing/ui/PersonalizedNote";
 import { domainExists } from "@/lib/landing/domainCheck";
 import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { normalizeDomain } from "@/lib/landing/previewData";
+import { trackLanding } from "@/components/landing/track";
 import type { PreviewController, PreviewOverlayDict } from "@/components/landing/preview/PreviewOverlay";
 
 // The preview overlay pulls in framer-motion and the entire replica dashboard —
@@ -100,7 +101,12 @@ export default function Hero({
   const [error, setError] = useState<null | "format" | "notfound">(null);
   const [checking, setChecking] = useState(false);
   const previewRef = useRef<PreviewController | null>(null);
+  // One form_start per page load, not per keystroke.
+  const formStartedRef = useRef(false);
 
+  // Every exit from this function emits exactly one hero_domain_submitted, with a
+  // `valid` flag and a `reason` rather than three separate event names — the
+  // failure rate stays a single FILTER instead of extra names to keep in sync.
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (checking) return;
@@ -110,6 +116,7 @@ export default function Hero({
     //    before the lazily-loaded preview chunk has finished streaming in.
     if (normalizeDomain(domain) == null) {
       setError("format");
+      trackLanding("hero_domain_submitted", { valid: false, reason: "format" });
       return;
     }
 
@@ -122,8 +129,18 @@ export default function Hero({
     setChecking(false);
     if (!exists) {
       setError("notfound");
+      // The domain is kept here but NOT on the "format" branch above: this one
+      // parsed as a host and merely failed to resolve, so it is a real signal
+      // (which non-existent domains people try). A format failure is often a
+      // mistyped email, which we have no reason to store.
+      trackLanding("hero_domain_submitted", {
+        valid: false,
+        reason: "notfound",
+        domain: domain.trim(),
+      });
       return;
     }
+    trackLanding("hero_domain_submitted", { valid: true, domain: domain.trim() });
     previewRef.current?.open(domain);
   }
 
@@ -181,6 +198,15 @@ export default function Hero({
             <input
               value={domain}
               onChange={(e) => {
+                // Form start = the first keystroke, fired once per page load.
+                // Focus would be noisier (tab-through, autofocus, a stray tap all
+                // count as focus without intent); typing is the earliest point the
+                // visitor has actually committed to the form. The gap between this
+                // and hero_domain_submitted is the abandonment we care about.
+                if (!formStartedRef.current) {
+                  formStartedRef.current = true;
+                  trackLanding("form_start", { form: "hero_domain" });
+                }
                 setDomain(e.target.value);
                 if (error) setError(null);
               }}

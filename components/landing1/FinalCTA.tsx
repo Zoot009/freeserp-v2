@@ -4,6 +4,7 @@ import { ArrowRight, Award } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/landing1/ui/Reveal";
 import { LogoMark } from "@/components/landing1/ui/Logo";
 import { useAppUrl } from "@/lib/useAppUrl";
+import { trackLandingAndFlush } from "@/components/landing/track";
 
 type FinalCtaDict = {
   heading: string;
@@ -47,6 +48,12 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
             />
             <a
               href={appUrl("/signup")}
+                onClick={(e) =>
+                  trackLandingAndFlush("signup_cta_click", {
+                    placement: "final_cta",
+                    href: e.currentTarget.getAttribute("href"),
+                  })
+                }
               className="group relative inline-flex items-center gap-2 rounded-full bg-accent px-9 py-[15px] text-base font-bold text-white shadow-[0_12px_28px_rgba(47,107,255,0.4)] transition-all duration-300 hover:bg-accent-dark hover:shadow-[0_18px_44px_-8px_rgba(47,107,255,0.65)]"
             >
               {dict.button}
