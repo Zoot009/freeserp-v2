@@ -84,6 +84,8 @@ const fr: Dictionary = {
     modalDismiss: "Continuer à explorer",
     modalDisclosure:
       "Aperçu affiché avec des données d'exemple. Vos positions réelles sont vérifiées après l'inscription.",
+    scanTitle: "Analyse terminée",
+    scanSub: "{domain} exploré",
   },
   logoStrip: {
     trustLine: "Plus de 2M de marketeurs font déjà confiance à FreeSERP",

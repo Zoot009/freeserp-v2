@@ -56,6 +56,13 @@ export const PREVIEW_PARAM = "domain";
  */
 const HOLD_MS = 2400;
 /**
+ * The "analysis complete" beat between the crawl finishing and the unlock card.
+ * A ring races to 100% with a checkmark and a sweep crosses the body, so the ask
+ * lands on a scan that visibly just completed. Long enough for the ring fill
+ * (~0.85s) + the checkmark pop to read, short enough not to stall the funnel.
+ */
+const SCAN_MS = 1300;
+/**
  * The crawl window. Rows land sequentially at ROW_MS (1.25s) apart with their
  * cells pacing left-to-right inside each row, and the rail summaries close it
  * out around 5.9s — long on purpose, because a check that visibly takes time
@@ -98,6 +105,9 @@ export default function PreviewOverlay({
   const [data, setData] = useState<PreviewData | null>(null);
   const [phase, setPhase] = useState<Phase>("skeleton");
   const [unlocked, setUnlocked] = useState(false);
+  // The brief "analysis complete" beat, between the crawl finishing and the
+  // unlock card rising. Distinct from `unlocked` so the card is not shown yet.
+  const [scanning, setScanning] = useState(false);
   const [flag, setFlag] = useState<string | null>(null);
   const [checkedAt, setCheckedAt] = useState("");
   const [favicon, setFavicon] = useState<string | null>(null);
@@ -148,6 +158,7 @@ export default function PreviewOverlay({
       setData(preview);
       setPhase("skeleton");
       setUnlocked(false);
+      setScanning(false);
       setFlag(null);
       setFavicon(null);
       setPageScore(null);
@@ -202,14 +213,20 @@ export default function PreviewOverlay({
       clearTimers();
       timersRef.current.push(
         setTimeout(() => setPhase("reveal"), HOLD_MS),
-        // The crawl finishing is the moment to ask: the dashboard has been seen
-        // filling in, so the card lands on a page the visitor already wants.
-        // Dismissing it leaves the blurred dashboard, and clicking the data
-        // brings the card back — see `armed` in PreviewDashboard.
+        // The crawl finishes: lock the data and play the "analysis complete"
+        // beat (ring to 100% + checkmark + sweep) BEFORE the card.
         setTimeout(() => {
           setPhase("locked");
-          setUnlocked(true);
+          setScanning(true);
         }, HOLD_MS + FILL_MS),
+        // The beat is done, so the card rises — the dashboard has been seen
+        // filling in and the scan has visibly completed, so the ask lands on a
+        // page the visitor already wants. Dismissing it leaves the blurred
+        // dashboard, and clicking the data brings the card back (see `armed`).
+        setTimeout(() => {
+          setScanning(false);
+          setUnlocked(true);
+        }, HOLD_MS + FILL_MS + SCAN_MS),
       );
 
       if (push) {
@@ -343,6 +360,7 @@ export default function PreviewOverlay({
                   realRank={realRank}
                   rankStatus={rankStatus}
                   locked={phase === "locked"}
+                  scanning={scanning}
                   unlockOpen={unlocked}
                   onRequestUnlock={() => setUnlocked(true)}
                 >

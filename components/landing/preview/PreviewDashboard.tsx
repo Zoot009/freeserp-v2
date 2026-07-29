@@ -1,8 +1,10 @@
 "use client";
 
+import { AnimatePresence } from "framer-motion";
 import { Ic, ScoreGauge } from "./icons";
 import { renderTemplate } from "@/lib/landing/template";
 import { compactNumber, type PreviewData } from "@/lib/landing/previewData";
+import PreviewScanComplete from "./PreviewScanComplete";
 
 /**
  * The filled dashboard body — stat strip, insight rail, and the rank-tracking
@@ -89,6 +91,9 @@ export type PreviewDict = {
   modalNote: string;
   modalDismiss: string;
   modalDisclosure: string;
+  // Scan-complete beat
+  scanTitle: string;
+  scanSub: string;
 };
 
 /**
@@ -496,6 +501,7 @@ export default function PreviewDashboard({
   realRank,
   rankStatus,
   locked,
+  scanning,
   unlockOpen,
   onRequestUnlock,
   children,
@@ -524,6 +530,8 @@ export default function PreviewDashboard({
    * blur fill has finished playing out.
    */
   locked: boolean;
+  /** The "analysis complete" beat is playing — the card has not risen yet. */
+  scanning: boolean;
   unlockOpen: boolean;
   onRequestUnlock: () => void;
   /** The unlock card, rendered over the body when open. */
@@ -531,8 +539,9 @@ export default function PreviewDashboard({
 }) {
   // Once the data is blurred, clicking ANY of it — a stat value, a rank badge,
   // a row — opens the unlock card. The handler sits on the whole body rather
-  // than the table alone so every obscured number is a live target.
-  const armed = locked && !unlockOpen;
+  // than the table alone so every obscured number is a live target. Suppressed
+  // while the scan-complete beat plays, so a stray click can't cut it short.
+  const armed = locked && !unlockOpen && !scanning;
   // Measured rivals when we have them, otherwise the sample stand-in.
   const rivals =
     realRank?.competitors.length
@@ -868,6 +877,13 @@ export default function PreviewDashboard({
           </div>
         </div>
       </div>
+
+      {/* The scan-complete beat plays over the same body the card centres on,
+          just before it. Its own AnimatePresence so it animates out as the card
+          animates in. */}
+      <AnimatePresence>
+        {scanning && <PreviewScanComplete key="scan" domain={data.domain} dict={dict} />}
+      </AnimatePresence>
 
       {unlockOpen && children}
       </div>
