@@ -92,6 +92,12 @@ export type Dictionary = {
      * not be presented as a measurement of their site.
      */
     modalDisclosure: string;
+    /**
+     * The brief "analysis complete" beat that plays when the crawl finishes,
+     * just before the unlock card rises. scanSub takes {domain}.
+     */
+    scanTitle: string;
+    scanSub: string;
   };
   logoStrip: {
     trustLine: string;

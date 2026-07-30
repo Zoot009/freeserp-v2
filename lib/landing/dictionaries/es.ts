@@ -85,6 +85,8 @@ const es: Dictionary = {
     modalDismiss: "Seguir explorando",
     modalDisclosure:
       "Vista previa con datos de ejemplo. Tus posiciones reales se comprueban tras el registro.",
+    scanTitle: "Análisis completado",
+    scanSub: "{domain} rastreado",
   },
   logoStrip: {
     trustLine: "Más de 2M de marketers ya confían en FreeSERP",

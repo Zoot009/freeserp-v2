@@ -83,6 +83,8 @@ const en: Dictionary = {
     modalNote: "Free forever · No credit card required",
     modalDismiss: "Keep looking around",
     modalDisclosure: "",
+    scanTitle: "Analysis complete",
+    scanSub: "Crawled {domain}",
   },
   logoStrip: {
     trustLine: "2M+ marketers already track with FreeSERP",

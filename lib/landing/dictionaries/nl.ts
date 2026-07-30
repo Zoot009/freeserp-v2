@@ -84,6 +84,8 @@ const nl: Dictionary = {
     modalDismiss: "Verder rondkijken",
     modalDisclosure:
       "Preview met voorbeeldgegevens. Je echte posities worden na aanmelding gecontroleerd.",
+    scanTitle: "Analyse voltooid",
+    scanSub: "{domain} gecrawld",
   },
   logoStrip: {
     trustLine: "2M+ marketeers vertrouwen al op FreeSERP",

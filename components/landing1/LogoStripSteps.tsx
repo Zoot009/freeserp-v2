@@ -25,6 +25,10 @@ export default function LogoStripSteps({ dict }: { dict: LogoStripDict }) {
                 key={`${b.name}-${i}`}
                 src={b.logo}
                 alt={b.name}
+                width={b.w}
+                height={b.h}
+                loading="lazy"
+                decoding="async"
                 className="h-7 w-auto shrink-0 grayscale opacity-60 transition-all duration-300 hover:opacity-100 hover:grayscale-0"
               />
             ))}
