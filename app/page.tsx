@@ -35,7 +35,6 @@ import { Benefits } from "@/components/home/Benefits";
 import { Compare } from "@/components/serp-checker/Compare";
 import { Integration } from "@/components/home/Integration";
 import { Testimonials } from "@/components/home/Testimonials";
-import { Blog } from "@/components/home/Blog";
 import { Faq } from "@/components/home/Faq";
 import { Cta } from "@/components/home/Cta";
 import {
@@ -62,7 +61,6 @@ export default function HomePage() {
       <Compare />
       <Integration />
       <Testimonials />
-      <Blog />
       <Faq />
       <Cta />
       <Footer />
