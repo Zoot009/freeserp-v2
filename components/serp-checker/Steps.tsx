@@ -42,7 +42,7 @@ function PlayIcon() {
     </svg>
   );
 }
-export function Steps({ sub }: { sub?: string }) {
+export function Steps({ title, sub }: { title?: string; sub?: string }) {
   const [active, setActive] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const [progress, setProgress] = useState(0);
@@ -140,7 +140,7 @@ export function Steps({ sub }: { sub?: string }) {
     >
       <div style={{ maxWidth: 1360, margin: "0 auto", padding: "0 40px" }}>
         <SectionHead
-          title="How The Free Rank Tracker Works"
+          title={title ?? "How The Free Rank Tracker Works"}
           sub={sub ?? `From sign-up to a shareable AI-powered SEO plan in ${STEPS.length} steps. No credit card. No setup time.`}
           titleColor="#fff"
           subColor="#fff"

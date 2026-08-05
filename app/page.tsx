@@ -28,7 +28,6 @@ export const metadata: Metadata = {
 };
 import { Hero } from "@/components/home/Hero";
 import { Ticker } from "@/components/home/Ticker";
-import { Features } from "@/components/home/Features";
 import { InsideApp } from "@/components/home/InsideApp";
 import { Pricing } from "@/components/home/Pricing";
 import { Benefits } from "@/components/home/Benefits";
@@ -54,7 +53,6 @@ export default function HomePage() {
       <Nav />
       <Hero />
       <Ticker />
-      <Features />
       <InsideApp />
       <Pricing />
       <Benefits />

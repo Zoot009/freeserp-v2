@@ -59,7 +59,7 @@ export default function SerpCheckerPage() {
         backgroundPosition: "top center",
       }}>
         <Hero />
-        <Steps />
+        <Steps title="How The Free SERP Checker Works" />
       </div>
       <WhyChecker />
       <UseCases />
