@@ -3,6 +3,7 @@ import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { Hero } from "@/components/serp-checker/Hero";
 import { Steps } from "@/components/serp-checker/Steps";
+import { WhatIsChecker } from "@/components/serp-checker/WhatIsChecker";
 import { WhyChecker } from "@/components/serp-checker/WhyChecker";
 import { UseCases } from "@/components/serp-checker/UseCases";
 import { Faq } from "@/components/serp-checker/Faq";
@@ -61,6 +62,7 @@ export default function SerpCheckerPage() {
         <Hero />
         <Steps title="How The Free SERP Checker Works" />
       </div>
+      <WhatIsChecker />
       <WhyChecker />
       <UseCases />
       <Faq />
