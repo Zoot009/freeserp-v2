@@ -44,7 +44,7 @@ export function Cta() {
                 fill="#fff"
               />
             </svg>
-            Free trial · No credit card · Plans from $5/mo
+            Free plan · No credit card · Plans from $19/mo
           </div>
           <h2
             style={{
@@ -70,7 +70,7 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            3 free rank checks in a 7-day trial, real-time ranking data, and competitor intelligence — for SEOs, marketers, and developers. Subscribe to workers from $5/month for 75 automated checks a day.
+            100 free credits every month, real-time ranking data, and competitor intelligence — for SEOs, marketers, and developers. Plans from $19/month, with every tool paid for out of one balance.
           </p>
           <a
             href={appUrl("/signup")}

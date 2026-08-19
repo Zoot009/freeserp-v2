@@ -8,30 +8,27 @@ import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
 
 const FREE_FEATURES = [
-  "3 rank checks in a 7-day trial",
-  "Manual checks only",
+  "100 credits every month",
+  "Every tool unlocked",
   "190+ countries & all devices",
   "No credit card required",
 ];
 
 const PAID_FEATURES = [
-  "Automated recurring checks",
-  "AI analysis for every section — 2/day per worker",
-  "Internal link analysis for all competitors",
+  "Automated recurring rank checks",
+  "Local map grid scans, site audits and keyword research",
+  "Competitor and internal-link analysis",
   "190+ countries & all devices",
   "Priority support",
   "Cancel anytime",
 ];
 
-// 1 worker = 15 rank checks / day · $1/worker/month (or $10/worker/year)
+// One credit checks one keyword. Keep in step with the backend's
+// credits/catalog.ts, which is what actually gets charged.
 const PAID_PLANS = [
-  { price: 5,   checks: 75,   label: "Starter"                },
-  { price: 10,  checks: 150,  label: "Standard"               },
-  { price: 20,  checks: 300,  label: "Popular", popular: true },
-  { price: 40,  checks: 600,  label: "Growth"                 },
-  { price: 50,  checks: 750,  label: "Business"               },
-  { price: 100, checks: 1500, label: "Scale"                  },
-  { price: 500, checks: 7500, label: "Enterprise"             },
+  { price: 19, credits: 2_000,  label: "Starter"                },
+  { price: 49, credits: 6_000,  label: "Pro", popular: true     },
+  { price: 99, credits: 15_000, label: "Agency"                 },
 ];
 
 function DarkCheck() {
@@ -78,7 +75,9 @@ export function Pricing() {
   const appUrl = useAppUrl();
   const [index, setIndex] = useState(2);
   const plan = PAID_PLANS[index];
-  const workers = plan.checks / 15; // 1 worker = 15 rank checks / day
+  // Credits per day if you spread the month evenly — the number people
+  // actually compare against "how many keywords do I track?".
+  const perDay = Math.floor(plan.credits / 30);
   const isFirst = index === 0;
   const isLast = index === PAID_PLANS.length - 1;
 
@@ -87,7 +86,7 @@ export function Pricing() {
       <SectionHead
         tag="PRICING"
         title="Simple plans. No surprises."
-        sub="No hidden charges. Start with a free 7-day trial, then add workers only when you need more daily checks."
+        sub="One credit checks one keyword, and the same balance pays for audits, local grids and keyword research. Start free with 100 credits a month."
       />
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>
@@ -114,7 +113,7 @@ export function Pricing() {
                 Free
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 32px" }}>
-                Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for kicking the tires before you commit.
+                100 credits every month, refilled automatically — no credit card. Enough to try every tool properly.
               </p>
               <div
                 style={{
@@ -194,7 +193,7 @@ export function Pricing() {
                 {plan.label}
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 24px" }}>
-                {workers.toLocaleString()} workers · {plan.checks.toLocaleString()} rank checks a day. Cancel anytime — or save with annual billing at $10/worker/year.
+                {plan.credits.toLocaleString()} credits a month — about {perDay.toLocaleString()} keywords checked every day, or spend them on audits, grids and research instead. Cancel anytime.
               </p>
 
               {/* Stepper */}
@@ -241,7 +240,7 @@ export function Pricing() {
                   }}
                 >
                   <span style={{ fontSize: 18, fontWeight: 600, color: "#111" }}>
-                    {plan.checks.toLocaleString()} checks / day
+                    {plan.credits.toLocaleString()} credits / mo
                   </span>
                 </div>
                 <button

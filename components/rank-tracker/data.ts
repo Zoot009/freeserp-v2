@@ -49,7 +49,7 @@ export type FAQ = { q: string; a: string };
 export const FAQ_ITEMS: FAQ[] = [
   {
     q: "Is the rank tracker really free?",
-    a: "Yes, to start — you get 3 free rank checks in a 7-day trial with no credit card. After that, worker plans start at $5/month: each worker adds 15 daily checks, so 5 workers give you 75 rank checks a day. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes — the free plan gives you 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits, and the same balance also pays for site audits, local map grid scans, keyword research and competitor analysis. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank tracking data?",
@@ -105,7 +105,7 @@ export const SOFTWARE_APP_SCHEMA = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "3 free rank checks in a 7-day trial. No credit card required.",
+    description: "100 free credits every month. No credit card required.",
   },
   featureList: [
     "Check domain ranking for any keyword",

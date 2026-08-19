@@ -113,27 +113,27 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for solo SEOs and side projects.",
+      desc: "100 credits every month, refilled automatically — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "3 rank checks in a 7-day trial",
-        "Manual checks only",
+        "100 credits every month",
+        "Every tool unlocked",
         "190+ countries & all devices",
         "No credit card required",
       ],
     },
     {
-      name: "Workers",
-      price: 5,
-      desc: "1 worker = 15 rank checks a day. Start at 5 workers for $5/month and scale up to 500 as you grow.",
-      cta: "Get Workers",
+      name: "Pro",
+      price: 49,
+      desc: "6,000 credits a month — about 200 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      cta: "Get Pro",
       featured: true,
       features: [
-        "75 rank checks / day (5 workers)",
-        "Automated recurring checks",
-        "AI analysis for every section — 2/day per worker",
-        "Internal link analysis for all competitors",
+        "Automated recurring rank checks",
+        "Local map grid scans and site audits",
+        "Keyword research, competitor and internal-link analysis",
+        "190+ countries & all devices",
         "Priority support",
         "Cancel anytime",
       ],
@@ -143,27 +143,27 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "Try FreeSERP with 3 rank checks in a 7-day trial — no credit card. Built for solo SEOs and side projects.",
+      desc: "100 credits every month, refilled automatically — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "3 rank checks in a 7-day trial",
-        "Manual checks only",
+        "100 credits every month",
+        "Every tool unlocked",
         "190+ countries & all devices",
         "No credit card required",
       ],
     },
     {
-      name: "Workers",
-      price: 50,
-      desc: "1 worker = 15 rank checks a day. 5 workers for $50/year — around 2 months free versus monthly billing.",
-      cta: "Get Workers",
+      name: "Pro",
+      price: 49,
+      desc: "6,000 credits a month — about 200 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      cta: "Get Pro",
       featured: true,
       features: [
-        "75 rank checks / day (5 workers)",
-        "Automated recurring checks",
-        "AI analysis for every section — 2/day per worker",
-        "Internal link analysis for all competitors",
+        "Automated recurring rank checks",
+        "Local map grid scans and site audits",
+        "Keyword research, competitor and internal-link analysis",
+        "190+ countries & all devices",
         "Priority support",
         "Cancel anytime",
       ],
@@ -182,7 +182,7 @@ export const INTEGRATIONS = [
 
 export const TESTIMONIALS = [
   {
-    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free trial sold me in a week, and $5/mo for 75 daily checks is a no-brainer for the search headroom.",
+    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free plan sold me in a week, and $19/mo covering rank tracking, audits and keyword research is a no-brainer.",
     name: "Daniel Cooper",
     role: "Indie SEO Consultant",
     img: "https://framerusercontent.com/images/KcCMMECKZOgi4RCYPbRBT2B8u0.png",
@@ -224,7 +224,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the free 7-day trial gives you 3 rank checks with no credit card. If you need more headroom, worker subscriptions start at $5/month for 5 workers (75 checks a day), billed monthly or annually. Questions? Email support@freeserp.com.",
+    a: "Yes — the free plan gives you 100 credits every month with no credit card, and every tool is unlocked. If you need more, plans start at $19/month for 2,000 credits. One credit checks one keyword; the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
   },
 ];
 
@@ -260,7 +260,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
       name: "Free Trial",
       price: "0",
       priceCurrency: "USD",
-      description: "3 free rank checks in a 7-day trial. No credit card required.",
+      description: "100 free credits every month. No credit card required.",
     },
     {
       "@type": "Offer",
@@ -275,7 +275,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
         billingIncrement: 1,
       },
       description:
-        "Worker subscription from $5/month — 5 workers, 75 rank checks per day. Scale up to 500 workers, or save with annual billing at $10/worker/year.",
+        "Credit plans from $19/month — 2,000 credits, where one credit checks one keyword. The same balance also covers site audits, local map grid scans, keyword research and competitor analysis.",
     },
   ],
   featureList: [
@@ -344,7 +344,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "Is there a free plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free 7-day trial gives you 3 rank checks with no credit card required. Rank tracking projects are available on the free plan with up to 10 keywords per project. Paid worker subscriptions start at $5/month for 5 workers — 75 rank checks per day — with automated recurring checks and unlimited project keywords.",
+        text: "Yes. The free plan gives you 100 credits every month with no credit card required, and every tool is unlocked. Rank tracking projects are available on the free plan with up to 10 keywords per project. Paid plans start at $19/month for 2,000 credits — one credit checks one keyword — with automated recurring checks and unlimited project keywords.",
       },
     },
   ],
