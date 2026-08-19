@@ -9,11 +9,11 @@ export const FEATURE_BLOCKS: FeatureBlock[] = [
   {
     title: "Check Your Website Ranking Free",
     paras: [
-      "Most ranking tools lock your data behind expensive monthly plans, charging $29 to $99 per month for the same basic rank check you needed in the first place. FreeSERP lets you check your website ranking free with 3 rank checks in a 7-day trial — no credit card required — and paid plans start at just $5 per month for 75 checks a day.",
+      "Most ranking tools lock your data behind expensive monthly plans, charging $29 to $99 per month for the same basic rank check you needed in the first place. FreeSERP gives you 100 credits every month for free — no credit card required — and paid plans start at $19 per month for 2,000 credits, which also cover site audits, local grid scans and keyword research.",
       "Your trial checks work on any domain, for any keyword, in any country. Free accounts allow up to 10 keywords per project and provide 30 days of rank history for saved tracking projects. This gives you enough data to see your real positions, spot ranking drops, and decide whether FreeSERP fits your workflow—before spending anything.",
     ],
     img: "/serp-image/sparkles.png",
-    alt: "website-ranking-checker — check your website ranking free in a 7-day trial",
+    alt: "website-ranking-checker — check your website ranking free every month",
   },
   {
     title: "Global Website Ranking Checker",
@@ -45,19 +45,19 @@ export type WhoUsesItem = {
 export const WHO_USES: WhoUsesItem[] = [
   {
     title: "Solo & Freelancers",
-    desc: "Check website rankings across all your clients—5 or 50—without a $99+ tool eating into your margins. From $5/month, each worker adds 15 daily checks, so you can walk into every client call with live data. Export rankings as a PDF or CSV and attach them directly to your monthly reports.",
+    desc: "Check website rankings across all your clients—5 or 50—without a $99+ tool eating into your margins. From $19/month for 2,000 credits, so you can walk into every client call with live data. Export rankings as a PDF or CSV and attach them directly to your monthly reports.",
     img: "/serp-image/user.png",
     alt: "website-ranking-checker — for solo SEOs and freelancers tracking client rankings",
   },
   {
     title: "Small Business Owners",
-    desc: "Enter your domain, enter the keyword, pick your country, and see your position in seconds. No credit card, no setup — start with 3 free checks in a 7-day trial. When your ranking drops, you will know immediately instead of finding out weeks later when your traffic has already fallen.",
+    desc: "Enter your domain, enter the keyword, pick your country, and see your position in seconds. No credit card, no setup — start with 100 free credits a month. When your ranking drops, you will know immediately instead of finding out weeks later when your traffic has already fallen.",
     img: "/serp-image/home.png",
     alt: "website-ranking-checker — for small business owners checking keyword positions",
   },
   {
     title: "Companies Running Audits",
-    desc: "FreeSERP delivers a live ranking snapshot in under 10 seconds—fast enough to run during a discovery call. Each worker adds 15 daily checks, so a 100-worker plan handles 1,500 checks a day without slowing your team down. The data is live and accurate every time.",
+    desc: "FreeSERP delivers a live ranking snapshot in under 10 seconds—fast enough to run during a discovery call. One credit checks one keyword, so a 15,000-credit plan handles 500 checks a day without slowing your team down. The data is live and accurate every time.",
     img: "/serp-image/briefcase.png",
     alt: "website-ranking-checker — for companies and agencies running SEO audits",
   },
@@ -66,7 +66,7 @@ export const WHO_USES: WhoUsesItem[] = [
 export const FAQ_ITEMS = [
   {
     q: "Is the website ranking checker really free?",
-    a: "Yes, to start — the free 7-day trial gives you 3 rank checks with no credit card. Check any domain, any keyword, and any country. When you need more, worker plans start at $5/month for 75 checks a day. Saved projects are limited to 10 keywords on the free plan with 30 days of history; paid plans unlock unlimited keywords and extended history.",
+    a: "Yes — the free plan gives you 100 credits every month with no credit card. Check any domain, any keyword, and any country. When you need more, plans start at $19/month for 2,000 credits. Saved projects are limited to 10 keywords on the free plan with 30 days of history; paid plans unlock unlimited keywords and extended history.",
   },
   {
     q: "How accurate is the website ranking data?",
@@ -114,7 +114,7 @@ export const SOFTWARE_APP_SCHEMA = {
   "@type": "SoftwareApplication",
   name: "FreeSERP — Website Ranking Checker",
   description:
-    "Website ranking checker with a free 7-day trial. Check your website ranking in any country, on any device — 3 free checks, no credit card.",
+    "Website ranking checker, free every month. Check your website ranking in any country, on any device — 100 free credits, no credit card.",
   applicationCategory: "BrowserApplication",
   operatingSystem: "Any",
   url: PAGE_URL,

@@ -54,12 +54,12 @@ export const WHY_CALLOUTS: WhyCallout[] = [
 
 export type CompareRow = { feature: string; ours: string; mid: string; light: string };
 export const COMPARE_ROWS: CompareRow[] = [
-  { feature: "Live SERP check",            ours: "From $5/mo (75/day)",     mid: "$99–$249/mo", light: "Free, limited per day" },
+  { feature: "Live SERP check",            ours: "From $19/mo (2,000/mo)", mid: "$99–$249/mo", light: "Free, limited per day" },
   { feature: "Top 100 results",            ours: "Yes",                     mid: "Yes",         light: "Top 50" },
   { feature: "Country + device targeting", ours: "Yes",                     mid: "Yes",         light: "Limited" },
   { feature: "Saved keyword tracking",     ours: "10 free, unlimited paid", mid: "500–10,000",  light: "25 free" },
-  { feature: "Competitor crawl",           ours: "Yes (from $5/mo)",        mid: "Yes (paid)",  light: "No" },
-  { feature: "AI recommendations",         ours: "Unlimited (from $5/mo)",  mid: "No",          light: "No" },
+  { feature: "Competitor crawl",           ours: "Yes (from $19/mo)",      mid: "Yes (paid)",  light: "No" },
+  { feature: "AI recommendations",         ours: "Unlimited (from $19/mo)", mid: "No",          light: "No" },
   { feature: "Signup required",            ours: "No",                      mid: "Yes",         light: "Optional" },
 ];
 
@@ -145,7 +145,7 @@ export const USE_CASES: UseCase[] = [
 export const FAQ_ITEMS = [
   {
     q: "Is the Free SERP checker really free?",
-    a: "Yes, to start — the free 7-day trial includes 3 rank checks with no credit card. When you need more, worker plans start at $5/month for 75 checks a day (1 worker = 15 daily checks). Saved tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes — the free plan includes 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits, spendable on rank checks, audits, local grid scans and keyword research alike. Saved tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank data?",

@@ -136,7 +136,7 @@ export function Testimonials() {
               style={{ fontSize: 17, lineHeight: 1.5, margin: "0 0 auto", paddingBottom: 28 }}
             >
               &quot;FreeSERP delivers the same intelligence the $999/mo enterprise tools
-              sell — the trial won me over fast, and $1 per worker a month is the
+              sell — the trial won me over fast, and $19 a month for the whole toolkit is the
               cheapest serious pricing I&apos;ve seen.&quot;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

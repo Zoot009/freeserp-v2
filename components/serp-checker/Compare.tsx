@@ -192,8 +192,9 @@ export function Compare() {
             />
           </div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: COLORS.gray }}>
-            The free 7-day trial is enough to see your real rankings. Tracking daily? Start
-            at 5 workers ($5/mo, 75 checks a day) and scale to 500 as you grow.
+            The free plan is enough to see your real rankings — 100 credits every month.
+            Tracking daily? Plans start at $19/mo for 2,000 credits, and the same balance
+            covers audits, local grids and keyword research.
           </p>
         </div>
       </Reveal>
