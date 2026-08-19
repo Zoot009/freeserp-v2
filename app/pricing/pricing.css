@@ -1,0 +1,447 @@
+/* Pricing page layout.
+ *
+ * Written as real CSS rather than inline styles because everything here is a
+ * responsive or sticky behaviour, and neither can be expressed inline. The rest
+ * of the marketing site uses inline styles for static decoration, which is fine
+ * — this is the file for the parts that have to respond to the viewport.
+ */
+
+/* ── Plan cards ─────────────────────────────────────────────────────────── */
+
+/* Four plans, four columns. The previous auto-fit grid dropped the fourth card
+   onto a row of its own, which reads as a mistake rather than a tier. */
+.pr-plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+@media (max-width: 1080px) {
+  .pr-plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .pr-plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pr-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px 22px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -18px rgba(16, 24, 40, 0.3);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.pr-card:hover {
+  border-color: #cfd6e4;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 16px 40px -22px rgba(16, 24, 40, 0.45);
+}
+
+/* The recommended tier is raised rather than recoloured — a second blue card
+   next to the blue CTA turns the row into noise. */
+.pr-card--featured {
+  border-color: #0454ff;
+  box-shadow: 0 0 0 1px rgba(4, 84, 255, 0.12), 0 20px 48px -24px rgba(4, 84, 255, 0.5);
+}
+
+@media (min-width: 1081px) {
+  .pr-card--featured {
+    transform: translateY(-10px);
+  }
+  .pr-card--featured:hover {
+    transform: translateY(-13px);
+  }
+}
+
+.pr-badge {
+  position: absolute;
+  top: -10px;
+  left: 22px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #0454ff;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.pr-tier {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0454ff;
+  letter-spacing: 0.02em;
+}
+
+.pr-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.pr-price b {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #0b1220;
+}
+
+.pr-price span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.pr-credits {
+  margin: 12px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b1220;
+}
+
+.pr-who {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #9ca3af;
+  min-height: 34px;
+}
+
+.pr-rule {
+  height: 1px;
+  background: #f1f3f7;
+  margin: 18px 0;
+}
+
+.pr-list {
+  list-style: none;
+  margin: 0 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.pr-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.pr-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #0b1220;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pr-cta:hover {
+  background: #f7f8fb;
+  border-color: #d3d8e0;
+}
+
+.pr-cta--primary {
+  background: #0454ff;
+  border-color: #0454ff;
+  color: #fff;
+}
+
+.pr-cta--primary:hover {
+  background: #0044d6;
+  border-color: #0044d6;
+}
+
+/* ── Compare table ──────────────────────────────────────────────────────── */
+
+/* A real table: ruled both ways, on its own white surface, sitting on the page
+   background rather than bleeding into it. Row borders alone left the columns
+   floating — the eye had nothing to track down. */
+.pr-compare {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.pr-compare thead th:first-child {
+  border-top-left-radius: 13px;
+}
+.pr-compare thead th:last-child {
+  border-top-right-radius: 13px;
+}
+.pr-compare tbody:last-of-type tr:last-child td:first-child {
+  border-bottom-left-radius: 13px;
+}
+.pr-compare tbody:last-of-type tr:last-child td:last-child {
+  border-bottom-right-radius: 13px;
+}
+
+.pr-compare th,
+.pr-compare td {
+  padding: 13px 14px;
+}
+
+/* Vertical rules between plans. Not on the first column: the feature name and
+   its first value read as one statement, and a line between them cuts it. */
+.pr-compare th + th,
+.pr-compare td + td {
+  border-left: 1px solid #f1f3f7;
+}
+
+/* Sticky rather than a fixed overlay. The old approach put a second fixed bar at
+   top:0, where the site nav already lives — the two drew on top of each other.
+   Sticky keeps the header inside the table's own flow and offsets it below the
+   nav, so they can never collide. */
+.pr-compare thead th {
+  position: sticky;
+  top: 72px;
+  /* Anchors the shadow below, which marks the header as lifted once it sticks. */
+  isolation: isolate;
+  z-index: 20;
+  background: #fff;
+  vertical-align: bottom;
+  /* Both rules drawn as insets: a sticky element's own border does not travel
+     with it in every engine, but a box-shadow does. */
+  box-shadow: inset 0 -1px 0 #e5e7eb;
+}
+
+/* Once it lifts off, the header needs to sit ON the rows rather than in them. */
+.pr-compare thead th::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  height: 12px;
+  background: linear-gradient(to bottom, rgba(16, 24, 40, 0.05), transparent);
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .pr-compare thead th {
+    top: 60px;
+  }
+}
+
+.pr-compare .pr-feature {
+  width: 34%;
+  text-align: left;
+}
+
+.pr-compare tbody td {
+  border-bottom: 1px solid #f1f3f7;
+  text-align: center;
+  font-size: 13.5px;
+  color: #0b1220;
+}
+
+.pr-compare tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* A quiet stripe rather than a hover colour: the rows are being compared
+   across, so the horizontal read is the one to help. */
+.pr-compare tbody tr:hover td {
+  background: #fafbfd;
+}
+
+.pr-compare tbody tr:hover td.pr-col-featured {
+  background: #f2f6ff;
+}
+
+.pr-compare tbody td.pr-feature {
+  text-align: left;
+  font-size: 13.5px;
+  color: #4b5563;
+}
+
+/* The recommended column is a column, not a tint: ruled on both sides so it
+   reads as one continuous thing from header to last row. */
+.pr-compare .pr-col-featured {
+  background: #f8faff;
+  border-left: 1px solid #cfd6e4;
+  border-right: 1px solid #cfd6e4;
+}
+
+.pr-section-head td {
+  padding: 22px 14px 10px;
+  background: #fafbfd;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.pr-tag {
+  margin-left: 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #0454ff;
+  background: #ebf1ff;
+  padding: 2px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+/* Only a scroll container where it has to be. `overflow-x: auto` forces
+   overflow-y to auto as well, which would make this the sticky header's
+   scrolling ancestor and stop it sticking to the viewport at all. Above this
+   width the table fits, so it does not scroll and the header works. */
+@media (max-width: 900px) {
+  .pr-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ── Top-ups ────────────────────────────────────────────────────────────── */
+
+.pr-packs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+@media (max-width: 720px) {
+  .pr-packs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pr-pack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  text-decoration: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.pr-pack:hover {
+  border-color: #0454ff;
+  box-shadow: 0 10px 26px -18px rgba(4, 84, 255, 0.55);
+  transform: translateY(-2px);
+}
+
+.pr-pack--best {
+  border-color: #c9dcff;
+  background: #fbfcff;
+}
+
+/* The arrow is the affordance: these are links, and a bare box of numbers does
+   not look like one. It leans in on hover rather than appearing, so nothing
+   shifts. */
+.pr-pack-go {
+  position: absolute;
+  top: 20px;
+  right: 18px;
+  color: #c3c9d4;
+  transition: transform 0.16s ease, color 0.16s ease;
+}
+
+.pr-pack:hover .pr-pack-go {
+  color: #0454ff;
+  transform: translateX(3px);
+}
+
+.pr-pack-credits {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0b1220;
+}
+
+.pr-pack-price {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0454ff;
+}
+
+.pr-pack-rule {
+  height: 1px;
+  background: #f1f3f7;
+  margin: 14px 0 12px;
+}
+
+.pr-pack-buys {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pr-pack-buys li {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+.pr-pack-badge {
+  position: absolute;
+  top: -9px;
+  left: 18px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #0454ff;
+  color: #fff;
+}
+
+/* ── Enterprise ─────────────────────────────────────────────────────────── */
+
+.pr-ent {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0b1220;
+  color: #fff;
+}
+
+@media (max-width: 860px) {
+  .pr-ent {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
