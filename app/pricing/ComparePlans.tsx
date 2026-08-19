@@ -41,7 +41,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
     rows: [
       { feature: "Google rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
       { feature: "YouTube rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
-      { feature: "Local map grid scans", tag: "1 / 8 points", values: [true, true, true, true] },
+      { feature: "Local map grid scans", tag: "3–57 / scan", values: [true, true, true, true] },
       { feature: "Automated recurring checks", values: [false, true, true, true] },
       { feature: "190+ countries, all devices", values: [true, true, true, true] },
       { feature: "Keywords per project", values: [10, "Unlimited", "Unlimited", "Unlimited"] },

@@ -54,7 +54,7 @@ function whatItBuys(credits: number): string[] {
   return [
     `${credits.toLocaleString()} rank checks`,
     `${Math.floor(credits / 30).toLocaleString()} keywords tracked daily`,
-    `${Math.floor(credits / 16).toLocaleString()} local map grid scans`,
+    `${Math.floor(credits / 17).toLocaleString()} local map grid scans`,
     `${Math.floor(credits / 5).toLocaleString()} full site audits`,
   ];
 }
@@ -137,7 +137,7 @@ export function PlanCard({ plan }: { plan: CreditPlan }) {
 function packBuys(credits: number): string[] {
   return [
     `${credits.toLocaleString()} rank checks`,
-    `or ${Math.floor(credits / 16).toLocaleString()} local grid scans`,
+    `or ${Math.floor(credits / 17).toLocaleString()} local grid scans`,
     `or ${Math.floor(credits / 5).toLocaleString()} site audits`,
   ];
 }
