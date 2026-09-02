@@ -5,7 +5,7 @@ import { locales, defaultLocale, hasLocale } from "@/lib/landing/dictionaries";
 // Every locale-prefixed marketing-page variant that shares this proxy's
 // redirect logic. Add new roots here (and to `config.matcher` below) rather
 // than duplicating the function.
-const LANDING_ROOTS = ["/landing", "/landing1"];
+const LANDING_ROOTS = ["/free-serp-checker"];
 
 function getPreferredLocale(request: NextRequest) {
   const acceptLanguage = request.headers.get("accept-language");
@@ -46,5 +46,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/landing", "/landing/:path*", "/landing1", "/landing1/:path*"],
+  matcher: ["/free-serp-checker", "/free-serp-checker/:path*"],
 };
