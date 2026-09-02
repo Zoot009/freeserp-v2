@@ -90,30 +90,28 @@ export default function RootLayout({
             }),
           }}
         />
-        {/* GTM loaded lazyOnload (browser-idle), NOT afterInteractive.
-            This container is what injects the heavy third-party tags —
-            ContentSquare (~158KB), LogRocket (~270KB), Facebook Pixel (~200KB)
-            and duplicate GA loads — which together were ~500KB of unused JS and
-            ~2.3s of main-thread script evaluation on the critical path. Idle
-            loading moves all of it AFTER the page is interactive.
-            The direct gtag.js below stays afterInteractive so Google Ads /
-            GA4 conversion tracking still fires promptly. */}
+        {/* Google Tag Manager.
+            afterInteractive, not the lazyOnload this used to be. That choice
+            was paired with a direct gtag.js loader below which carried the
+            Google Ads and GA4 conversions promptly while the container idled;
+            with gtag.js gone, this container is the only tracking on the page,
+            and conversions deferred to browser-idle are conversions missed. */}
         <Script
           id="gtm-script"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-MG3XS6F6');`,
+})(window,document,'script','dataLayer','GTM-MN3Q7X5V');`,
           }}
         />
       </head>
       <body className="min-h-full flex flex-col">
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-MG3XS6F6"
+            src="https://www.googletagmanager.com/ns.html?id=GTM-MN3Q7X5V"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
@@ -126,22 +124,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </Suspense>
         <SessionReplay />
         <CookieNotice />
-        {/* gtag.js — single loader, multiple config() calls for both the
-            Google Ads (AW-) and Google Analytics 4 (G-) tags. This is Google's
-            recommended pattern when running more than one tag on a page. */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-5236DFCJLX"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-5236DFCJLX');
-            gtag('config', 'AW-18179127431');
-          `}
-        </Script>
       </body>
     </html>
   );
