@@ -5,10 +5,10 @@
 // Deliberately a plain module rather than a context/provider: every call site is
 // already a client component, and the only thing a provider would supply
 // implicitly — page variant and locale — is already carried on every event as
-// `path` (/landing/en vs /landing1/en), so the admin derives both in SQL instead
+// `path` (e.g. /free-serp-checker/en), so the admin derives both in SQL instead
 // of us stamping them on each row.
 //
-// Must NOT reach for useSearchParams: /landing/[lang] is statically prerendered
+// Must NOT reach for useSearchParams: /free-serp-checker/[lang] is statically prerendered
 // via generateStaticParams, which is why PreviewOverlay reads window.location
 // directly. Keep this module hook-free.
 
