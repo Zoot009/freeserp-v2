@@ -1,0 +1,245 @@
+/* Styling for the /tracking-suite ad landing page.
+ *
+ * The visual language is taken from the reference the campaign is modelled on
+ * (drospecta.framer.website): a warm off-white canvas rather than white,
+ * near-black ink rather than pure black, Inter at weight 600 for headings (not
+ * 800), a narrow 1072px column, 20px cards inside 40px panels, and pastel tiles
+ * instead of coloured text. Those values are its real tokens, read off the page,
+ * not an impression of it.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the root layout already
+ * loads app/globals.css and Tailwind v4 scans the whole project, so every
+ * utility used in page.tsx is generated. Re-importing the framework here would
+ * ship a second copy of preflight + utilities on this route, which is exactly
+ * the weight an ad landing page cannot afford.
+ *
+ * Everything is scoped under .ads-scope, so none of it can leak into the rest
+ * of the marketing site.
+ */
+
+.ads-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     Retheming the page is these two lines. --accent is FreeSERP blue, kept
+     because it is the brand colour on every other page of the site. For the
+     reference's exact lime instead, swap in:
+         --accent: #9fe870;
+         --accent-ink: #163300;
+     Nothing else needs to change; every button and highlight reads them. */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+
+  --ink: #0e0f0c;
+  --body: #454745;
+  --muted: #6a6c6a;
+  --canvas: #edefeb;
+  --card: #ffffff;
+  --line: #0e0f0c1f;
+
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() rather than a rule in globals.css so it stays confined to
+   the routes that actually render .ads-scope. */
+html:has(.ads-scope),
+html:has(.ads-scope) body {
+  background: #edefeb;
+}
+
+.ads-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── type ───────────────────────────────────────────────────────────────
+   One clamp per level so the page has a real scale instead of a pile of
+   breakpoint overrides. Weight 600 throughout: the reference never goes
+   heavier, and 800 is what makes a landing page look like a template. */
+.ads-h1 {
+  font-size: clamp(40px, 6.4vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+  font-weight: 600;
+}
+
+.ads-h2 {
+  font-size: clamp(30px, 4.4vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.024em;
+  font-weight: 600;
+}
+
+.ads-h3 {
+  font-size: clamp(25px, 3.1vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+.ads-lead {
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.55;
+  color: var(--body);
+}
+
+/* ── surfaces ───────────────────────────────────────────────────────── */
+.ads-panel {
+  border-radius: 40px;
+}
+
+.ads-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+/* The small capsule that labels each section — "Personas", "Pricing", "FAQ". */
+.ads-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px 6px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffffb3;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+}
+
+.ads-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ── buttons ────────────────────────────────────────────────────────── */
+.ads-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.ads-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ads-btn-lg {
+  padding: 15px 26px;
+  font-size: 16px;
+}
+
+.ads-btn-sm {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.ads-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ads-btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 86%, #000);
+}
+
+.ads-btn-ink {
+  background: var(--ink);
+  color: #fff;
+}
+
+.ads-btn-ink:hover {
+  background: #23241f;
+}
+
+.ads-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.ads-btn-ghost:hover {
+  border-color: #0e0f0c40;
+}
+
+/* On the dark stat/CTA panels the ghost button has to invert. */
+.ads-on-dark .ads-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff2e;
+}
+
+.ads-on-dark .ads-btn-ghost:hover {
+  background: #ffffff24;
+  border-color: #ffffff5c;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   Product shots are a light UI on a light canvas, so they need an edge to sit
+   on rather than a frame to sit in: a hairline, a soft lift, and nothing else.
+   Drawn mockups reuse the same treatment so the four tracker visuals read as
+   one set even though only one of them is a photograph of the product today. */
+.ads-shot {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(14, 15, 12, 0.04),
+    0 24px 48px -28px rgba(14, 15, 12, 0.28);
+}
+
+.ads-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fbfbfa;
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────
+   A native <details>: keyboard-accessible and announced correctly for free,
+   open before React would have loaded, and Ctrl+F still finds a closed answer
+   in Chrome. These rules only kill the default marker — which Safari draws even
+   with list-style: none — and turn the chevron. */
+.ads-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.ads-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.ads-faq[open] summary .ads-chevron {
+  transform: rotate(180deg);
+}
+
+.ads-chevron {
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-btn,
+  .ads-chevron {
+    transition: none;
+  }
+  .ads-btn:hover {
+    transform: none;
+  }
+}
