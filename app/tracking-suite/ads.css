@@ -95,16 +95,19 @@ html:has(.ads-scope) body {
   border-radius: 20px;
 }
 
-/* The small capsule that labels each section — "Personas", "Pricing", "FAQ". */
+/* The small capsule that labels each section — "Personas", "Pricing", "FAQ".
+   One size up from the reference: at 13px it read as a caption above a 52px
+   heading rather than as a label belonging to it. Every section head and the
+   four tracker kickers share this class, so they all move together. */
 .ads-tag {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 14px 6px 11px;
+  gap: 9px;
+  padding: 9px 20px 9px 16px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: #ffffffb3;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: -0.2px;
   color: var(--ink);
@@ -112,8 +115,8 @@ html:has(.ads-scope) body {
 
 .ads-tag::before {
   content: "";
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   border-radius: 999px;
   background: var(--accent);
 }
@@ -212,6 +215,149 @@ html:has(.ads-scope) body {
   background: #fbfbfa;
 }
 
+/* The one highlighted line on the page: the free-credits promise, set apart
+   from the section's own sub-heading so it reads as an offer rather than as
+   more explanation. */
+.ads-note {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 22px auto 0;
+  padding: 11px 22px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, #fff);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  text-align: center;
+  color: var(--ink);
+}
+
+/* ── the platform strip ────────────────────────────────────────
+   Seven marks do not fit a phone at a readable size, so the row scrolls. The
+   list is rendered twice inside the track and the track is translated exactly
+   -50%, which lands the copy where the original started — a loop with no seam
+   and no JavaScript. The mask fades both ends so items enter and leave instead
+   of appearing at a hard edge. */
+.ads-marquee {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.ads-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: ads-marquee-scroll 34s linear infinite;
+}
+
+.ads-marquee-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 12px;
+}
+
+.ads-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffffb3;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+
+@keyframes ads-marquee-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── timed signup popup ────────────────────────────────── */
+.ads-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ads-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 15, 12, 0.45);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+
+.ads-popup-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 34px 34px;
+  border-radius: 28px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  text-align: center;
+  box-shadow: 0 32px 64px -24px rgba(14, 15, 12, 0.4);
+  animation: ads-popup-in 0.24s ease-out;
+}
+
+.ads-popup-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: background-color 0.2s ease;
+}
+
+.ads-popup-x:hover {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.ads-popup-title {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.024em;
+  font-weight: 600;
+}
+
+.ads-popup-body {
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+.ads-popup-body b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@keyframes ads-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
 /* ── FAQ ────────────────────────────────────────────────────────────────
    A native <details>: keyboard-accessible and announced correctly for free,
    open before React would have loaded, and Ctrl+F still finds a closed answer
@@ -241,5 +387,9 @@ html:has(.ads-scope) body {
   }
   .ads-btn:hover {
     transform: none;
+  }
+  .ads-marquee-track,
+  .ads-popup-card {
+    animation: none;
   }
 }

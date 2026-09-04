@@ -3,22 +3,27 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
   BarChart3,
+  Briefcase,
   Building2,
   Check,
   ChevronDown,
   Clock,
   Download,
+  Landmark,
   Layers,
   MapPin,
   Star,
+  Store,
   Target,
   Users,
   Wallet,
 } from "lucide-react";
-import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
+import { LogoMark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
+import { PLATFORMS } from "./PlatformMarks";
+import { SignupPopup } from "./SignupPopup";
 import "./ads.css";
 
 /**
@@ -29,9 +34,9 @@ import "./ads.css";
  * one place. The only pieces kept outside are ./ads.css (Next needs CSS in a
  * .css file) and ./Cta.tsx (the single client component — see the note there).
  *
- * It is otherwise a pure server component: no hooks, no state, no hydration.
- * The FAQ is a native <details>, the nav is a plain bar, and the page ships as
- * static HTML — which is what keeps LCP low on a cold paid click.
+ * Almost a pure server component: the FAQ is a native <details> and the page
+ * ships as static HTML, which is what keeps LCP low on a cold paid click. The
+ * only islands are the CTA and the timed signup popup.
  *
  * Layout and typography follow drospecta.framer.website, the reference for this
  * campaign: warm off-white canvas, near-black ink, Inter 600 headings, a 1072px
@@ -39,8 +44,9 @@ import "./ads.css";
  * palette lives in ads.css so the whole page can be rethemed from two lines.
  *
  * Separate from the marketing site's own pages by design: no global Nav, no
- * Footer, no links out except signup, privacy, terms and support. Everything a
- * visitor can click either scrolls down this page or starts a signup.
+ * Footer, no links out except signup, privacy, terms and support. There is no
+ * bar of its own either — the page opens on the headline, and the ask arrives
+ * as the timed popup rather than as a button race at the top.
  *
  * It renders inside the root layout, so Google Ads conversion tracking (gtag
  * AW-), GA4, GTM and first-party UTM capture are all inherited — no tag setup
@@ -176,7 +182,7 @@ const TRACKERS: Tracker[] = [
   {
     key: "google",
     kicker: "Google Rank Tracker",
-    title: "Know your Google position before the client asks",
+    title: "Know Your Google Position and Stay Ahead of Your Competitors",
     body: "Add your keywords once and FreeSERP checks them every day — desktop and mobile, in any of 190+ countries, down to a single city. Positions, movement and the whole top-3 / top-10 split are on the dashboard when you open it.",
     points: [
       "Automated daily checks across your whole keyword set",
@@ -190,8 +196,8 @@ const TRACKERS: Tracker[] = [
   {
     key: "maps",
     kicker: "Google Map Tracker",
-    title: "See your Map Pack rank street by street",
-    body: "One position is a lie for a local business — you rank first outside your own door and nowhere three miles away. FreeSERP scans a geo-grid around your pin and shows the rank at every point on it.",
+    title: "See your Google Map Pack rank street by street",
+    body: "Ranking #1 near your business doesn't mean you're ranking #1 everywhere. FreeSERP scans a geo-grid around your location to show exactly where you rank.",
     points: [
       "Geo-grid scans from 3×3 up to 21×21 around your business",
       "ARP, ATRP and SoLV — the three metrics local SEOs report on",
@@ -218,7 +224,7 @@ const TRACKERS: Tracker[] = [
   {
     key: "ai",
     kicker: "AI Visibility Tracker",
-    title: "Find out whether ChatGPT recommends you",
+    title: "Find Out How Visible Your Brand Is Across AI Search",
     body: "A growing share of buying decisions never touches a blue link. FreeSERP runs your prompts against ChatGPT, Gemini, Perplexity and Claude on a schedule, then scores how often you are named, cited, and how early in the answer you appear.",
     points: [
       "ChatGPT, Gemini, Perplexity and Claude, run on a schedule",
@@ -232,7 +238,7 @@ const TRACKERS: Tracker[] = [
 ];
 
 const STATS = [
-  { value: "4", label: "trackers on one credit balance" },
+  { value: "5+", label: "trackers on one credit balance" },
   { value: "190+", label: "countries and all device types" },
   { value: "50M+", label: "indexed search terms" },
   { value: "100", label: "free credits every month" },
@@ -253,6 +259,21 @@ const PERSONAS = [
     icon: Users,
     title: "In-house SEO and creators",
     text: "Google, YouTube and AI answers side by side, so you can prove which channel moved and defend the budget behind it.",
+  },
+  {
+    icon: Store,
+    title: "Business owners",
+    text: "See where you stand without hiring anyone to read it for you. Open the dashboard, read the position, and know whether last month's work paid.",
+  },
+  {
+    icon: Briefcase,
+    title: "Freelancers",
+    text: "Track every client you have taken on from one balance, on a plan that costs less than a single seat of the tools your clients expect you to own.",
+  },
+  {
+    icon: Landmark,
+    title: "Corporate firms",
+    text: "Multiple brands, regions and domains as separate projects, each with its own keyword set and its own history, all reporting into one account.",
   },
 ];
 
@@ -355,41 +376,21 @@ export default function TrackingSuitePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* ── nav ───────────────────────────────────────────────────────────
-          A floating capsule, the way the reference does it.
-          `fixed`, not `sticky`, for the same reason the site Nav and the
-          existing landing Header are: globals.css puts overflow-x: hidden on
-          <body>, which makes it a scroll container and stops sticky from ever
-          sticking. The hero carries the matching top padding.
-          Logo and one CTA, nothing else: every extra destination in the bar of
-          a paid landing page is a way to spend the click without converting.
-          The section anchors still exist for the in-page links (the hero's
-          "See pricing"), they just are not advertised up here. */}
-      <header className="fixed inset-x-0 top-3 z-50 px-4 sm:top-5">
-        <div className="mx-auto flex w-full max-w-[1072px] items-center gap-6 rounded-full border border-[#0e0f0c1f] bg-white/80 py-2.5 pr-2.5 pl-4 backdrop-blur-xl sm:pl-6">
-          <a href="#top" className="flex items-center gap-2.5">
-            <LogoMark className="h-6.5 w-6.5" />
-            <Wordmark className="text-[16px] font-semibold tracking-[-0.02em] text-[var(--ink)]" />
-          </a>
-          <Cta
-            placement="nav"
-            label="Start for free"
-            size="sm"
-            variant="ink"
-            arrow={false}
-            className="ml-auto"
-          />
-        </div>
-      </header>
-
       <main>
         {/* ── hero ────────────────────────────────────────────────────────
             The screenshot is the real keywords dashboard, not an illustration.
             priority + a real width/height pair: it is the LCP element, and a
-            paid click cannot afford it to arrive late or shift the layout. */}
-        <section id="top" className="relative pt-28 pb-6 sm:pt-36">
+            paid click cannot afford it to arrive late or shift the layout.
+
+            No button pair here any more: the ask is the timed popup, so the
+            fold carries the promise and the proof and nothing else. With the
+            nav capsule gone the section needs only enough top padding to
+            breathe. */}
+        <section id="top" className="relative pt-14 pb-6 sm:pt-20">
           <div className={`${WRAP} text-center`}>
-            <span className="ads-tag">Google · Maps · YouTube · AI</span>
+            <span className="ads-tag">
+              Google Search | Google Maps | Youtube | AI - All in one Rank Tracker
+            </span>
 
             <h1 className="ads-h1 mx-auto mt-6 max-w-[16ch]">
               Track every ranking that matters
@@ -401,28 +402,41 @@ export default function TrackingSuitePage() {
               Claude recommend you — in one dashboard, updated every day.
             </p>
 
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Cta placement="hero" />
-              <a href="#pricing" className="ads-btn ads-btn-lg ads-btn-ghost">
-                See pricing
-              </a>
-            </div>
-
-            <p className="mt-5 text-[14px] text-[var(--muted)]">
-              100 free credits every month · no credit card · every tool unlocked
-            </p>
           </div>
 
-          <div className={`${WRAP} mt-12 sm:mt-16`}>
-            <Shot
-              src={HERO_SHOT.src}
-              alt={HERO_SHOT.alt}
-              width={HERO_SHOT.width}
-              height={HERO_SHOT.height}
-              sizes="(max-width: 1120px) 100vw, 1010px"
-              label="app.freeserp.com/keywords"
-              priority
-            />
+          {/* Every surface FreeSERP tracks, said as marks rather than prose.
+              Outside WRAP on purpose: the strip is meant to run off both edges,
+              which is what tells a reader that it continues. */}
+          <div
+            className="ads-marquee mt-9"
+            aria-label="Tracked across Google Search, Google Maps, YouTube, ChatGPT, Perplexity, Claude and Gemini"
+          >
+            <div className="ads-marquee-track">
+              {[0, 1].map((pass) => (
+                <div className="ads-marquee-row" key={pass} aria-hidden={pass === 1}>
+                  {PLATFORMS.map((p) => (
+                    <span key={p.name} className="ads-marquee-item">
+                      {p.mark}
+                      {p.name}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={`${WRAP} mt-8 sm:mt-10`}>
+            <div className="mx-auto max-w-[820px]">
+              <Shot
+                src={HERO_SHOT.src}
+                alt={HERO_SHOT.alt}
+                width={HERO_SHOT.width}
+                height={HERO_SHOT.height}
+                sizes="(max-width: 860px) 100vw, 820px"
+                label="app.freeserp.com/keywords"
+                priority
+              />
+            </div>
           </div>
         </section>
 
@@ -430,7 +444,7 @@ export default function TrackingSuitePage() {
             Paid traffic arrives from one ad group with one idea of the product.
             This row lets an agency buyer and a single-location restaurant owner
             both decide, in one glance, that the page is written for them. */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className={WRAP}>
             <SectionHead tag="Who it is for" title="Built for everyone chasing a position" />
 
@@ -458,8 +472,8 @@ export default function TrackingSuitePage() {
           <div className={WRAP}>
             <SectionHead
               tag="The suite"
-              title="Four trackers, one dashboard"
-              sub="Search did not stay in one place, so rank tracking cannot either. These four cover where your buyers actually look."
+              title="Multiple trackers, one dashboard"
+              sub="Search did not stay in one place, so rank tracking cannot either. These cover where your buyers actually look."
             />
 
             <div className="mt-12 space-y-5">
@@ -524,7 +538,7 @@ export default function TrackingSuitePage() {
         </section>
 
         {/* ── stats ───────────────────────────────────────────────────────── */}
-        <section className="py-20 sm:py-28">
+        <section className="py-14 sm:py-20">
           <div className={WRAP}>
             <div className="ads-on-dark ads-panel grid grid-cols-2 gap-y-10 bg-[var(--ink)] px-8 py-12 text-white sm:px-12 lg:grid-cols-4">
               {STATS.map((s) => (
@@ -542,13 +556,17 @@ export default function TrackingSuitePage() {
         </section>
 
         {/* ── benefits and supporting screenshots ─────────────────────────── */}
-        <section id="why" className="scroll-mt-24 pb-20 sm:pb-28">
+        <section id="why" className="scroll-mt-24 pb-14 sm:pb-20">
           <div className={WRAP}>
             <SectionHead
               tag="Why FreeSERP"
               title="All-in-one, no extra tools needed"
-              sub="Tracking is only useful if it runs on its own, connects to the data you already have, and leaves the building when you need to report on it."
+              sub="See your rankings, competitors, clicks and impressions together in one place. FreeSERP runs recurring checks for you, so you can spot what is changing, understand your performance and know where to focus next."
             />
+
+            <p className="ads-note">
+              Get 100 free credits every month. Explore every tool before you pay for more.
+            </p>
 
             <div className="mt-12 space-y-10">
               {SUPPORTING_SHOTS.map((s) => (
@@ -581,12 +599,52 @@ export default function TrackingSuitePage() {
           </div>
         </section>
 
+        {/* ── testimonials ────────────────────────────────────────────────
+            The same three quotes the home page runs, imported rather than
+            re-written: a landing page that invents its own customers is one
+            whose social proof contradicts the site the moment a visitor clicks
+            through. framerusercontent.com is already in next.config's
+            remotePatterns, so next/image can optimize the avatars. */}
+        <section className="pb-14 sm:pb-20">
+          <div className={WRAP}>
+            <SectionHead tag="Testimonials" title="Results from real customers" />
+
+            <div className="mt-12 grid gap-4 lg:grid-cols-3">
+              {TESTIMONIALS.map((t) => (
+                <figure key={t.name} className="ads-card flex flex-col p-7">
+                  <div className="flex gap-1 text-[#f5a623]" aria-label="Rated 5 out of 5">
+                    {[0, 1, 2, 3, 4].map((s) => (
+                      <Star key={s} className="h-3.5 w-3.5" fill="currentColor" strokeWidth={0} />
+                    ))}
+                  </div>
+                  <blockquote className="mt-5 mb-auto text-[15px] leading-[1.6]">
+                    {t.text}
+                  </blockquote>
+                  <figcaption className="mt-7 flex items-center gap-3">
+                    <Image
+                      src={t.img}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                    <span>
+                      <span className="block text-[14px] font-semibold">{t.name}</span>
+                      <span className="block text-[13px] text-[var(--muted)]">{t.role}</span>
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ── pricing ─────────────────────────────────────────────────────
             Prices come from CREDIT_PLANS. The "what it buys" line uses the same
             divisor the pricing page does: a credit checks one keyword and a
             month is 30 days, so credits / 30 is how many keywords the balance
             tracks daily for a full month. */}
-        <section id="pricing" className="scroll-mt-24 pb-20 sm:pb-28">
+        <section id="pricing" className="scroll-mt-24 pb-14 sm:pb-20">
           <div className={WRAP}>
             <SectionHead
               tag="Pricing"
@@ -664,51 +722,11 @@ export default function TrackingSuitePage() {
           </div>
         </section>
 
-        {/* ── testimonials ────────────────────────────────────────────────
-            The same three quotes the home page runs, imported rather than
-            re-written: a landing page that invents its own customers is one
-            whose social proof contradicts the site the moment a visitor clicks
-            through. framerusercontent.com is already in next.config's
-            remotePatterns, so next/image can optimize the avatars. */}
-        <section className="pb-20 sm:pb-28">
-          <div className={WRAP}>
-            <SectionHead tag="Testimonials" title="Results from real customers" />
-
-            <div className="mt-12 grid gap-4 lg:grid-cols-3">
-              {TESTIMONIALS.map((t) => (
-                <figure key={t.name} className="ads-card flex flex-col p-7">
-                  <div className="flex gap-1 text-[#f5a623]" aria-label="Rated 5 out of 5">
-                    {[0, 1, 2, 3, 4].map((s) => (
-                      <Star key={s} className="h-3.5 w-3.5" fill="currentColor" strokeWidth={0} />
-                    ))}
-                  </div>
-                  <blockquote className="mt-5 mb-auto text-[15px] leading-[1.6]">
-                    {t.text}
-                  </blockquote>
-                  <figcaption className="mt-7 flex items-center gap-3">
-                    <Image
-                      src={t.img}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 rounded-full object-cover"
-                    />
-                    <span>
-                      <span className="block text-[14px] font-semibold">{t.name}</span>
-                      <span className="block text-[13px] text-[var(--muted)]">{t.role}</span>
-                    </span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ── faq ─────────────────────────────────────────────────────────
             Plain <details>: keyboard-accessible and announced correctly for
             free, open before React would have loaded, and Ctrl+F still finds a
             closed answer in Chrome. */}
-        <section id="faq" className="scroll-mt-24 pb-20 sm:pb-28">
+        <section id="faq" className="scroll-mt-24 pb-14 sm:pb-20">
           <div className={WRAP}>
             <SectionHead
               tag="FAQ"
@@ -786,6 +804,8 @@ export default function TrackingSuitePage() {
           </div>
         </div>
       </footer>
+
+      <SignupPopup />
     </div>
   );
 }

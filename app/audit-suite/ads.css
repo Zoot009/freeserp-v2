@@ -1,0 +1,274 @@
+/* Styling for the /audit-suite ad landing page.
+ *
+ * The visual language is taken from the reference this campaign is modelled on
+ * (filo-saas.framer.website): a near-white warm canvas rather than grey, an
+ * orange accent, 24px cards and 10px controls rather than big pills, Inter at
+ * 500/600 with letter-spacing set in px so it tightens as the type grows, and a
+ * 1139px column. Those are its real tokens, read off the page.
+ *
+ * Deliberately NOT shared with app/tracking-suite/ads.css, which follows a
+ * different reference (drospecta) — the two ad pages are separate campaigns and
+ * now genuinely look different. Same class names on purpose: the markup between
+ * the two pages stays comparable even though the skins diverge.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the root layout already
+ * loads app/globals.css and Tailwind v4 scans the whole project, so every
+ * utility used in page.tsx is generated. Re-importing the framework here would
+ * ship a second copy of preflight + utilities on this route, which is exactly
+ * the weight an ad landing page cannot afford.
+ *
+ * Everything is scoped under .ads-scope, so none of it can leak into the rest
+ * of the marketing site.
+ */
+
+.ads-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     Retheming is these two lines. FreeSERP blue, not the reference's orange:
+     the layout, radii and type are Filo's, the colour is the brand's — the same
+     blue every other page of the site uses. For the reference's orange instead:
+     --accent: #ff5d30. */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+
+  --ink: #111111;
+  --body: #46484d;
+  --muted: #6c6f76;
+  --canvas: #fbfaf9;
+  --surface: #f6f5f3;
+  --card: #ffffff;
+  --line: #46484d1f;
+  --line-soft: #46484d0f;
+
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() rather than a rule in globals.css so it stays confined to
+   the routes that actually render .ads-scope. */
+html:has(.ads-scope),
+html:has(.ads-scope) body {
+  background: #fbfaf9;
+}
+
+.ads-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+/* ── type ───────────────────────────────────────────────────────────────
+   Letter-spacing in px, not em, because that is what the reference does: the
+   tracking tightens as the type grows instead of scaling with it, which is what
+   keeps a 64px headline from looking loose next to 16px body. */
+.ads-h1 {
+  font-size: clamp(38px, 5.6vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -2px;
+  font-weight: 600;
+}
+
+.ads-h2 {
+  font-size: clamp(29px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  font-weight: 600;
+}
+
+.ads-h3 {
+  font-size: clamp(23px, 2.6vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.ads-lead {
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: var(--body);
+}
+
+/* ── surfaces ───────────────────────────────────────────────────────── */
+.ads-panel {
+  border-radius: 24px;
+}
+
+.ads-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+}
+
+.ads-soft {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+}
+
+/* The reference's two-part section label: a coloured cap, then the name. */
+.ads-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--body);
+}
+
+.ads-tag > b {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* A feature name from the chip cloud. */
+.ads-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body);
+  white-space: nowrap;
+}
+
+.ads-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── buttons ────────────────────────────────────────────────────────────
+   10px, not a pill. It is the single loudest difference between this page and
+   its sibling, and it comes straight off the reference. */
+.ads-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ads-btn-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.ads-btn-sm {
+  padding: 9px 16px;
+  font-size: 14px;
+}
+
+.ads-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 1px 2px rgba(17, 17, 17, 0.16);
+}
+
+.ads-btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 88%, #000);
+}
+
+.ads-btn-ink {
+  background: var(--ink);
+  color: #fff;
+}
+
+.ads-btn-ink:hover {
+  background: #2b2c30;
+}
+
+.ads-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.ads-btn-ghost:hover {
+  border-color: #46484d3d;
+}
+
+.ads-on-dark .ads-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff29;
+}
+
+.ads-on-dark .ads-btn-ghost:hover {
+  background: #ffffff24;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   Product shots are a light UI on a near-white canvas, so they need an edge to
+   sit on rather than a frame to sit in: a hairline, a soft lift, nothing else.
+   24px to match the cards. */
+.ads-shot {
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(17, 17, 17, 0.04),
+    0 28px 56px -30px rgba(17, 17, 17, 0.26);
+}
+
+.ads-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: #fcfcfb;
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────
+   A native <details>: keyboard-accessible and announced correctly for free,
+   open before React would have loaded, and Ctrl+F still finds a closed answer
+   in Chrome. These rules only kill the default marker — which Safari draws even
+   with list-style: none — and turn the chevron. */
+.ads-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.ads-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.ads-faq[open] summary .ads-chevron {
+  transform: rotate(180deg);
+}
+
+.ads-chevron {
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-btn,
+  .ads-chevron {
+    transition: none;
+  }
+}
