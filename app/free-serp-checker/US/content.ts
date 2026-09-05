@@ -26,6 +26,9 @@ export const content = {
     cta: "Start free",
   },
   hero: {
+    // The shared SerpForm renders this; it defaults to "Check Rankings →"
+    // for the organic pages, and this campaign overrides it.
+    submitLabel: "Check rankings free →",
     eyebrow: "Free SERP checker",
     market: "United States",
     headline1: "Still Googling your keywords",

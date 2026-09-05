@@ -310,13 +310,16 @@ html:has(.uk-scope) body {
   max-width: 100%;
   margin: 20px auto 0;
   font-family: var(--mono);
-  font-size: 11px;
+  /* 700 alone was not enough to read as bold: JetBrains Mono is an even,
+     low-contrast face, and at 11px in muted grey the extra weight disappeared.
+     Size and colour do the rest of the work. */
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.6;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   text-align: center;
-  color: var(--muted);
+  color: var(--ink);
 }
 
 /* ── the hero's check form ──────────────────────────────────────────────

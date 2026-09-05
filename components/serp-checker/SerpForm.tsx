@@ -88,7 +88,18 @@ type SerpRow = {
   snippet: string | null;
 };
 
-export function SerpForm() {
+export function SerpForm({
+  /**
+   * Label for the submit button. Defaults to the string this component has
+   * always rendered, so /serp-checker, /rank-tracker and
+   * /website-ranking-checker are untouched; the ad landers pass their own
+   * campaign wording. Includes its own arrow, since the arrow is part of the
+   * label rather than something the button adds.
+   */
+  submitLabel = "Check Rankings →",
+}: {
+  submitLabel?: string;
+} = {}) {
   const appUrl = useAppUrl();
   const [domain, setDomain] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -379,7 +390,7 @@ export function SerpForm() {
               transition: "opacity .2s ease",
             }}
           >
-            {isChecking ? "Checking…" : "Check Rankings →"}
+            {isChecking ? "Checking…" : submitLabel}
           </button>
         </form>
 

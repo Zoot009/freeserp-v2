@@ -105,7 +105,7 @@ export default function FreeSerpCheckerUsPage() {
             </p>
 
             <div className="mt-9">
-              <SerpForm />
+              <SerpForm submitLabel={content.hero.submitLabel} />
             </div>
 
             <span className="us-note">{content.hero.disclaimer}</span>
