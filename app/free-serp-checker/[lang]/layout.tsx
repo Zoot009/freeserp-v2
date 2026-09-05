@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
-import { getDictionary, hasLocale, locales } from "@/lib/landing/dictionaries";
+import { getDictionary, hasLocale, locales, localeTag } from "@/lib/landing/dictionaries";
 import { notFound } from "next/navigation";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -46,7 +46,7 @@ export default async function LandingLocaleLayout({
 
   return (
     <div
-      lang={lang}
+      lang={localeTag(lang)}
       className={`${jakarta.variable} ${spaceMono.variable} landing-scope bg-white text-[#0b1020] antialiased`}
     >
       {children}

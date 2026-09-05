@@ -8,7 +8,7 @@ import FeatureThematic from "@/components/landing/FeatureThematic";
 import Stats from "@/components/landing/Stats";
 import Testimonial from "@/components/landing/Testimonial";
 import FinalCTA from "@/components/landing/FinalCTA";
-import { getDictionary, hasLocale } from "@/lib/landing/dictionaries";
+import { getDictionary, hasLocale, localeTag } from "@/lib/landing/dictionaries";
 import { notFound } from "next/navigation";
 
 export default async function LandingHome({
@@ -24,7 +24,12 @@ export default async function LandingHome({
     <div className="w-full overflow-x-hidden">
       <UrgencyBanner dict={dict.urgency} />
       <Header dict={dict.header} />
-      <Hero dict={dict.hero} personalization={dict.personalization} preview={dict.preview} locale={lang} />
+      <Hero
+        dict={dict.hero}
+        personalization={dict.personalization}
+        preview={dict.preview}
+        locale={localeTag(lang)}
+      />
       <LogoStripSteps dict={dict.logoStrip} />
       <FeatureVisibility dict={dict.visibility} />
       <FeatureCompetitors dict={dict.competitors} />

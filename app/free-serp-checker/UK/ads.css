@@ -1,0 +1,775 @@
+/* Styling for the /free-serp-checker/UK ad landing page.
+ *
+ * Same visual language as app/tracking-suite/ads.css and the sibling US ad
+ * page — warm off-white canvas rather than white, near-black ink rather than
+ * pure black, Inter 600 for headings (not 800), a narrow column, 20px cards
+ * inside 40px panels, pastel tiles instead of coloured text — so the ad pages
+ * read as a set.
+ *
+ * Its own file rather than an import of either, deliberately. These are
+ * separate campaigns; a palette change made for the US campaign must not
+ * silently restyle the UK campaign the week its ads are live. The copy in
+ * ./content.ts is separated for the same reason.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the segment layout
+ * (app/free-serp-checker/layout.tsx) already loads landing.css, which imports
+ * Tailwind, and v4 scans the whole project — so every utility used in page.tsx
+ * is generated. Re-importing the framework here would ship a second copy of
+ * preflight + utilities on this route, which is exactly the weight an ad
+ * landing page cannot afford.
+ *
+ * Everything is scoped under .uk-scope, so none of it reaches the language
+ * landers at /free-serp-checker/en (which keep .landing-scope), the US ad page
+ * (.us-scope), /tracking-suite (.ads-scope), or the rest of the marketing site.
+ */
+
+.uk-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     Retheming the page is these two lines; every button, tag and highlight
+     reads them. --accent is FreeSERP blue, the brand colour sitewide. */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+
+  --ink: #0e0f0c;
+  --body: #454745;
+  --muted: #6a6c6a;
+  --canvas: #edefeb;
+  --card: #ffffff;
+  --line: #0e0f0c1f;
+
+  /* The pastel panel tints, one per section that takes a panel. Kept as tokens
+     rather than inline values so the page's colour story is legible in one
+     place instead of scattered across a dozen style props. */
+  --tint-demo: #e7ecf6;
+  --tint-suite: #e9eae6;
+  --tint-freeserp: #e3ebff;
+  --tint-audiences: #e6efe9;
+  --tint-journey: #f0ebe4;
+
+  /* Instrument Sans for display and body, JetBrains Mono for the eyebrow
+     capsules, field labels and every numeric or data-ish bit — so a figure on
+     this page always looks like a reading, never like prose. */
+  --sans: var(--uk-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --mono: var(--uk-mono), ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Numbers, codes and readings. Applied wherever a value is shown rather than
+   described. */
+.uk-scope .uk-mono,
+.uk-scope [data-mono] {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() so it stays confined to routes that render .uk-scope. */
+html:has(.uk-scope),
+html:has(.uk-scope) body {
+  background: #edefeb;
+}
+
+.uk-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── type ───────────────────────────────────────────────────────────────
+   One clamp per level so the page has a real scale instead of a pile of
+   breakpoint overrides. Weight 600 throughout: 800 is what makes a landing
+   page look like a template. */
+.uk-h1 {
+  font-size: clamp(33px, 6.4vw, 62px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+.uk-h2 {
+  font-size: clamp(27px, 4.6vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -0.024em;
+  font-weight: 600;
+}
+
+.uk-h3 {
+  font-size: clamp(23px, 3.3vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+.uk-lead {
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.55;
+  color: var(--body);
+}
+
+/* ── hero ───────────────────────────────────────────────────────────────
+   The top of the page was a flat field of canvas with a headline floating in
+   the middle of it. This gives it a light source: three very low-alpha radial
+   stops — the brand blue in the centre, a warm one to the right and a cool
+   green-grey to the left — blurred into a single wash. Low enough that it
+   reads as light rather than as a coloured band, which is what keeps it from
+   fighting the pastel panels further down.
+
+   `isolation: isolate` plus a negative z-index on the pseudo-element keeps the
+   wash behind the content without giving every child its own stacking rule,
+   and `overflow: hidden` stops the bleed past the viewport edge from adding a
+   horizontal scrollbar. */
+.uk-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.uk-hero::before {
+  content: "";
+  position: absolute;
+  inset: -300px -8% auto;
+  height: 900px;
+  z-index: -1;
+  /* The layer starts 300px above the section so the blur has room to bleed,
+     which means these Y stops are offset by that much: 52% of 900px lands
+     ~170px into the hero, behind the headline rather than behind the logo. */
+  background:
+    radial-gradient(
+      44% 46% at 50% 52%,
+      color-mix(in srgb, var(--accent) 22%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(32% 34% at 84% 42%, #f0d6b4b3, transparent 70%),
+    radial-gradient(30% 32% at 14% 46%, #c9dfd2b3, transparent 70%);
+  filter: blur(26px);
+}
+
+/* The second half of the headline. Grey read as washed out against the wash
+   behind it; the gradient gives the hero its one moment of real colour. */
+.uk-hero-accent {
+  background: linear-gradient(102deg, var(--accent) 0%, #5b46ff 54%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Forced-colours modes paint over the gradient and would leave the words
+   invisible, so the fill comes back there. */
+@media (forced-colors: active) {
+  .uk-hero-accent {
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+}
+
+/* ── surfaces ───────────────────────────────────────────────────────── */
+.uk-panel {
+  border-radius: 26px;
+}
+
+@media (min-width: 640px) {
+  .uk-panel {
+    border-radius: 40px;
+  }
+}
+
+.uk-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+/* The small capsule that labels each section. */
+.uk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 15px 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.uk-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ── buttons ────────────────────────────────────────────────────────── */
+.uk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.uk-btn:hover {
+  transform: translateY(-1px);
+}
+
+.uk-btn-lg {
+  padding: 15px 26px;
+  font-size: 16px;
+}
+
+.uk-btn-sm {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.uk-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.uk-btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 86%, #000);
+}
+
+.uk-btn-ink {
+  background: var(--ink);
+  color: #fff;
+}
+
+.uk-btn-ink:hover {
+  background: #23241f;
+}
+
+.uk-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.uk-btn-ghost:hover {
+  border-color: #0e0f0c40;
+}
+
+.uk-on-dark .uk-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff2e;
+}
+
+.uk-on-dark .uk-btn-ghost:hover {
+  background: #ffffff24;
+  border-color: #ffffff5c;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   Product shots are a light UI on a light canvas, so they need an edge to sit
+   on rather than a frame to sit in: a hairline, a soft lift, nothing else. */
+.uk-shot {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(14, 15, 12, 0.04),
+    0 24px 48px -28px rgba(14, 15, 12, 0.28);
+}
+
+.uk-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fbfbfa;
+}
+
+/* The one highlighted line on the page: the free-credits promise, set apart
+   from the hero's own sub-heading so it reads as an offer, not more prose. */
+.uk-note {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 20px auto 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ── the hero's check form ──────────────────────────────────────────────
+   Four fields and a full-width submit, in one white card on the canvas. A
+   domain alone cannot run a real check — the SERP lookup needs a keyword, a
+   country and a device too — so the hero asks for all four up front rather
+   than collecting three of them after the click. */
+.uk-form {
+  padding: 18px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow:
+    0 1px 2px rgba(14, 15, 12, 0.04),
+    0 24px 48px -30px rgba(14, 15, 12, 0.26);
+  text-align: left;
+}
+
+.uk-field-group {
+  display: block;
+}
+
+.uk-label {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.uk-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.uk-input::placeholder {
+  color: var(--muted);
+}
+
+.uk-input:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.uk-input:disabled {
+  opacity: 0.6;
+}
+
+.uk-select {
+  appearance: none;
+  cursor: pointer;
+  /* Room for the chevron, which is painted as a background image so the
+     control stays a single element. */
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%236a6c6a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+}
+
+/* Desktop / Mobile. Two buttons rather than a select — the choice is binary
+   and has to be readable without opening anything. */
+.uk-toggle {
+  display: flex;
+  gap: 4px;
+  height: 46px;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--canvas);
+}
+
+.uk-toggle-btn {
+  flex: 1;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  /* `font: inherit` above pulls in the shorthand but not text-decoration, and
+     a button inside a label can pick one up from a UA stylesheet. Pinned so
+     the pressed state never renders underlined. */
+  text-decoration: none;
+  color: var(--body);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.uk-toggle-btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.uk-toggle-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* ── the UK map ─────────────────────────────────────────────────────────
+   Sized in the stylesheet rather than on the element so the map and the reach
+   ladder under it stay in step. */
+.uk-map {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* The rungs of the Local → Regional → National → Global ladder. Depth is
+   carried by ink opacity rather than four hues, the same way the rest of the
+   page keeps colour in surfaces instead of in marks. */
+.uk-rung {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #ffffffb3;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  color: var(--ink);
+}
+
+.uk-rung i {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ── the logo ticker ────────────────────────────────────────────────────
+   The same treatment the FreeSERP UI uses on the home page: one continuously
+   scrolling row, edges faded out by a mask, logos capped in BOTH dimensions.
+
+   The dimension cap is the important part. These files have wildly different
+   intrinsic aspects (Delhivery is 2694x427, InCaps 132x53), so constraining
+   height alone — which the static strip here used to do — renders one logo
+   five times the width of its neighbour. Capping max-width as well as
+   max-height makes the row read as one set of marks.
+
+   The track holds the list twice and travels exactly -50%, so the second copy
+   is where the first was when it loops and the seam is invisible. */
+.uk-ticker {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.uk-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: max-content;
+  animation: uk-ticker 22s linear infinite;
+}
+
+@media (min-width: 640px) {
+  .uk-form {
+    padding: 26px;
+  }
+}
+
+@media (min-width: 640px) {
+  .uk-ticker-track {
+    gap: 86px;
+  }
+}
+
+.uk-ticker-track img {
+  max-height: 30px;
+  max-width: 150px;
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+  opacity: 0.62;
+  filter: grayscale(100%);
+}
+
+@keyframes uk-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Stop the scroll and lay the single set out as a centred wrapped row. The
+     duplicate exists only to make the loop seamless, so it goes with it. */
+  .uk-ticker {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .uk-ticker-track {
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 28px 56px;
+    animation: none;
+  }
+
+  .uk-ticker-dup {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uk-btn {
+    transition: none;
+  }
+  .uk-btn:hover {
+    transform: none;
+  }
+}
+
+/* ── motion ─────────────────────────────────────────────────────────────
+   Two kinds, both pure CSS. No IntersectionObserver and no library: this page
+   is static HTML on purpose because it is bought traffic, and a reveal effect
+   is not worth a client island.
+
+   1. The hero animates once on load, on a time-based stagger.
+   2. Everything below it animates against the scroll position, using
+      `animation-timeline: view()`.
+
+   The @supports gate on the scroll half is load-bearing, not tidiness. Without
+   it, a browser with no view-timeline support would still apply the keyframe's
+   opacity:0 and then have no timeline to ever advance it — the page would
+   render blank below the hero. Gated, such a browser simply gets the finished
+   page with no reveal, which is the correct way for this to fail. The
+   reduced-motion block at the end resets opacity and transform for the same
+   reason: clearing `animation` alone would strand an element at opacity 0. */
+@keyframes uk-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.uk-enter > * {
+  animation: uk-rise 0.62s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.uk-enter > *:nth-child(1) {
+  animation-delay: 0.04s;
+}
+.uk-enter > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+.uk-enter > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.uk-enter > *:nth-child(4) {
+  animation-delay: 0.28s;
+}
+.uk-enter > *:nth-child(5) {
+  animation-delay: 0.34s;
+}
+
+@supports (animation-timeline: view()) {
+  .uk-reveal,
+  .uk-reveal-group > * {
+    animation: uk-rise 1s linear both;
+    animation-timeline: view();
+    /* Both ends of the range live inside `entry`, and that is the whole point.
+       An earlier version ended at `cover 26%`: the `cover` range only completes
+       once an element has travelled the full height of the scrollport, which
+       nothing near the bottom of the document can ever do — the page runs out
+       of scroll first. Those elements stopped part-way through the fade and
+       stayed there, so the closing CTA rendered as grey-over-cream instead of
+       near-black, and the effect got worse the further down the page you
+       looked. Ending inside `entry` means the animation is finished as soon as
+       the element has entered the viewport, which every element reaches. */
+    animation-range: entry 0% entry 55%;
+  }
+
+  /* Stagger within a group by pushing each child's range later — a
+     scroll-driven animation has no delay to give it. Every end stays well
+     under `entry 100%` so the last row of the last group still completes. */
+  .uk-reveal-group > *:nth-child(2) {
+    animation-range: entry 8% entry 63%;
+  }
+  .uk-reveal-group > *:nth-child(3) {
+    animation-range: entry 16% entry 71%;
+  }
+  .uk-reveal-group > *:nth-child(4) {
+    animation-range: entry 24% entry 79%;
+  }
+  .uk-reveal-group > *:nth-child(n + 5) {
+    animation-range: entry 32% entry 87%;
+  }
+}
+
+/* Printing and full-page capture evaluate a view timeline at whatever progress
+   the element currently reports, so anything off-screen would come out faded.
+   Nothing animates on paper. */
+@media print {
+  .uk-enter > *,
+  .uk-reveal,
+  .uk-reveal-group > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Cards that answer the pointer. Transform and shadow only, so it stays on the
+   compositor and never reflows the grid around it. */
+.uk-lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.uk-lift:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 1px 2px rgba(14, 15, 12, 0.04),
+    0 20px 40px -26px rgba(14, 15, 12, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uk-enter > *,
+  .uk-reveal,
+  .uk-reveal-group > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .uk-lift,
+  .uk-lift:hover {
+    transition: none;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* ── top bar ────────────────────────────────────────────────────────────
+   A single thin row: the mark on the left, a live-data marker on the right.
+   Not a nav — there are still no links out of this page — so it costs the
+   visitor nothing while giving the hero a top edge to sit under. */
+.uk-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0 0;
+}
+
+.uk-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ── the accent panel ───────────────────────────────────────────────────
+   One solid-blue surface on the page, used for the side of the comparison
+   we are arguing for. Everything inside it inverts. */
+.uk-panel-accent {
+  background: var(--accent);
+  color: #fff;
+}
+
+.uk-panel-accent .uk-check {
+  background: #ffffff2e;
+}
+
+.uk-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  margin-top: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 14%, #fff);
+}
+
+/* The muted side of the comparison. Em dashes, not crosses: these are not
+   failures, they are things a ranking check does not need. */
+.uk-dash {
+  flex-shrink: 0;
+  width: 12px;
+  color: var(--muted);
+}
+
+/* ── mock browser panel ─────────────────────────────────────────────────
+   Stands in for the dashboard without shipping a 200KB screenshot of it. The
+   figures come from content.ts like every other mockup on the page. */
+.uk-window {
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+  overflow: hidden;
+}
+
+.uk-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.uk-window-bar::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.uk-bar-track {
+  flex: 1;
+  height: 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  overflow: hidden;
+}
+
+.uk-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}

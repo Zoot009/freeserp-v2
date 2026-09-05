@@ -32,6 +32,8 @@ type HeroDict = {
   invalidDomain: string;
   notFound: string;
   checking: string;
+  subheading2?: string;
+  disclaimerTone?: "accent";
 };
 
 type PersonalizationDict = {
@@ -89,11 +91,17 @@ export default function Hero({
   personalization,
   preview,
   locale,
+  showDemo = true,
 }: {
   dict: HeroDict;
   personalization: PersonalizationDict;
   preview: PreviewOverlayDict;
   locale: string;
+  /**
+   * Landers that give the demo clip its own section below the hero pass false,
+   * so the clip isn't rendered (and lazily fetched) twice on one page.
+   */
+  showDemo?: boolean;
 }) {
   const [domain, setDomain] = useState("");
   // "format" — not a plausible host at all (a typo like "hello world").
@@ -188,6 +196,11 @@ export default function Hero({
         <p className="mx-auto mt-7 max-w-[640px] text-lg leading-[1.4] font-medium text-pretty text-[#3b4256] sm:text-[22px]">
           {dict.subheading}
         </p>
+        {dict.subheading2 && (
+          <p className="mx-auto mt-4 max-w-[640px] text-lg leading-[1.4] font-medium text-pretty text-[#3b4256] sm:text-[22px]">
+            {dict.subheading2}
+          </p>
+        )}
 
         <form
           onSubmit={handleSubmit}
@@ -241,14 +254,20 @@ export default function Hero({
           </button>
         </form>
         <p
-          className={`mt-5 text-sm ${error ? "font-semibold text-[#c02626]" : "text-[#6b7286]"}`}
+          className={`mt-5 ${
+            error
+              ? "text-sm font-semibold text-[#c02626]"
+              : dict.disclaimerTone === "accent"
+                ? "text-[15px] font-semibold tracking-[0.01em] text-accent-dark sm:text-base"
+                : "text-sm text-[#6b7286]"
+          }`}
           role={error ? "alert" : undefined}
         >
           {message}
         </p>
         <PersonalizedNote dict={personalization} locale={locale} />
 
-        <TiltCard liveDemo={dict.liveDemo} demoAlt={dict.demoAlt} />
+        {showDemo && <TiltCard liveDemo={dict.liveDemo} demoAlt={dict.demoAlt} />}
       </div>
 
       <PreviewOverlay dict={preview} locale={locale} controllerRef={previewRef} />

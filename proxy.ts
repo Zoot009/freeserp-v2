@@ -7,6 +7,15 @@ import { locales, defaultLocale, hasLocale } from "@/lib/landing/dictionaries";
 // than duplicating the function.
 const LANDING_ROOTS = ["/free-serp-checker"];
 
+// Ad-market landers: standalone routes under a LANDING_ROOT that are NOT
+// locales. They own their copy (app/free-serp-checker/US/content.ts) and must
+// be served exactly as requested. They are listed here rather than read from
+// `locales` precisely because they are deliberately absent from it — a market
+// is not a language. Without this, they fall through to the locale redirect
+// below and a US ad click lands on /free-serp-checker/en/US, which 404s.
+// Segments are case-sensitive, matching the route folder and the ad URL.
+const MARKET_SEGMENTS = ["US", "UK"];
+
 function getPreferredLocale(request: NextRequest) {
   const acceptLanguage = request.headers.get("accept-language");
   if (!acceptLanguage) return defaultLocale;
@@ -38,6 +47,12 @@ export function proxy(request: NextRequest) {
     (locale) => pathname === `${root}/${locale}` || pathname.startsWith(`${root}/${locale}/`),
   );
   if (pathnameHasLocale) return NextResponse.next();
+
+  const isMarketRoute = MARKET_SEGMENTS.some(
+    (market) =>
+      pathname === `${root}/${market}` || pathname.startsWith(`${root}/${market}/`),
+  );
+  if (isMarketRoute) return NextResponse.next();
 
   const locale = getPreferredLocale(request);
   const url = request.nextUrl.clone();

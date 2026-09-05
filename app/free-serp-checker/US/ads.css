@@ -1,0 +1,513 @@
+/* Styling for the /free-serp-checker/US ad landing page.
+ *
+ * Two typefaces, both already carried by the site so neither is a new
+ * dependency:
+ *
+ *   Archivo (variable, loaded with its wdth axis) for every heading and all
+ *   body copy. Headings run the width axis at 106–112% — slightly extended
+ *   rather than merely bold, which is what gives the big left-aligned display
+ *   type its weight without pushing to 800. The axis is why this page loads its
+ *   own Archivo instance: the root layout's is a set of static weights and has
+ *   no wdth axis to drive, so font-stretch there would do nothing.
+ *
+ *   Geist Mono for the small uppercase eyebrows, field labels and stat deltas.
+ *   Taken from the root layout's --font-geist-mono, so it costs no extra fetch.
+ *
+ * The layout is left-aligned throughout: a mono eyebrow, a large heading, and
+ * where a section needs a sentence of explanation it sits in a second column
+ * beside the heading rather than centred beneath it. Colour is carried by two
+ * surfaces only — a solid accent panel and a hairline-bordered one — with
+ * hairline rules doing the work that panel washes used to.
+ *
+ * Palette is shared with /free-serp-checker/UK so the two ad pages read as a
+ * set. Each still owns its own stylesheet rather than importing a shared one,
+ * so neither can restyle the other mid-campaign.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the segment layout
+ * (app/free-serp-checker/layout.tsx) already loads landing.css, which imports
+ * Tailwind, and v4 scans the whole project — so every utility used in page.tsx
+ * is generated. Re-importing the framework here would ship a second copy of
+ * preflight + utilities on this route, which is exactly the weight an ad
+ * landing page cannot afford.
+ *
+ * Everything is scoped under .us-scope, so none of it reaches the language
+ * landers at /free-serp-checker/en (which keep .landing-scope), /UK, or the
+ * rest of the marketing site.
+ */
+
+.us-scope {
+  /* ── theme ──────────────────────────────────────────────────────────── */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+
+  --ink: #0e0f0c;
+  --body: #454745;
+  --muted: #6a6c6a;
+  --canvas: #edefeb;
+  --card: #ffffff;
+  --line: #0e0f0c1f;
+  --rule: #0e0f0c14;
+
+  /* The one remaining panel wash, behind the drawn report mockups. Everything
+     else is either the canvas, a white card, or the solid accent. */
+  --tint-report: #e6efe9;
+
+  /* Data colours for the mockups. Semantic — a gain is green, a loss is red —
+     so this is the one place hue carries meaning rather than decoration. */
+  --data-up: #16a34a;
+  --data-down: #ef4444;
+  --data-warn: #f59e0b;
+  --data-flat: #8a91a3;
+  --ring-track: #e6e9f2;
+
+  background: var(--canvas);
+  color: var(--ink);
+  overflow-x: hidden;
+  font-family: var(--font-archivo-us), ui-sans-serif, system-ui, sans-serif;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html:has(.us-scope),
+html:has(.us-scope) body {
+  background: #edefeb;
+}
+
+.us-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── type ───────────────────────────────────────────────────────────────
+   The width axis is the point. font-stretch on a variable Archivo drives wdth
+   directly; it is set per level so display type is wider than section type and
+   the scale reads as one family rather than three sizes of the same thing. */
+.us-h1 {
+  font-size: clamp(34px, 7vw, 88px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  font-stretch: 112%;
+}
+
+.us-h2 {
+  font-size: clamp(30px, 4.4vw, 50px);
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+  font-weight: 700;
+  font-stretch: 108%;
+}
+
+.us-h3 {
+  font-size: clamp(25px, 3.1vw, 38px);
+  line-height: 1.1;
+  letter-spacing: -0.024em;
+  font-weight: 700;
+  font-stretch: 106%;
+}
+
+.us-h4 {
+  font-size: 19px;
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+  font-weight: 600;
+  font-stretch: 106%;
+}
+
+.us-lead {
+  font-size: clamp(15.5px, 1.4vw, 17px);
+  line-height: 1.55;
+  color: var(--body);
+}
+
+/* The small uppercase label above every section heading, and the field labels
+   and deltas inside the mockups. Mono, because it is the one voice on the page
+   that is meant to read as instrumentation rather than as prose. */
+.us-eyebrow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.us-eyebrow-accent {
+  color: var(--accent);
+}
+
+.us-mono {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── the page container ─────────────────────────────────────────────────
+   Defined once here rather than repeated as a utility string, because it was
+   repeated and the two copies drifted 40px apart. */
+.us-wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 640px) {
+  .us-wrap {
+    padding-inline: 32px;
+  }
+}
+
+/* ── rules and surfaces ─────────────────────────────────────────────────
+   A hairline is the default separator on this page. Panels are either a plain
+   bordered card or the solid accent; there is no third treatment. */
+.us-rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 0;
+}
+
+.us-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.us-outline {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.us-solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 16px;
+}
+
+.us-panel {
+  border-radius: 20px;
+}
+
+/* ── the top bar ────────────────────────────────────────────────────────
+   The one navigational element, and it navigates nowhere except signup: a
+   wordmark, the offer, and the call to action. A paid visitor arrived for one
+   question and a row of links is an invitation to leave before it is
+   answered. */
+.us-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0 8px;
+}
+
+.us-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  font-stretch: 106%;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.us-nav-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ── buttons ────────────────────────────────────────────────────────── */
+.us-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-stretch: 104%;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.us-btn:hover {
+  transform: translateY(-1px);
+}
+
+.us-btn-lg {
+  padding: 14px 24px;
+  font-size: 15.5px;
+}
+
+.us-btn-sm {
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+/* Ink, not accent: the accent is spent on whole surfaces here, so a blue
+   button beside a blue panel would read as part of it. */
+.us-btn-primary {
+  background: var(--ink);
+  color: #fff;
+}
+
+.us-btn-primary:hover {
+  background: #2b2b2b;
+}
+
+/* For use ON the solid accent panel, where the accent itself is unavailable. */
+.us-btn-onsolid {
+  background: #fff;
+  color: var(--ink);
+}
+
+.us-btn-onsolid:hover {
+  background: #eef1f4;
+}
+
+.us-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.us-btn-ghost:hover {
+  border-color: #0e0f0c40;
+}
+
+/* ── the offer line under the hero form ─────────────────────────────── */
+.us-note {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  /* Centred under the checker rather than aligned to the page's left edge:
+     it belongs to the form, which is itself centred, not to the left-aligned
+     column of copy above it. */
+  margin: 20px auto 0;
+  text-align: center;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ── motion ─────────────────────────────────────────────────────────────
+   All CSS. This is an ad landing page, so a scroll-reveal library — or even an
+   IntersectionObserver island — would mean shipping and hydrating JavaScript
+   before the first paint settles, which is the cost the rest of the page is
+   built to avoid.
+
+   Two mechanisms, both progressive enhancements that degrade to "no animation,
+   content fully visible" rather than to a blank page:
+
+     1. Load-time keyframes for the hero, which is above the fold and needs no
+        scroll to have happened. These run everywhere.
+     2. Scroll-driven `animation-timeline: view()` below it, wrapped in
+        @supports. Where unsupported (Firefox, older Safari) no animation is
+        registered at all, so nothing is ever left stuck at opacity 0 — the
+        failure mode of every JS-free reveal that forgets this. */
+
+@keyframes us-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .us-hero-in > * {
+    animation: us-fade-up 0.6s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+  }
+  .us-hero-in > *:nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  .us-hero-in > *:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .us-hero-in > *:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+  .us-hero-in > *:nth-child(4) {
+    animation-delay: 0.19s;
+  }
+  .us-hero-in > *:nth-child(5) {
+    animation-delay: 0.24s;
+  }
+  .us-hero-in > *:nth-child(6) {
+    animation-delay: 0.29s;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .us-rise {
+      animation: us-fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 46%;
+    }
+
+    .us-rise-group > * {
+      animation: us-fade-up linear both;
+      animation-timeline: view();
+    }
+    .us-rise-group > *:nth-child(1) {
+      animation-range: entry 5% entry 44%;
+    }
+    .us-rise-group > *:nth-child(2) {
+      animation-range: entry 9% entry 50%;
+    }
+    .us-rise-group > *:nth-child(3) {
+      animation-range: entry 13% entry 56%;
+    }
+    .us-rise-group > *:nth-child(4) {
+      animation-range: entry 17% entry 62%;
+    }
+    .us-rise-group > *:nth-child(n + 5) {
+      animation-range: entry 20% entry 66%;
+    }
+
+    .us-ring {
+      animation: us-ring-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 12% entry 52%;
+    }
+  }
+}
+
+/* ── the radial meters ──────────────────────────────────────────────────
+   The fill percentage is a registered custom property, which is what makes a
+   conic-gradient animatable at all — an unregistered one has no type, so the
+   browser cannot interpolate it and the sweep would simply snap.
+
+   --us-ring-fill is ALSO set inline on the element, to its final value. Where
+   @property or view() timelines are unsupported the animation never runs, and
+   that inline value leaves the ring rendered full and correct instead of
+   collapsing to an invalid gradient. */
+@property --us-ring-fill {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.us-ring {
+  background: conic-gradient(
+    var(--us-ring-color) 0 var(--us-ring-fill),
+    var(--ring-track) var(--us-ring-fill) 100%
+  );
+}
+
+@keyframes us-ring-fill {
+  from {
+    --us-ring-fill: 0%;
+  }
+  to {
+    --us-ring-fill: var(--us-ring-target);
+  }
+}
+
+/* ── hover ──────────────────────────────────────────────────────────────
+   Transform and border-color only, so it composites on the GPU and never
+   triggers layout. */
+@media (prefers-reduced-motion: no-preference) {
+  .us-lift {
+    transition:
+      transform 0.28s cubic-bezier(0.22, 0.7, 0.2, 1),
+      border-color 0.28s ease;
+  }
+
+  .us-lift:hover {
+    transform: translateY(-3px);
+    border-color: #0e0f0c33;
+  }
+}
+
+/* ── the logo ticker ────────────────────────────────────────────────────
+   One continuously scrolling row, edges faded by a mask, logos capped in BOTH
+   dimensions. The dimension cap is the important part: these files have very
+   different intrinsic aspects (Delhivery is 2694x427, InCaps 132x53), so
+   constraining height alone renders one logo several times the width of its
+   neighbour.
+
+   The track holds the list twice and travels exactly -50%, so the second copy
+   is where the first was when it loops and the seam is invisible. */
+.us-ticker {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+.us-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: max-content;
+  animation: us-ticker 22s linear infinite;
+}
+
+@media (min-width: 640px) {
+  .us-ticker-track {
+    gap: 86px;
+  }
+}
+
+.us-ticker-track img {
+  max-height: 28px;
+  max-width: 140px;
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+  opacity: 0.55;
+  filter: grayscale(100%);
+}
+
+@keyframes us-ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Stop the scroll and lay the single set out as a centred wrapped row. The
+     duplicate exists only to make the loop seamless, so it goes with it. */
+  .us-ticker {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .us-ticker-track {
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px 48px;
+    animation: none;
+  }
+
+  .us-ticker-dup {
+    display: none;
+  }
+
+  .us-btn {
+    transition: none;
+  }
+
+  .us-btn:hover {
+    transform: none;
+  }
+}
