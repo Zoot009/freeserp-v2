@@ -199,14 +199,6 @@ export default function FreeSerpCheckerUkPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-9">
-                  <Cta
-                    placement="positioning"
-                    label={content.hero.ctaButton}
-                    variant="ghost"
-                    size="sm"
-                  />
-                </div>
               </div>
             </div>
           </div>

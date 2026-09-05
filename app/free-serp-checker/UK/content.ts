@@ -35,9 +35,6 @@ export const content = {
       "Check where your site really ranks — by keyword, country and device.",
     subheading2:
       "Real Google SERP results, not the personalised ones you see when you search yourself.",
-    // The label on the mid-page signup button. The hero's own submit lives in
-    // `check` with the rest of the form.
-    ctaButton: "Check your rankings free",
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",
   },
@@ -52,7 +49,7 @@ export const content = {
     deviceLabel: "Device",
     desktop: "Desktop",
     mobile: "Mobile",
-    submit: "Check rankings",
+    submit: "Check rankings free",
     checking: "Checking…",
     disclaimer: "100 Free Credits Monthly • No Credit Card • Real SERP Results",
   },

@@ -39,7 +39,6 @@ export const content = {
       "Check where your site really ranks — by keyword, country and device.",
     subheading2:
       "Real Google SERP results, not the personalized ones you see when you search yourself.",
-    ctaButton: "Check your rankings free",
     disclaimer: "100 Free Credits Monthly • No Credit Card • Real SERP Results",
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",

@@ -186,14 +186,6 @@ export default function FreeSerpCheckerUsPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8">
-                  <Cta
-                    placement="positioning"
-                    label={content.hero.ctaButton}
-                    size="sm"
-                    variant="onsolid"
-                  />
-                </div>
               </div>
             </div>
           </div>
