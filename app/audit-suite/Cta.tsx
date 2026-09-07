@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { trackLandingAndFlush } from "@/components/landing/track";
 
@@ -42,8 +42,9 @@ export function Cta({
   placement: string;
   label?: string;
   size?: "lg" | "sm";
-  variant?: "primary" | "ink" | "ghost";
-  arrow?: boolean;
+  variant?: "primary" | "ink" | "ghost" | "white";
+  /** `true` trails the label with →; "up-right" with ↗, for the nav pill. */
+  arrow?: boolean | "up-right";
   className?: string;
 }) {
   const appUrl = useAppUrl();
@@ -62,7 +63,11 @@ export function Cta({
       className={`ads-btn ads-btn-${size} ads-btn-${variant} ${className}`}
     >
       {label}
-      {arrow && <ArrowRight className="h-[17px] w-[17px]" strokeWidth={2} />}
+      {arrow === "up-right" ? (
+        <ArrowUpRight className="h-[17px] w-[17px]" strokeWidth={2} />
+      ) : (
+        arrow && <ArrowRight className="h-[17px] w-[17px]" strokeWidth={2} />
+      )}
     </a>
   );
 }

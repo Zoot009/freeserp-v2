@@ -20,6 +20,7 @@ import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
+import { SignupPopup } from "./SignupPopup";
 import "./ads.css";
 
 /**
@@ -417,33 +418,30 @@ export default function AuditSuitePage() {
       />
 
       {/* ── nav ───────────────────────────────────────────────────────────
-          `fixed`, not `sticky`, for the same reason the site Nav and the
-          existing landing Header are: globals.css puts overflow-x: hidden on
-          <body>, which makes it a scroll container and stops sticky from ever
-          sticking. The hero carries the matching top padding.
-          Logo and one CTA, nothing else: every extra destination in the bar of
-          a paid landing page is a way to spend the click without converting. */}
-      <header className="fixed inset-x-0 top-3 z-50 px-4 sm:top-5">
-        <div className="mx-auto flex w-full max-w-[1139px] items-center gap-6 rounded-[16px] border border-[#46484d1f] bg-white/85 py-2.5 pr-2.5 pl-4 backdrop-blur-xl sm:pl-6">
+          No bar: the header is transparent and sits directly on the hero, so
+          the top of the page is the headline rather than a chrome strip above
+          it. That is only readable while there is hero behind it, so this is
+          `absolute` at the top of the document rather than `fixed` — a
+          transparent bar pinned over the scrolling body would drag a floating
+          logo and a white pill across every card below.
+          Logo one side, the CTA the other, nothing in between: the anchors that
+          were here read as a site nav, and this is a landing page with one
+          thing to do. The pill is white rather than the accent because it sits
+          on colour — on the hero it is the only white object in the frame. */}
+      <header className="absolute inset-x-0 top-0 z-50">
+        <div className={`${WRAP} flex h-[76px] items-center justify-between gap-4 sm:h-[84px]`}>
           <a href="#top" className="flex items-center gap-2.5">
-            <LogoMark className="h-6.5 w-6.5" />
-            <Wordmark className="text-[16px] font-semibold tracking-[-0.5px] text-[var(--ink)]" />
+            <LogoMark className="h-7 w-7 rounded-[8px]" />
+            <Wordmark className="text-[19px] font-semibold tracking-[-0.6px] text-[var(--ink)]" />
           </a>
-          <Cta
-            placement="nav"
-            label="Create free account"
-            size="sm"
-            variant="ink"
-            arrow={false}
-            className="ml-auto"
-          />
+
+          <Cta placement="nav" label="Start free" size="sm" variant="white" arrow="up-right" />
         </div>
       </header>
 
       <main>
         {/* ── hero ─────────────────────────────────────────────────────────
-            The announcement pill, the single primary CTA and the reassurance
-            line under it are the reference's opening move. The screenshot is
+            The announcement pill opens the page. The screenshot is
             the Full Website Audit mid-crawl. The finished report is the first
             block in the toolkit below — the flagship tool, in both its states. */}
         <section id="top" className="relative pt-28 pb-6 sm:pt-36">
@@ -468,15 +466,6 @@ export default function AuditSuitePage() {
               single page against 63 checks. Put yourself beside the pages outranking
               you, map your internal links, and find the keywords worth writing for.
             </p>
-
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Cta placement="hero" label="Start free — 100 credits" />
-              <a href="#pricing" className="ads-btn ads-btn-lg ads-btn-ghost">
-                See pricing
-              </a>
-            </div>
-
-            <p className="mt-4 text-[14px] text-[var(--muted)]">No credit card required</p>
           </div>
 
           <div className={`${WRAP} mt-12 sm:mt-16`}>
@@ -876,6 +865,8 @@ export default function AuditSuitePage() {
           </div>
         </div>
       </footer>
+
+      <SignupPopup />
     </div>
   );
 }

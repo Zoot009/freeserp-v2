@@ -244,6 +244,85 @@ html:has(.ads-scope) body {
   background: #fcfcfb;
 }
 
+/* ── timed signup popup ────────────────────────────────────
+   Same markup as /tracking-suite's popup, skinned to this page: a 24px card and
+   this reference's shadow, not the pill-and-28px one the tracker page uses. */
+.ads-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ads-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.45);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+
+.ads-popup-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 34px 34px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  text-align: center;
+  box-shadow: 0 32px 64px -24px rgba(17, 17, 17, 0.34);
+  animation: ads-popup-in 0.24s ease-out;
+}
+
+.ads-popup-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--muted);
+  transition: background-color 0.2s ease;
+}
+
+.ads-popup-x:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.ads-popup-title {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.ads-popup-body {
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+.ads-popup-body b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@keyframes ads-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
 /* ── FAQ ────────────────────────────────────────────────────────────────
    A native <details>: keyboard-accessible and announced correctly for free,
    open before React would have loaded, and Ctrl+F still finds a closed answer
@@ -270,5 +349,8 @@ html:has(.ads-scope) body {
   .ads-btn,
   .ads-chevron {
     transition: none;
+  }
+  .ads-popup-card {
+    animation: none;
   }
 }
