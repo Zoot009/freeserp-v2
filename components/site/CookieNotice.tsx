@@ -73,8 +73,8 @@ export function CookieNotice() {
     >
       <div className="mx-auto flex max-w-3xl flex-col items-start justify-between gap-3 px-4 py-4 sm:flex-row sm:items-center sm:px-6">
         <p className="text-sm leading-relaxed text-black/70">
-          We use cookies and similar technologies to understand how visitors use FreeSERP and to
-          improve it. Anything you type into a form is never captured.{" "}
+          We use cookies and similar technologies to see how FreeSERP is used and to improve it.
+          What you type into forms is never recorded.{" "}
           <Link href="/privacy" className="underline underline-offset-2 hover:text-black">
             Privacy policy
           </Link>

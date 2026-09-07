@@ -107,6 +107,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-MN3Q7X5V');`,
           }}
         />
+        {/* OpenAI conversion pixel. The snippet stubs window.oaiq into a call
+            queue and injects the SDK itself, the same stub-then-load shape as
+            the GTM snippet above — so it stays inline and verbatim rather than
+            being split into a <Script src> plus a separate init. Same
+            afterInteractive reasoning too: attribution deferred to browser-idle
+            is attribution missed. Fire conversions with oaiq('event', ...). */}
+        <Script
+          id="openai-pixel"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"7iq3PsaY5c9VB87YLnXeoH",debug:true});`,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <noscript>
