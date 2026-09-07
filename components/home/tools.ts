@@ -281,7 +281,6 @@ export interface Capability {
     | "share"
     | "zap"
     | "gauge"
-    | "wallet"
     | "sparkles"
     | "eye"
     | "chart";
@@ -349,11 +348,6 @@ export const CAPABILITIES: Capability[] = [
     icon: "share",
     title: "Shareable reports",
     text: "Send a finished audit or analysis as a link. The person reading it does not need an account, and you do not need to rebuild it as a slide.",
-  },
-  {
-    icon: "wallet",
-    title: "One balance, no seats",
-    text: "Every tool spends from the same credits, and nothing is locked behind a higher tier. No per-user pricing, so bringing a colleague in costs nothing.",
   },
 ];
 

@@ -10,7 +10,6 @@ import {
   Share2,
   Sparkles,
   Star,
-  Wallet,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -29,7 +28,6 @@ const ICONS: Record<Capability["icon"], LucideIcon> = {
   share: Share2,
   zap: Zap,
   gauge: Gauge,
-  wallet: Wallet,
   sparkles: Sparkles,
   eye: Eye,
   chart: BarChart3,
