@@ -1,0 +1,418 @@
+/* Styling for the /audit-suite landing pages (/us, /uk).
+ *
+ * A sibling of app/tracking-suite/ads.css, not a copy of it: the two campaigns
+ * run side by side, and importing one route's theme into the other would mean a
+ * colour change made for the tracking campaign silently repaints this one.
+ * Self-contained is the cheaper mistake here.
+ *
+ * ── Where colour is allowed to go ──────────────────────────────────────────
+ * An earlier draft put one blue→violet ramp on every button, icon, card edge,
+ * badge and number. Repeated that often a gradient stops reading as emphasis
+ * and starts reading as a template, so the rules are now explicit:
+ *
+ *   Gradient = ambient light.  The hero wash and the glow inside dark panels.
+ *              Large, diffuse, behind content. Never a button, an icon, a card
+ *              edge or a badge.
+ *   Gradient on type = exactly one moment per page (the hero's second line).
+ *              A second one makes both of them ordinary.
+ *   Hue = meaning.  Each tool and each check category owns a colour, worn as a
+ *              tinted chip (.audit-icon) and a dot. A reader can tell the
+ *              internal-links section from the page-audit section at a glance
+ *              because they are different colours, not because they are
+ *              different distances down the page.
+ *   Solid accent = action.  Every primary button is one flat brand blue, so
+ *              "this is the thing to click" is a colour the eye learns once.
+ *
+ * Depth comes from hairlines, tints and shadows rather than from colour ramps.
+ *
+ * Layout tokens (1072px column, 40px panels, 20px cards, Inter 600 headings)
+ * match the sibling campaign, so the two still look like the same company.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the root layout already
+ * loads app/globals.css and Tailwind v4 scans the whole project, so every
+ * utility used in page.tsx is generated. Re-importing the framework here would
+ * ship a second copy of preflight + utilities on this route, which is exactly
+ * the weight an ad landing page cannot afford.
+ *
+ * Everything is scoped under .audit-scope, so none of it can leak into the rest
+ * of the marketing site.
+ */
+
+.audit-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     One accent, and one gradient that is only ever allowed to touch type. */
+  --accent: #0454ff;
+  --accent-deep: #0838b8;
+  --accent-ink: #ffffff;
+
+  /* The single gradient permitted on text. Kept short and close in hue —
+     blue into indigo, not blue across to magenta — so it reads as one colour
+     catching the light rather than as a rainbow. */
+  --grad-text: linear-gradient(96deg, #0454ff 0%, #4832d8 100%);
+
+  --ink: #0d1020;
+  --body: #454a5e;
+  --muted: #6b7186;
+  --canvas: #f3f4f9;
+  --card: #ffffff;
+  --line: #0d10201f;
+
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() rather than a rule in globals.css so it stays confined to
+   the routes that actually render .audit-scope. */
+html:has(.audit-scope),
+html:has(.audit-scope) body {
+  background: #f3f4f9;
+}
+
+.audit-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── type ───────────────────────────────────────────────────────────────
+   One clamp per level so the page has a real scale instead of a pile of
+   breakpoint overrides. Weight 600 throughout: 800 is what makes a landing
+   page look like a template. */
+.audit-h1 {
+  font-size: clamp(38px, 6vw, 68px);
+  line-height: 1.05;
+  letter-spacing: -0.028em;
+  font-weight: 600;
+}
+
+.audit-h2 {
+  font-size: clamp(29px, 4.2vw, 50px);
+  line-height: 1.08;
+  letter-spacing: -0.024em;
+  font-weight: 600;
+}
+
+.audit-h3 {
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+.audit-lead {
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.58;
+  color: var(--body);
+}
+
+/* The one line per page that carries the ramp. If you find yourself adding a
+   second, make one of them solid instead. */
+.audit-grad-text {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── ambient light ──────────────────────────────────────────────────────
+   The hero wash. Three wide, low-opacity blooms on an absolutely-positioned
+   layer rather than a background-image on the section itself, so they can
+   bleed past the 1072px column without widening it. Low opacity and a large
+   blur are what separate "light in the room" from "two coloured blobs":
+   nothing here should be identifiable as a shape.
+   pointer-events + aria-hidden are set on the element in page.tsx. */
+.audit-bloom {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.audit-bloom::before,
+.audit-bloom::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(110px);
+}
+
+.audit-bloom::before {
+  width: 780px;
+  height: 620px;
+  top: -300px;
+  left: -220px;
+  opacity: 0.4;
+  background: radial-gradient(circle, #7d9bff 0%, #7d9bff00 72%);
+}
+
+.audit-bloom::after {
+  width: 700px;
+  height: 560px;
+  top: -260px;
+  right: -200px;
+  opacity: 0.28;
+  background: radial-gradient(circle, #b98cff 0%, #b98cff00 72%);
+}
+
+/* ── surfaces ───────────────────────────────────────────────────────── */
+.audit-panel {
+  border-radius: 40px;
+}
+
+.audit-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+/* A card that lifts on hover — only on the grids a visitor scans (personas,
+   benefits), never on the ones they read. */
+.audit-card-lift {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.audit-card-lift:hover {
+  transform: translateY(-3px);
+  border-color: #0d102033;
+  box-shadow: 0 18px 40px -24px rgba(13, 16, 32, 0.35);
+}
+
+/* ── the hue chip ───────────────────────────────────────────────────────
+   How a tool or a category wears its colour: a tinted disc with the icon in
+   the same hue, rather than a saturated gradient fill. Set --tint per instance
+   and the tint, the border and the glyph all derive from it, so a new section
+   colour is one value rather than three.
+   Falls back to the accent when --tint is not set. */
+.audit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tint, var(--accent)) 11%, #fff);
+  border: 1px solid color-mix(in srgb, var(--tint, var(--accent)) 22%, transparent);
+  color: var(--tint, var(--accent));
+}
+
+/* The same idea at 7px, for the dot on a section kicker. */
+.audit-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--tint, var(--accent));
+}
+
+/* The small capsule that labels each section — "The problem", "Pricing", "FAQ". */
+.audit-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #ffffffcc;
+  backdrop-filter: blur(8px);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  color: var(--ink);
+}
+
+.audit-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ── buttons ────────────────────────────────────────────────────────── */
+.audit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.audit-btn:hover {
+  transform: translateY(-1px);
+}
+
+.audit-btn-lg {
+  padding: 15px 26px;
+  font-size: 16px;
+}
+
+.audit-btn-sm {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+/* One flat brand blue. The lift comes from a hairline of light along the top
+   edge and a shadow tinted with the button's own colour — depth, rather than a
+   second colour sliding across it. */
+.audit-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 8px 20px -12px rgba(4, 84, 255, 0.85);
+}
+
+.audit-btn-primary:hover {
+  background: var(--accent-deep);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 14px 28px -12px rgba(4, 84, 255, 0.9);
+}
+
+.audit-btn-ink {
+  background: var(--ink);
+  color: #fff;
+}
+
+.audit-btn-ink:hover {
+  background: #1c2136;
+}
+
+.audit-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.audit-btn-ghost:hover {
+  border-color: #0d102040;
+}
+
+/* On the dark stat/CTA panels the ghost button has to invert. */
+.audit-on-dark .audit-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff2e;
+}
+
+.audit-on-dark .audit-btn-ghost:hover {
+  background: #ffffff24;
+  border-color: #ffffff5c;
+}
+
+/* ── dark panels ────────────────────────────────────────────────────────
+   The second and last place a gradient is allowed: deep indigo with the light
+   falling off across it, so a 1000px-wide black block has some air in it.
+   Kept well below the point where the two source hues are nameable. */
+.audit-dark {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 130% at 8% -10%, #33409033 0%, #33409000 58%),
+    radial-gradient(110% 120% at 96% 4%, #6b3a8c2e 0%, #6b3a8c00 58%),
+    linear-gradient(168deg, #121734 0%, #0d1020 100%);
+  color: #fff;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   Product shots are a light UI on a light canvas, so they need an edge to sit
+   on rather than a frame to sit in: a hairline, a soft lift, and nothing else.
+   (An earlier draft wrapped these in a tinted gradient ring — one more place
+   the ramp appeared for no reason. The shadow already separates the shot from
+   the canvas.) */
+.audit-shot {
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(13, 16, 32, 0.04),
+    0 26px 52px -28px rgba(13, 16, 32, 0.32);
+}
+
+.audit-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: #fbfbfd;
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────
+   A native <details>: keyboard-accessible and announced correctly for free,
+   open before React would have loaded, and Ctrl+F still finds a closed answer
+   in Chrome. These rules only kill the default marker — which Safari draws even
+   with list-style: none — and turn the chevron. */
+.audit-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.audit-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.audit-faq[open] summary .audit-chevron {
+  transform: rotate(180deg);
+}
+
+.audit-chevron {
+  transition: transform 0.2s ease;
+}
+
+/* ── signup popup ───────────────────────────────────────────────────────
+   Fades and lifts in once, eight seconds after load. Keyframes rather than a
+   transition because the element is added to the DOM in its final state. */
+@keyframes audit-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes audit-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.audit-pop-backdrop {
+  animation: audit-fade-in 0.28s ease both;
+}
+
+.audit-pop-card {
+  animation: audit-pop-in 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audit-btn,
+  .audit-chevron,
+  .audit-card-lift {
+    transition: none;
+  }
+  .audit-btn:hover,
+  .audit-card-lift:hover {
+    transform: none;
+  }
+  .audit-pop-backdrop,
+  .audit-pop-card {
+    animation: none;
+  }
+}
