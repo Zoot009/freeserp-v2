@@ -84,7 +84,14 @@ function AppShot({
     <div className="fs-shot">
       <div className="fs-app-frame">
         <div className={`fs-app-frame-shot${narrow ? " fs-narrow" : ""}`}>
-          <Image src={image} alt={alt} width={width} height={height} loading="lazy" />
+          <Image
+            src={image}
+            alt={alt}
+            width={width}
+            height={height}
+            loading="lazy"
+            sizes="(max-width: 1000px) 100vw, 600px"
+          />
         </div>
       </div>
       <PopCard {...pop} position="tr" width={popWidth} />
@@ -92,9 +99,21 @@ function AppShot({
   );
 }
 
+/**
+ * "Inside the app" — one full-width row per screen.
+ *
+ * This used to be a big row, then two rows of half-width cards, then another big
+ * row. The cards were the problem: at half width the screenshots were too small
+ * to read, two different image shapes side by side ended at different heights,
+ * and the floating stat card covered most of the shot it was annotating. Every
+ * item now gets the same full-width treatment the Rank Tracker and Search
+ * Console rows always had, alternating sides so the screenshots zig-zag rather
+ * than lining up in a single right-hand column.
+ *
+ * Uniform rows also mean there is one code path instead of three, so adding a
+ * screen is a new entry in INSIDE_APP and nothing else.
+ */
 export function InsideApp() {
-  const [big1, card1, card2, card3, card4, big2] = INSIDE_APP;
-
   return (
     <section
       className="fs-section"
@@ -106,160 +125,58 @@ export function InsideApp() {
         sub="This is the front door. Once you're tracking keywords, this is the dashboard that does the daily work for you."
       />
 
-      {/* Big: Rank Tracker */}
-      <Reveal style={{ marginTop: 56 }}>
-        <div className="fs-grid-2" style={{ gap: 40, alignItems: "center" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <span
-              style={{
-                color: COLORS.blue,
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}
-            >
-              {big1.kicker}
-            </span>
-            <h3 style={{ fontSize: 26, fontWeight: 600, letterSpacing: "-0.03em", margin: 0 }}>
-              {big1.title}
-            </h3>
-            <p style={{ color: COLORS.gray, fontSize: 15.5, lineHeight: 1.55, margin: 0 }}>
-              {big1.text}
-            </p>
-            {big1.link && (
-              <a href={big1.link.href} className="fs-inside-link">
-                {big1.link.text}
-              </a>
-            )}
-          </div>
-          <AppShot image={big1.image} alt={big1.alt} pop={big1.pop} width={1600} height={909} />
-        </div>
-      </Reveal>
-
-      {/* 2-col: Competitor Analysis | Projects */}
-      <div className="fs-grid-2" style={{ marginTop: 24 }}>
-        {[card1, card2].map((f) => (
-          <Reveal key={f.title} delay={0.05}>
+      <div style={{ marginTop: 56, display: "flex", flexDirection: "column", gap: 72 }}>
+        {INSIDE_APP.map((f, i) => (
+          <Reveal key={f.title}>
+            {/* Odd rows flip, so the screenshots zig-zag down the page instead of
+                stacking in one right-hand column. The swap is done with `order`
+                rather than by reordering the markup, so the copy still comes
+                first in the DOM on every row. */}
             <div
-              style={{
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: 20,
-                padding: 28,
-                background: COLORS.softGray,
-                height: "100%",
-              }}
+              className={`fs-grid-2 fs-alt-row${i % 2 === 1 ? " fs-flip" : ""}`}
+              style={{ gap: 40, alignItems: "center" }}
             >
-              <span
-                style={{
-                  color: COLORS.blue,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                }}
+              <div
+                className="fs-alt-copy"
+                style={{ display: "flex", flexDirection: "column", gap: 20 }}
               >
-                {f.kicker}
-              </span>
-              <h3 style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.03em", margin: "10px 0 8px" }}>
-                {f.title}
-              </h3>
-              <p style={{ color: COLORS.gray, fontSize: 15.5, lineHeight: 1.55, margin: "0 0 16px" }}>
-                {f.text}
-              </p>
-              <div style={{ marginTop: 16 }}>
-                <AppShot image={f.image} alt={f.alt} pop={f.pop} width={1572} height={788} popWidth={54} />
+                <span
+                  style={{
+                    color: COLORS.blue,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {f.kicker}
+                </span>
+                <h3 style={{ fontSize: 26, fontWeight: 600, letterSpacing: "-0.03em", margin: 0 }}>
+                  {f.title}
+                </h3>
+                <p style={{ color: COLORS.gray, fontSize: 15.5, lineHeight: 1.55, margin: 0 }}>
+                  {f.text}
+                </p>
+                {f.link && (
+                  <a href={f.link.href} className="fs-inside-link">
+                    {f.link.text}
+                  </a>
+                )}
               </div>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-
-      {/* 2-col: Alerts | Favorites */}
-      <div className="fs-grid-2" style={{ marginTop: 24 }}>
-        {[card3, card4].map((f) => (
-          <Reveal key={f.title} delay={0.05}>
-            <div
-              style={{
-                border: `1px solid ${COLORS.border}`,
-                borderRadius: 20,
-                padding: 28,
-                background: COLORS.softGray,
-                height: "100%",
-              }}
-            >
-              <span
-                style={{
-                  color: COLORS.blue,
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                }}
-              >
-                {f.kicker}
-              </span>
-              <h3 style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.03em", margin: "10px 0 8px" }}>
-                {f.title}
-              </h3>
-              <p style={{ color: COLORS.gray, fontSize: 15.5, lineHeight: 1.55, margin: "0 0 16px" }}>
-                {f.text}
-              </p>
-              <div style={{ marginTop: 16 }}>
+              <div className="fs-alt-media">
                 <AppShot
                   image={f.image}
                   alt={f.alt}
                   narrow={f.narrow}
                   pop={f.pop}
-                  width={f.narrow ? 436 : 1378}
-                  height={f.narrow ? 384 : 830}
-                  popWidth={f.narrow ? 58 : 52}
+                  width={f.w}
+                  height={f.h}
                 />
               </div>
             </div>
           </Reveal>
         ))}
       </div>
-
-      {/* Big: Google Search Console */}
-      <Reveal style={{ marginTop: 24 }}>
-        <div className="fs-grid-2" style={{ gap: 40, alignItems: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              order: 1,
-            }}
-          >
-            <span
-              style={{
-                color: COLORS.blue,
-                fontSize: 13,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-              }}
-            >
-              {big2.kicker}
-            </span>
-            <h3 style={{ fontSize: 26, fontWeight: 600, letterSpacing: "-0.03em", margin: 0 }}>
-              {big2.title}
-            </h3>
-            <p style={{ color: COLORS.gray, fontSize: 15.5, lineHeight: 1.55, margin: 0 }}>
-              {big2.text}
-            </p>
-            {big2.link && (
-              <a href={big2.link.href} className="fs-inside-link">
-                {big2.link.text}
-              </a>
-            )}
-          </div>
-          <div style={{ order: 2 }}>
-            <AppShot image={big2.image} alt={big2.alt} pop={big2.pop} width={1600} height={522} />
-          </div>
-        </div>
-      </Reveal>
     </section>
   );
 }

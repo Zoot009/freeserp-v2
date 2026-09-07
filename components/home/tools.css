@@ -1,0 +1,203 @@
+/* ─── Trackers rows, tick lists, credit chips and the toolkit tabs ─── */
+
+/* Alternating image-and-copy row. Copy left, media right; .fs-flip swaps them
+   by ordering the children rather than reversing the grid, so the DOM order
+   (and therefore the reading order) stays copy-then-image on every row. */
+.fs-tracker-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 56px;
+  align-items: center;
+}
+.fs-tracker-row > .fs-tracker-copy {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+.fs-tracker-row > .fs-tracker-media {
+  order: 2;
+  min-width: 0;
+}
+.fs-tracker-row.fs-flip {
+  grid-template-columns: 1.15fr 1fr;
+}
+.fs-tracker-row.fs-flip > .fs-tracker-copy {
+  order: 2;
+}
+.fs-tracker-row.fs-flip > .fs-tracker-media {
+  order: 1;
+}
+
+/* Kicker with a coloured dot, so the four trackers stay apart as you scroll. */
+.fs-tracker-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b0d12;
+}
+.fs-tracker-kicker i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Checked feature list. */
+.fs-tick-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fs-tick-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #3d4250;
+}
+.fs-tick-list li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* "5 credits an analysis" — the price of one run, said next to the tool. */
+.fs-cost-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: #ebf1ff;
+  color: #0454ff;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+}
+
+/* ─── Toolkit tabs ──────────────────────────────────────────────────
+   The rail is the scroll container so the pills can overflow off the edge on
+   narrow screens without stretching the section; the strip inside is the
+   tablist. Masked on both edges so a cut-off pill reads as "more this way". */
+.fs-tabs-rail {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  margin-bottom: 44px;
+}
+.fs-tabs-rail::-webkit-scrollbar {
+  display: none;
+}
+.fs-tabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 100px;
+  background: #f5f6f8;
+  border: 1px solid #eaeaea;
+  min-width: max-content;
+}
+.fs-tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  color: #6d6d6d;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.fs-tab:hover {
+  color: #0b0d12;
+}
+.fs-tab.is-active {
+  background: #fff;
+  color: #0454ff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(8, 32, 96, 0.1), 0 4px 12px rgba(8, 32, 96, 0.08);
+}
+.fs-tab:focus-visible {
+  outline: 2px solid #0454ff;
+  outline-offset: 2px;
+}
+
+/* The panel is a grid, so `hidden` alone would not hide it — display wins. */
+.fs-tab-panel {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 56px;
+  align-items: center;
+}
+.fs-tab-panel[hidden] {
+  display: none;
+}
+.fs-tool-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+}
+.fs-tool-media {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fs-tab-panel:not([hidden]) {
+    animation: fs-fade-up 0.35s ease both;
+  }
+}
+
+@media (max-width: 1000px) {
+  .fs-tracker-row,
+  .fs-tracker-row.fs-flip {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  /* Stack image first on mobile — the screenshot is what earns the scroll. */
+  .fs-tracker-row > .fs-tracker-media,
+  .fs-tracker-row.fs-flip > .fs-tracker-media {
+    order: 1;
+  }
+  .fs-tracker-row > .fs-tracker-copy,
+  .fs-tracker-row.fs-flip > .fs-tracker-copy {
+    order: 2;
+  }
+
+  .fs-tab-panel {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .fs-tool-media {
+    order: 1;
+  }
+  .fs-tool-copy {
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Let the pills run to the section edge rather than stopping at the padding,
+     so the strip looks scrollable instead of clipped. */
+  .fs-tabs-rail {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 32px;
+  }
+}

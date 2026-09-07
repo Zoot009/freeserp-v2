@@ -27,13 +27,35 @@ export const FEATURES = [
   },
 ];
 
-export const INSIDE_APP = [
+/**
+ * One row per screen in "Inside the app". Every item renders identically —
+ * copy on the left, screenshot on the right — so the section reads as one list
+ * rather than a big row, a grid of cards, then another big row.
+ */
+export interface InsideAppItem {
+  kicker: string;
+  title: string;
+  text: string;
+  link?: { text: string; href: string };
+  image: string;
+  /** The file's real intrinsic size, so Next reserves the right box. */
+  w: number;
+  h: number;
+  alt: string;
+  /** A small in-app panel rather than a full-bleed screenshot: inset, not bled. */
+  narrow?: boolean;
+  pop: { label: string; num: string; badge?: string; color: string };
+}
+
+export const INSIDE_APP: InsideAppItem[] = [
   {
     kicker: "RANK TRACKER",
     title: "Catch every rank change the moment it happens",
     text: "Every tracked keyword updates daily — average position, estimated traffic, and how many terms sit in the top 3, top 10, and top 30. No more spreadsheets, no more end-of-month surprises.",
     link: { text: "Explore Rank Tracker →", href: "/rank-tracker" },
     image: "/inside-app/rank-tracker.jpg",
+    w: 1600,
+    h: 909,
     alt: "FreeSERP rank tracker — keywords tracked",
     pop: { label: "Keywords in Top 10", num: "312", badge: "26%", color: COLORS.blue },
   },
@@ -42,6 +64,8 @@ export const INSIDE_APP = [
     title: "See exactly who's outranking you",
     text: "Pull the real top-10 competitors for any tracked keyword, compare their pages side by side, and pick which ones to analyze further.",
     image: "/inside-app/competitor-analysis.jpg",
+    w: 1572,
+    h: 788,
     alt: "Competitor analysis — shared keywords and gaps",
     pop: { label: "You rank higher", num: "100%", badge: "2 of 2", color: COLORS.blue },
   },
@@ -50,6 +74,8 @@ export const INSIDE_APP = [
     title: "One dashboard per domain",
     text: "Organize keywords into projects — your site, a client's site, or a competitor you're watching. Each gets its own tracked history.",
     image: "/inside-app/projects.jpg",
+    w: 1390,
+    h: 936,
     alt: "Projects — one dashboard per domain",
     pop: { label: "Active projects", num: "12", badge: "3 new", color: COLORS.purple },
   },
@@ -58,6 +84,8 @@ export const INSIDE_APP = [
     title: "Get notified the moment rankings move",
     text: "No need to check the dashboard every morning — significant position changes land in your activity feed as they happen.",
     image: "/inside-app/alerts.jpg",
+    w: 1378,
+    h: 830,
     alt: "Alerts — rank-change notifications",
     pop: { label: "Rank movements · 7d", num: "13", badge: "8 up", color: COLORS.blue },
   },
@@ -66,6 +94,8 @@ export const INSIDE_APP = [
     title: "Pin the keywords that matter most",
     text: "Star your highest-priority terms across every project so they're one click away, without digging through hundreds of rows.",
     image: "/inside-app/favorites.jpg",
+    w: 436,
+    h: 384,
     alt: "Favorites — pinned keywords",
     narrow: true,
     pop: { label: "Pinned keywords", num: "3", badge: "starred", color: COLORS.amber },
@@ -76,6 +106,8 @@ export const INSIDE_APP = [
     text: "Link Search Console to any project and see clicks, impressions, and CTR sit right next to FreeSERP's tracked positions — so you know which rankings are actually driving traffic. Export any of it to CSV in one click.",
     link: { text: "See integrations →", href: "#" },
     image: "/inside-app/search-console.jpg",
+    w: 1600,
+    h: 522,
     alt: "Tracked keyword positions",
     pop: { label: "Clicks · 28 days", num: "9.6K", badge: "15%", color: COLORS.purple },
   },
@@ -226,6 +258,34 @@ export const FAQS = [
     q: "Is there a free plan?",
     a: "Yes — the free plan gives you 100 credits every month with no credit card, and every tool is unlocked. If you need more, plans start at $19/month for 2,000 credits. One credit checks one keyword; the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
   },
+  {
+    q: "What can FreeSERP track besides Google?",
+    a: "Bing organic rankings, tracked separately from Google so a keyword can use either or both; the Google Map Pack, scanned as a geo-grid around your business; YouTube, where you can track a single video or a whole channel against your keywords; and AI answers on ChatGPT, Gemini, Perplexity and Claude. All of them run from the same login and the same credit balance.",
+  },
+  {
+    q: "How does Google Maps rank tracking work?",
+    a: "You drop a pin on your business, choose a radius and a grid size from 3×3 up to 21×21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 3 credits for a 3×3 up to 57 for a 21×21.",
+  },
+  {
+    q: "Can I see whether ChatGPT and other AI assistants mention my brand?",
+    a: "Yes. Add the prompts your customers would actually type and FreeSERP runs them against ChatGPT, Gemini, Perplexity and Claude on a schedule, then scores mention rate, citation rate and how early in the answer you appear. It also works out your share of voice against the competitors you name, and stores every answer so you can read the exact wording and the sources it cited.",
+  },
+  {
+    q: "Can I track my competitors' rankings too?",
+    a: "Yes, and it is not a separate report you have to run. Name the domains you compete with on a project and FreeSERP records their position beside yours on every keyword you already track — one SERP fetch returns both, so watching a rival does not double what you spend. That is separate from Competitor Analysis, which takes one keyword and scores your page against the pages beating you on 63 on-page checks.",
+  },
+  {
+    q: "What does the website audit check?",
+    a: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 1 credit per 20 pages, and a single-page audit costs 1 credit.",
+  },
+  {
+    q: "How do credits work?",
+    a: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 1 credit, adding a keyword is free, a page audit is 1, an internal link crawl is 2, a keyword score is 3, keyword research is 3 to 15, and a competitor analysis is 5. Website audits cost 1 credit per 20 pages crawled, and connecting Google Search Console is free.",
+  },
+  {
+    q: "Can I export the data or share a report?",
+    a: "Yes. Every table exports to CSV, audits and analyses export to PDF, and finished reports can be sent as a link that the recipient can open without an account. There is no per-seat pricing either, so sharing an account with a colleague costs nothing extra.",
+  },
 ];
 
 export const HOME_WEBSITE_SCHEMA = {
@@ -286,6 +346,22 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
     "Mobile and desktop rank tracking",
     "CSV export",
     "Free trial available",
+    "Bing rank tracking alongside Google",
+    "Competitor rank tracking on your own keywords",
+    "Google Maps geo-grid rank tracking",
+    "YouTube video and channel rank tracking",
+    "AI visibility tracking on ChatGPT, Gemini, Perplexity and Claude",
+    "AI share of voice",
+    "Full website audit, up to 1,000 pages per crawl",
+    "Page audit with 63 on-page checks",
+    "Internal link analysis and orphan page detection",
+    "Keyword research with volume, difficulty, CPC and intent",
+    "Keyword score checker with page speed and authority data",
+    "Google Search Console integration",
+    "Automated recurring rank checks",
+    "Rank change alerts and activity feed",
+    "Projects, favorites and city-level targeting",
+    "PDF export and shareable reports",
   ],
 };
 
@@ -345,6 +421,62 @@ export const HOME_FAQ_SCHEMA = {
       acceptedAnswer: {
         "@type": "Answer",
         text: "Yes. The free plan gives you 100 credits every month with no credit card required, and every tool is unlocked. Rank tracking projects are available on the free plan with up to 10 keywords per project. Paid plans start at $19/month for 2,000 credits — one credit checks one keyword — with automated recurring checks and unlimited project keywords.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What can FreeSERP track besides Google?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Bing organic rankings, tracked separately from Google so a keyword can use either or both; the Google Map Pack, scanned as a geo-grid around your business; YouTube, where you can track a single video or a whole channel against your keywords; and AI answers on ChatGPT, Gemini, Perplexity and Claude. All of them run from the same login and the same credit balance.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does Google Maps rank tracking work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "You drop a pin on your business, choose a radius and a grid size from 3x3 up to 21x21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 3 credits for a 3x3 up to 57 for a 21x21.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I see whether ChatGPT and other AI assistants mention my brand?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Add the prompts your customers would actually type and FreeSERP runs them against ChatGPT, Gemini, Perplexity and Claude on a schedule, then scores mention rate, citation rate and how early in the answer you appear. It also works out your share of voice against the competitors you name, and stores every answer so you can read the exact wording and the sources it cited.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I track my competitors' rankings too?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, and it is not a separate report you have to run. Name the domains you compete with on a project and FreeSERP records their position beside yours on every keyword you already track — one SERP fetch returns both, so watching a rival does not double what you spend. That is separate from Competitor Analysis, which takes one keyword and scores your page against the pages beating you on 63 on-page checks.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What does the FreeSERP website audit check?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 1 credit per 20 pages, and a single-page audit costs 1 credit.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do FreeSERP credits work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 1 credit, adding a keyword is free, a page audit is 1, an internal link crawl is 2, a keyword score is 3, keyword research is 3 to 15, and a competitor analysis is 5. Website audits cost 1 credit per 20 pages crawled, and connecting Google Search Console is free.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I export the data or share a report?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Every table exports to CSV, audits and analyses export to PDF, and finished reports can be sent as a link that the recipient can open without an account. There is no per-seat pricing either, so sharing an account with a colleague costs nothing extra.",
       },
     },
   ],

@@ -93,9 +93,43 @@
   margin-top: 12px;
 }
 
+/* ─── alternating rows ──────────────────────────────────────────────
+   Sides are swapped with `order`, not by reordering the markup, so the copy
+   stays first in the DOM on every row — a screen reader and a crawler read
+   heading-then-image the whole way down regardless of which side it renders. */
+.fs-alt-copy {
+  order: 1;
+}
+.fs-alt-media {
+  order: 2;
+  min-width: 0;
+}
+.fs-alt-row.fs-flip .fs-alt-copy {
+  order: 2;
+}
+.fs-alt-row.fs-flip .fs-alt-media {
+  order: 1;
+}
+/* On a flipped row the shot sits on the left, so its stat card overhangs the
+   left edge too — otherwise it leans into the gap between the two columns. */
+.fs-alt-row.fs-flip .fs-pop-tr {
+  right: auto;
+  left: -4%;
+}
+
 @media (max-width: 1000px) {
   .fs-pop {
     display: none;
+  }
+  /* Stacked, every row leads with its screenshot — same as the Trackers
+     section, so the two screenshot sections behave alike on a phone. */
+  .fs-alt-row .fs-alt-media,
+  .fs-alt-row.fs-flip .fs-alt-media {
+    order: 1;
+  }
+  .fs-alt-row .fs-alt-copy,
+  .fs-alt-row.fs-flip .fs-alt-copy {
+    order: 2;
   }
 }
 
