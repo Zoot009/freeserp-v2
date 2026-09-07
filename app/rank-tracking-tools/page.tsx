@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Geist } from "next/font/google";
-import Header from "@/components/landing2/Header";
-import Hero from "@/components/landing2/Hero";
-import Stats from "@/components/landing2/Stats";
-import Problem from "@/components/landing2/Problem";
-import Tools from "@/components/landing2/Tools";
-import Features from "@/components/landing2/Features";
-import AiTracker from "@/components/landing2/AiTracker";
-import HowItWorks from "@/components/landing2/HowItWorks";
-import Pricing from "@/components/landing2/Pricing";
-import Faq from "@/components/landing2/Faq";
-import FinalCta from "@/components/landing2/FinalCta";
-import Footer from "@/components/landing2/Footer";
-import "@/components/landing2/landing2.css";
+import Header from "@/components/rank-tracking-tools/Header";
+import Hero from "@/components/rank-tracking-tools/Hero";
+import Stats from "@/components/rank-tracking-tools/Stats";
+import Problem from "@/components/rank-tracking-tools/Problem";
+import Tools from "@/components/rank-tracking-tools/Tools";
+import Features from "@/components/rank-tracking-tools/Features";
+import AiTracker from "@/components/rank-tracking-tools/AiTracker";
+import HowItWorks from "@/components/rank-tracking-tools/HowItWorks";
+import Pricing from "@/components/rank-tracking-tools/Pricing";
+import Faq from "@/components/rank-tracking-tools/Faq";
+import FinalCta from "@/components/rank-tracking-tools/FinalCta";
+import Footer from "@/components/rank-tracking-tools/Footer";
+import "@/components/rank-tracking-tools/rank-tracking-tools.css";
 
 // This page's own type stack, not the site's. The root layout puts Archivo on
 // <body>; the design is set in Geist with Bebas Neue display headings, so both
@@ -35,10 +35,10 @@ export const metadata: Metadata = {
   title: "FreeSERP — Track rankings in Google, Maps, YouTube and AI chatbots",
   description:
     "One dashboard that tells you where you rank, who is beating you, and exactly what to fix. 12 tools unlocked on the free plan, 190+ countries, no credit card.",
-  alternates: { canonical: "/landing2" },
+  alternates: { canonical: "/rank-tracking-tools" },
 };
 
-export default function Landing2() {
+export default function RankTrackingToolsPage() {
   return (
     <div className={`l2 ${bebas.variable} ${geist.variable}`}>
       <Header />

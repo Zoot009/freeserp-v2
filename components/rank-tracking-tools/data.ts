@@ -1,4 +1,4 @@
-// Copy for /landing2, lifted verbatim from the "FreeSERP Ads Landing v2 (Tight)"
+// Copy for /rank-tracking-tools, lifted verbatim from the "FreeSERP Ads Landing v2 (Tight)"
 // design canvas (its DCLogic renderVals()). Kept in one module rather than inline
 // in the sections so a copy edit is a one-file change — this is an ads landing
 // page whose wording gets tuned far more often than its layout.
