@@ -5,11 +5,20 @@ import { ArrowUpRight, ShieldCheck, X } from "lucide-react";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { trackLanding, trackLandingAndFlush } from "@/components/landing/track";
 
-/** How long a visitor reads before the offer is worth interrupting them for. */
-const DELAY_MS = 8_000;
+/**
+ * How far down the page a visitor has to get before the offer is worth
+ * interrupting them for, as a fraction of everything there is to scroll.
+ *
+ * Scroll depth rather than a timer: elapsed time counts a visitor who opened
+ * the tab and walked away exactly the same as one who is reading, and these
+ * pages are long enough that eight seconds landed most people barely past the
+ * hero. Thirty per cent is roughly the first product block, so the offer
+ * arrives once the page has actually shown what it is selling.
+ */
+const SCROLL_TRIGGER = 0.3;
 
 /**
- * The delayed signup offer, shared by every /audit-suite locale.
+ * The scroll-triggered signup offer, shared by every /audit-suite locale.
  *
  * This replaces the inline offer band that would otherwise sit under the hero:
  * the same offer, but asked for after the visitor has read enough of the page
@@ -82,12 +91,42 @@ export function SignupPopup({
     }
     if (seen) return;
 
-    const timer = window.setTimeout(() => {
+    let frame = 0;
+    let fired = false;
+
+    const measure = () => {
+      frame = 0;
+      // The furthest this page can be scrolled. Zero when the content is
+      // shorter than the viewport, where there is no 30% to reach and dividing
+      // by it would be a NaN that fires the popup instantly.
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      if (window.scrollY / scrollable < SCROLL_TRIGGER) return;
+
+      fired = true;
+      window.removeEventListener("scroll", onScroll);
       setOpen(true);
       trackLanding("signup_popup_view", { page });
-    }, DELAY_MS);
+    };
 
-    return () => window.clearTimeout(timer);
+    // Coalesced into a frame: scroll fires far faster than the page paints, and
+    // reading scrollHeight is a layout flush every time.
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(measure);
+    };
+
+    // Measured once up front as well. A back-navigation restores the previous
+    // scroll position without ever firing a scroll event, so a visitor
+    // returning to the middle of the page would otherwise have to scroll again
+    // to reach a depth they had already passed.
+    measure();
+    if (!fired) window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [page, seenKey]);
 
   // Escape closes, and the close button takes focus so the panel is reachable

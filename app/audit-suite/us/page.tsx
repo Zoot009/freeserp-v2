@@ -606,8 +606,9 @@ export default function AuditSuiteUsPage() {
               United States · Multiple SEO tools · One credit balance
             </span>
 
-            <h1 className="audit-h1 mx-auto mt-6 max-w-[19ch]">
-              Your SEO Co-Pilot for Every Search Move.
+            <h1 className="audit-h1 mx-auto mt-6 max-w-[44ch]">
+              Get a complete SEO audit of your website and discover the issues,
+              opportunities, and fixes that can help you improve your search visibility.
             </h1>
 
             <p className="mx-auto mt-4 max-w-[28ch] text-[clamp(20px,2.6vw,30px)] leading-[1.2] font-semibold tracking-[-0.024em]">
@@ -1264,7 +1265,7 @@ export default function AuditSuiteUsPage() {
 
       {/* The inline "Turn Your Website Into Your Next SEO Opportunity" band used
           to live under the hero. It is this instead: the same offer, asked for
-          eight seconds in, once per session. */}
+          30% of the way down the page, once per session. */}
       <SignupPopup
         page="audit_suite_us"
         title="Turn Your Website Into Your Next"

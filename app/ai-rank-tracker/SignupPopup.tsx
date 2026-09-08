@@ -8,11 +8,16 @@ import { PlatformMark, type PlatformId } from "./PlatformMarks";
 /**
  * The timed signup prompt.
  *
- * A sibling of app/audit-suite/SignupPopup.tsx — same behaviour and the same
- * nine-second delay, with its own session key and its own funnel placement, so
- * the three campaigns never suppress or report over each other. Nine seconds
- * rather than five: an interstitial that lands before the reader has finished
- * the headline is the one they close without reading.
+ * A sibling of app/audit-suite/SignupPopup.tsx — same card, same dismissal, its
+ * own session key and its own funnel placement, so the three campaigns never
+ * suppress or report over each other.
+ *
+ * It opens on scroll depth rather than a timer, matching the UK and US locale
+ * pages: elapsed time counts a visitor who opened the tab and walked away
+ * exactly the same as one who is reading, and an interstitial that lands before
+ * the reader has finished the headline is the one they close without reading.
+ * Thirty per cent of this page is around the first platform block, so the ask
+ * arrives once the page has shown what it is selling.
  *
  * Dismissal is remembered for the session, so a visitor who says no once is not
  * asked again on the way back from the pricing anchor. sessionStorage rather
@@ -26,7 +31,9 @@ import { PlatformMark, type PlatformId } from "./PlatformMarks";
  * wins.
  */
 
-const DELAY_MS = 9000;
+/** How far down the page the visitor gets before the offer is worth showing. */
+const SCROLL_TRIGGER = 0.3;
+
 const SEEN_KEY = "fs_ai_rank_tracker_popup";
 
 /** The four marks, in the order the dashboard's sidebar lists them. */
@@ -50,8 +57,42 @@ export function SignupPopup() {
     } catch {
       /* ignore and show it */
     }
-    const timer = setTimeout(() => setOpen(true), DELAY_MS);
-    return () => clearTimeout(timer);
+
+    let frame = 0;
+    let fired = false;
+
+    const measure = () => {
+      frame = 0;
+      // The furthest this page can be scrolled. Zero when the content is
+      // shorter than the viewport, where there is no 30% to reach and dividing
+      // by it would be a NaN that opens the popup instantly.
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      if (window.scrollY / scrollable < SCROLL_TRIGGER) return;
+
+      fired = true;
+      window.removeEventListener("scroll", onScroll);
+      setOpen(true);
+    };
+
+    // Coalesced into a frame: scroll fires far faster than the page paints, and
+    // reading scrollHeight is a layout flush every time.
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(measure);
+    };
+
+    // Measured once up front as well. A back-navigation restores the previous
+    // scroll position without ever firing a scroll event, so a visitor
+    // returning to the middle of the page would otherwise have to scroll again
+    // to reach a depth they had already passed.
+    measure();
+    if (!fired) window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
