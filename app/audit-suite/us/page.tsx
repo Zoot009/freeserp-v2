@@ -30,7 +30,7 @@ import { Point, SectionHead, ShotFrame, WRAP, type Shot } from "../_locale/piece
 import "../_locale/audit.css";
 
 /**
- * /audit-suite/us — the US paid-acquisition landing page for the seven audit
+ * /audit-suite/us — the US paid-acquisition landing page for the audit
  * and research tools. Sibling of /tracking-suite, which sells the four trackers
  * to the same account; the two campaigns run side by side and share nothing but
  * the pricing table and the testimonials, both imported rather than restated.
@@ -69,7 +69,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Free SEO Audit Suite for US Websites — FreeSERP",
   description:
-    "Audit your whole website, grade any page across 63 checks, compare competitors, map internal links, and research keywords — seven SEO tools on one credit balance. 100 free credits every month, no credit card.",
+    "Audit your whole website, grade any page across 63 checks, compare competitors, map internal links, and research keywords — multiple SEO tools on one credit balance. 100 free credits every month, no credit card.",
   alternates: { canonical: "/audit-suite/us" },
   openGraph: {
     title: "Your SEO Co-Pilot for Every Search Move",
@@ -91,7 +91,7 @@ export const metadata: Metadata = {
 /* ══════════════════════════════════════════════════════════════════════════
    CONTENT — everything a marketer edits between campaigns lives in this block.
 
-   Every claim has to be true of the product. The seven tools map to real
+   Every claim has to be true of the product. The tools map to real
    backend modules (site-audit, page-audit, competitor-analysis,
    ai-internal-linking, rankings, keyword-magic, keyword-analysis) and the
    prices come from CREDIT_PLANS, imported rather than restated so this page can
@@ -401,7 +401,7 @@ const PERSONAS = [
 ];
 
 const STATS = [
-  { value: "7", label: "SEO tools on one credit balance" },
+  { value: "Multiple", label: "SEO tools on one credit balance" },
   { value: "1,000", label: "pages crawled in a single audit" },
   { value: "63", label: "checks behind every page score" },
   { value: "100", label: "free credits every month" },
@@ -491,7 +491,7 @@ const BENEFITS = [
 
 const FREE_POINTS = [
   "100 free credits every month",
-  "All seven tools unlocked",
+  "Multiple tools unlocked",
   "Website and page audits",
   "Competitor analysis",
   "Internal link analysis",
@@ -510,14 +510,14 @@ const PAID_POINTS = [
 const FAQS = [
   {
     q: "What do I get on the free plan?",
-    a: "100 credits every month, refilled automatically, with no credit card. All seven tools are unlocked on it — website audits, page audits, competitor analysis, internal link analysis, keyword research, the keyword score checker and rank tracking all draw from the same balance.",
+    a: "100 credits every month, refilled automatically, with no credit card. Multiple tools are unlocked on it — website audits, page audits, competitor analysis, internal link analysis, keyword research, the keyword score checker and rank tracking all draw from the same balance.",
   },
   {
     q: "How big a website can FreeSERP audit?",
     a: "A single Full Website Audit crawls up to 1,000 pages. The crawler starts at the URL you give it and follows your internal links outward, auditing every page it reaches, then rolls the findings up into one prioritized report.",
   },
   {
-    q: "How do credits work across the seven tools?",
+    q: "How do credits work across the multiple tools?",
     a: "One balance covers all of them, so you spend credits on the job in front of you rather than on whichever tool your plan happened to include. A full site audit costs one credit per page crawled, and rank checks, keyword research and competitor analysis draw from the same balance.",
   },
   {
@@ -572,7 +572,7 @@ export default function AuditSuiteUsPage() {
           The two taglines drop out at md and lg rather than wrapping — a
           three-line capsule would eat the top of the hero on a laptop. */}
       <header className="fixed inset-x-0 top-3 z-50 px-4 sm:top-5">
-        <div className="mx-auto flex w-full max-w-[1072px] items-center gap-4 rounded-full border border-[#0d10201f] bg-white/80 py-2.5 pr-2.5 pl-4 backdrop-blur-xl sm:pl-6">
+        <div className="mx-auto flex w-full max-w-[1072px] items-center gap-4 rounded-full border border-[#0d10201f] bg-white/80 py-2.5 pr-4 pl-4 backdrop-blur-xl sm:pr-6 sm:pl-6">
           <a href="#top" className="flex shrink-0 items-center gap-2.5">
             <LogoMark className="h-6.5 w-6.5" />
             <Wordmark className="text-[16px] font-semibold tracking-[-0.02em] text-[var(--ink)]" />
@@ -586,19 +586,9 @@ export default function AuditSuiteUsPage() {
               |
             </span>
             <span className="hidden xl:inline">
-              100 Free Credits Every Month · 7 Tools · One Account. No Credit Card.
+              100 Free Credits Every Month · Multiple Tools · One Account. No Credit Card.
             </span>
           </p>
-
-          <Cta
-            page="audit_suite_us"
-            placement="nav"
-            label="Start for free"
-            size="sm"
-            variant="ink"
-            arrow={false}
-            className="ml-auto shrink-0"
-          />
         </div>
       </header>
 
@@ -613,7 +603,7 @@ export default function AuditSuiteUsPage() {
 
           <div className={`${WRAP} relative text-center`}>
             <span className="audit-tag">
-              United States · 7 SEO tools · One credit balance
+              United States · Multiple SEO tools · One credit balance
             </span>
 
             <h1 className="audit-h1 mx-auto mt-6 max-w-[19ch]">
@@ -635,7 +625,7 @@ export default function AuditSuiteUsPage() {
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Cta page="audit_suite_us" placement="hero" label="Start SEO Audit for Free" />
               <a href="#toolkit" className="audit-btn audit-btn-lg audit-btn-ghost">
-                Explore the seven tools
+                Explore the multiple tools
               </a>
             </div>
 
@@ -744,13 +734,13 @@ export default function AuditSuiteUsPage() {
             />
 
             <p className="audit-lead mx-auto mt-5 max-w-[64ch] text-center">
-              FreeSERP gives you seven connected SEO tools with one shared credit balance — so you
+              FreeSERP gives you multiple connected SEO tools with one shared credit balance — so you
               can move from finding a problem to investigating it, fixing it, and tracking what
               happens next.
             </p>
 
             <ul className="mt-9 flex flex-wrap justify-center gap-3">
-              {["One account.", "Seven SEO tools.", "One shared credit balance."].map((s) => (
+              {["One account.", "Multiple SEO tools.", "One shared credit balance."].map((s) => (
                 <li
                   key={s}
                   className="flex items-center gap-2 rounded-full border border-[var(--line)] bg-white px-4 py-2 text-[14px] font-medium"
@@ -1075,7 +1065,7 @@ export default function AuditSuiteUsPage() {
                 </p>
                 <ul className="mt-6 mb-8 space-y-3">
                   {[
-                    "All seven tools unlocked",
+                    "Multiple tools unlocked",
                     "Website and page audits",
                     "Real keyword data",
                     "No credit card required",
@@ -1228,7 +1218,7 @@ export default function AuditSuiteUsPage() {
               Turn SEO data into your next clear decision
             </h2>
             <p className="mx-auto mt-5 max-w-[56ch] text-[16px] leading-[1.6] text-white/60">
-              Seven SEO tools, one account, one shared credit balance. 100 free credits every
+              Multiple SEO tools, one account, one shared credit balance. 100 free credits every
               month, no credit card, and everything unlocked from the first day.
             </p>
             <div className="mt-8 flex justify-center">
