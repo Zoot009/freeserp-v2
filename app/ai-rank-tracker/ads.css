@@ -1,0 +1,524 @@
+/* Styling for the /ai-rank-tracker ad landing page.
+ *
+ * The third page in the family, after /tracking-suite (drospecta) and
+ * /audit-suite (filo-saas). It borrows the audit page's typographic system —
+ * Inter at 500/600, letter-spacing in px so tracking tightens as type grows,
+ * 24px cards, 10px controls — because the two pages sell to the same buyer and
+ * the popup was specified from that page. What makes it its own campaign is the
+ * top of the page: a full-bleed near-black band that the hero screenshot hangs
+ * off the bottom of, and a tinted panel per AI platform in the platform colour
+ * rather than one accent repeated four times.
+ *
+ * Everything is prefixed `airt-` and scoped under `.airt-scope`. The sibling
+ * pages both use `.ads-*`; a third page reusing those class names would inherit
+ * whichever of the two stylesheets a client-side navigation happened to leave in
+ * the document, so this one shares no selector with either.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the root layout already
+ * loads app/globals.css and Tailwind v4 scans the whole project, so every
+ * utility used in page.tsx is generated. Re-importing the framework here would
+ * ship a second copy of preflight + utilities on this route, which is exactly
+ * the weight an ad landing page cannot afford.
+ */
+
+.airt-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     Retheming is these two lines. FreeSERP blue, the same blue every other
+     page of the site uses. The four platform tints are NOT theme tokens —
+     they are each platform's own colour and are set per block in page.tsx. */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+
+  --ink: #0e0f13;
+  --body: #46484d;
+  --muted: #6c6f76;
+  --canvas: #fbfaf9;
+  --surface: #f6f5f3;
+  --card: #ffffff;
+  --line: #46484d1f;
+  --line-soft: #46484d0f;
+
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() rather than a rule in globals.css so it stays confined to
+   the route that actually renders .airt-scope. */
+html:has(.airt-scope),
+html:has(.airt-scope) body {
+  background: #fbfaf9;
+}
+
+.airt-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+/* ── type ─────────────────────────────────────────────────────────────── */
+.airt-h1 {
+  font-size: clamp(38px, 5.6vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -2px;
+  font-weight: 600;
+}
+
+.airt-h2 {
+  font-size: clamp(29px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  font-weight: 600;
+}
+
+.airt-h3 {
+  font-size: clamp(23px, 2.6vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.airt-lead {
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: var(--body);
+}
+
+/* ── the dark band ──────────────────────────────────────────────────────
+   Full-bleed, and the only dark thing above the fold. The glow is two radial
+   gradients rather than an image: an AI page wants some atmosphere at the top,
+   and an atmosphere that costs no bytes and no request cannot delay LCP. */
+.airt-band {
+  position: relative;
+  background: var(--ink);
+  color: #fff;
+  overflow: hidden;
+}
+
+.airt-band::before {
+  content: "";
+  position: absolute;
+  inset: -30% -10% auto;
+  height: 720px;
+  background:
+    radial-gradient(48% 60% at 50% 32%, rgba(4, 84, 255, 0.35), transparent 70%),
+    radial-gradient(38% 48% at 78% 8%, rgba(217, 119, 87, 0.22), transparent 72%);
+  pointer-events: none;
+}
+
+.airt-band > * {
+  position: relative;
+}
+
+/* Text tones inside the band, so page.tsx is not littered with white/xx. */
+.airt-band .airt-lead {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* ── surfaces ─────────────────────────────────────────────────────────── */
+.airt-panel {
+  border-radius: 24px;
+}
+
+.airt-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+}
+
+.airt-soft {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+}
+
+/* A two-part section label: a coloured cap, then the name. */
+.airt-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--body);
+}
+
+.airt-tag > b {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.airt-band .airt-tag {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* A metric name from the chip cloud. */
+.airt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body);
+  white-space: nowrap;
+}
+
+.airt-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── platform blocks ────────────────────────────────────────────────────
+   One panel per AI platform, tinted with that platform's own colour. `--tint`
+   and `--dot` are set inline per block, which is the only way four different
+   colours can come out of one class without four near-identical rules. */
+.airt-plat {
+  border-radius: 24px;
+  background: var(--tint);
+  border: 1px solid rgba(70, 72, 77, 0.08);
+}
+
+.airt-plat-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: #fff;
+  border: 1px solid rgba(70, 72, 77, 0.08);
+  color: var(--dot);
+  flex-shrink: 0;
+}
+
+/* The spec rows under each platform block. A definition list rather than a
+   table: it is four independent key/value pairs per platform, and it has to
+   fold to one column on a phone, which a table row will not do. */
+.airt-spec {
+  display: grid;
+  gap: 1px;
+  background: rgba(70, 72, 77, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.airt-spec > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  background: #fff;
+  font-size: 13.5px;
+}
+
+.airt-spec dt {
+  color: var(--muted);
+}
+
+.airt-spec dd {
+  font-weight: 500;
+  text-align: right;
+  color: var(--ink);
+}
+
+/* ── comparison table ───────────────────────────────────────────────────
+   Scrolls inside its own box rather than widening the page: five columns of
+   real capability differences do not fit a phone, and a landing page that
+   scrolls sideways is a landing page with a bug. */
+.airt-table-scroll {
+  overflow-x: auto;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.airt-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.airt-table th,
+.airt-table td {
+  padding: 15px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.airt-table thead th {
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.airt-table tbody tr:last-child th,
+.airt-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.airt-table tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.airt-yes {
+  color: #1a7f4b;
+  font-weight: 500;
+}
+
+.airt-no {
+  color: var(--muted);
+}
+
+/* ── buttons ──────────────────────────────────────────────────────────── */
+.airt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.airt-btn-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.airt-btn-sm {
+  padding: 9px 16px;
+  font-size: 14px;
+}
+
+.airt-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 1px 2px rgba(14, 15, 19, 0.16);
+}
+
+.airt-btn-primary:hover {
+  background: color-mix(in srgb, var(--accent) 88%, #000);
+}
+
+.airt-btn-ink {
+  background: var(--ink);
+  color: #fff;
+}
+
+.airt-btn-ink:hover {
+  background: #2b2c30;
+}
+
+.airt-btn-white {
+  background: #fff;
+  color: var(--ink);
+}
+
+.airt-btn-white:hover {
+  background: #eceae7;
+}
+
+.airt-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.airt-btn-ghost:hover {
+  border-color: #46484d3d;
+}
+
+.airt-on-dark .airt-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff29;
+}
+
+.airt-on-dark .airt-btn-ghost:hover {
+  background: #ffffff24;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   The hero shot straddles the dark band and the canvas, so it carries a real
+   shadow rather than the hairline the audit page uses — on the dark half a
+   hairline is invisible and the screenshot floats. */
+.airt-shot {
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(14, 15, 19, 0.04),
+    0 40px 80px -36px rgba(14, 15, 19, 0.45);
+}
+
+.airt-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: #fcfcfb;
+}
+
+/* ── timed signup popup ─────────────────────────────────────────────────
+   The same behaviour and the same shape as /audit-suite's, which is what this
+   page was asked to carry: a 24px card, its own session key, and a backdrop,
+   an X and Escape that all dismiss it. */
+.airt-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.airt-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 15, 19, 0.45);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+
+.airt-popup-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 34px 34px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  text-align: center;
+  box-shadow: 0 32px 64px -24px rgba(14, 15, 19, 0.34);
+  animation: airt-popup-in 0.24s ease-out;
+}
+
+.airt-popup-marks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.airt-popup-marks > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+
+.airt-popup-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--muted);
+  transition: background-color 0.2s ease;
+}
+
+.airt-popup-x:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.airt-popup-title {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.airt-popup-body {
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+.airt-popup-body b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@keyframes airt-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────
+   A native <details>: keyboard-accessible and announced correctly for free,
+   open before React would have loaded, and Ctrl+F still finds a closed answer
+   in Chrome. These rules only kill the default marker — which Safari draws even
+   with list-style: none — and turn the chevron. */
+.airt-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.airt-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.airt-faq[open] summary .airt-chevron {
+  transform: rotate(180deg);
+}
+
+.airt-chevron {
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .airt-btn,
+  .airt-chevron {
+    transition: none;
+  }
+  .airt-popup-card {
+    animation: none;
+  }
+}
