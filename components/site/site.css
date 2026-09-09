@@ -109,6 +109,25 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
+/* Four figures read across, not four cards compared against each other — so a
+   wider gap than the card grids and no border between them. */
+.fs-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+@media (max-width: 1000px) {
+  .fs-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 36px;
+  }
+}
+@media (max-width: 560px) {
+  .fs-stats-row {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
 @media (max-width: 1000px) {
   .fs-grid-3 {
     grid-template-columns: repeat(2, 1fr);

@@ -39,6 +39,9 @@ import { Compare } from "@/components/serp-checker/Compare";
 import { Integration } from "@/components/home/Integration";
 import { Testimonials } from "@/components/home/Testimonials";
 import { Faq } from "@/components/home/Faq";
+import { Stats } from "@/components/home/Stats";
+import { Trust } from "@/components/home/Trust";
+import { Blog } from "@/components/home/Blog";
 import { Cta } from "@/components/home/Cta";
 import {
   HOME_WEBSITE_SCHEMA,
@@ -61,12 +64,21 @@ export default function HomePage() {
       <Trackers />
       <Toolkit />
       <Capabilities />
+      {/* The scale of the data, before the page asks for money. Every figure
+          here is a claim the page already makes in prose elsewhere. */}
+      <Stats />
       <Credits />
       <Pricing />
       <Benefits />
       <Compare />
       <Integration />
       <Testimonials />
+      {/* Why a position can be believed. Every tracker shows a number; this is
+          the section that says how it was measured. */}
+      <Trust />
+      {/* Written months ago and never rendered anywhere. The only thing on this
+          page that gives a visitor a reason to return without signing up. */}
+      <Blog />
       <Faq />
       <Cta />
       <Footer />
