@@ -117,7 +117,7 @@ const HERO_SHOT: Shot = {
   src: "/shots/ai-tracker.png",
   width: 3200,
   height: 2000,
-  alt: "FreeSERP AI Prompt Tracker: the brand Patagonia with four prompts tracked across ChatGPT, Claude, Gemini and Perplexity, an 83% average mention rate and 70% cited as a source, and a mention rate, cited rate, prominence and schedule on every prompt and platform",
+  alt: "FreeSERP AI Prompt Tracker: the brand Patagonia with multiple prompts tracked across ChatGPT, Claude, Gemini and Perplexity, an 83% average mention rate and 70% cited as a source, and a mention rate, cited rate, prominence and schedule on every prompt and platform",
 };
 
 /** What the hero screenshot is actually showing, said in four lines. */
@@ -201,7 +201,7 @@ const PLATFORMS: Platform[] = [
     points: [
       "Real product output on Gemini 2.5 Flash",
       "Global answers — Gemini will not accept a country",
-      "Scored on exactly the same metrics as the other three",
+      "Scored on exactly the same metrics as every other platform",
       "1 credit an answer",
     ],
     spec: [
@@ -297,7 +297,7 @@ const METRICS = [
   {
     icon: BarChart3,
     title: "Prominence",
-    text: "How early in the answer your first mention lands, as a percentage of the way through. It is the closest thing AI search has to a rank position, and it works on all four platforms.",
+    text: "How early in the answer your first mention lands, as a percentage of the way through. It is the closest thing AI search has to a rank position, and it works on every platform.",
   },
   {
     icon: Quote,
@@ -344,7 +344,7 @@ const STEPS = [
   {
     n: "03",
     title: "Pick platforms and samples",
-    text: "Any of the four, per prompt, and 1 to 5 answers each run — three by default. More samples is a steadier rate; fewer is a cheaper one.",
+    text: "Any of the platforms, per prompt, and 1 to 5 answers each run — three by default. More samples is a steadier rate; fewer is a cheaper one.",
   },
   {
     n: "04",
@@ -354,7 +354,7 @@ const STEPS = [
 ];
 
 const STATS = [
-  { value: "4", label: "AI platforms, one dashboard" },
+  { value: "All", label: "AI platforms, one dashboard" },
   { value: "5", label: "answers a prompt, every run" },
   { value: "250", label: "prompts per brand" },
   { value: "100", label: "free credits every month" },
@@ -394,7 +394,7 @@ const BENEFITS = [
 ];
 
 const FREE_POINTS = [
-  "All four platforms unlocked",
+  "All platforms unlocked",
   "Mentions, citations, prominence",
   "Every answer stored in full",
   "No credit card required",
@@ -413,12 +413,12 @@ const FAQS = [
     a: "It asks the AI assistants the questions your buyers ask, on a schedule, and scores what comes back. For every prompt you get the share of answers that named you, the share that linked to you as a source, how early in the answer you appeared, which competitors were named alongside you, and the full text of every answer it collected.",
   },
   {
-    q: "Why these four platforms?",
+    q: "Why these platforms?",
     a: "ChatGPT, Claude, Gemini and Perplexity are where AI answers are actually being read, and each is reached in the way that gives the truest result: ChatGPT and Gemini are read from their own product output, while Claude and Perplexity are answered through their APIs on a pinned model version with web search on.",
   },
   {
     q: "What does it cost in credits?",
-    a: "One credit per answer on ChatGPT, Gemini and Perplexity, and three on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on all four at three samples each is 18 credits.",
+    a: "One credit per answer on ChatGPT, Gemini and Perplexity, and three on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 18 credits.",
   },
   {
     q: "Why more than one answer per prompt?",
@@ -510,15 +510,15 @@ export default function AiRankTrackerPage() {
 
             <p className="airt-lead mx-auto mt-6 max-w-[62ch]">
               A growing share of buying decisions never touches a blue link — it ends at an
-              assistant&rsquo;s answer. FreeSERP asks the questions your buyers ask, on all four
-              platforms, and scores how often you are named, how often you are cited, and how
+              assistant&rsquo;s answer. FreeSERP asks the questions your buyers ask, on every
+              platform, and scores how often you are named, how often you are cited, and how
               early in the answer you appear.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
               <Cta placement="hero" label="Start free — 100 credits" />
               <a href="#platforms" className="airt-btn airt-btn-lg airt-btn-ghost">
-                See the four platforms
+                See the platforms
               </a>
             </div>
 
@@ -567,7 +567,7 @@ export default function AiRankTrackerPage() {
             ))}
           </div>
           <p className="mt-4 text-center text-[13px] text-[var(--muted)]">
-            Above: one brand&rsquo;s prompts, scored on all four platforms
+            Above: one brand&rsquo;s prompts, scored on every platform
           </p>
         </div>
 
@@ -580,7 +580,7 @@ export default function AiRankTrackerPage() {
           <div className={WRAP}>
             <SectionHead
               label="Platforms"
-              name="The four"
+              name="The platforms"
               title="What FreeSERP does on each assistant"
               sub="Reached in whichever way gives the truest answer, and scored the same way once the answer is in."
             />
@@ -643,7 +643,7 @@ export default function AiRankTrackerPage() {
             <SectionHead
               label="Compare"
               name="Side by side"
-              title="Where the four actually differ"
+              title="Where they actually differ"
               sub="Measured against the live APIs, not assumed — including the one limitation we would rather state than paper over."
             />
 
@@ -690,8 +690,8 @@ export default function AiRankTrackerPage() {
             <SectionHead
               label="Metrics"
               name="What you get back"
-              title="Six things every run tells you"
-              sub="The same six on all four platforms, so a number from ChatGPT and a number from Claude can sit in the same column."
+              title="What every run tells you"
+              sub="The same metrics on every platform, so a number from ChatGPT and a number from Claude can sit in the same column."
             />
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -733,7 +733,7 @@ export default function AiRankTrackerPage() {
             <SectionHead
               label="Setup"
               name="How it works"
-              title="Four steps, then it runs itself"
+              title="A few steps, then it runs itself"
             />
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -987,7 +987,7 @@ export default function AiRankTrackerPage() {
               Find out what the assistants say about you
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              Four platforms, one credit balance. 100 free credits every month, no credit card,
+              Multiple AI platforms, one credit balance. 100 free credits every month, no credit card,
               and every answer stored so you can read it for yourself.
             </p>
             <div className="mt-8 flex justify-center">
