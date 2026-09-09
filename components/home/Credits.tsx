@@ -63,7 +63,8 @@ export function Credits() {
                       style={{
                         padding: "14px 20px",
                         fontWeight: 600,
-                        color: row.cost === "Free" ? COLORS.green : COLORS.blue,
+                        // Free was green, the only green on the page. Weight carries it now.
+                        color: COLORS.blue,
                         background: COLORS.blueBg,
                         verticalAlign: "top",
                         whiteSpace: "nowrap",

@@ -17,10 +17,11 @@ export function Cta() {
           padding: 80,
           borderRadius: 24,
           textAlign: "center",
+          // Our own blue rather than a template's PNG on an external CDN —
+          // the same ramp as the hero, so the page opens and closes on one
+          // colour.
           backgroundImage:
-            "url(https://framerusercontent.com/images/uBWoN7hnAElyBXYe18qKfbasI.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+            "radial-gradient(ellipse 100% 140% at 50% 0%, #4a8fff 0%, #0454ff 45%, #03155a 100%)",
         }}
       >
         <Reveal>
@@ -29,7 +30,9 @@ export function Cta() {
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              background: "#000",
+              // Was black — a third colour on a blue panel. Translucent white
+              // sits on the gradient without introducing one.
+              background: "rgba(255,255,255,.16)",
               color: "#fff",
               padding: "9px 18px",
               borderRadius: 100,

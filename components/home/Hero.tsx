@@ -15,10 +15,20 @@ export function Hero() {
         paddingTop: 160,
         paddingBottom: 120,
         textAlign: "center",
+        /**
+         * Our own blue, not a hosted photograph.
+         *
+         * This was a JPEG served from framerusercontent.com — a template's
+         * asset on a CDN we do not control, loaded on every first paint of the
+         * site's most important page. A gradient is the same look with no
+         * request, no third party, and a colour that is exactly the brand blue
+         * rather than approximately it.
+         *
+         * The same ramp Integration and Pricing already use, so the three blue
+         * surfaces on the page are the one colour instead of three near-misses.
+         */
         backgroundImage:
-          "url(https://framerusercontent.com/images/LTzUgqhBMU0fYD8l2vHeGvu8dQI.jpg)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+          "radial-gradient(ellipse 90% 120% at 50% 8%, #4a8fff 0%, #0454ff 42%, #03155a 100%)",
         position: "relative",
         overflow: "hidden",
       }}
@@ -89,15 +99,18 @@ export function Hero() {
             display: "inline-flex",
             alignItems: "center",
             marginTop: 36,
-            background: "#000",
-            color: "#fff",
+            // White on the blue hero: the button should be the brightest thing
+            // in the frame, and a black pill on a blue photo is a third colour
+            // doing the job one already does.
+            background: "#fff",
+            color: COLORS.blue,
             padding: "16px 34px",
             borderRadius: 100,
             fontSize: 15,
             fontWeight: 600,
             letterSpacing: "-0.1px",
             textDecoration: "none",
-            boxShadow: "0 14px 34px rgba(8, 32, 96, .28)",
+            boxShadow: "0 14px 34px rgba(3, 21, 90, .30)",
           }}
         >
           Free SERP Checker
