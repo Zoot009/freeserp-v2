@@ -4,47 +4,6 @@ import { SectionHead } from "@/components/site/SectionHead";
 import { COLORS } from "@/components/site/constants";
 import { TESTIMONIALS } from "./data";
 
-/**
- * Initials, not a face.
- *
- * These were PNGs served from framerusercontent.com: stock portraits shipped
- * with a template, attached to named people and presented as our customers.
- * Two problems in one image — a third party's CDN on our critical path, and a
- * stranger's photograph captioned as somebody who uses the product.
- *
- * Initials in the brand blue say exactly as much as a stock portrait does about
- * whether a review is real, cost nothing to load, and claim nothing untrue.
- */
-function Initials({ name, onBlue = false }: { name: string; onBlue?: boolean }) {
-  const initials = name
-    .split(/s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        flexShrink: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: 16,
-        fontWeight: 600,
-        letterSpacing: "-0.02em",
-        background: onBlue ? "rgba(255,255,255,.18)" : COLORS.blueBg,
-        color: onBlue ? "#fff" : COLORS.blue,
-      }}
-    >
-      {initials}
-    </div>
-  );
-}
-
 function StarRow() {
   return (
     <div style={{ display: "flex", gap: 4, marginBottom: 28 }}>
@@ -101,7 +60,13 @@ export function Testimonials() {
               terms — no contracts, no per-seat fees, and zero credit card on file.&quot;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <Initials name="Alex Jordan" onBlue />
+              <Image
+                src="https://framerusercontent.com/images/aQAfw6UatloRhlkBjVmGTg6WP0.png"
+                alt="Alex Jordan"
+                width={48}
+                height={48}
+                style={{ borderRadius: 24 }}
+              />
               <div>
                 <div style={{ fontWeight: 600 }}>Alex Jordan</div>
                 <div style={{ fontSize: 14, opacity: 0.7 }}>SEO Content Strategist</div>
@@ -175,7 +140,13 @@ export function Testimonials() {
               cheapest serious pricing I&apos;ve seen.&quot;
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <Initials name="Maya Rahman" onBlue />
+              <Image
+                src="https://framerusercontent.com/images/cz25k9bZZYaN9322N08WN8lbE.png"
+                alt="Maya Rahman"
+                width={48}
+                height={48}
+                style={{ borderRadius: 24 }}
+              />
               <div>
                 <div style={{ fontWeight: 600 }}>Maya Rahman</div>
                 <div style={{ fontSize: 14, opacity: 0.85 }}>Search Performance Lead</div>

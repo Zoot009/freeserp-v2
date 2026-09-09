@@ -5,18 +5,11 @@ import { SectionHead } from "@/components/site/SectionHead";
 import { COLORS } from "@/components/site/constants";
 import { getLatestPosts, urlFor, type LatestPost } from "@/lib/sanity";
 
-/**
- * One hue, three weights.
- *
- * These were red, blue and purple, which made three neighbouring article cards
- * look like three different products. The page is blue and white; a tag is a
- * label, not a place to introduce a second and third accent colour. Depth
- * separates them instead of hue.
- */
+// Rotating tag colours so three consecutive cards don't look identical.
 const TAG_PALETTE = [
+  { bg: COLORS.redBg, color: COLORS.red },
   { bg: COLORS.blueBg, color: COLORS.blue },
-  { bg: "#f4f7ff", color: "#2f6bff" },
-  { bg: COLORS.blue, color: COLORS.white },
+  { bg: "#f1ecff", color: COLORS.purple },
 ];
 
 function formatDate(iso?: string) {
