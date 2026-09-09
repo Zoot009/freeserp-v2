@@ -1,0 +1,802 @@
+/* Styling for the /competitor-analysis ad landing page.
+ *
+ * The fourth page in the family, after /tracking-suite, /audit-suite and
+ * /ai-rank-tracker. It borrows the AI page's typographic system — Inter at
+ * 500/600, letter-spacing in px so tracking tightens as type grows, 24px cards,
+ * 10px controls — because the two sell to the same buyer.
+ *
+ * Where it deliberately parts company is colour. This page is monochrome blue:
+ * FreeSERP's own #0454ff, ramped from a cyan-leaning highlight to a deep navy,
+ * with one gradient token (--grad) doing all the accent work — buttons, section
+ * caps, panel hairlines, step numerals, the hero band and the dark panels. The
+ * AI page needed four brand colours because it was selling four vendors; this
+ * one is selling a single tool that lives next to the main app, so a single
+ * blue that matches the product is the more useful choice. Every tint below is
+ * in the blue family; nothing green, amber or violet appears anywhere.
+ *
+ * The blue-tinted canvas (#fafbff rather than the warm #fbfaf9 the other pages
+ * use) is what makes the difference read at a glance rather than only in the
+ * accents.
+ *
+ * Everything is prefixed `cmpa-` and scoped under `.cmpa-scope`. The three
+ * sibling campaigns use `.ads-*` and `.airt-*`; a fourth page reusing either set
+ * would inherit whichever stylesheet a client-side navigation happened to leave
+ * in the document, so this one shares no selector with any of them.
+ *
+ * Plain CSS with no `@import "tailwindcss"` of its own: the root layout already
+ * loads app/globals.css and Tailwind v4 scans the whole project, so every
+ * utility used in page.tsx is generated. Re-importing the framework here would
+ * ship a second copy of preflight + utilities on this route, which is exactly
+ * the weight an ad landing page cannot afford.
+ */
+
+.cmpa-scope {
+  /* ── theme ────────────────────────────────────────────────────────────
+     One hue. --accent is the flat blue for anything that has to stay legible
+     at 11px; --grad is the same blue opened out towards cyan and is what makes
+     the page feel like its own campaign. Retheming is these few lines. */
+  --accent: #0454ff;
+  --accent-ink: #ffffff;
+  --accent-deep: #0b2ea8;
+  --accent-lift: #22a7f0;
+
+  --grad: linear-gradient(120deg, #0b2ea8 0%, #0454ff 46%, #22a7f0 100%);
+  /* The same ramp for text on the dark band, where the dark end would vanish. */
+  --grad-light: linear-gradient(100deg, #ffffff 0%, #b6cdff 52%, #7fe3ff 100%);
+
+  --ink: #0a1130;
+  --body: #454b63;
+  --muted: #6b7290;
+  --canvas: #fafbff;
+  --surface: #eff3fd;
+  --card: #ffffff;
+  --line: #0b205a1f;
+  --line-soft: #0b205a12;
+
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas has to reach the document root, or an overscroll bounce (and any
+   gap below a short page) shows the site-wide white from globals.css behind it.
+   Written as :has() rather than a rule in globals.css so it stays confined to
+   the route that actually renders .cmpa-scope. */
+html:has(.cmpa-scope),
+html:has(.cmpa-scope) body {
+  background: #fafbff;
+}
+
+.cmpa-scope ::selection {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ── type ─────────────────────────────────────────────────────────────── */
+.cmpa-h1 {
+  font-size: clamp(38px, 5.6vw, 64px);
+  line-height: 1.06;
+  letter-spacing: -2px;
+  font-weight: 600;
+}
+
+.cmpa-h2 {
+  font-size: clamp(29px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  font-weight: 600;
+}
+
+.cmpa-h3 {
+  font-size: clamp(23px, 2.6vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.cmpa-lead {
+  font-size: clamp(16px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: var(--body);
+}
+
+/* Half a headline in the gradient. Used on the hero H1 and the closing H2, and
+   nowhere else — a page where every heading is gradient-filled is a page where
+   none of them mean anything. */
+.cmpa-grad-text {
+  background-image: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cmpa-on-dark .cmpa-grad-text {
+  background-image: var(--grad-light);
+}
+
+/* ── the dark band ──────────────────────────────────────────────────────
+   Full-bleed, and the only dark thing above the fold. Three stacked gradients
+   rather than an image — a navy base, a blue bloom off the left shoulder and a
+   cyan wash coming over the top edge — so the atmosphere costs no bytes and no
+   request and cannot delay LCP. */
+.cmpa-band {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(120% 86% at 50% -12%, rgba(34, 167, 240, 0.3), transparent 62%),
+    radial-gradient(72% 58% at 10% 6%, rgba(4, 84, 255, 0.46), transparent 66%),
+    linear-gradient(162deg, #050a20 0%, #081239 48%, #05091d 100%);
+}
+
+/* A faint engineering grid, faded out at the edges with a mask so it never
+   reaches a hard line. This is the page's one piece of texture. */
+.cmpa-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(72% 62% at 50% 26%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(72% 62% at 50% 26%, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+
+.cmpa-band > * {
+  position: relative;
+}
+
+/* Text tones inside the band, so page.tsx is not littered with white/xx. */
+.cmpa-band .cmpa-lead {
+  color: rgba(255, 255, 255, 0.64);
+}
+
+/* ── dark panels ────────────────────────────────────────────────────────
+   The stats strip, the popular pricing card and the closing CTA. The same
+   navy-to-blue ramp as the band, at panel scale, so the three dark moments on
+   the page read as one material. */
+.cmpa-ink-panel {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(88% 130% at 88% -10%, rgba(34, 167, 240, 0.26), transparent 58%),
+    linear-gradient(135deg, #06102f 0%, #0a1b56 62%, #071233 100%);
+}
+
+.cmpa-ink-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(80% 80% at 70% 0%, #000 0%, transparent 76%);
+  mask-image: radial-gradient(80% 80% at 70% 0%, #000 0%, transparent 76%);
+  pointer-events: none;
+}
+
+.cmpa-ink-panel > * {
+  position: relative;
+}
+
+/* The same material without the grid overlay, for a panel that has to let a
+   child escape its box. The popular pricing card hangs its "Popular" badge
+   above its own top edge, which `overflow: hidden` would clip and the
+   `> *` rule above would drop back into the flow. */
+.cmpa-ink-soft {
+  color: #fff;
+  background:
+    radial-gradient(88% 130% at 88% -10%, rgba(34, 167, 240, 0.26), transparent 58%),
+    linear-gradient(135deg, #06102f 0%, #0a1b56 62%, #071233 100%);
+}
+
+/* ── surfaces ─────────────────────────────────────────────────────────── */
+.cmpa-panel {
+  border-radius: 24px;
+}
+
+.cmpa-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* The lift is for the content cards. The FAQ rows are the same surface but
+   they are controls, and a control that floats when you aim at it is a control
+   you mis-click. */
+.cmpa-card:not(.cmpa-faq):hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+  box-shadow: 0 22px 44px -28px rgba(4, 84, 255, 0.55);
+}
+
+.cmpa-soft {
+  background: linear-gradient(135deg, var(--surface) 0%, #ffffff 82%);
+  border: 1px solid var(--line-soft);
+  border-radius: 24px;
+}
+
+/* A two-part section label: a gradient cap, then the name. */
+.cmpa-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--body);
+  box-shadow: 0 6px 18px -14px rgba(4, 84, 255, 0.8);
+}
+
+.cmpa-tag > b {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background-image: var(--grad);
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cmpa-band .cmpa-tag {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.72);
+  box-shadow: none;
+}
+
+/* The hero eyebrow — a pill on the band with a gradient cap of its own. */
+.cmpa-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.74);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cmpa-eyebrow:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.cmpa-eyebrow > b {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background-image: var(--grad);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The four labels under the hero headline. */
+.cmpa-hero-layer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #cfe0ff;
+}
+
+/* A keyword from the chip cloud. */
+.cmpa-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body);
+  white-space: nowrap;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.cmpa-chip:hover {
+  border-color: color-mix(in srgb, var(--accent) 34%, transparent);
+  color: var(--ink);
+}
+
+.cmpa-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background-image: var(--grad);
+  flex-shrink: 0;
+}
+
+/* ── layer blocks ───────────────────────────────────────────────────────
+   One panel per layer of the comparison. All four are blue; what separates
+   them is where in the ramp they sit — core blue, cyan-blue, indigo-blue,
+   deep blue — set inline per block as `--tint` and `--dot`, which is the only
+   way four steps of one hue come out of one class without four near-identical
+   rules. Each panel washes its tint out to white on the diagonal and carries a
+   gradient hairline along the top edge. */
+.cmpa-layer {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(134deg, var(--tint) 0%, #ffffff 76%);
+  border: 1px solid var(--line-soft);
+}
+
+.cmpa-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background-image: var(--grad);
+  opacity: 0.6;
+}
+
+.cmpa-layer-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  color: var(--dot);
+  box-shadow: 0 12px 26px -16px color-mix(in srgb, var(--dot) 75%, transparent);
+  flex-shrink: 0;
+}
+
+/* The spec rows under each layer block. A definition list rather than a table:
+   it is four independent key/value pairs per layer, and it has to fold to one
+   column on a phone, which a table row will not do. */
+.cmpa-spec {
+  display: grid;
+  gap: 1px;
+  background: color-mix(in srgb, var(--dot) 16%, transparent);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.cmpa-spec > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  background: #fff;
+  font-size: 13.5px;
+}
+
+.cmpa-spec dt {
+  color: var(--muted);
+}
+
+.cmpa-spec dd {
+  font-weight: 500;
+  text-align: right;
+  color: var(--ink);
+}
+
+/* ── data-source table ──────────────────────────────────────────────────
+   Scrolls inside its own box rather than widening the page: four columns of
+   real provenance do not fit a phone, and a landing page that scrolls sideways
+   is a landing page with a bug. */
+.cmpa-table-scroll {
+  overflow-x: auto;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 24px 50px -40px rgba(11, 32, 90, 0.6);
+}
+
+.cmpa-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.cmpa-table th,
+.cmpa-table td {
+  padding: 15px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.cmpa-table thead th {
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.cmpa-table tbody tr:hover td,
+.cmpa-table tbody tr:hover th {
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+
+.cmpa-table tbody tr:last-child th,
+.cmpa-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.cmpa-table tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Scored / not scored. Both stay in the blue family — a green tick here would
+   read as "good", and half these rows are deliberately not in the score. */
+.cmpa-yes {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.cmpa-no {
+  color: var(--muted);
+}
+
+/* ── the four steps ─────────────────────────────────────────────────────
+   A gradient rule runs behind the numerals on wide screens, so the four cards
+   read as one sequence rather than four unrelated boxes. */
+.cmpa-steps {
+  position: relative;
+}
+
+.cmpa-steps > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .cmpa-steps::before {
+    content: "";
+    position: absolute;
+    top: 45px;
+    right: 40px;
+    left: 40px;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      rgba(4, 84, 255, 0.32),
+      rgba(34, 167, 240, 0.32),
+      rgba(4, 84, 255, 0.06)
+    );
+    z-index: 0;
+  }
+}
+
+.cmpa-step-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background-image: var(--grad);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: 0 10px 22px -12px rgba(4, 84, 255, 0.9);
+}
+
+/* A soft icon tile for the output and benefit cards. */
+.cmpa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(140deg, var(--surface) 0%, #ffffff 100%);
+  border: 1px solid var(--line-soft);
+  color: var(--accent);
+}
+
+/* ── buttons ──────────────────────────────────────────────────────────── */
+.cmpa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.cmpa-btn-lg {
+  padding: 14px 24px;
+  font-size: 16px;
+}
+
+.cmpa-btn-sm {
+  padding: 9px 16px;
+  font-size: 14px;
+}
+
+.cmpa-btn-primary {
+  background-color: var(--accent);
+  background-image: var(--grad);
+  color: var(--accent-ink);
+  box-shadow: 0 10px 26px -14px rgba(4, 84, 255, 0.95);
+}
+
+.cmpa-btn-primary:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 14px 30px -12px rgba(4, 84, 255, 0.95);
+}
+
+.cmpa-btn-ink {
+  background-color: var(--ink);
+  background-image: linear-gradient(135deg, #0a1130 0%, #0d2166 100%);
+  color: #fff;
+}
+
+.cmpa-btn-ink:hover {
+  filter: brightness(1.12);
+}
+
+.cmpa-btn-white {
+  background: #fff;
+  color: var(--ink);
+}
+
+.cmpa-btn-white:hover {
+  background: #e6ecfb;
+}
+
+.cmpa-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.cmpa-btn-ghost:hover {
+  border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+}
+
+.cmpa-on-dark .cmpa-btn-ghost {
+  background: #ffffff14;
+  color: #fff;
+  border-color: #ffffff29;
+}
+
+.cmpa-on-dark .cmpa-btn-ghost:hover {
+  background: #ffffff24;
+  border-color: #ffffff4d;
+}
+
+/* ── screenshots ────────────────────────────────────────────────────────
+   The hero shot straddles the dark band and the canvas, so it carries a real
+   shadow rather than a hairline — on the dark half a hairline is invisible and
+   the screenshot floats. Its border is the gradient rather than a grey line,
+   painted with the two-background padding-box/border-box trick because a
+   gradient cannot be a border-color. */
+.cmpa-shot {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, rgba(4, 84, 255, 0.55), rgba(34, 167, 240, 0.3), rgba(4, 84, 255, 0.08))
+      border-box;
+  box-shadow:
+    0 1px 2px rgba(5, 10, 32, 0.06),
+    0 44px 90px -38px rgba(5, 10, 32, 0.7);
+}
+
+/* A blue bloom behind the shot, bridging the band and the canvas. */
+.cmpa-shot-glow {
+  position: relative;
+}
+
+.cmpa-shot-glow::before {
+  content: "";
+  position: absolute;
+  inset: -6% 6% 22%;
+  border-radius: 999px;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(4, 84, 255, 0.34), transparent 70%);
+  filter: blur(46px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.cmpa-shot-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line-soft);
+  background: #fbfcff;
+}
+
+/* ── timed signup popup ─────────────────────────────────────────────────
+   The same behaviour and the same shape as /ai-rank-tracker's: a 24px card, its
+   own session key, and a backdrop, an X and Escape that all dismiss it. */
+.cmpa-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.cmpa-popup-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 10, 32, 0.5);
+  backdrop-filter: blur(2px);
+  cursor: default;
+}
+
+.cmpa-popup-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 34px 34px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  text-align: center;
+  box-shadow: 0 36px 70px -26px rgba(5, 10, 32, 0.45);
+  animation: cmpa-popup-in 0.24s ease-out;
+}
+
+.cmpa-popup-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background-image: var(--grad);
+}
+
+.cmpa-popup-marks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cmpa-popup-marks > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(140deg, var(--surface) 0%, #ffffff 100%);
+  border: 1px solid var(--line-soft);
+  color: var(--accent);
+}
+
+.cmpa-popup-x {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: var(--muted);
+  transition: background-color 0.2s ease;
+}
+
+.cmpa-popup-x:hover {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.cmpa-popup-title {
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  font-weight: 600;
+}
+
+.cmpa-popup-body {
+  margin-top: 14px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+.cmpa-popup-body b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+@keyframes cmpa-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+/* ── FAQ ────────────────────────────────────────────────────────────────
+   A native <details>: keyboard-accessible and announced correctly for free,
+   open before React would have loaded, and Ctrl+F still finds a closed answer
+   in Chrome. These rules only kill the default marker — which Safari draws even
+   with list-style: none — and turn the chevron. */
+.cmpa-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.cmpa-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.cmpa-faq[open] {
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.cmpa-faq[open] summary .cmpa-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.cmpa-chevron {
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cmpa-btn,
+  .cmpa-card,
+  .cmpa-chip,
+  .cmpa-chevron,
+  .cmpa-eyebrow {
+    transition: none;
+  }
+  .cmpa-card:not(.cmpa-faq):hover {
+    transform: none;
+  }
+  .cmpa-popup-card {
+    animation: none;
+  }
+}
