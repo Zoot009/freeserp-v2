@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FileText, Gauge, Link2, Search, X } from "lucide-react";
 import { Cta } from "./Cta";
+import { trackLanding } from "@/components/landing/track";
 
 /**
  * The timed signup prompt.
@@ -33,6 +34,9 @@ import { Cta } from "./Cta";
 
 /** How far down the page the visitor gets before the offer is worth showing. */
 const SCROLL_TRIGGER = 0.3;
+// Same value Cta.tsx stamps on signup_cta_click, so every event from this page
+// groups together in the admin funnel.
+const PAGE = "competitor_analysis";
 
 /** The layers of the comparison, in the order the page introduces them. */
 const MARKS = [Search, FileText, Gauge, Link2];
@@ -40,7 +44,13 @@ const MARKS = [Search, FileText, Gauge, Link2];
 export function SignupPopup() {
   const [open, setOpen] = useState(false);
 
-  const dismiss = useCallback(() => setOpen(false), []);
+  // `reason` separates "closed it deliberately" from "pressed escape" from
+  // "clicked the backdrop" in the admin funnel — the popup's own dismiss
+  // breakdown is the only signal for whether it is helping or just in the way.
+  const dismiss = useCallback((reason: string) => {
+    setOpen(false);
+    trackLanding("signup_popup_dismiss", { reason, page: PAGE });
+  }, []);
 
   useEffect(() => {
     let frame = 0;
@@ -58,6 +68,9 @@ export function SignupPopup() {
       fired = true;
       window.removeEventListener("scroll", onScroll);
       setOpen(true);
+      // Without this the admin sees popup CTA clicks with no impressions behind
+      // them, so the popup's conversion rate is unmeasurable.
+      trackLanding("signup_popup_view", { page: PAGE });
     };
 
     // Coalesced into a frame: scroll fires far faster than the page paints, and
@@ -83,7 +96,7 @@ export function SignupPopup() {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") dismiss();
+      if (e.key === "Escape") dismiss("escape");
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -98,10 +111,10 @@ export function SignupPopup() {
       aria-modal="true"
       aria-labelledby="cmpa-popup-title"
     >
-      <button type="button" className="cmpa-popup-backdrop" aria-label="Close" onClick={dismiss} />
+      <button type="button" className="cmpa-popup-backdrop" aria-label="Close" onClick={() => dismiss("backdrop")} />
 
       <div className="cmpa-popup-card">
-        <button type="button" className="cmpa-popup-x" onClick={dismiss} aria-label="Close">
+        <button type="button" className="cmpa-popup-x" onClick={() => dismiss("close_button")} aria-label="Close">
           <X className="h-4 w-4" strokeWidth={2.2} />
         </button>
 

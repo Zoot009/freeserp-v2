@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Cta } from "./Cta";
 import { PlatformMark, type PlatformId } from "./PlatformMarks";
+import { trackLanding } from "@/components/landing/track";
 
 /**
  * The timed signup prompt.
@@ -35,6 +36,9 @@ import { PlatformMark, type PlatformId } from "./PlatformMarks";
 const SCROLL_TRIGGER = 0.3;
 
 const SEEN_KEY = "fs_ai_rank_tracker_popup";
+// Same value Cta.tsx stamps on signup_cta_click, so every event from this
+// page groups together in the admin funnel.
+const PAGE = "ai_rank_tracker";
 
 /** The four marks, in the order the dashboard's sidebar lists them. */
 const MARKS: PlatformId[] = ["chat_gpt", "claude", "gemini", "perplexity"];
@@ -42,8 +46,12 @@ const MARKS: PlatformId[] = ["chat_gpt", "claude", "gemini", "perplexity"];
 export function SignupPopup() {
   const [open, setOpen] = useState(false);
 
-  const dismiss = useCallback(() => {
+  // `reason` separates "closed it deliberately" from "pressed escape" from
+  // "clicked the backdrop" in the admin funnel — the popup's own dismiss
+  // breakdown is the only signal for whether it is helping or just in the way.
+  const dismiss = useCallback((reason: string) => {
     setOpen(false);
+    trackLanding("signup_popup_dismiss", { reason, page: PAGE });
     try {
       sessionStorage.setItem(SEEN_KEY, "1");
     } catch {
@@ -73,6 +81,9 @@ export function SignupPopup() {
       fired = true;
       window.removeEventListener("scroll", onScroll);
       setOpen(true);
+      // Without this the admin sees popup CTA clicks with no impressions behind
+      // them, so the popup's conversion rate is unmeasurable.
+      trackLanding("signup_popup_view", { page: PAGE });
     };
 
     // Coalesced into a frame: scroll fires far faster than the page paints, and
@@ -98,7 +109,7 @@ export function SignupPopup() {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") dismiss();
+      if (e.key === "Escape") dismiss("escape");
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -113,10 +124,10 @@ export function SignupPopup() {
       aria-modal="true"
       aria-labelledby="airt-popup-title"
     >
-      <button type="button" className="airt-popup-backdrop" aria-label="Close" onClick={dismiss} />
+      <button type="button" className="airt-popup-backdrop" aria-label="Close" onClick={() => dismiss("backdrop")} />
 
       <div className="airt-popup-card">
-        <button type="button" className="airt-popup-x" onClick={dismiss} aria-label="Close">
+        <button type="button" className="airt-popup-x" onClick={() => dismiss("close_button")} aria-label="Close">
           <X className="h-4 w-4" strokeWidth={2.2} />
         </button>
 

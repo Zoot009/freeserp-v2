@@ -109,8 +109,17 @@ const MAX_VALUE_LEN = 512
 // Deliberately does NOT match app params like `domain`, which the preview overlay
 // pushes into the URL; treating that as a campaign would log a touch on every
 // preview open.
+//
+// gbraid/wbraid are spelled out because they match NEITHER the prefix alternation
+// nor /clid$/. Google sends them INSTEAD of gclid on iOS click flows under ATT, so
+// without them such a visit carried no marketing-shaped param at all: hasAnyUtm()
+// returned false, no touch row was written, and the click was invisible to
+// attribution entirely — not merely unattributed.
+//
+// srsltid is deliberately NOT here: that is Google Shopping's FREE listings
+// parameter, so treating it as paid traffic would inflate the Google split.
 const MARKETING_KEY_RE =
-  /^(utm_|fs_meta_)|clid$|^(gclid|ref|referrer|source|campaign|medium|affiliate|partner|promo|coupon|ad_id|adset_id|campaign_id|placement)$/i
+  /^(utm_|fs_meta_)|clid$|^(gclid|gbraid|wbraid|ref|referrer|source|campaign|medium|affiliate|partner|promo|coupon|ad_id|adset_id|campaign_id|placement)$/i
 
 // The spelling we EMIT when forwarding to app.freeserp.com — always canonical,
 // regardless of which alias the ad link arrived with.
