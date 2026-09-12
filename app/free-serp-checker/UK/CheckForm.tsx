@@ -91,6 +91,19 @@ export function CheckForm({
     const href = url.toString();
 
     setLeaving(true);
+    // The same CTA name the US lander's button fires, so "Check rankings free"
+    // is one comparable number across both markets even though the two buttons
+    // do different things afterwards — UK hops to signup, US runs the check
+    // inline. signup_cta_click below is kept: on THIS page the click really is a
+    // signup intent, and removing it would break the existing funnel.
+    trackLanding("check_rankings_click", {
+      placement: "hero_check",
+      page: "free_serp_checker_uk",
+      domain: dom,
+      keyword: kw,
+      country,
+      device,
+    });
     trackLandingAndFlush("signup_cta_click", {
       placement: "hero_check",
       page: "free_serp_checker_uk",

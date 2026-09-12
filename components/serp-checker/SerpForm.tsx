@@ -7,6 +7,7 @@ import { POPULAR_LOCATIONS, ALL_LOCATIONS, flagFor, countryName } from "@/compon
 import { LockIcon, GoogleLogo } from "@/components/site/icons";
 import { pushDataLayer } from "@/lib/gtm";
 import { track } from "@/lib/analytics";
+import { trackLanding } from "@/components/landing/track";
 
 type Device = "desktop" | "mobile";
 
@@ -97,8 +98,24 @@ export function SerpForm({
    * label rather than something the button adds.
    */
   submitLabel = "Check Rankings →",
+  /**
+   * When set, the submit button also reports itself as a campaign CTA under this
+   * page id — `check_rankings_click`, fired on the CLICK.
+   *
+   * Opt-in for the same reason submitLabel is: /serp-checker, /rank-tracker and
+   * /website-ranking-checker render this form too, and they are organic pages
+   * with no landing-page funnel to feed. Undefined leaves them exactly as they
+   * were.
+   *
+   * Distinct from `serp_checker_used`, which fires only after a check SUCCEEDS —
+   * so it silently drops rate-limited, timed-out and errored attempts. The gap
+   * between the two is the share of people who asked for a check and did not get
+   * one, which is worth being able to see.
+   */
+  ctaPage,
 }: {
   submitLabel?: string;
+  ctaPage?: string;
 } = {}) {
   const appUrl = useAppUrl();
   const [domain, setDomain] = useState("");
@@ -132,6 +149,20 @@ export function SerpForm({
     const kw = keyword.trim();
     const dom = domain.trim();
     if (!kw || !dom) return;
+
+    // The CTA itself: recorded here, at the click, so it counts the intent even
+    // when the check below rate-limits, times out or errors. Only on the ad
+    // landers (see ctaPage).
+    if (ctaPage) {
+      trackLanding("check_rankings_click", {
+        placement: "hero_check",
+        page: ctaPage,
+        domain: dom,
+        keyword: kw,
+        country,
+        device,
+      });
+    }
 
     // Cancel any in-flight request
     abortRef.current?.abort();
