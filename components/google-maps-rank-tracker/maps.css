@@ -1,0 +1,44 @@
+/* ─── /google-maps-rank-tracker ────────────────────────────────────────
+   Only what the shared serp.css / site.css rules don't already cover:
+   the four-across step row under the scan screenshot. Inline styles can't
+   hold media queries, hence !important at the breakpoints.
+   ------------------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .fs-maps-steps-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .fs-maps-steps-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .fs-maps-shot {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* ── Report: image + copy side by side → stack ── */
+@media (max-width: 900px) {
+  .fs-report-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* ── Metrics: the three headline numbers ── */
+@media (max-width: 900px) {
+  .fs-metric-row {
+    grid-template-columns: 1fr !important;
+  }
+  /* Stacked, the vertical rules become wrong-axis dividers. */
+  .fs-metric-cell {
+    border-left: none !important;
+    border-top: 1px solid #eaeaea !important;
+  }
+  .fs-metric-row > div:first-child .fs-metric-cell {
+    border-top: none !important;
+  }
+}

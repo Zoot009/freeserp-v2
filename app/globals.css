@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "../components/site/site.css";
 @import "../components/serp-checker/serp.css";
+@import "../components/google-maps-rank-tracker/maps.css";
+@import "../components/local-search-grid/grid.css";
+@import "../components/local-rank-tracker/local.css";
 @import "../components/blog/blog.css";
 @import "../components/home/inside-app.css";
 @import "../components/home/tools.css";

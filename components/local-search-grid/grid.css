@@ -1,0 +1,40 @@
+/* ─── /local-search-grid ───────────────────────────────────────────────
+   Only what serp.css / site.css / maps.css don't already cover. The page
+   shares .fs-maps-shot, .fs-maps-steps-grid and .fs-report-grid with
+   /google-maps-rank-tracker; these are its own two grids plus the table.
+   Inline styles can't hold media queries, hence !important.
+   ------------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .fs-pattern-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* The grid-size table: let it scroll rather than crush four columns. */
+@media (max-width: 720px) {
+  .fs-gridsize-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .fs-gridsize-wrap table {
+    min-width: 560px !important;
+  }
+}
+
+/* ── Reading the grid: band scale + legend rows ── */
+@media (max-width: 720px) {
+  /* Six labels across a phone is unreadable — stack the scale into a column
+     so each band keeps its name, and let the legend rows lose the name
+     column since the row already carries it. */
+  .fs-band-scale {
+    flex-direction: column !important;
+  }
+  .fs-band-row {
+    grid-template-columns: 18px minmax(0, 1fr) !important;
+    row-gap: 4px !important;
+  }
+  .fs-band-row > span:nth-child(3) {
+    grid-column: 2 !important;
+  }
+}

@@ -1,0 +1,21 @@
+/* ─── /local-rank-tracker ──────────────────────────────────────────────
+   Shares .fs-maps-shot, .fs-maps-steps-grid and the section classes with
+   the other two local pages; these are its own two blocks.
+   ------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .fs-workflow-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Market table: scroll rather than crush three columns. */
+@media (max-width: 720px) {
+  .fs-market-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .fs-market-wrap table {
+    min-width: 560px !important;
+  }
+}

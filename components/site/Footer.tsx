@@ -1,7 +1,7 @@
 import { appUrl } from "./constants";
 
 const COLS = [
-  { h: "Product", l: ["Features", "Rank Tracker", "Website Ranking Checker", "Blog", "Dashboard"] },
+  { h: "Product", l: ["Features", "Rank Tracker", "Local Rank Tracker", "Google Maps Rank Tracker", "Local Search Grid", "Website Ranking Checker", "Blog", "Dashboard"] },
   { h: "Legal", l: ["Privacy Policy", "Terms of Service", "Refund Policy"] },
   { h: "Connect", l: ["Contact Us", "support@freeserp.com"] },
 ] as const;
@@ -9,6 +9,9 @@ const COLS = [
 const FOOTER_HREFS: Record<string, string> = {
   Features: "/#features",
   "Rank Tracker": "/rank-tracker",
+  "Local Rank Tracker": "/local-rank-tracker",
+  "Google Maps Rank Tracker": "/google-maps-rank-tracker",
+  "Local Search Grid": "/local-search-grid",
   "Website Ranking Checker": "/website-ranking-checker",
   Blog: "/blog",
   Dashboard: appUrl("/dashboard"),
