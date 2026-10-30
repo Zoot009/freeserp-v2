@@ -41,7 +41,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
     rows: [
       { feature: "Google rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
       { feature: "YouTube rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
-      { feature: "Local map grid scans", tag: "3–57 / scan", values: [true, true, true, true] },
+      { feature: "Local map grid scans", tag: "7–295 / scan", values: [true, true, true, true] },
       { feature: "Automated recurring checks", values: [false, true, true, true] },
       { feature: "190+ countries, all devices", values: [true, true, true, true] },
       { feature: "Keywords per project", values: [10, "Unlimited", "Unlimited", "Unlimited"] },
@@ -50,7 +50,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Research and audits",
     rows: [
-      { feature: "Keyword Magic Tool", tag: "3–15 / search", values: [true, true, true, true] },
+      { feature: "Keyword Magic Tool", tag: "7–38 / search", values: [true, true, true, true] },
       { feature: "Rows per keyword search", values: [100, "1,000", "1,000", "1,000"] },
       { feature: "Website Audit", tag: "1 / 20 pages", values: [true, true, true, true] },
       { feature: "Competitor Analysis", tag: "5 / analysis", values: [true, true, true, true] },

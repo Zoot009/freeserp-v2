@@ -42,8 +42,8 @@ import "./ads.css";
  * capability was measured against the live API — ChatGPT and Gemini are read
  * from the products' own output, Claude and Perplexity are answered through
  * their APIs on a pinned model, Gemini refuses country targeting outright, and
- * Claude costs about six times an answer, which is why it is 3 credits and the
- * rest are 1. A landing page that flattened all that into "we track four AI
+ * Claude costs about six times an answer, which is why it is 7 credits,
+ * Perplexity 2 and the rest 1. A landing page that flattened all that into "we track four AI
  * platforms" would be selling something the product does not do.
  *
  * The whole page lives in this one file: copy and layout together, so a change
@@ -125,7 +125,7 @@ const HERO_POINTS = [
   "ChatGPT, Claude, Gemini and Perplexity",
   "Mention rate, citations and prominence",
   "Up to 5 answers a prompt, so it is a rate",
-  "1 credit an answer — 3 on Claude",
+  "1 credit an answer, 2 on Perplexity, 7 on Claude",
 ];
 
 interface Platform {
@@ -181,13 +181,13 @@ const PLATFORMS: Platform[] = [
       "Pinned model version, so runs stay comparable over time",
       "Web search forced on, and country targeting supported",
       "Linked sources parsed out of every answer",
-      "3 credits an answer — priced on what it really costs",
+      "7 credits an answer — priced on what it really costs",
     ],
     spec: [
       { k: "Answer comes from", v: "Claude API, web search on" },
       { k: "Model", v: "claude-haiku-4-5, pinned" },
       { k: "Country targeting", v: "Yes" },
-      { k: "Cost", v: "3 credits an answer" },
+      { k: "Cost", v: "7 credits an answer" },
     ],
   },
   {
@@ -223,13 +223,13 @@ const PLATFORMS: Platform[] = [
       "Retrieves on every answer — there is nothing to force",
       "Sources on every answer, resolved down to the domain",
       "Country targeting on any prompt",
-      "1 credit an answer",
+      "2 credits an answer",
     ],
     spec: [
       { k: "Answer comes from", v: "Perplexity Sonar, live retrieval" },
       { k: "Model", v: "sonar, pinned" },
       { k: "Country targeting", v: "Yes" },
-      { k: "Cost", v: "1 credit an answer" },
+      { k: "Cost", v: "2 credits an answer" },
     ],
   },
 ];
@@ -418,7 +418,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "One credit per answer on ChatGPT, Gemini and Perplexity, and three on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 18 credits.",
+    a: "One credit per answer on ChatGPT and Gemini, two on Perplexity and seven on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 33 credits.",
   },
   {
     q: "Why more than one answer per prompt?",

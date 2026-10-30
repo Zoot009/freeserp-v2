@@ -331,7 +331,7 @@ const FAQS = [
   },
   {
     q: "How do credits work across the four trackers?",
-    a: "One credit checks one keyword on Google or YouTube. A local map grid scan costs 3 to 57 credits depending on the grid size you choose, and research tools such as the Keyword Magic Tool and Website Audit draw from the same balance.",
+    a: "One credit checks one keyword on Google or YouTube. A local map grid scan costs 7 to 295 credits depending on the grid size you choose, and research tools such as the Keyword Magic Tool and Website Audit draw from the same balance.",
   },
   {
     q: "Do you really track the Google Map Pack?",

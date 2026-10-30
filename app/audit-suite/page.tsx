@@ -240,7 +240,7 @@ const FEATURES: Feature[] = [
       "Volume, difficulty, CPC and intent on every keyword",
       "Broad, Phrase, Exact and Related match types",
       "Word groups that carve a big list into topics",
-      "3 credits a search, 15 for the full page on paid",
+      "7 credits a search, 38 for the full page on paid",
     ],
     shot: {
       src: "/shots/keyword-magic.png",
@@ -372,7 +372,7 @@ const FAQS = [
   },
   {
     q: "What does each tool cost in credits?",
-    a: "A website crawl is 1 credit per 20 pages, so 100 pages is 5. A page audit is 1 credit, and a follow-up question on it is 1 more. Competitor analysis is 5 an analysis, internal link analysis is 2 a crawl, the Keyword Score Checker is 3 a page, and the Keyword Magic Tool is 3 a search — 15 for the fuller result page on a paid plan.",
+    a: "A website crawl is 1 credit per 20 pages, so 100 pages is 5. A page audit is 1 credit, and a follow-up question on it is 1 more. Competitor analysis is 5 an analysis, internal link analysis is 2 a crawl, the Keyword Score Checker is 3 a page, and the Keyword Magic Tool is 7 a search — 38 for the fuller result page on a paid plan.",
   },
   {
     q: "How many pages will the site audit crawl?",
