@@ -56,7 +56,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
       { feature: "Competitor Analysis", tag: "5 / analysis", values: [true, true, true, true] },
       { feature: "AI Internal Linking", tag: "2 / crawl", values: [true, true, true, true] },
       { feature: "Keyword Score Checker", tag: "3 / page", values: [true, true, true, true] },
-      { feature: "Quick Serp", tag: "1 / lookup", values: [true, true, true, true] },
+      { feature: "Quick Serp", tag: "1–4 / lookup", values: [true, true, true, true] },
     ],
   },
   {

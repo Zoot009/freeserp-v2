@@ -13,15 +13,15 @@ export type Tool = {
 export const TOOLS: Tool[] = [
   { name: "Keyword Rank Tracker", what: "Daily positions in any country, with history", cost: "1 / keyword" },
   { name: "AI Prompt Tracker", what: "Brand mentions in ChatGPT, Claude, Gemini, Perplexity", cost: "" },
-  { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "3–57 / scan" },
+  { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "7–295 / scan" },
   { name: "YouTube Rank Tracker", what: "Video positions, with views and age", cost: "1 / keyword" },
   { name: "Website Audit", what: "A real browser crawl and 63 SEO rules", cost: "1 / 20 pages" },
   { name: "Page Audit", what: "One URL, every issue, with an AI plan", cost: "" },
   { name: "Competitor Analysis", what: "Your page against the ones outranking it", cost: "5 / analysis" },
   { name: "AI Internal Linking", what: "Your link graph, with orphans and hubs surfaced", cost: "2 / crawl" },
-  { name: "Keyword Magic Tool", what: "Hundreds of ideas with volume, difficulty and intent", cost: "3–15 / search" },
+  { name: "Keyword Magic Tool", what: "Hundreds of ideas with volume, difficulty and intent", cost: "7–38 / search" },
   { name: "Keyword Score Checker", what: "One page scored against one keyword", cost: "3 / page" },
-  { name: "Quick Serp", what: "A live lookup without tracking anything", cost: "1 / lookup" },
+  { name: "Quick Serp", what: "A live lookup without tracking anything", cost: "1–4 / lookup" },
   { name: "Search Console & GA4", what: "Real clicks beside your tracked positions", cost: "Free" },
 ];
 

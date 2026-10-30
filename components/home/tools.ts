@@ -359,7 +359,7 @@ export const CAPABILITIES: Capability[] = [
 export const CREDIT_COSTS: { action: string; cost: string; note: string }[] = [
   { action: "Rank check", cost: "1", note: "One keyword, one engine, depth 100" },
   { action: "Adding a keyword", cost: "Free", note: "The check it schedules carries the charge" },
-  { action: "Quick SERP lookup", cost: "1", note: "A live, one-off check" },
+  { action: "Quick SERP lookup", cost: "1–4", note: "A live, one-off check; 4 on paid plans, with volume and difficulty" },
   { action: "YouTube check", cost: "1", note: "One keyword against a video or channel" },
   { action: "Local map grid scan", cost: "7–295", note: "3×3 costs 7, 11×11 costs 83, 21×21 costs 295" },
   { action: "AI answer", cost: "1–7", note: "Per answer sampled; 2 on Perplexity, 7 on Claude" },
