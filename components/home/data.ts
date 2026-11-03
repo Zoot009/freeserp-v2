@@ -256,7 +256,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the free plan gives you 100 credits every month with no credit card, and every tool is unlocked. If you need more, plans start at $19/month for 2,000 credits. One credit checks one keyword; the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
+    a: "Yes — the free plan gives you 100 credits every month with no credit card, and every tool is unlocked. If you need more, plans start at $19/month for 2,000 credits. A keyword check is 5 credits, and the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
   },
   {
     q: "What can FreeSERP track besides Google?",
