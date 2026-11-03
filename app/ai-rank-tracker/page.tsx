@@ -42,8 +42,8 @@ import "./ads.css";
  * capability was measured against the live API — ChatGPT and Gemini are read
  * from the products' own output, Claude and Perplexity are answered through
  * their APIs on a pinned model, Gemini refuses country targeting outright, and
- * Claude costs about six times an answer, which is why it is 7 credits,
- * Perplexity 2 and the rest 1. A landing page that flattened all that into "we track four AI
+ * Claude costs about six times an answer, which is why it is 35 credits,
+ * Perplexity 10 and the rest 5. A landing page that flattened all that into "we track four AI
  * platforms" would be selling something the product does not do.
  *
  * The whole page lives in this one file: copy and layout together, so a change
@@ -125,7 +125,7 @@ const HERO_POINTS = [
   "ChatGPT, Claude, Gemini and Perplexity",
   "Mention rate, citations and prominence",
   "Up to 5 answers a prompt, so it is a rate",
-  "1 credit an answer, 2 on Perplexity, 7 on Claude",
+  "5 credits an answer, 10 on Perplexity, 35 on Claude",
 ];
 
 interface Platform {
@@ -166,7 +166,7 @@ const PLATFORMS: Platform[] = [
       { k: "Answer comes from", v: "The ChatGPT product" },
       { k: "Model", v: "Recorded per run" },
       { k: "Country targeting", v: "Yes" },
-      { k: "Cost", v: "1 credit an answer" },
+      { k: "Cost", v: "5 credits an answer" },
     ],
   },
   {
@@ -181,13 +181,13 @@ const PLATFORMS: Platform[] = [
       "Pinned model version, so runs stay comparable over time",
       "Web search forced on, and country targeting supported",
       "Linked sources parsed out of every answer",
-      "7 credits an answer — priced on what it really costs",
+      "35 credits an answer — priced on what it really costs",
     ],
     spec: [
       { k: "Answer comes from", v: "Claude API, web search on" },
       { k: "Model", v: "claude-haiku-4-5, pinned" },
       { k: "Country targeting", v: "Yes" },
-      { k: "Cost", v: "7 credits an answer" },
+      { k: "Cost", v: "35 credits an answer" },
     ],
   },
   {
@@ -202,13 +202,13 @@ const PLATFORMS: Platform[] = [
       "Real product output on Gemini 2.5 Flash",
       "Global answers — Gemini will not accept a country",
       "Scored on exactly the same metrics as every other platform",
-      "1 credit an answer",
+      "5 credits an answer",
     ],
     spec: [
       { k: "Answer comes from", v: "The Gemini product" },
       { k: "Model", v: "Recorded per run" },
       { k: "Country targeting", v: "Not supported" },
-      { k: "Cost", v: "1 credit an answer" },
+      { k: "Cost", v: "5 credits an answer" },
     ],
   },
   {
@@ -223,13 +223,13 @@ const PLATFORMS: Platform[] = [
       "Retrieves on every answer — there is nothing to force",
       "Sources on every answer, resolved down to the domain",
       "Country targeting on any prompt",
-      "2 credits an answer",
+      "10 credits an answer",
     ],
     spec: [
       { k: "Answer comes from", v: "Perplexity Sonar, live retrieval" },
       { k: "Model", v: "sonar, pinned" },
       { k: "Country targeting", v: "Yes" },
-      { k: "Cost", v: "2 credits an answer" },
+      { k: "Cost", v: "10 credits an answer" },
     ],
   },
 ];
@@ -251,7 +251,7 @@ const COMPARISON: {
     model: "Recorded per run",
     geo: true,
     geoNote: "Yes",
-    credits: "1 credit",
+    credits: "5 credits",
   },
   {
     id: "claude",
@@ -260,7 +260,7 @@ const COMPARISON: {
     model: "claude-haiku-4-5",
     geo: true,
     geoNote: "Yes",
-    credits: "3 credits",
+    credits: "35 credits",
   },
   {
     id: "gemini",
@@ -269,7 +269,7 @@ const COMPARISON: {
     model: "Recorded per run",
     geo: false,
     geoNote: "Global only",
-    credits: "1 credit",
+    credits: "5 credits",
   },
   {
     id: "perplexity",
@@ -278,7 +278,7 @@ const COMPARISON: {
     model: "sonar",
     geo: true,
     geoNote: "Yes",
-    credits: "1 credit",
+    credits: "10 credits",
   },
 ];
 
@@ -418,7 +418,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "One credit per answer on ChatGPT and Gemini, two on Perplexity and seven on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 33 credits.",
+    a: "Five credits per answer on ChatGPT and Gemini, ten on Perplexity and thirty-five on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 165 credits.",
   },
   {
     q: "Why more than one answer per prompt?",
@@ -791,8 +791,8 @@ export default function AiRankTrackerPage() {
         </section>
 
         {/* ── pricing ──────────────────────────────────────────────────────
-            Prices come from CREDIT_PLANS. An answer is 1 credit on three of the
-            four platforms, so a balance is roughly that many answers — the same
+            Prices come from CREDIT_PLANS. An answer is 5 credits on two of the
+            four platforms, so a balance ÷ 5 is roughly that many answers — the same
             arithmetic the credit catalog uses. */}
         <section id="pricing" className="scroll-mt-24 pb-20 sm:pb-28">
           <div className={WRAP}>
@@ -811,7 +811,7 @@ export default function AiRankTrackerPage() {
                   $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-                  100 credits — about 100 AI answers
+                  100 credits — about 20 AI answers
                 </p>
                 <Cta
                   placement="pricing_free"
@@ -857,7 +857,7 @@ export default function AiRankTrackerPage() {
                     className={`mt-2 text-[12.5px] ${plan.popular ? "text-white/55" : "text-[var(--muted)]"}`}
                   >
                     {plan.credits.toLocaleString()} credits — about{" "}
-                    {plan.credits.toLocaleString()} AI answers
+                    {Math.floor(plan.credits / 5).toLocaleString()} AI answers
                   </p>
                   <Cta
                     placement={`pricing_${plan.slug}`}

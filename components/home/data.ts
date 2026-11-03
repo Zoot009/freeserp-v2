@@ -158,7 +158,7 @@ export const PLANS = {
     {
       name: "Pro",
       price: 49,
-      desc: "6,000 credits a month — about 200 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      desc: "6,000 credits a month — about 40 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
       cta: "Get Pro",
       featured: true,
       features: [
@@ -188,7 +188,7 @@ export const PLANS = {
     {
       name: "Pro",
       price: 49,
-      desc: "6,000 credits a month — about 200 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      desc: "6,000 credits a month — about 40 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
       cta: "Get Pro",
       featured: true,
       features: [
@@ -264,7 +264,7 @@ export const FAQS = [
   },
   {
     q: "How does Google Maps rank tracking work?",
-    a: "You drop a pin on your business, choose a radius and a grid size from 3×3 up to 21×21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 3 credits for a 3×3 up to 57 for a 21×21.",
+    a: "You drop a pin on your business, choose a radius and a grid size from 3×3 up to 21×21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 35 credits for a 3×3 up to 1,475 for a 21×21.",
   },
   {
     q: "Can I see whether ChatGPT and other AI assistants mention my brand?",
@@ -276,11 +276,11 @@ export const FAQS = [
   },
   {
     q: "What does the website audit check?",
-    a: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 1 credit per 20 pages, and a single-page audit costs 1 credit.",
+    a: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 5 credits per 20 pages, and a single-page audit costs 5 credits.",
   },
   {
     q: "How do credits work?",
-    a: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 1 credit, adding a keyword is free, a page audit is 1, an internal link crawl is 2, a keyword score is 3, keyword research is 3 to 15, and a competitor analysis is 5. Website audits cost 1 credit per 20 pages crawled, and connecting Google Search Console is free.",
+    a: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per 20 pages crawled, and connecting Google Search Console is free.",
   },
   {
     q: "Can I export the data or share a report?",
@@ -335,7 +335,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
         billingIncrement: 1,
       },
       description:
-        "Credit plans from $19/month — 2,000 credits, where one credit checks one keyword. The same balance also covers site audits, local map grid scans, keyword research and competitor analysis.",
+        "Credit plans from $19/month — 2,000 credits, where five credits check one keyword. The same balance also covers site audits, local map grid scans, keyword research and competitor analysis.",
     },
   ],
   featureList: [
@@ -436,7 +436,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "How does Google Maps rank tracking work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "You drop a pin on your business, choose a radius and a grid size from 3x3 up to 21x21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 3 credits for a 3x3 up to 57 for a 21x21.",
+        text: "You drop a pin on your business, choose a radius and a grid size from 3x3 up to 21x21, and FreeSERP runs a Map Pack search from every point on that grid. You get a rank pin at each point plus ARP, ATRP and Share of Local Voice, and you can open any point to see which businesses are ranking there instead of you. A scan costs from 35 credits for a 3x3 up to 1,475 for a 21x21.",
       },
     },
     {
@@ -460,7 +460,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "What does the FreeSERP website audit check?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 1 credit per 20 pages, and a single-page audit costs 1 credit.",
+        text: "A crawl covers up to 1,000 pages and grades them on SEO, Performance, UI/UX, Links, Technology and Social — 63 on-page checks per page. The finished report gives one site average, a grade per category, and every finding ranked Critical, Warning or Notice, grouped either by issue or page by page with the URLs and the exact element behind each one. A crawl costs 5 credits per 20 pages, and a single-page audit costs 5 credits.",
       },
     },
     {
@@ -468,7 +468,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "How do FreeSERP credits work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 1 credit, adding a keyword is free, a page audit is 1, an internal link crawl is 2, a keyword score is 3, keyword research is 3 to 15, and a competitor analysis is 5. Website audits cost 1 credit per 20 pages crawled, and connecting Google Search Console is free.",
+        text: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per 20 pages crawled, and connecting Google Search Console is free.",
       },
     },
     {

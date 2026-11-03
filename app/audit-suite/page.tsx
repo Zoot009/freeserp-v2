@@ -120,7 +120,7 @@ const HERO_POINTS = [
   "Up to 1,000 pages in one crawl",
   "Findings ranked Critical, Warning, Notice",
   "Every issue counted across every page",
-  "1 credit per 20 pages",
+  "5 credits per 20 pages",
 ];
 
 interface Feature {
@@ -164,7 +164,7 @@ const FEATURES: Feature[] = [
       "SEO, Performance, UI/UX, Links, Technology and Social",
       "Failures ranked Critical or Warning, each one explained",
       "Ask the finished audit a follow-up question",
-      "PDF export · 1 credit an audit",
+      "PDF export · 5 credits an audit",
     ],
     shot: {
       src: "/shots/page-audit.png",
@@ -183,7 +183,7 @@ const FEATURES: Feature[] = [
       "Your domain and the pages above it, side by side",
       "Overall SEO score plus every check behind it",
       "Title length, meta description, word count, keyword use",
-      "Share or export it · 5 credits an analysis",
+      "Share or export it · 25 credits an analysis",
     ],
     shot: {
       src: "/shots/competitor-analysis.png",
@@ -202,7 +202,7 @@ const FEATURES: Feature[] = [
       "Pages crawled, internal links, links per page",
       "Orphan pages — reachable from nothing — named",
       "Depth from the homepage, and where equity pools",
-      "Inbound, outbound and equity share per page · 2 credits",
+      "Inbound, outbound and equity share per page · 10 credits",
     ],
     shot: {
       src: "/shots/internal-links.png",
@@ -221,7 +221,7 @@ const FEATURES: Feature[] = [
       "Every project in one table, not one tab each",
       "Position, movement, volume, traffic and ranking URL",
       "Filter by project, device or engine; star and export",
-      "Adding a keyword is free · 1 credit a check",
+      "Adding a keyword is free · 5 credits a check",
     ],
     shot: {
       src: "/shots/keywords-all.png",
@@ -240,7 +240,7 @@ const FEATURES: Feature[] = [
       "Volume, difficulty, CPC and intent on every keyword",
       "Broad, Phrase, Exact and Related match types",
       "Word groups that carve a big list into topics",
-      "7 credits a search, 38 for the full page on paid",
+      "35 credits a search, 190 for the full page on paid",
     ],
     shot: {
       src: "/shots/keyword-magic.png",
@@ -259,7 +259,7 @@ const FEATURES: Feature[] = [
       "One grade over on-page and off-page together",
       "Domain and Page Authority, and the backlinks behind them",
       "Real page speed — TTFB, FCP, LCP and CLS",
-      "3 credits a page",
+      "15 credits a page",
     ],
     shot: {
       src: "/shots/keyword-score.png",
@@ -327,7 +327,7 @@ const BENEFITS = [
   {
     icon: Gauge,
     title: "Our own crawler",
-    text: "The site crawl and the page audit run on FreeSERP's own browser, which is why a full crawl costs a credit per twenty pages.",
+    text: "The site crawl and the page audit run on FreeSERP's own browser, which is why a full crawl costs 5 credits per twenty pages.",
   },
   {
     icon: MessageSquareText,
@@ -372,7 +372,7 @@ const FAQS = [
   },
   {
     q: "What does each tool cost in credits?",
-    a: "A website crawl is 1 credit per 20 pages, so 100 pages is 5. A page audit is 1 credit, and a follow-up question on it is 1 more. Competitor analysis is 5 an analysis, internal link analysis is 2 a crawl, the Keyword Score Checker is 3 a page, and the Keyword Magic Tool is 7 a search — 38 for the fuller result page on a paid plan.",
+    a: "A website crawl is 5 credits per 20 pages, so 100 pages is 25. A page audit is 5 credits, and a follow-up question on it is 5 more. Competitor analysis is 25 an analysis, internal link analysis is 10 a crawl, the Keyword Score Checker is 15 a page, and the Keyword Magic Tool is 35 a search — 190 for the fuller result page on a paid plan.",
   },
   {
     q: "How many pages will the site audit crawl?",
@@ -642,8 +642,8 @@ export default function AuditSuitePage() {
         </section>
 
         {/* ── pricing ──────────────────────────────────────────────────────
-            Prices come from CREDIT_PLANS. A credit buys 20 crawled pages, so
-            credits / 5 is roughly how many pages a balance crawls in a month —
+            Prices come from CREDIT_PLANS. Five credits buy 20 crawled pages, so
+            credits / 5 × 20 is roughly how many pages a balance crawls in a month —
             the same arithmetic the credit catalog uses. */}
         <section id="pricing" className="scroll-mt-24 pb-20 sm:pb-28">
           <div className={WRAP}>

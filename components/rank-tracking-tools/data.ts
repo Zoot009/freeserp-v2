@@ -11,17 +11,17 @@ export type Tool = {
 };
 
 export const TOOLS: Tool[] = [
-  { name: "Keyword Rank Tracker", what: "Daily positions in any country, with history", cost: "1 / keyword" },
+  { name: "Keyword Rank Tracker", what: "Daily positions in any country, with history", cost: "5 / keyword" },
   { name: "AI Prompt Tracker", what: "Brand mentions in ChatGPT, Claude, Gemini, Perplexity", cost: "" },
-  { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "7–295 / scan" },
-  { name: "YouTube Rank Tracker", what: "Video positions, with views and age", cost: "1 / keyword" },
-  { name: "Website Audit", what: "A real browser crawl and 63 SEO rules", cost: "1 / 20 pages" },
+  { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "35–1,475 / scan" },
+  { name: "YouTube Rank Tracker", what: "Video positions, with views and age", cost: "5 / keyword" },
+  { name: "Website Audit", what: "A real browser crawl and 63 SEO rules", cost: "5 / 20 pages" },
   { name: "Page Audit", what: "One URL, every issue, with an AI plan", cost: "" },
-  { name: "Competitor Analysis", what: "Your page against the ones outranking it", cost: "5 / analysis" },
-  { name: "AI Internal Linking", what: "Your link graph, with orphans and hubs surfaced", cost: "2 / crawl" },
-  { name: "Keyword Magic Tool", what: "Hundreds of ideas with volume, difficulty and intent", cost: "7–38 / search" },
-  { name: "Keyword Score Checker", what: "One page scored against one keyword", cost: "3 / page" },
-  { name: "Quick Serp", what: "A live lookup without tracking anything", cost: "1–4 / lookup" },
+  { name: "Competitor Analysis", what: "Your page against the ones outranking it", cost: "25 / analysis" },
+  { name: "AI Internal Linking", what: "Your link graph, with orphans and hubs surfaced", cost: "10 / crawl" },
+  { name: "Keyword Magic Tool", what: "Hundreds of ideas with volume, difficulty and intent", cost: "35–190 / search" },
+  { name: "Keyword Score Checker", what: "One page scored against one keyword", cost: "15 / page" },
+  { name: "Quick Serp", what: "A live lookup without tracking anything", cost: "5–20 / lookup" },
   { name: "Search Console & GA4", what: "Real clicks beside your tracked positions", cost: "Free" },
 ];
 
@@ -89,7 +89,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "What is a credit?",
-    a: "One unit of work. A tracked keyword costs 1, an audit costs 1 per 20 pages, a competitor analysis costs 5. The full rate card is above.",
+    a: "One unit of work. A tracked keyword costs 5, an audit costs 5 per 20 pages, a competitor analysis costs 25. The full rate card is above.",
   },
   {
     q: "Can I share results with a client?",

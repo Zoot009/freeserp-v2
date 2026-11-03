@@ -151,7 +151,7 @@ export const TOOLS: Tool[] = [
       "Findings ranked Critical, Warning and Notice, counted across every page",
       "Share the report, export it to PDF or CSV, re-crawl whenever you like",
     ],
-    cost: "1 credit per 20 pages",
+    cost: "5 credits per 20 pages",
     shot: {
       src: "/shots/site-audit-report.png",
       width: 3200,
@@ -169,7 +169,7 @@ export const TOOLS: Tool[] = [
       "Failures ranked Critical or Warning, each one explained",
       "Ask the finished audit what to fix first",
     ],
-    cost: "1 credit an audit",
+    cost: "5 credits an audit",
     shot: {
       src: "/shots/page-audit.png",
       width: 2240,
@@ -187,7 +187,7 @@ export const TOOLS: Tool[] = [
       "Overall SEO score plus every check behind it",
       "Title length, meta description, word count, keyword use",
     ],
-    cost: "5 credits an analysis",
+    cost: "25 credits an analysis",
     shot: {
       src: "/shots/competitor-analysis.png",
       width: 2240,
@@ -205,7 +205,7 @@ export const TOOLS: Tool[] = [
       "Orphan pages — reachable from nothing — named",
       "Depth from the homepage, and where link equity pools",
     ],
-    cost: "2 credits a crawl",
+    cost: "10 credits a crawl",
     shot: {
       src: "/shots/internal-links.png",
       width: 2240,
@@ -223,7 +223,7 @@ export const TOOLS: Tool[] = [
       "Broad, Phrase, Exact and Related match types",
       "Word groups that carve a long list into topics",
     ],
-    cost: "7 credits a search, 38 for the full page",
+    cost: "35 credits a search, 190 for the full page",
     shot: {
       src: "/shots/keyword-magic.png",
       width: 3200,
@@ -241,7 +241,7 @@ export const TOOLS: Tool[] = [
       "Domain and Page Authority, and the backlinks behind them",
       "Real page speed — TTFB, FCP, LCP and CLS",
     ],
-    cost: "3 credits a page",
+    cost: "15 credits a page",
     shot: {
       src: "/shots/keyword-score.png",
       width: 2240,
@@ -259,7 +259,7 @@ export const TOOLS: Tool[] = [
       "Filter by project, device or search engine",
       "Adding a keyword is free — you pay for the check",
     ],
-    cost: "1 credit a check",
+    cost: "5 credits a check",
     shot: {
       src: "/shots/keywords-all.png",
       width: 3200,
@@ -357,17 +357,17 @@ export const CAPABILITIES: Capability[] = [
  * checkout does not honour.
  */
 export const CREDIT_COSTS: { action: string; cost: string; note: string }[] = [
-  { action: "Rank check", cost: "1", note: "One keyword, one engine, depth 100" },
+  { action: "Rank check", cost: "5", note: "One keyword, one engine, depth 100" },
   { action: "Adding a keyword", cost: "Free", note: "The check it schedules carries the charge" },
-  { action: "Quick SERP lookup", cost: "1–4", note: "A live, one-off check; 4 on paid plans, with volume and difficulty" },
-  { action: "YouTube check", cost: "1", note: "One keyword against a video or channel" },
-  { action: "Local map grid scan", cost: "7–295", note: "3×3 costs 7, 11×11 costs 83, 21×21 costs 295" },
-  { action: "AI answer", cost: "1–7", note: "Per answer sampled; 2 on Perplexity, 7 on Claude" },
-  { action: "Page audit", cost: "1", note: "One URL, 63 checks" },
-  { action: "Website audit", cost: "1 / 20 pages", note: "A 1,000-page crawl costs 50" },
-  { action: "Competitor analysis", cost: "5", note: "Your page against the real top 10" },
-  { action: "Internal link analysis", cost: "2", note: "Up to 150 pages crawled and graphed" },
-  { action: "Keyword research", cost: "7–38", note: "7 for 100 keywords, 38 for the full page" },
-  { action: "Keyword score", cost: "3", note: "Crawl, PageSpeed and an authority lookup" },
+  { action: "Quick SERP lookup", cost: "5–20", note: "A live, one-off check; 20 on paid plans, with volume and difficulty" },
+  { action: "YouTube check", cost: "5", note: "One keyword against a video or channel" },
+  { action: "Local map grid scan", cost: "35–1,475", note: "3×3 costs 35, 11×11 costs 415, 21×21 costs 1,475" },
+  { action: "AI answer", cost: "5–35", note: "Per answer sampled; 10 on Perplexity, 35 on Claude" },
+  { action: "Page audit", cost: "5", note: "One URL, 63 checks" },
+  { action: "Website audit", cost: "5 / 20 pages", note: "A 1,000-page crawl costs 250" },
+  { action: "Competitor analysis", cost: "25", note: "Your page against the real top 10" },
+  { action: "Internal link analysis", cost: "10", note: "Up to 150 pages crawled and graphed" },
+  { action: "Keyword research", cost: "35–190", note: "35 for 100 keywords, 190 for the full page" },
+  { action: "Keyword score", cost: "15", note: "Crawl, PageSpeed and an authority lookup" },
   { action: "Search Console", cost: "Free", note: "Connecting it and reading it cost nothing" },
 ];

@@ -331,7 +331,7 @@ const FAQS = [
   },
   {
     q: "How do credits work across the four trackers?",
-    a: "One credit checks one keyword on Google or YouTube. A local map grid scan costs 7 to 295 credits depending on the grid size you choose, and research tools such as the Keyword Magic Tool and Website Audit draw from the same balance.",
+    a: "Five credits check one keyword on Google or YouTube. A local map grid scan costs 35 to 1,475 credits depending on the grid size you choose, and research tools such as the Keyword Magic Tool and Website Audit draw from the same balance.",
   },
   {
     q: "Do you really track the Google Map Pack?",
@@ -641,8 +641,8 @@ export default function TrackingSuitePage() {
 
         {/* ── pricing ─────────────────────────────────────────────────────
             Prices come from CREDIT_PLANS. The "what it buys" line uses the same
-            divisor the pricing page does: a credit checks one keyword and a
-            month is 30 days, so credits / 30 is how many keywords the balance
+            divisor the pricing page does: five credits check one keyword and a
+            month is 30 days, so credits / 150 is how many keywords the balance
             tracks daily for a full month. */}
         <section id="pricing" className="scroll-mt-24 pb-14 sm:pb-20">
           <div className={WRAP}>
@@ -696,7 +696,7 @@ export default function TrackingSuitePage() {
                   </p>
                   <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
                     {plan.credits.toLocaleString()} credits — about{" "}
-                    {Math.floor(plan.credits / 30).toLocaleString()} keywords checked every day.{" "}
+                    {Math.floor(plan.credits / 150).toLocaleString()} keywords checked every day.{" "}
                     {plan.who}.
                   </p>
                   <ul className="mt-6 mb-8 space-y-3">

@@ -30,8 +30,8 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
     title: "Credits",
     rows: [
       { feature: "Credits per month", values: [100, "2,000", "6,000", "15,000"] },
-      { feature: "Rank checks", tag: "1 credit each", values: [100, "2,000", "6,000", "15,000"] },
-      { feature: "Keywords tracked daily", tag: "for a full month", values: [3, 66, 200, 500] },
+      { feature: "Rank checks", tag: "5 credits each", values: [20, 400, "1,200", "3,000"] },
+      { feature: "Keywords tracked daily", tag: "for a full month", values: [false, 13, 40, 100] },
       { feature: "Buy top-up packs", values: [false, true, true, true] },
       { feature: "Credits roll over", tag: "top-ups only", values: [false, true, true, true] },
     ],
@@ -39,9 +39,9 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Rank tracking",
     rows: [
-      { feature: "Google rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
-      { feature: "YouTube rank tracking", tag: "1 / keyword", values: [true, true, true, true] },
-      { feature: "Local map grid scans", tag: "7–295 / scan", values: [true, true, true, true] },
+      { feature: "Google rank tracking", tag: "5 / keyword", values: [true, true, true, true] },
+      { feature: "YouTube rank tracking", tag: "5 / keyword", values: [true, true, true, true] },
+      { feature: "Local map grid scans", tag: "35–1,475 / scan", values: [true, true, true, true] },
       { feature: "Automated recurring checks", values: [false, true, true, true] },
       { feature: "190+ countries, all devices", values: [true, true, true, true] },
       { feature: "Keywords per project", values: [10, "Unlimited", "Unlimited", "Unlimited"] },
@@ -50,13 +50,13 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Research and audits",
     rows: [
-      { feature: "Keyword Magic Tool", tag: "7–38 / search", values: [true, true, true, true] },
+      { feature: "Keyword Magic Tool", tag: "35–190 / search", values: [true, true, true, true] },
       { feature: "Rows per keyword search", values: [100, "1,000", "1,000", "1,000"] },
-      { feature: "Website Audit", tag: "1 / 20 pages", values: [true, true, true, true] },
-      { feature: "Competitor Analysis", tag: "5 / analysis", values: [true, true, true, true] },
-      { feature: "AI Internal Linking", tag: "2 / crawl", values: [true, true, true, true] },
-      { feature: "Keyword Score Checker", tag: "3 / page", values: [true, true, true, true] },
-      { feature: "Quick Serp", tag: "1–4 / lookup", values: [true, true, true, true] },
+      { feature: "Website Audit", tag: "5 / 20 pages", values: [true, true, true, true] },
+      { feature: "Competitor Analysis", tag: "25 / analysis", values: [true, true, true, true] },
+      { feature: "AI Internal Linking", tag: "10 / crawl", values: [true, true, true, true] },
+      { feature: "Keyword Score Checker", tag: "15 / page", values: [true, true, true, true] },
+      { feature: "Quick Serp", tag: "5–20 / lookup", values: [true, true, true, true] },
     ],
   },
   {

@@ -57,7 +57,7 @@ export const WHO_USES: WhoUsesItem[] = [
   },
   {
     title: "Companies Running Audits",
-    desc: "FreeSERP delivers a live ranking snapshot in under 10 seconds—fast enough to run during a discovery call. One credit checks one keyword, so a 15,000-credit plan handles 500 checks a day without slowing your team down. The data is live and accurate every time.",
+    desc: "FreeSERP delivers a live ranking snapshot in under 10 seconds—fast enough to run during a discovery call. Five credits check one keyword, so a 15,000-credit plan handles 100 checks a day without slowing your team down. The data is live and accurate every time.",
     img: "/serp-image/briefcase.png",
     alt: "website-ranking-checker — for companies and agencies running SEO audits",
   },

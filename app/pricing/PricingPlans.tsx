@@ -48,14 +48,14 @@ const FREE_FEATURES = [
 /**
  * What a balance buys, in the things people actually do. A credit count is
  * meaningless on its own — "6,000 credits" only becomes a price once you can
- * see it is 200 keywords checked every day for a month.
+ * see it is 40 keywords checked every day for a month.
  */
 function whatItBuys(credits: number): string[] {
   return [
-    `${credits.toLocaleString()} rank checks`,
-    `${Math.floor(credits / 30).toLocaleString()} keywords tracked daily`,
-    `${Math.floor(credits / 83).toLocaleString()} local map grid scans`, // an 11×11 grid
-    `${Math.floor(credits / 5).toLocaleString()} full site audits`,
+    `${Math.floor(credits / 5).toLocaleString()} rank checks`,
+    `${Math.floor(credits / 150).toLocaleString()} keywords tracked daily`,
+    `${Math.floor(credits / 415).toLocaleString()} local map grid scans`, // an 11×11 grid
+    `${Math.floor(credits / 25).toLocaleString()} full site audits`, // a 100-page crawl
   ];
 }
 
@@ -136,9 +136,9 @@ export function PlanCard({ plan }: { plan: CreditPlan }) {
  */
 function packBuys(credits: number): string[] {
   return [
-    `${credits.toLocaleString()} rank checks`,
-    `or ${Math.floor(credits / 83).toLocaleString()} local grid scans`, // an 11×11 grid
-    `or ${Math.floor(credits / 5).toLocaleString()} site audits`,
+    `${Math.floor(credits / 5).toLocaleString()} rank checks`,
+    `or ${Math.floor(credits / 415).toLocaleString()} local grid scans`, // an 11×11 grid
+    `or ${Math.floor(credits / 25).toLocaleString()} site audits`, // a 100-page crawl
   ];
 }
 
