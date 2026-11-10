@@ -11,17 +11,14 @@ import {
   Code2,
   FileDown,
   FileText,
-  Gauge,
   History,
-  ListOrdered,
-  MessageSquareText,
-  Quote,
   RefreshCw,
   ShieldCheck,
   Sparkles,
   Star,
   Users,
   Wallet,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
@@ -30,21 +27,26 @@ import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
 import { SignupPopup } from "./SignupPopup";
 // Same `.cmpa-` design system as /competitor-analysis, imported rather than
-// copied so the ad pages cannot drift apart.
+// copied so the ad pages share one theme. aeo.css adds this page's visuals.
 import "../competitor-analysis/ads.css";
+import "./aeo.css";
 
 /**
  * /aeo-geo-audit — paid-acquisition landing page for the AEO & GEO audit.
- * Same layout family as /competitor-analysis and /google-maps-audit.
  *
  * Every claim is taken from freeserp-backend-v2/src/modules/aeo-audit:
  * engine/checks (7 scored categories), engine/scoring/config.ts (AEO and GEO
- * weights, severity points, the cap at 40 when AI bots are blocked),
- * engine/checks/crawl-access/ai-crawlers.ts (exact bot names),
- * engine/visibility (10 questions per engine, 5 engines measured),
- * credits/catalog.ts (5 base + 5 per engine unit). Things the tool does NOT do
- * — share links, CSV, AI grading of the writing, measuring Copilot — are
- * deliberately never claimed.
+ * weights, severity points, the cap at 40 when robots.txt blocks Googlebot or
+ * the answer bots), engine/checks/crawl-access/ai-crawlers.ts (exact bot
+ * names), engine/visibility (10 questions per engine, 5 engines measured,
+ * cited / read / named / absent), engine/report.ts (fixes ranked by points per
+ * effort), credits/catalog.ts (5 base + 5 per engine unit). Things the tool
+ * does NOT do — share links, CSV, AI grading of the writing, measuring
+ * Copilot — are deliberately never claimed.
+ *
+ * The chat card, robots.txt, matrix and fix list are illustrative mock ups
+ * built in HTML/CSS (no screenshot exists for this tool), each marked
+ * "Example".
  */
 
 const inter = Inter({
@@ -81,181 +83,109 @@ const HERO_POINTS = [
   "Fixes ranked by points per effort",
 ];
 
-const HERO_LAYERS: { icon: LucideIcon; label: string }[] = [
-  { icon: Bot, label: "AI crawler access" },
-  { icon: Code2, label: "Schema & rendering" },
-  { icon: FileText, label: "Answer-ready content" },
-  { icon: Quote, label: "Cited in AI answers" },
-];
+const ENGINES = ["ChatGPT", "Claude", "Perplexity", "Gemini", "AI Overviews"];
 
-interface Layer {
-  id: string;
-  icon: LucideIcon;
-  tint: string;
-  dot: string;
-  name: string;
-  kicker: string;
-  title: string;
-  body: string;
-  points: string[];
-  spec: { k: string; v: string }[];
-}
-
-const LAYERS: Layer[] = [
+const BOT_GROUPS: { name: string; bots: { name: string; blocked?: boolean }[] }[] = [
+  { name: "Search bots", bots: [{ name: "Googlebot" }, { name: "Bingbot" }] },
   {
-    id: "crawl",
-    icon: Bot,
-    tint: "#e7effe",
-    dot: "#0454ff",
-    name: "Crawl access",
-    kicker: "Can the AI bots get in at all",
-    title: "Every AI crawler, tested against your robots.txt",
-    body: "Search bots, AI answer bots and AI training bots are each tested against your robots.txt on every page in the audit. When one is blocked, the finding quotes the exact Disallow line and gives you the fix to paste. Sitemaps, cookie-redirect loops and llms.txt are checked too — and if your robots.txt blocks Googlebot or the answer bots, both scores are capped at 40 until it is fixed.",
-    points: [
-      "Search bots — Googlebot, Bingbot",
-      "Answer bots — OAI-SearchBot, PerplexityBot, Claude-SearchBot",
-      "Training bots — GPTBot, ClaudeBot, Google-Extended, CCBot",
-      "Sitemap, robots.txt reachability and llms.txt",
-    ],
-    spec: [
-      { k: "Checks", v: "9" },
-      { k: "AEO weight", v: "20%" },
-      { k: "GEO weight", v: "20%" },
-      { k: "If AI bots are blocked", v: "Scores capped at 40" },
-    ],
+    name: "AI answer bots",
+    bots: [{ name: "OAI-SearchBot" }, { name: "PerplexityBot", blocked: true }, { name: "Claude-SearchBot" }],
   },
   {
-    id: "render",
-    icon: Code2,
-    tint: "#e4f2fc",
-    dot: "#0d80c9",
-    name: "Rendering & structured data",
-    kicker: "What a bot sees without running your JavaScript",
-    title: "Content in the HTML, and schema that says what it is",
-    body: "Many AI crawlers do not run JavaScript, so the audit checks your content and links are in the raw HTML. Then it validates your JSON-LD and looks for the schema that tells an engine who you are and what each page is — Organization, WebSite, Article, FAQ and breadcrumbs — with the required and recommended fields checked for nine schema types.",
-    points: [
-      "Content and links present without JavaScript",
-      "Valid JSON-LD on every page read",
-      "Organization, WebSite, Article, FAQ, breadcrumb schema",
-      "Required fields for 9 types, incl. LocalBusiness and Product",
-    ],
-    spec: [
-      { k: "Checks", v: "2 + 6, plus field checks" },
-      { k: "AEO weight", v: "10% + 20%" },
-      { k: "GEO weight", v: "10% + 15%" },
-      { k: "Scored as", v: "Share of pages that pass" },
-    ],
-  },
-  {
-    id: "content",
-    icon: FileText,
-    tint: "#e9ebfd",
-    dot: "#3b46d6",
-    name: "Content structure",
-    kicker: "Is the answer easy to lift out",
-    title: "Pages shaped the way answer engines read them",
-    body: "Answer engines quote pages that state the answer early and break it into parts. The audit checks for one clear H1, headings in order, headings phrased as questions, answer-first paragraphs, short paragraphs, lists and tables, and an FAQ section — the shapes that turn a page into a quotable answer.",
-    points: [
-      "One H1 and headings in order",
-      "Question-style headings and answer-first openings",
-      "Paragraph length, lists and tables",
-      "FAQ sections",
-    ],
-    spec: [
-      { k: "Checks", v: "7" },
-      { k: "AEO weight", v: "25% — the largest" },
-      { k: "GEO weight", v: "10%" },
-      { k: "Scored as", v: "Share of pages that pass" },
-    ],
-  },
-  {
-    id: "trust",
-    icon: ShieldCheck,
-    tint: "#e3ebfe",
-    dot: "#0a3fbf",
-    name: "Trust, freshness & technical",
-    kicker: "Is your brand worth citing",
-    title: "The signals that make a model trust a source",
-    body: "Generative engines cite brands they can identify and believe. The audit looks for an About page, real contact details, named authors, sameAs profile links, a consistent brand name, reviews and outbound citations — then checks dates, how long since pages were updated and sitemap lastmod, plus the technical basics from HTTPS and canonicals to speed and broken pages.",
-    points: [
-      "About, contact, authors, sameAs and brand name",
-      "Reviews and citations to sources",
-      "Published and updated dates, sitemap lastmod",
-      "HTTPS, titles, meta, canonical, speed, broken pages",
-    ],
-    spec: [
-      { k: "Checks", v: "8 trust · 3 fresh · 11 tech" },
-      { k: "GEO weight", v: "25% trust — the largest" },
-      { k: "AEO weight", v: "10% · 5% · 10%" },
-      { k: "Scored as", v: "Share of pages that pass" },
-    ],
-  },
-  {
-    id: "visibility",
-    icon: Quote,
-    tint: "#e6f0fb",
-    dot: "#1867c0",
-    name: "Measured in AI answers",
-    kicker: "Not a prediction — the actual answers",
-    title: "Ten real questions, asked to the engines you pick",
-    body: "Questions a customer would ask are written from your own homepage and About page — unbranded, branded or a mix — and put to ChatGPT, Claude, Perplexity, Gemini and Google's AI Overviews in your site's country and language. For every answer you see whether your site was cited and in which source position, read but not cited, named without a link, or left out — and which domains were cited instead.",
-    points: [
-      "ChatGPT, Claude, Perplexity, Gemini, AI Overviews",
-      "10 questions per engine, in your market's language",
-      "Cited, read-but-not-cited, named, or absent",
-      "The top domains cited instead of you",
-    ],
-    spec: [
-      { k: "Questions", v: "10 per engine" },
-      { k: "Score", v: "% of answers that link to you" },
-      { k: "Cached", v: "Never — asked fresh each run" },
-      { k: "If an engine fails", v: "Shown as couldn't measure" },
-    ],
+    name: "AI training bots",
+    bots: [{ name: "GPTBot" }, { name: "ClaudeBot" }, { name: "Google-Extended" }, { name: "CCBot" }],
   },
 ];
 
-/** The two scores, category by category — config.ts weights. */
-const SCORING = [
-  { id: "crawl", name: "Crawl access", aeo: "20%", geo: "20%" },
-  { id: "render", name: "Rendering", aeo: "10%", geo: "10%" },
-  { id: "schema", name: "Structured data", aeo: "20%", geo: "15%" },
-  { id: "content", name: "Content structure", aeo: "25%", geo: "10%" },
-  { id: "trust", name: "Entity & trust", aeo: "10%", geo: "25%" },
-  { id: "fresh", name: "Freshness", aeo: "5%", geo: "10%" },
-  { id: "tech", name: "Technical basics", aeo: "10%", geo: "10%" },
+const CRAWL_POINTS = [
+  "Every bot tested on every page in the audit",
+  "The exact Disallow line quoted, with the fix to paste",
+  "Sitemap, robots.txt reachability, cookie-redirect loops",
+  "llms.txt checked — and a template if you have none",
 ];
 
-const DELIVERABLES = [
+/** The seven categories and their share of each score — scoring/config.ts. */
+const WEIGHTS = [
+  { name: "Crawl access", aeo: 20, geo: 20 },
+  { name: "Rendering", aeo: 10, geo: 10 },
+  { name: "Structured data", aeo: 20, geo: 15 },
+  { name: "Content structure", aeo: 25, geo: 10 },
+  { name: "Entity & trust", aeo: 10, geo: 25 },
+  { name: "Freshness", aeo: 5, geo: 10 },
+  { name: "Technical basics", aeo: 10, geo: 10 },
+];
+
+type Mark = "cited" | "read" | "named" | "absent";
+type Cell = { m: Mark; pos?: number };
+
+/** The example matrix: one row per question, one cell per engine. */
+const MATRIX: { q: string; cells: Cell[] }[] = [
   {
-    icon: Gauge,
-    title: "Two scores, one grade",
-    text: "AEO — how ready your pages are to be the answer — and GEO — how ready your brand is to be cited. Each out of 100, with a grade from A to F.",
+    q: "best crm for small sales teams",
+    cells: [{ m: "cited", pos: 1 }, { m: "read" }, { m: "cited", pos: 2 }, { m: "named" }, { m: "absent" }],
   },
   {
-    icon: ListOrdered,
-    title: "Fix first, ranked",
-    text: "Every failing rule sorted by the points it would add to AEO and GEO for the effort it takes, with what was found, why it matters and how to fix it.",
+    q: "crm with email tracking",
+    cells: [{ m: "read" }, { m: "absent" }, { m: "cited", pos: 3 }, { m: "absent" }, { m: "read" }],
   },
   {
-    icon: MessageSquareText,
-    title: "The answers themselves",
-    text: "A question-by-engine grid of real AI answers showing where you were cited, where you were read but passed over, and who was cited instead.",
+    q: "how to choose a crm",
+    cells: [{ m: "absent" }, { m: "absent" }, { m: "named" }, { m: "absent" }, { m: "cited", pos: 4 }],
   },
   {
-    icon: BarChart3,
-    title: "Readiness per engine",
-    text: "An estimate of how ready your site is for ChatGPT, Claude, Perplexity, Gemini, AI Overviews and Copilot, based on crawler access and each engine's priorities.",
+    q: "cheapest crm for startups",
+    cells: [{ m: "cited", pos: 2 }, { m: "named" }, { m: "absent" }, { m: "read" }, { m: "absent" }],
   },
   {
-    icon: History,
-    title: "Since the last audit",
-    text: "Score changes, what got fixed and what newly broke since your previous audit of the same site, with a history of past runs.",
+    q: "crm that works with gmail",
+    cells: [{ m: "absent" }, { m: "read" }, { m: "cited", pos: 1 }, { m: "absent" }, { m: "cited", pos: 2 }],
+  },
+];
+const CELLS = MATRIX.flatMap((r) => r.cells);
+const CITED = CELLS.filter((c) => c.m === "cited").length;
+
+const CITED_INSTEAD = [
+  { d: "competitor-a.com", n: 7 },
+  { d: "review-site.com", n: 5 },
+  { d: "competitor-b.com", n: 3 },
+];
+
+const FIXES = [
+  {
+    title: "Allow PerplexityBot in robots.txt",
+    sev: "Critical",
+    gain: "+8 AEO · +8 GEO",
+    effort: "Low effort",
+    where: "robots.txt",
   },
   {
-    icon: FileDown,
-    title: "A PDF to hand over",
-    text: "Download the full report — fixes at a glance, scores by category, measured answers and every fix in detail — as a PDF.",
+    title: "Add FAQ schema to question pages",
+    sev: "High",
+    gain: "+5 AEO · +3 GEO",
+    effort: "Medium effort",
+    where: "6 / 21 pages",
   },
+  {
+    title: "Open pages with a direct answer",
+    sev: "High",
+    gain: "+4 AEO · +2 GEO",
+    effort: "Medium effort",
+    where: "12 / 21 pages",
+  },
+  {
+    title: "Add named authors to articles",
+    sev: "Medium",
+    gain: "+1 AEO · +4 GEO",
+    effort: "Low effort",
+    where: "8 / 21 pages",
+  },
+];
+
+const OUTPUT_POINTS = [
+  "What was found, why it matters and how to fix it — per rule",
+  "What got fixed and what newly broke since the last audit",
+  "Readiness per engine, incl. Copilot — clearly labelled an estimate",
+  "The whole report as a PDF",
 ];
 
 const CHIPS = [
@@ -417,46 +347,36 @@ export default function AeoGeoAuditPage() {
       </header>
 
       <main>
-        {/* ── hero ── no product screenshot exists for this tool yet, so the
-            band closes normally instead of having a shot hang off it. */}
+        {/* ── hero: copy on the left, an AI answer citing you on the right ── */}
         <section id="top" className="cmpa-band cmpa-on-dark pt-28 pb-20 sm:pt-36 sm:pb-28">
-          <div className={`${WRAP} text-center`}>
-            <a href="#measured" className="cmpa-eyebrow">
-              <b>New</b>
-              See the real answers ChatGPT and Gemini give
-              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
-            </a>
-
-            <h1 className="cmpa-h1 mx-auto mt-7 max-w-[20ch] text-white">
-              Get your website <span className="cmpa-grad-text">cited by AI answers</span>
-            </h1>
-
-            <p className="cmpa-lead mx-auto mt-6 max-w-[62ch]">
-              FreeSERP checks whether ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews can
-              read, trust and quote your site — scores you for AEO and GEO, asks the engines real
-              questions to see who they cite, and ranks every fix by how much it moves the score.
-            </p>
-
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <Cta placement="hero" label="Audit my site free" />
-              <a href="#checks" className="cmpa-btn cmpa-btn-lg cmpa-btn-ghost">
-                See what it checks
+          <div className={`${WRAP} grid items-center gap-14 lg:grid-cols-[1.02fr_0.98fr]`}>
+            <div className="text-center lg:text-left">
+              <a href="#measured" className="cmpa-eyebrow">
+                <b>New</b>
+                See the real answers AI engines give
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
               </a>
+
+              <h1 className="cmpa-h1 mx-auto mt-7 max-w-[16ch] text-white lg:mx-0">
+                Get your website <span className="cmpa-grad-text">cited by AI answers</span>
+              </h1>
+
+              <p className="cmpa-lead mx-auto mt-6 max-w-[54ch] lg:mx-0">
+                FreeSERP checks whether ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews
+                can read, trust and quote your site — scores you for AEO and GEO, asks the engines
+                real questions to see who they cite, and ranks every fix by how much it moves the
+                score.
+              </p>
+
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+                <Cta placement="hero" label="Audit my site free" />
+                <a href="#checks" className="cmpa-btn cmpa-btn-lg cmpa-btn-ghost">
+                  See what it checks
+                </a>
+              </div>
             </div>
 
-            <ul className="mt-11 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-              {HERO_LAYERS.map((l) => (
-                <li
-                  key={l.label}
-                  className="flex items-center gap-2.5 text-[15px] font-medium text-white/80"
-                >
-                  <span className="cmpa-hero-layer">
-                    <l.icon className="h-[17px] w-[17px]" strokeWidth={1.9} />
-                  </span>
-                  {l.label}
-                </li>
-              ))}
-            </ul>
+            <HeroChat />
           </div>
         </section>
 
@@ -474,124 +394,322 @@ export default function AeoGeoAuditPage() {
           </div>
         </div>
 
-        {/* ── the layers ── */}
+        {/* ── crawl access: copy beside a robots.txt read-out ── */}
         <section id="checks" className="scroll-mt-24 pt-20 sm:pt-28">
-          <div className={WRAP}>
-            <SectionHead
-              label="Audit"
-              name="The checks"
-              title="Everything an AI engine needs before it cites you"
-              sub="Can it get in, can it read the page, can it lift the answer out, and does it trust who wrote it — then, did it actually cite you."
-            />
-          </div>
+          <div className={`${WRAP} grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]`}>
+            <div>
+              <span className="cmpa-tag">
+                <b>Step 1</b>
+                Crawl access
+              </span>
+              <h2 className="cmpa-h2 mt-5">If the AI bots can&rsquo;t get in, nothing else counts</h2>
+              <p className="cmpa-lead mt-4 max-w-[52ch]">
+                Nine AI and search crawlers are tested against your robots.txt. Block Googlebot or the
+                answer bots and both scores are capped at 40 — however good the rest of the site is.
+              </p>
+              <ul className="mt-7 space-y-3">
+                {CRAWL_POINTS.map((p) => (
+                  <Point key={p}>{p}</Point>
+                ))}
+              </ul>
+            </div>
 
-          <div className={`${WRAP} mt-14 space-y-5`}>
-            {LAYERS.map((l, i) => (
-              <article
-                key={l.id}
-                id={l.id === "visibility" ? "measured" : l.id}
-                className="cmpa-layer scroll-mt-24 p-7 sm:p-10"
-                style={{ "--tint": l.tint, "--dot": l.dot } as React.CSSProperties}
-              >
-                <div
-                  className={`grid gap-9 lg:gap-14 ${
-                    i % 2 ? "lg:grid-cols-[0.85fr_1.15fr]" : "lg:grid-cols-[1.15fr_0.85fr]"
-                  }`}
-                >
-                  <div className={i % 2 ? "lg:order-2" : undefined}>
-                    <div className="flex items-center gap-4">
-                      <span className="cmpa-layer-mark">
-                        <l.icon className="h-[23px] w-[23px]" strokeWidth={1.8} />
+            <div className="aeo-term">
+              <div className="aeo-term-bar">
+                <i />
+                <i />
+                <i />
+                <span className="aeo-mono ml-2">yoursite.com/robots.txt</span>
+                <span className="aeo-example ml-auto">Example</span>
+              </div>
+              <pre className="aeo-mono">
+                <span className="c"># robots.txt</span>
+                {"\n"}
+                <span className="k">User-agent:</span> *{"\n"}
+                <span className="k">Allow:</span> /{"\n\n"}
+                <span className="k">User-agent:</span> PerplexityBot{"\n"}
+                <span className="bad">
+                  <span className="k">Disallow:</span> /
+                </span>
+              </pre>
+              <div className="aeo-bots">
+                {BOT_GROUPS.map((g) => (
+                  <div key={g.name}>
+                    <p>{g.name}</p>
+                    {g.bots.map((b) => (
+                      <span key={b.name} className={`aeo-bot${b.blocked ? " blocked" : ""}`}>
+                        <i />
+                        {b.name}
                       </span>
-                      <span>
-                        <span className="block text-[19px] font-semibold tracking-[-0.6px]">
-                          {l.name}
-                        </span>
-                        <span className="block text-[13.5px] text-[var(--muted)]">{l.kicker}</span>
-                      </span>
-                    </div>
-                    <h3 className="cmpa-h3 mt-7">{l.title}</h3>
-                    <p className="mt-4 text-[15.5px] leading-[1.65] text-[var(--body)]">{l.body}</p>
+                    ))}
                   </div>
-
-                  <div className={i % 2 ? "lg:order-1" : undefined}>
-                    <dl className="cmpa-spec">
-                      {l.spec.map((s) => (
-                        <div key={s.k}>
-                          <dt>{s.k}</dt>
-                          <dd>{s.v}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                    <ul className="mt-7 space-y-3">
-                      {l.points.map((p) => (
-                        <Point key={p}>{p}</Point>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </article>
-            ))}
+                ))}
+              </div>
+              <div className="aeo-fixline">
+                <Wrench className="mt-0.5 h-4 w-4 shrink-0 text-[#7fe3ff]" strokeWidth={2} />
+                <span>
+                  PerplexityBot is blocked on line 6. Remove the Disallow so Perplexity can read your
+                  pages — and cite them.
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* ── scoring ── */}
+        {/* ── three tiles: can it read, lift and trust the page ── */}
+        <section className="pt-20 sm:pt-28">
+          <div className={WRAP}>
+            <SectionHead
+              label="Step 2"
+              name="On the page"
+              title="Can it read it, lift the answer out, and trust who wrote it?"
+              sub="Checked on every page in the audit and scored by the share of pages that pass."
+            />
+
+            <div className="mt-12 grid gap-4 lg:grid-cols-3">
+              <article className="cmpa-card flex flex-col p-7">
+                <TileHead icon={Code2} name="Rendering & schema" weights="AEO 30% · GEO 25%" />
+                <div className="aeo-code aeo-mono mt-5">
+                  {"{\n  "}
+                  <span className="k">&quot;@type&quot;</span>: <span className="s">&quot;Organization&quot;</span>
+                  {",\n  "}
+                  <span className="k">&quot;name&quot;</span>: <span className="s">&quot;Your Company&quot;</span>
+                  {",\n  "}
+                  <span className="k">&quot;url&quot;</span>: <span className="s">&quot;https://yoursite.com&quot;</span>
+                  {",\n  "}
+                  <span className="k">&quot;sameAs&quot;</span>: [ … ]{"\n}"}
+                </div>
+                <ul className="mt-6 space-y-3">
+                  <Point>Content and links present without JavaScript</Point>
+                  <Point>Valid JSON-LD — Organization, WebSite, Article, FAQ, breadcrumbs</Point>
+                  <Point>Required fields checked for 9 schema types</Point>
+                </ul>
+              </article>
+
+              <article className="cmpa-card flex flex-col p-7">
+                <TileHead icon={FileText} name="Content structure" weights="AEO 25% · GEO 10%" />
+                <div className="aeo-outline mt-5">
+                  <div>
+                    <span className="h">H1</span>CRM for small sales teams
+                  </div>
+                  <div className="sub">
+                    <span className="h">H2</span>What is a CRM?<span className="q">Question</span>
+                  </div>
+                  <div className="sub">
+                    <span className="h">H2</span>How much does it cost?<span className="q">Question</span>
+                  </div>
+                  <div className="sub">
+                    <span className="h">H2</span>Compare plans<span className="q">Table</span>
+                  </div>
+                </div>
+                <ul className="mt-6 space-y-3">
+                  <Point>One H1, headings in order, question-style headings</Point>
+                  <Point>Answer-first openings and short paragraphs</Point>
+                  <Point>Lists, tables and FAQ sections</Point>
+                </ul>
+              </article>
+
+              <article className="cmpa-card flex flex-col p-7">
+                <TileHead icon={ShieldCheck} name="Trust & freshness" weights="GEO 35% · AEO 15%" />
+                <div className="aeo-trust mt-5">
+                  {["About page", "Contact details", "Named authors", "Reviews", "Updated dates", "Sitemap lastmod"].map((t) => (
+                    <span key={t}>
+                      <Check className="h-3.5 w-3.5 text-[var(--accent)]" strokeWidth={2.6} />
+                      {t}
+                    </span>
+                  ))}
+                  {["sameAs links", "Cited sources"].map((t) => (
+                    <span key={t} className="miss">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <ul className="mt-6 space-y-3">
+                  <Point>About, contact, authors, brand name, sameAs</Point>
+                  <Point>Published and updated dates, sitemap lastmod</Point>
+                  <Point>Plus 11 technical basics — HTTPS to broken pages</Point>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* ── AEO vs GEO ── */}
         <section className="py-20 sm:py-28">
           <div className={WRAP}>
             <SectionHead
               label="Score"
-              name="How it adds up"
+              name="AEO vs GEO"
               title="Same checks, two different questions"
-              sub="AEO asks whether your pages can be the answer. GEO asks whether your brand is worth citing. So the same seven categories are weighted differently."
+              sub="AEO asks whether your pages can be the answer. GEO asks whether your brand is worth citing. So the same seven categories count differently in each."
             />
 
-            <div className="cmpa-table-scroll mt-12">
-              <table className="cmpa-table">
-                <thead>
-                  <tr>
-                    <th scope="col">Category</th>
-                    <th scope="col">Share of AEO</th>
-                    <th scope="col">Share of GEO</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {SCORING.map((row) => (
-                    <tr key={row.id}>
-                      <th scope="row">{row.name}</th>
-                      <td>{row.aeo}</td>
-                      <td>{row.geo}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="cmpa-soft mt-12 p-6 sm:p-10">
+              <div className="mb-8 flex flex-wrap gap-6">
+                <span className="aeo-key">
+                  <i style={{ background: "var(--accent)" }} />
+                  <b>AEO</b> — answer engines
+                </span>
+                <span className="aeo-key">
+                  <i style={{ background: "#22a7f0" }} />
+                  <b>GEO</b> — generative AI
+                </span>
+              </div>
+              <div className="aeo-weights">
+                {WEIGHTS.map((w) => (
+                  <div key={w.name} className="aeo-wrow">
+                    <span className="text-[14.5px] font-medium">{w.name}</span>
+                    <div className="aeo-wbars">
+                      <div className="aeo-wbar">
+                        <i style={{ "--w": w.aeo } as React.CSSProperties} />
+                        {w.aeo}%
+                      </div>
+                      <div className="aeo-wbar geo">
+                        <i style={{ "--w": w.geo } as React.CSSProperties} />
+                        {w.geo}%
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-8 text-[13px] leading-[1.55] text-[var(--muted)]">
+                Every rule carries a severity — Critical 8 points, High 5, Medium 3, Low 1 — and scores
+                the share of pages it passes on. Both scores are graded A to F.
+              </p>
             </div>
-
-            <p className="mt-4 text-center text-[13px] text-[var(--muted)]">
-              Each rule scores the share of pages it passes on, weighted by severity. If robots.txt
-              blocks Googlebot or the AI answer bots, both scores are capped at 40.
-            </p>
           </div>
         </section>
 
-        {/* ── what you get back ── */}
-        <section id="plan" className="scroll-mt-24 pb-20 sm:pb-28">
+        {/* ── measured: the question × engine matrix on a dark panel ── */}
+        <section id="measured" className="scroll-mt-24 pb-20 sm:pb-28">
           <div className={WRAP}>
-            <SectionHead
-              label="Output"
-              name="What you get back"
-              title="A report that tells you what to fix first"
-              sub="The scores say where you stand. The answers say what AI actually does with your site. The fix list says what to do about it."
-            />
-            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {DELIVERABLES.map((d) => (
-                <div key={d.title} className="cmpa-card p-7">
-                  <span className="cmpa-icon">
-                    <d.icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
+            <div className="cmpa-on-dark cmpa-ink-panel cmpa-panel px-5 py-12 sm:px-12 sm:py-16">
+              <div className="mx-auto max-w-[66ch] text-center">
+                <span className="cmpa-tag border-white/15 bg-white/[0.08] text-white/70">
+                  <b>Step 3</b>
+                  Measured, not predicted
+                </span>
+                <h2 className="cmpa-h2 mt-5">Ten real questions, asked to every engine you pick</h2>
+                <p className="mx-auto mt-4 max-w-[58ch] text-[16px] leading-[1.6] text-white/60">
+                  Written from your own homepage and About page, asked in your site&rsquo;s country
+                  and language, and marked answer by answer.
+                </p>
+              </div>
+
+              <div className="mt-10 overflow-x-auto pb-2">
+                <div className="aeo-matrix mx-auto max-w-[900px]">
+                  <span className="hd lbl">
+                    <span className="aeo-example">Example</span>
                   </span>
-                  <h3 className="mt-5 text-[17px] font-semibold tracking-[-0.5px]">{d.title}</h3>
-                  <p className="mt-2 text-[14.5px] leading-[1.6] text-[var(--body)]">{d.text}</p>
+                  {ENGINES.map((e) => (
+                    <span key={e} className="hd">
+                      {e}
+                    </span>
+                  ))}
+                  {MATRIX.map((row) =>
+                    [
+                      <span key={row.q} className="lbl">
+                        {row.q}
+                      </span>,
+                      ...row.cells.map((c, i) => (
+                        <span key={`${row.q}-${i}`}>
+                          <MarkIcon c={c} />
+                        </span>
+                      )),
+                    ],
+                  )}
                 </div>
-              ))}
+              </div>
+
+              <div className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-3 text-[12.5px] text-white/65">
+                <span className="flex items-center gap-2">
+                  <MarkIcon c={{ m: "cited", pos: 1 }} /> Cited, with source position
+                </span>
+                <span className="flex items-center gap-2">
+                  <MarkIcon c={{ m: "read" }} /> Read your site, cited others
+                </span>
+                <span className="flex items-center gap-2">
+                  <MarkIcon c={{ m: "named" }} /> Named you, no link
+                </span>
+                <span className="flex items-center gap-2">
+                  <MarkIcon c={{ m: "absent" }} /> Absent
+                </span>
+              </div>
+
+              <div className="mt-10 grid items-center gap-6 border-t border-white/10 pt-8 md:grid-cols-[auto_1fr]">
+                <div>
+                  <div className="text-[44px] leading-none font-semibold tracking-[-1.5px]">
+                    {Math.round((CITED / CELLS.length) * 100)}%
+                  </div>
+                  <div className="mt-2 text-[13px] text-white/55">
+                    cited in {CITED} of {CELLS.length} answers
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                  <span className="mr-1 text-[12.5px] text-white/55">Cited instead:</span>
+                  {CITED_INSTEAD.map((c) => (
+                    <span key={c.d} className="aeo-domain">
+                      {c.d} <b>{c.n}×</b>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── fix first ── */}
+        <section id="plan" className="scroll-mt-24 pb-20 sm:pb-28">
+          <div className={`${WRAP} grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]`}>
+            <div className="cmpa-soft order-2 p-5 sm:p-7 lg:order-1">
+              <div className="mb-4 flex items-center justify-between">
+                <span className="text-[14px] font-semibold">Fix first</span>
+                <span className="aeo-example">Example</span>
+              </div>
+              <div className="grid gap-2.5">
+                {FIXES.map((f, i) => (
+                  <div key={f.title} className="aeo-fix">
+                    <span className="rk">{i + 1}</span>
+                    <div>
+                      <div className="text-[15px] font-semibold tracking-[-0.3px]">{f.title}</div>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <span className={`aeo-tag${f.sev === "Critical" ? " crit" : ""}`}>{f.sev}</span>
+                        <span className="aeo-tag gain">{f.gain}</span>
+                        <span className="aeo-tag">{f.effort}</span>
+                        <span className="aeo-tag">{f.where}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="order-1 lg:order-2">
+              <span className="cmpa-tag">
+                <b>Output</b>
+                What you get back
+              </span>
+              <h2 className="cmpa-h2 mt-5">Every fix, ranked by what it&rsquo;s worth</h2>
+              <p className="cmpa-lead mt-4 max-w-[52ch]">
+                Each failing rule is sorted by the points it adds to AEO and GEO for the effort it
+                takes — so the quick, high-impact fixes rise to the top.
+              </p>
+              <ul className="mt-7 space-y-3">
+                {OUTPUT_POINTS.map((p) => (
+                  <Point key={p}>{p}</Point>
+                ))}
+              </ul>
+              <div className="mt-7 flex flex-wrap gap-2.5">
+                <span className="cmpa-chip inline-flex items-center gap-2">
+                  <History className="h-4 w-4" strokeWidth={1.9} /> Since last audit
+                </span>
+                <span className="cmpa-chip inline-flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" strokeWidth={1.9} /> Engine readiness
+                </span>
+                <span className="cmpa-chip inline-flex items-center gap-2">
+                  <FileDown className="h-4 w-4" strokeWidth={1.9} /> PDF report
+                </span>
+              </div>
             </div>
           </div>
         </section>
@@ -736,6 +854,113 @@ export default function AeoGeoAuditPage() {
 /* ══════════════════════════════════════════════════════════════════════════
    PIECES
    ══════════════════════════════════════════════════════════════════════════ */
+
+/** The hero visual: an example AI answer that cites the site, with both scores. */
+function HeroChat() {
+  return (
+    <div className="relative mx-auto w-full max-w-[520px]">
+      <div className="aeo-chat">
+        <div className="aeo-chat-inner">
+          <div className="aeo-tabs">
+            {ENGINES.map((e, i) => (
+              <span key={e} className={i === 0 ? "on" : undefined}>
+                {e}
+              </span>
+            ))}
+          </div>
+
+          <div className="p-4 sm:p-5">
+            <div className="aeo-q">What&rsquo;s the best CRM for a small sales team?</div>
+
+            <div className="mt-5 flex items-start gap-3">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-[10px] bg-[var(--ink)] text-white">
+                <Bot className="h-4 w-4" strokeWidth={2} />
+              </span>
+              <div className="grid flex-1 gap-2.5 pt-1.5">
+                <div className="flex items-center">
+                  <span className="aeo-line" style={{ "--w": 86 } as React.CSSProperties} />
+                  <span className="aeo-cite">1</span>
+                </div>
+                <span className="aeo-line" style={{ "--w": 94 } as React.CSSProperties} />
+                <div className="flex items-center">
+                  <span className="aeo-line" style={{ "--w": 70 } as React.CSSProperties} />
+                  <span className="aeo-cite">2</span>
+                </div>
+                <span className="aeo-line" style={{ "--w": 52 } as React.CSSProperties} />
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between">
+              <span className="text-[12px] font-semibold tracking-[0.05em] text-[var(--muted)] uppercase">
+                Sources
+              </span>
+              <span className="aeo-example">Example</span>
+            </div>
+            <div className="mt-2.5 grid gap-2">
+              <div className="aeo-src me">
+                <span className="n">1</span>
+                <span className="font-semibold">yoursite.com</span>
+                <span className="aeo-pill">Cited · #1</span>
+              </div>
+              <div className="aeo-src">
+                <span className="n">2</span>
+                competitor-a.com
+              </div>
+              <div className="aeo-src">
+                <span className="n">3</span>
+                review-site.com
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Both rings hang off the card's bottom edge, clear of the answer. */}
+      <div className="aeo-score hidden sm:flex -left-6 -bottom-10">
+        <div className="aeo-ring" style={{ "--v": 74 } as React.CSSProperties}>
+          <span>74</span>
+        </div>
+        <div className="text-[12px] leading-[1.3] text-[var(--muted)]">
+          AEO score
+          <br />
+          <b className="text-[14px] text-[var(--ink)]">Grade C</b>
+        </div>
+      </div>
+      <div className="aeo-score late hidden sm:flex -right-6 -bottom-10">
+        <div className="aeo-ring" style={{ "--v": 61, "--c": "#22a7f0" } as React.CSSProperties}>
+          <span>61</span>
+        </div>
+        <div className="text-[12px] leading-[1.3] text-[var(--muted)]">
+          GEO score
+          <br />
+          <b className="text-[14px] text-[var(--ink)]">Grade D</b>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MarkIcon({ c }: { c: Cell }) {
+  return (
+    <span className={`aeo-mk ${c.m}`} aria-label={c.m}>
+      {c.m === "cited" ? c.pos : null}
+    </span>
+  );
+}
+
+function TileHead({ icon: Icon, name, weights }: { icon: LucideIcon; name: string; weights: string }) {
+  return (
+    <div className="flex items-center gap-3.5">
+      <span className="cmpa-icon">
+        <Icon className="h-[18px] w-[18px]" strokeWidth={1.8} />
+      </span>
+      <span>
+        <span className="block text-[17px] font-semibold tracking-[-0.5px]">{name}</span>
+        <span className="block text-[12.5px] text-[var(--muted)]">{weights}</span>
+      </span>
+    </div>
+  );
+}
 
 function SectionHead({ label, name, title, sub }: { label: string; name: string; title: string; sub?: string }) {
   return (

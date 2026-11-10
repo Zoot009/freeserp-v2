@@ -1,0 +1,559 @@
+/* Visuals for /google-maps-audit, layered on ../competitor-analysis/ads.css.
+ * Theme tokens (--accent, --grad, --ink, --body, --muted, --surface, --line…)
+ * come from `.cmpa-scope`; nothing here introduces a new hue. Everything is
+ * prefixed `gma-` so it cannot collide with the shared stylesheet.
+ * The mock report pieces are illustrative and carry an "Example" badge. */
+
+.gma-example {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+}
+
+/* ── hero map card ─────────────────────────────────────────────────────── */
+.gma-mapcard {
+  position: relative;
+  padding: 12px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 50px 90px -40px rgba(4, 84, 255, 0.7);
+}
+
+.gma-map {
+  position: relative;
+  aspect-ratio: 1 / 0.86;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    /* two main roads and a diagonal */
+    linear-gradient(90deg, transparent 49%, #fff 49%, #fff 52.5%, transparent 52.5%),
+    linear-gradient(0deg, transparent 60%, #fff 60%, #fff 63.5%, transparent 63.5%),
+    linear-gradient(32deg, transparent 33%, #fff 33%, #fff 35%, transparent 35%),
+    /* water and a park, both kept in the blue family */
+    radial-gradient(26% 22% at 14% 20%, #cfe0ff 0 62%, transparent 64%),
+    radial-gradient(22% 30% at 92% 86%, #d9e6fb 0 60%, transparent 62%),
+    /* street blocks */
+    repeating-linear-gradient(0deg, #e4eaf6 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(90deg, #e4eaf6 0 1px, transparent 1px 30px),
+    #eef2fa;
+}
+
+/* The 1 km rings around the business. */
+.gma-map::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 74%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 40%, transparent);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%);
+}
+
+.gma-pin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 8px 18px -8px rgba(10, 17, 48, 0.55);
+}
+
+.gma-pin.t1 { background: var(--grad); }
+.gma-pin.t2 { background: #5b8bff; }
+.gma-pin.t3 { background: #a9bde6; color: var(--ink); }
+.gma-pin.t0 { background: #fff; color: var(--muted); border: 2px dashed #a9bde6; }
+
+/* The business itself, at the centre. */
+.gma-home {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  color: #fff;
+  background: var(--ink);
+  border: 3px solid #fff;
+  box-shadow: 0 14px 30px -10px rgba(10, 17, 48, 0.7);
+}
+
+.gma-home b {
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  background: var(--accent);
+  border: 2px solid #fff;
+}
+
+.gma-home::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 16px;
+  border: 2px solid var(--accent);
+  opacity: 0;
+}
+
+/* No `display` here: the page sets `hidden sm:flex`, and an unlayered display
+   rule would beat Tailwind's layered utilities. */
+.gma-float {
+  position: absolute;
+  z-index: 4;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -22px rgba(10, 17, 48, 0.5);
+  white-space: nowrap;
+}
+
+.gma-float .gma-dot {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  color: #fff;
+  background: var(--grad);
+}
+
+.gma-listing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.gma-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.gma-legend i {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 5px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+/* ── score ring ───────────────────────────────────────────────────────── */
+.gma-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--v) * 1%), rgba(10, 17, 48, 0.08) 0);
+}
+
+.gma-ring::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.gma-ring span {
+  position: relative;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+/* ── bento ─────────────────────────────────────────────────────────────── */
+.gma-bento {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .gma-bento { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .gma-bento { grid-template-columns: repeat(6, 1fr); }
+  .gma-span-3 { grid-column: span 3; }
+  .gma-span-2 { grid-column: span 2; }
+}
+
+.gma-tile {
+  display: flex;
+  flex-direction: column;
+  padding: 26px;
+}
+
+.gma-weight {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: #e7effe;
+}
+
+.gma-check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  background: var(--canvas);
+  border: 1px solid var(--line-soft);
+}
+
+.gma-check small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.gma-s {
+  flex-shrink: 0;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gma-s.pass { color: var(--accent); background: #e7effe; }
+.gma-s.warn { color: #3b46d6; background: #fff; border: 1px dashed #8ea3f5; }
+.gma-s.fail { color: #fff; background: var(--ink); }
+
+.gma-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.gma-bar > i {
+  display: block;
+  height: 100%;
+  width: calc(var(--w) * 1%);
+  border-radius: inherit;
+  background: var(--grad);
+}
+
+.gma-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.gma-mini span {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.gma-mini .t1 { background: var(--grad); }
+.gma-mini .t2 { background: #5b8bff; }
+.gma-mini .t3 { background: #a9bde6; color: var(--ink); }
+.gma-mini .t0 { background: var(--canvas); color: var(--muted); border: 1px dashed #a9bde6; }
+.gma-mini .me { background: var(--ink); }
+
+.gma-photos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.gma-photos span {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e3ebfe, #b9cdfd);
+}
+
+.gma-photos span:nth-child(2) { background: linear-gradient(135deg, #cfe3fb, #8fc3f2); }
+.gma-photos span:nth-child(3) { background: linear-gradient(135deg, #dfe3fd, #a7aff2); }
+.gma-photos span:nth-child(4) { background: linear-gradient(135deg, #e7effe, #9ab8ff); }
+.gma-photos span.empty {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: var(--canvas);
+  border: 1px dashed #a9bde6;
+}
+
+.gma-url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--body);
+  background: var(--canvas);
+  border: 1px solid var(--line-soft);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.gma-url mark {
+  padding: 1px 4px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: #e7effe;
+}
+
+/* ── score breakdown ───────────────────────────────────────────────────── */
+.gma-stack {
+  display: flex;
+  height: 64px;
+  gap: 4px;
+}
+
+.gma-stack > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 14px;
+  min-width: 0;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.gma-stack small {
+  overflow: hidden;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.8;
+}
+
+.gma-scale {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60fr 10fr 10fr 10fr 10fr;
+  gap: 4px;
+}
+
+.gma-scale > div {
+  padding-top: 12px;
+  border-top: 6px solid;
+  font-size: 12.5px;
+  color: var(--body);
+}
+
+.gma-scale b {
+  display: block;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.gma-weights {
+  display: grid;
+  gap: 10px;
+}
+
+.gma-weights > div {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+/* ── competitor table mock ─────────────────────────────────────────────── */
+.gma-comp {
+  display: grid;
+  gap: 8px;
+}
+
+.gma-comp > div {
+  display: grid;
+  grid-template-columns: 34px 1fr 64px 72px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  background: #fff;
+  border: 1px solid var(--line-soft);
+}
+
+.gma-comp > div.head {
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: 0;
+}
+
+.gma-comp > div.me {
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 16px 34px -24px rgba(4, 84, 255, 0.8);
+}
+
+.gma-comp .rk {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  background: #e7effe;
+}
+
+.gma-comp .me .rk { color: #fff; background: var(--grad); }
+.gma-comp .more { color: var(--accent); font-weight: 600; }
+
+/* ── 30-day timeline ───────────────────────────────────────────────────── */
+.gma-timeline {
+  position: relative;
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .gma-timeline { grid-template-columns: 7fr 7fr 16fr; }
+  .gma-timeline::before {
+    content: "";
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 33px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--grad);
+    opacity: 0.35;
+  }
+}
+
+.gma-phase {
+  position: relative;
+  padding: 22px 24px 26px;
+}
+
+.gma-phase-dot {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--grad);
+  box-shadow: 0 0 0 6px #fff, 0 0 0 7px var(--line);
+}
+
+.gma-days {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: #e7effe;
+}
+
+/* ── motion ────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .gma-pin {
+    animation: gma-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+    animation-delay: calc(var(--d, 0) * 90ms + 250ms);
+  }
+
+  .gma-home::before {
+    animation: gma-pulse 2.4s ease-out infinite;
+  }
+
+  .gma-float {
+    animation: gma-bob 6s ease-in-out infinite;
+  }
+
+  .gma-float.late {
+    animation-delay: -3s;
+  }
+
+  .gma-bar > i {
+    animation: gma-grow 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+}
+
+@keyframes gma-pop {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes gma-pulse {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
+@keyframes gma-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes gma-grow {
+  from { width: 0; }
+}
