@@ -23,7 +23,7 @@ const PAID_FEATURES = [
   "Cancel anytime",
 ];
 
-// One credit checks one keyword. Keep in step with the backend's
+// Five credits check one keyword. Keep in step with the backend's
 // credits/catalog.ts, which is what actually gets charged.
 const PAID_PLANS = [
   { price: 19, credits: 2_000,  label: "Starter"                },
@@ -75,9 +75,9 @@ export function Pricing() {
   const appUrl = useAppUrl();
   const [index, setIndex] = useState(2);
   const plan = PAID_PLANS[index];
-  // Credits per day if you spread the month evenly — the number people
+  // Keywords per day (5 credits a check) if you spread the month evenly — the number people
   // actually compare against "how many keywords do I track?".
-  const perDay = Math.floor(plan.credits / 30);
+  const perDay = Math.floor(plan.credits / 150);
   const isFirst = index === 0;
   const isLast = index === PAID_PLANS.length - 1;
 
@@ -86,7 +86,7 @@ export function Pricing() {
       <SectionHead
         tag="PRICING"
         title="Simple plans. No surprises."
-        sub="One credit checks one keyword, and the same balance pays for audits, local grids and keyword research. Start free with 100 credits a month."
+        sub="Five credits check one keyword, and the same balance pays for audits, local grids and keyword research. Start free with 100 credits a month."
       />
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>

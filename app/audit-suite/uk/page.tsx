@@ -541,7 +541,7 @@ const FAQS = [
   },
   {
     q: "How do credits work across the multiple tools?",
-    a: "One balance covers all of them, so you spend credits on the job in front of you rather than on whichever tool your plan happened to include. A full site audit costs one credit per page crawled, and rank checks, keyword research and competitor analysis draw from the same balance.",
+    a: "One balance covers all of them, so you spend credits on the job in front of you rather than on whichever tool your plan happened to include. A full site audit costs 5 credits per 20 pages crawled, and rank checks, keyword research and competitor analysis draw from the same balance.",
   },
   {
     q: "What's the difference between the Full Website Audit and the Page Audit?",
@@ -1227,7 +1227,7 @@ export default function AuditSuiteUkPage() {
                   </p>
                   <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
                     {plan.credits.toLocaleString()} credits — about{" "}
-                    {Math.floor(plan.credits / 200).toLocaleString()} full site audits of 200 pages
+                    {Math.floor(plan.credits / 50).toLocaleString()} full site audits of 200 pages
                     each. {plan.who}.
                   </p>
                   <ul className="mt-6 mb-8 space-y-3">

@@ -104,7 +104,7 @@ export default function PricingPage() {
                 lineHeight: 1.65,
               }}
             >
-              One credit checks one keyword. Monthly credits refill on your billing date; anything
+              Five credits check one keyword. Monthly credits refill on your billing date; anything
               you buy on top lasts a year. Whatever expires soonest is always spent first.
             </p>
           </section>

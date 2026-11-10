@@ -51,7 +51,7 @@ import "./ads.css";
  * average figure before the model is asked anything, ca.routes.ts caps an
  * analysis at ten competitor URLs, lib/access.ts is what makes chat paid-only
  * and the plan on-page-only past the free daily analysis, and credits/catalog.ts
- * prices a run at 5 credits and a chat message at 1. A landing page that
+ * prices a run at 25 credits and a chat message at 5. A landing page that
  * flattened all that into "we compare you with your competitors" would be
  * selling something less trustworthy than the product actually is.
  *
@@ -136,7 +136,7 @@ const HERO_POINTS = [
   "Your page and the ones above it, side by side",
   "One score per page — on-page and off-page",
   "Every gap measured against their average",
-  "5 credits an analysis, up to 10 rivals",
+  "25 credits an analysis, up to 10 rivals",
 ];
 
 /** The strip under the hero headline: what a single run reads. */
@@ -345,7 +345,7 @@ const DELIVERABLES = [
   {
     icon: MessageSquareText,
     title: "Questions, answered in context",
-    text: "A chat that already has the crawl, the gaps and the plan in front of it, scoped to whichever category you are reading. On paid plans, 1 credit a message.",
+    text: "A chat that already has the crawl, the gaps and the plan in front of it, scoped to whichever category you are reading. On paid plans, 5 credits a message.",
   },
 ];
 
@@ -388,7 +388,7 @@ const STEPS = [
 
 const STATS = [
   { value: "10", label: "competitors in one analysis" },
-  { value: "5", label: "credits an analysis" },
+  { value: "25", label: "credits an analysis" },
   { value: "7", label: "plan categories, prioritised" },
   { value: "100", label: "free credits every month" },
 ];
@@ -459,7 +459,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "5 credits an analysis, however many competitors you put in it, and 1 credit a chat message. The free plan runs one full analysis a day out of its monthly credits; past that the comparison table is still complete and the plan narrows to the on-page category.",
+    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. The free plan runs one full analysis a day out of its monthly credits; past that the comparison table is still complete and the plan narrows to the on-page category.",
   },
   {
     q: "Can I share the report with a client?",
@@ -472,7 +472,7 @@ const FAQS = [
 ];
 
 /** Credits per analysis, from the backend's credits catalog. */
-const CREDITS_PER_ANALYSIS = 5;
+const CREDITS_PER_ANALYSIS = 25;
 
 /** The page column. 1139px, matching /ai-rank-tracker. */
 const WRAP = "mx-auto w-full max-w-[1139px] px-5 sm:px-8";
@@ -837,7 +837,7 @@ export default function CompetitorAnalysisPage() {
         </section>
 
         {/* ── pricing ──────────────────────────────────────────────────────
-            Prices come from CREDIT_PLANS. An analysis is 5 credits whatever it
+            Prices come from CREDIT_PLANS. An analysis is 25 credits whatever it
             crawls, so a balance divides cleanly into runs — the same arithmetic
             the credit catalog uses. */}
         <section id="pricing" className="scroll-mt-24 pb-20 sm:pb-28">
@@ -934,8 +934,8 @@ export default function CompetitorAnalysisPage() {
                   Not sure how many analyses you need?
                 </p>
                 <p className="mt-1.5 max-w-[62ch] text-[14.5px] leading-[1.55] text-[var(--body)]">
-                  An analysis is 5 credits however many competitors go into it, and a chat message
-                  is 1. Tell us how many keywords you want to work and we will size the balance
+                  An analysis is 25 credits however many competitors go into it, and a chat message
+                  is 5. Tell us how many keywords you want to work and we will size the balance
                   for you.
                 </p>
               </div>
