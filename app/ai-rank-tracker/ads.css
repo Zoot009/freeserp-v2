@@ -29,14 +29,15 @@
   --accent: #0454ff;
   --accent-ink: #ffffff;
 
-  --ink: #0e0f13;
-  --body: #46484d;
-  --muted: #6c6f76;
-  --canvas: #fbfaf9;
-  --surface: #f6f5f3;
+  /* Homepage palette (components/site/constants.ts COLORS). */
+  --ink: #000000;
+  --body: #6d6d6d;
+  --muted: #8a8a93;
+  --canvas: #ffffff;
+  --surface: #f5f6f8;
   --card: #ffffff;
-  --line: #46484d1f;
-  --line-soft: #46484d0f;
+  --line: #eaeaea;
+  --line-soft: #f0f0f2;
 
   background: var(--canvas);
   color: var(--ink);
@@ -49,7 +50,7 @@
    the route that actually renders .airt-scope. */
 html:has(.airt-scope),
 html:has(.airt-scope) body {
-  background: #fbfaf9;
+  background: #ffffff;
 }
 
 .airt-scope ::selection {
@@ -88,9 +89,11 @@ html:has(.airt-scope) body {
    Full-bleed, and the only dark thing above the fold. The glow is two radial
    gradients rather than an image: an AI page wants some atmosphere at the top,
    and an atmosphere that costs no bytes and no request cannot delay LCP. */
+/* The home hero's blue (its background image, sampled), kept blue to the
+   bottom edge so white text stays legible all the way down. */
 .airt-band {
   position: relative;
-  background: var(--ink);
+  background: linear-gradient(180deg, #0a55ff 0%, #0454ff 55%, #2f7bff 100%);
   color: #fff;
   overflow: hidden;
 }
@@ -98,12 +101,21 @@ html:has(.airt-scope) body {
 .airt-band::before {
   content: "";
   position: absolute;
-  inset: -30% -10% auto;
-  height: 720px;
+  inset: 0;
   background:
-    radial-gradient(48% 60% at 50% 32%, rgba(4, 84, 255, 0.35), transparent 70%),
-    radial-gradient(38% 48% at 78% 8%, rgba(217, 119, 87, 0.22), transparent 72%);
+    radial-gradient(60% 55% at 100% 0%, rgba(150, 191, 253, 0.75), transparent 70%),
+    radial-gradient(55% 50% at 0% 100%, rgba(120, 186, 255, 0.5), transparent 72%);
   pointer-events: none;
+}
+
+/* Dark panels: near-black like the home closing CTA; the popular pricing card
+   uses the home page's own popular-plan gradient. */
+.airt-ink {
+  background: #0c0c0c;
+}
+
+.airt-popular {
+  background: radial-gradient(120% 90% at 50% 0%, #4a8fff 0%, #0454ff 45%, #03155a 100%);
 }
 
 .airt-band > * {
@@ -112,7 +124,7 @@ html:has(.airt-scope) body {
 
 /* Text tones inside the band, so page.tsx is not littered with white/xx. */
 .airt-band .airt-lead {
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* ── surfaces ─────────────────────────────────────────────────────────── */
@@ -194,7 +206,7 @@ html:has(.airt-scope) body {
 .airt-plat {
   border-radius: 24px;
   background: var(--tint);
-  border: 1px solid rgba(70, 72, 77, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .airt-plat-mark {
@@ -205,7 +217,7 @@ html:has(.airt-scope) body {
   height: 52px;
   border-radius: 15px;
   background: #fff;
-  border: 1px solid rgba(70, 72, 77, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   color: var(--dot);
   flex-shrink: 0;
 }
@@ -216,7 +228,7 @@ html:has(.airt-scope) body {
 .airt-spec {
   display: grid;
   gap: 1px;
-  background: rgba(70, 72, 77, 0.1);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   overflow: hidden;
 }
@@ -287,7 +299,7 @@ html:has(.airt-scope) body {
 }
 
 .airt-yes {
-  color: #1a7f4b;
+  color: #0ea66f;
   font-weight: 500;
 }
 
@@ -321,14 +333,35 @@ html:has(.airt-scope) body {
   font-size: 14px;
 }
 
+/* Black, as the home hero's CTA — blue inside the near-black panels and white
+   on the blue popular card, as the home page does in those two places. */
 .airt-btn-primary {
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: 0 1px 2px rgba(14, 15, 19, 0.16);
+  background: #000;
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(8, 32, 96, 0.28);
 }
 
 .airt-btn-primary:hover {
-  background: color-mix(in srgb, var(--accent) 88%, #000);
+  background: #1f1f1f;
+}
+
+.airt-ink .airt-btn-primary {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.airt-ink .airt-btn-primary:hover {
+  background: #0346d6;
+}
+
+.airt-popular .airt-btn-primary {
+  background: #fff;
+  color: #000;
+  box-shadow: none;
+}
+
+.airt-popular .airt-btn-primary:hover {
+  background: #f5f6f8;
 }
 
 .airt-btn-ink {
@@ -337,7 +370,7 @@ html:has(.airt-scope) body {
 }
 
 .airt-btn-ink:hover {
-  background: #2b2c30;
+  background: #1f1f1f;
 }
 
 .airt-btn-white {
@@ -346,7 +379,7 @@ html:has(.airt-scope) body {
 }
 
 .airt-btn-white:hover {
-  background: #eceae7;
+  background: #f5f6f8;
 }
 
 .airt-btn-ghost {
@@ -356,7 +389,7 @@ html:has(.airt-scope) body {
 }
 
 .airt-btn-ghost:hover {
-  border-color: #46484d3d;
+  border-color: #d1d5db;
 }
 
 .airt-on-dark .airt-btn-ghost {
@@ -389,7 +422,7 @@ html:has(.airt-scope) body {
   gap: 10px;
   padding: 11px 16px;
   border-bottom: 1px solid var(--line-soft);
-  background: #fcfcfb;
+  background: #f9fafb;
 }
 
 /* ── timed signup popup ─────────────────────────────────────────────────
@@ -409,7 +442,7 @@ html:has(.airt-scope) body {
 .airt-popup-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(14, 15, 19, 0.45);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   cursor: default;
 }

@@ -37,21 +37,23 @@
      the page feel like its own campaign. Retheming is these few lines. */
   --accent: #0454ff;
   --accent-ink: #ffffff;
-  --accent-deep: #0b2ea8;
-  --accent-lift: #22a7f0;
+  /* Homepage palette (components/site/constants.ts COLORS + the home pricing
+     card's #4a8fff → #0454ff → #03155a ramp). */
+  --accent-deep: #03155a;
+  --accent-lift: #4a8fff;
 
-  --grad: linear-gradient(120deg, #0b2ea8 0%, #0454ff 46%, #22a7f0 100%);
-  /* The same ramp for text on the dark band, where the dark end would vanish. */
-  --grad-light: linear-gradient(100deg, #ffffff 0%, #b6cdff 52%, #7fe3ff 100%);
+  --grad: linear-gradient(120deg, #03155a 0%, #0454ff 50%, #4a8fff 100%);
+  /* The same ramp for text on the blue band, kept near-white like the home hero. */
+  --grad-light: linear-gradient(100deg, #ffffff 0%, #ebf1ff 60%, #c1deff 100%);
 
-  --ink: #0a1130;
-  --body: #454b63;
-  --muted: #6b7290;
-  --canvas: #fafbff;
-  --surface: #eff3fd;
+  --ink: #000000;
+  --body: #6d6d6d;
+  --muted: #8a8a93;
+  --canvas: #ffffff;
+  --surface: #f5f6f8;
   --card: #ffffff;
-  --line: #0b205a1f;
-  --line-soft: #0b205a12;
+  --line: #eaeaea;
+  --line-soft: #f0f0f2;
 
   background: var(--canvas);
   color: var(--ink);
@@ -64,7 +66,7 @@
    the route that actually renders .cmpa-scope. */
 html:has(.cmpa-scope),
 html:has(.cmpa-scope) body {
-  background: #fafbff;
+  background: #ffffff;
 }
 
 .cmpa-scope ::selection {
@@ -122,10 +124,12 @@ html:has(.cmpa-scope) body {
   position: relative;
   overflow: hidden;
   color: #fff;
+  /* The home hero's blue (its background image, sampled), kept blue to the
+     bottom edge so white text stays legible all the way down. */
   background:
-    radial-gradient(120% 86% at 50% -12%, rgba(34, 167, 240, 0.3), transparent 62%),
-    radial-gradient(72% 58% at 10% 6%, rgba(4, 84, 255, 0.46), transparent 66%),
-    linear-gradient(162deg, #050a20 0%, #081239 48%, #05091d 100%);
+    radial-gradient(60% 55% at 100% 0%, rgba(150, 191, 253, 0.75), transparent 70%),
+    radial-gradient(55% 50% at 0% 100%, rgba(120, 186, 255, 0.5), transparent 72%),
+    linear-gradient(180deg, #0a55ff 0%, #0454ff 55%, #2f7bff 100%);
 }
 
 /* A faint engineering grid, faded out at the edges with a mask so it never
@@ -149,20 +153,21 @@ html:has(.cmpa-scope) body {
 
 /* Text tones inside the band, so page.tsx is not littered with white/xx. */
 .cmpa-band .cmpa-lead {
-  color: rgba(255, 255, 255, 0.64);
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* ── dark panels ────────────────────────────────────────────────────────
    The stats strip, the popular pricing card and the closing CTA. The same
    navy-to-blue ramp as the band, at panel scale, so the three dark moments on
    the page read as one material. */
+/* Near-black, as the home page's closing CTA panel. */
 .cmpa-ink-panel {
   position: relative;
   overflow: hidden;
   color: #fff;
   background:
-    radial-gradient(88% 130% at 88% -10%, rgba(34, 167, 240, 0.26), transparent 58%),
-    linear-gradient(135deg, #06102f 0%, #0a1b56 62%, #071233 100%);
+    radial-gradient(88% 130% at 88% -10%, rgba(4, 84, 255, 0.22), transparent 58%),
+    #0c0c0c;
 }
 
 .cmpa-ink-panel::before {
@@ -186,11 +191,10 @@ html:has(.cmpa-scope) body {
    child escape its box. The popular pricing card hangs its "Popular" badge
    above its own top edge, which `overflow: hidden` would clip and the
    `> *` rule above would drop back into the flow. */
+/* The popular pricing card — the home page's own popular-plan gradient. */
 .cmpa-ink-soft {
   color: #fff;
-  background:
-    radial-gradient(88% 130% at 88% -10%, rgba(34, 167, 240, 0.26), transparent 58%),
-    linear-gradient(135deg, #06102f 0%, #0a1b56 62%, #071233 100%);
+  background: radial-gradient(120% 90% at 50% 0%, #4a8fff 0%, #0454ff 45%, #03155a 100%);
 }
 
 /* ── surfaces ─────────────────────────────────────────────────────────── */
@@ -300,7 +304,7 @@ html:has(.cmpa-scope) body {
   border-radius: 11px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #cfe0ff;
+  color: #ffffff;
 }
 
 /* A keyword from the chip cloud. */
@@ -489,7 +493,7 @@ html:has(.cmpa-scope) body {
     background: linear-gradient(
       90deg,
       rgba(4, 84, 255, 0.32),
-      rgba(34, 167, 240, 0.32),
+      rgba(74, 143, 255, 0.32),
       rgba(4, 84, 255, 0.06)
     );
     z-index: 0;
@@ -551,26 +555,44 @@ html:has(.cmpa-scope) body {
   font-size: 14px;
 }
 
+/* Black, as the home hero's CTA — blue inside the near-black panel and white
+   on the blue popular card, as the home page does in those two places. */
 .cmpa-btn-primary {
-  background-color: var(--accent);
-  background-image: var(--grad);
-  color: var(--accent-ink);
-  box-shadow: 0 10px 26px -14px rgba(4, 84, 255, 0.95);
+  background-color: #000;
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(8, 32, 96, 0.28);
 }
 
 .cmpa-btn-primary:hover {
-  filter: brightness(1.07);
-  box-shadow: 0 14px 30px -12px rgba(4, 84, 255, 0.95);
+  background-color: #1f1f1f;
+}
+
+.cmpa-ink-panel .cmpa-btn-primary {
+  background-color: var(--accent);
+  box-shadow: none;
+}
+
+.cmpa-ink-panel .cmpa-btn-primary:hover {
+  background-color: #0346d6;
+}
+
+.cmpa-ink-soft .cmpa-btn-primary {
+  background-color: #fff;
+  color: #000;
+  box-shadow: none;
+}
+
+.cmpa-ink-soft .cmpa-btn-primary:hover {
+  background-color: #f5f6f8;
 }
 
 .cmpa-btn-ink {
-  background-color: var(--ink);
-  background-image: linear-gradient(135deg, #0a1130 0%, #0d2166 100%);
+  background-color: #000;
   color: #fff;
 }
 
 .cmpa-btn-ink:hover {
-  filter: brightness(1.12);
+  background-color: #1f1f1f;
 }
 
 .cmpa-btn-white {
@@ -579,7 +601,7 @@ html:has(.cmpa-scope) body {
 }
 
 .cmpa-btn-white:hover {
-  background: #e6ecfb;
+  background: #f5f6f8;
 }
 
 .cmpa-btn-ghost {
@@ -616,7 +638,7 @@ html:has(.cmpa-scope) body {
   border: 1px solid transparent;
   background:
     linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(135deg, rgba(4, 84, 255, 0.55), rgba(34, 167, 240, 0.3), rgba(4, 84, 255, 0.08))
+    linear-gradient(135deg, rgba(4, 84, 255, 0.55), rgba(74, 143, 255, 0.3), rgba(4, 84, 255, 0.08))
       border-box;
   box-shadow:
     0 1px 2px rgba(5, 10, 32, 0.06),
@@ -645,7 +667,7 @@ html:has(.cmpa-scope) body {
   gap: 10px;
   padding: 11px 16px;
   border-bottom: 1px solid var(--line-soft);
-  background: #fbfcff;
+  background: #f9fafb;
 }
 
 /* ── timed signup popup ─────────────────────────────────────────────────
@@ -664,7 +686,7 @@ html:has(.cmpa-scope) body {
 .cmpa-popup-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(5, 10, 32, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   cursor: default;
 }

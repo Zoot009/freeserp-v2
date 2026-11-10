@@ -177,7 +177,7 @@ const LAYERS: Layer[] = [
   {
     id: "content",
     icon: FileText,
-    tint: "#e7effe",
+    tint: "#ebf1ff",
     dot: "#0454ff",
     name: "Content & on-page",
     kicker: "What the page actually says",
@@ -199,8 +199,8 @@ const LAYERS: Layer[] = [
   {
     id: "technical",
     icon: Gauge,
-    tint: "#e4f2fc",
-    dot: "#0d80c9",
+    tint: "#eef4ff",
+    dot: "#4a8fff",
     name: "Speed & technical",
     kicker: "How the page behaves",
     title: "Lighthouse numbers on every page in the table",
@@ -221,8 +221,8 @@ const LAYERS: Layer[] = [
   {
     id: "internal-links",
     icon: Link2,
-    tint: "#e9ebfd",
-    dot: "#3b46d6",
+    tint: "#f5f6f8",
+    dot: "#03155a",
     name: "Internal linking",
     kicker: "What your own site does to you",
     title: "The links pointing at the page you want to rank",
@@ -243,8 +243,8 @@ const LAYERS: Layer[] = [
   {
     id: "authority",
     icon: Network,
-    tint: "#e3ebfe",
-    dot: "#0a3fbf",
+    tint: "#dbe6ff",
+    dot: "#2f6bff",
     name: "Off-page authority",
     kicker: "What the rest of the web says",
     title: "Authority and backlinks, weighted the way Google weights them",
@@ -592,7 +592,7 @@ export default function CompetitorAnalysisPage() {
             {HERO_POINTS.map((p) => (
               <div
                 key={p}
-                className="flex items-start gap-2.5 rounded-[14px] border border-[#46484d0f] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
+                className="flex items-start gap-2.5 rounded-[14px] border border-[#eaeaea] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
               >
                 <Check className="mt-px h-4 w-4 shrink-0 text-[var(--accent)]" strokeWidth={2.6} />
                 {p}
@@ -1111,9 +1111,9 @@ function ShotBar({ label }: { label?: string }) {
   return (
     <div className="cmpa-shot-bar">
       <span className="flex gap-1.5" aria-hidden>
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
       </span>
       {label && <span className="truncate text-[11px] text-[var(--muted)]">{label}</span>}
     </div>

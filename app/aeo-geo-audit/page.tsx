@@ -115,6 +115,14 @@ const WEIGHTS = [
   { name: "Technical basics", aeo: 10, geo: 10 },
 ];
 
+/** Severity points per failing rule — scoring/config.ts. */
+const SEVERITY = [
+  { name: "Critical", pts: 8 },
+  { name: "High", pts: 5 },
+  { name: "Medium", pts: 3 },
+  { name: "Low", pts: 1 },
+];
+
 type Mark = "cited" | "read" | "named" | "absent";
 type Cell = { m: Mark; pos?: number };
 
@@ -385,7 +393,7 @@ export default function AeoGeoAuditPage() {
             {HERO_POINTS.map((p) => (
               <div
                 key={p}
-                className="flex items-start gap-2.5 rounded-[14px] border border-[#46484d0f] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
+                className="flex items-start gap-2.5 rounded-[14px] border border-[#eaeaea] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
               >
                 <Check className="mt-px h-4 w-4 shrink-0 text-[var(--accent)]" strokeWidth={2.6} />
                 {p}
@@ -446,7 +454,7 @@ export default function AeoGeoAuditPage() {
                 ))}
               </div>
               <div className="aeo-fixline">
-                <Wrench className="mt-0.5 h-4 w-4 shrink-0 text-[#7fe3ff]" strokeWidth={2} />
+                <Wrench className="mt-0.5 h-4 w-4 shrink-0 text-[#c1deff]" strokeWidth={2} />
                 <span>
                   PerplexityBot is blocked on line 6. Remove the Disallow so Perplexity can read your
                   pages — and cite them.
@@ -544,38 +552,73 @@ export default function AeoGeoAuditPage() {
               sub="AEO asks whether your pages can be the answer. GEO asks whether your brand is worth citing. So the same seven categories count differently in each."
             />
 
-            <div className="cmpa-soft mt-12 p-6 sm:p-10">
-              <div className="mb-8 flex flex-wrap gap-6">
-                <span className="aeo-key">
-                  <i style={{ background: "var(--accent)" }} />
-                  <b>AEO</b> — answer engines
-                </span>
-                <span className="aeo-key">
-                  <i style={{ background: "#22a7f0" }} />
-                  <b>GEO</b> — generative AI
-                </span>
+            <div className="cmpa-soft mt-12 p-5 sm:p-10">
+              {/* Butterfly: AEO grows left from the category, GEO grows right.
+                  The lighter bar in each row is the score that leans on it less. */}
+              <div className="aeo-fly-row aeo-fly-head">
+                <div className="text-right">
+                  <span className="aeo-fly-name">AEO</span>
+                  <span className="aeo-fly-q">Can your pages be the answer?</span>
+                </div>
+                <span className="aeo-fly-mid">Share of score</span>
+                <div>
+                  <span className="aeo-fly-name geo">GEO</span>
+                  <span className="aeo-fly-q">Is your brand worth citing?</span>
+                </div>
               </div>
-              <div className="aeo-weights">
+
+              <div className="aeo-fly mt-6">
                 {WEIGHTS.map((w) => (
-                  <div key={w.name} className="aeo-wrow">
-                    <span className="text-[14.5px] font-medium">{w.name}</span>
-                    <div className="aeo-wbars">
-                      <div className="aeo-wbar">
-                        <i style={{ "--w": w.aeo } as React.CSSProperties} />
-                        {w.aeo}%
-                      </div>
-                      <div className="aeo-wbar geo">
-                        <i style={{ "--w": w.geo } as React.CSSProperties} />
-                        {w.geo}%
-                      </div>
+                  <div key={w.name} className="aeo-fly-row">
+                    <div className={`aeo-fly-side aeo${w.aeo < w.geo ? " dim" : ""}`}>
+                      <i style={{ "--w": w.aeo } as React.CSSProperties} />
+                      <b>{w.aeo}%</b>
+                    </div>
+                    <span className="aeo-fly-label">{w.name}</span>
+                    <div className={`aeo-fly-side geo${w.geo < w.aeo ? " dim" : ""}`}>
+                      <i style={{ "--w": w.geo } as React.CSSProperties} />
+                      <b>{w.geo}%</b>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-8 text-[13px] leading-[1.55] text-[var(--muted)]">
-                Every rule carries a severity — Critical 8 points, High 5, Medium 3, Low 1 — and scores
-                the share of pages it passes on. Both scores are graded A to F.
-              </p>
+
+              <div className="mt-10 grid gap-4 border-t border-[var(--line-soft)] pt-8 lg:grid-cols-[1.4fr_1fr]">
+                <div>
+                  <p className="text-[12px] font-semibold tracking-[0.05em] text-[var(--muted)] uppercase">
+                    Every rule carries a severity
+                  </p>
+                  <div className="aeo-sev mt-3">
+                    {SEVERITY.map((s) => (
+                      <div key={s.name}>
+                        <span className="text-[13px] font-semibold">{s.name}</span>
+                        <span className="aeo-dots" aria-label={`${s.pts} points`}>
+                          {Array.from({ length: s.pts }, (_, i) => (
+                            <i key={i} />
+                          ))}
+                        </span>
+                        <span className="text-[12px] text-[var(--muted)]">
+                          {s.pts} {s.pts === 1 ? "point" : "points"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-[12.5px] text-[var(--muted)]">
+                    Scored by the share of pages each rule passes on. Both scores are graded A to F.
+                  </p>
+                </div>
+
+                <div className="aeo-cap">
+                  <span className="aeo-cap-num">40</span>
+                  <div>
+                    <p className="text-[14.5px] font-semibold tracking-[-0.3px]">The hard ceiling</p>
+                    <p className="mt-1 text-[13px] leading-[1.5] text-[var(--body)]">
+                      If robots.txt blocks Googlebot or the AI answer bots, both scores are capped at
+                      40 — however good everything else is.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -927,7 +970,7 @@ function HeroChat() {
         </div>
       </div>
       <div className="aeo-score late hidden sm:flex -right-6 -bottom-10">
-        <div className="aeo-ring" style={{ "--v": 61, "--c": "#22a7f0" } as React.CSSProperties}>
+        <div className="aeo-ring" style={{ "--v": 61, "--c": "#4a8fff" } as React.CSSProperties}>
           <span>61</span>
         </div>
         <div className="text-[12px] leading-[1.3] text-[var(--muted)]">

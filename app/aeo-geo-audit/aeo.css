@@ -98,7 +98,7 @@
   font-weight: 600;
   vertical-align: middle;
   color: var(--accent);
-  background: #e7effe;
+  background: #ebf1ff;
 }
 
 .aeo-src {
@@ -144,7 +144,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--accent);
-  background: #e7effe;
+  background: #ebf1ff;
 }
 
 /* Floating score rings beside the chat card. */
@@ -192,8 +192,8 @@
   border-radius: 22px;
   color: #dbe5ff;
   background:
-    radial-gradient(80% 120% at 100% 0%, rgba(34, 167, 240, 0.18), transparent 60%),
-    linear-gradient(160deg, #06102f, #0a1b56 70%, #071233);
+    radial-gradient(80% 120% at 100% 0%, rgba(74, 143, 255, 0.18), transparent 60%),
+    #0c0c0c;
   box-shadow: 0 40px 80px -46px rgba(4, 84, 255, 0.8);
 }
 
@@ -222,7 +222,7 @@
   white-space: pre-wrap;
 }
 
-.aeo-term .k { color: #7fe3ff; }
+.aeo-term .k { color: #c1deff; }
 .aeo-term .c { color: rgba(255, 255, 255, 0.4); }
 .aeo-term .bad {
   display: inline-block;
@@ -230,7 +230,7 @@
   border-radius: 5px;
   color: #fff;
   background: rgba(4, 84, 255, 0.55);
-  outline: 1px dashed rgba(127, 227, 255, 0.7);
+  outline: 1px dashed rgba(193, 222, 255, 0.7);
 }
 
 .aeo-bots {
@@ -265,8 +265,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #7fe3ff;
-  box-shadow: 0 0 10px #7fe3ff;
+  background: #c1deff;
+  box-shadow: 0 0 10px #c1deff;
 }
 
 .aeo-bot.blocked {
@@ -292,7 +292,7 @@
   line-height: 1.5;
   color: #fff;
   background: rgba(4, 84, 255, 0.28);
-  border: 1px solid rgba(127, 227, 255, 0.3);
+  border: 1px solid rgba(193, 222, 255, 0.3);
 }
 
 /* ── three tiles: schema, outline, trust ───────────────────────────────── */
@@ -309,7 +309,7 @@
 }
 
 .aeo-code .k { color: var(--accent); }
-.aeo-code .s { color: #3b46d6; }
+.aeo-code .s { color: #03155a; }
 
 .aeo-outline {
   display: grid;
@@ -338,7 +338,7 @@
 }
 
 .aeo-outline .sub { margin-left: 22px; }
-.aeo-outline .sub .h { background: #3b46d6; }
+.aeo-outline .sub .h { background: #03155a; }
 
 .aeo-outline .q {
   margin-left: auto;
@@ -371,60 +371,170 @@
   border-style: dashed;
 }
 
-/* ── AEO vs GEO weights ────────────────────────────────────────────────── */
-.aeo-weights {
+/* ── AEO vs GEO butterfly ──────────────────────────────────────────────── */
+.aeo-fly {
   display: grid;
-  gap: 18px;
+  gap: 10px;
 }
 
-.aeo-wrow {
+.aeo-fly-row {
   display: grid;
-  gap: 6px 18px;
-  align-items: center;
-}
-
-@media (min-width: 768px) {
-  .aeo-wrow { grid-template-columns: 170px 1fr; }
-}
-
-.aeo-wbars {
-  display: grid;
-  gap: 5px;
-}
-
-.aeo-wbar {
-  display: flex;
+  grid-template-columns: 1fr minmax(104px, auto) 1fr;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .aeo-fly-row {
+    grid-template-columns: 1fr 176px 1fr;
+    gap: 16px;
+  }
+}
+
+.aeo-fly-name {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  color: var(--accent);
+}
+
+.aeo-fly-name.geo {
+  color: #4a8fff;
+}
+
+.aeo-fly-q {
+  display: block;
+  font-size: 12.5px;
   color: var(--muted);
 }
 
-.aeo-wbar > i {
-  display: block;
-  height: 12px;
-  /* 25% is the largest weight, so 4× fills the track. */
-  width: calc(var(--w) * 3.2%);
+.aeo-fly-mid {
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.aeo-fly-label {
+  padding: 9px 10px;
   border-radius: 999px;
-  background: var(--accent);
-}
-
-.aeo-wbar.geo > i {
-  background: #22a7f0;
-}
-
-.aeo-key {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+  text-align: center;
   font-size: 13px;
-  color: var(--body);
+  font-weight: 500;
+  line-height: 1.2;
+  background: #fff;
+  border: 1px solid var(--line);
 }
 
-.aeo-key i {
-  width: 22px;
-  height: 10px;
-  border-radius: 999px;
+.aeo-fly-side {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* AEO grows from the centre outwards, i.e. right to left. */
+.aeo-fly-side.aeo {
+  flex-direction: row-reverse;
+}
+
+.aeo-fly-side > i {
+  display: block;
+  flex-shrink: 0;
+  height: 22px;
+  /* 25% is the largest weight; 3.2× leaves room for the figure beside it. */
+  width: calc(var(--w) * 3.2%);
+  border-radius: 7px;
+  transition: opacity 0.2s ease;
+}
+
+.aeo-fly-side.aeo > i {
+  background: linear-gradient(270deg, #0454ff, #03155a);
+  border-radius: 7px 4px 4px 7px;
+}
+
+.aeo-fly-side.geo > i {
+  background: linear-gradient(90deg, #4a8fff, #8fb6ff);
+  border-radius: 4px 7px 7px 4px;
+}
+
+.aeo-fly-side b {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.aeo-fly-side.dim > i {
+  opacity: 0.35;
+}
+
+.aeo-fly-side.dim b {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Severity points as dot meters. */
+.aeo-sev {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .aeo-sev { grid-template-columns: repeat(4, 1fr); }
+}
+
+.aeo-sev > div {
+  display: grid;
+  gap: 7px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid var(--line-soft);
+}
+
+.aeo-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.aeo-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--grad);
+}
+
+/* The cap at 40, given its own callout. */
+.aeo-cap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.aeo-cap-num {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent),
+    var(--ink);
+  box-shadow: 0 14px 30px -16px rgba(10, 17, 48, 0.8);
 }
 
 /* ── measured matrix ───────────────────────────────────────────────────── */
@@ -471,16 +581,16 @@
 }
 
 .aeo-mk.cited {
-  color: #06102f;
-  background: linear-gradient(120deg, #ffffff, #7fe3ff);
-  box-shadow: 0 0 16px rgba(127, 227, 255, 0.6);
+  color: #000000;
+  background: linear-gradient(120deg, #ffffff, #c1deff);
+  box-shadow: 0 0 16px rgba(193, 222, 255, 0.6);
 }
 
-.aeo-mk.read { border: 2px solid #7fe3ff; }
+.aeo-mk.read { border: 2px solid #c1deff; }
 
 .aeo-mk.named {
-  border: 2px solid #8fb0ff;
-  background: linear-gradient(90deg, #8fb0ff 50%, transparent 50%);
+  border: 2px solid #8fb6ff;
+  background: linear-gradient(90deg, #8fb6ff 50%, transparent 50%);
 }
 
 .aeo-mk.absent {
@@ -504,7 +614,7 @@
 
 .aeo-domain b {
   font-weight: 600;
-  color: #7fe3ff;
+  color: #c1deff;
 }
 
 /* ── fix first list ────────────────────────────────────────────────────── */
@@ -533,7 +643,7 @@
 
 .aeo-fix:not(:first-child) .rk {
   color: var(--accent);
-  background: #e7effe;
+  background: #ebf1ff;
 }
 
 .aeo-tag {
@@ -555,7 +665,7 @@
 
 .aeo-tag.gain {
   color: var(--accent);
-  background: #e7effe;
+  background: #ebf1ff;
   border-color: transparent;
 }
 
@@ -577,7 +687,7 @@
     animation: aeo-glow 2.8s ease-in-out infinite;
   }
 
-  .aeo-wbar > i {
+  .aeo-fly-side > i {
     animation: aeo-grow 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 }

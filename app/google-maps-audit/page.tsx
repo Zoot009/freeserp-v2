@@ -3,12 +3,14 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
   ArrowRight,
+  CalendarPlus,
   Camera,
   Check,
   ChevronDown,
   Globe,
   History,
   LayoutGrid,
+  Lock,
   MapPin,
   MessageSquareWarning,
   Printer,
@@ -116,19 +118,19 @@ const STARS = [
 ];
 
 const SCORE_PARTS = [
-  { name: "Profile", w: 30, c: "#0b2ea8" },
-  { name: "Reviews", w: 25, c: "#0454ff" },
-  { name: "Visibility", w: 20, c: "#3b46d6" },
-  { name: "Photos", w: 15, c: "#0d80c9" },
-  { name: "Website", w: 10, c: "#22a7f0" },
+  { name: "Profile", w: 30, c: "#03155a" },
+  { name: "Reviews", w: 25, c: "#0b3bd0" },
+  { name: "Visibility", w: 20, c: "#0454ff" },
+  { name: "Photos", w: 15, c: "#2f6bff" },
+  { name: "Website", w: 10, c: "#4a8fff" },
 ];
 
 const VERDICTS = [
-  { name: "Room to grow", range: "below 60", c: "#c9d6f5" },
-  { name: "Fair", range: "60+", c: "#8fb0ff" },
-  { name: "Good", range: "70+", c: "#22a7f0" },
+  { name: "Room to grow", range: "below 60", c: "#cfd6e4" },
+  { name: "Fair", range: "60+", c: "#8fb6ff" },
+  { name: "Good", range: "70+", c: "#4a8fff" },
   { name: "Strong", range: "80+", c: "#0454ff" },
-  { name: "Excellent", range: "90+", c: "#0b2ea8" },
+  { name: "Excellent", range: "90+", c: "#03155a" },
 ];
 
 const COMPETITORS = [
@@ -368,7 +370,7 @@ export default function GoogleMapsAuditPage() {
             {HERO_POINTS.map((p) => (
               <div
                 key={p}
-                className="flex items-start gap-2.5 rounded-[14px] border border-[#46484d0f] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
+                className="flex items-start gap-2.5 rounded-[14px] border border-[#eaeaea] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
               >
                 <Check className="mt-px h-4 w-4 shrink-0 text-[var(--accent)]" strokeWidth={2.6} />
                 {p}
@@ -431,7 +433,7 @@ export default function GoogleMapsAuditPage() {
                     ))}
                   </div>
                 </div>
-                <div className="mt-6 grid gap-2">
+                <div className="mt-auto grid gap-2 pt-6">
                   <div className="gma-check">
                     <span>
                       Owner reply rate <small>· 14 of 20 replied</small>
@@ -448,50 +450,99 @@ export default function GoogleMapsAuditPage() {
                 </div>
               </article>
 
-              {/* Visibility */}
+              {/* Visibility — the grid as a small map, with its three numbers */}
               <article id="grid" className="cmpa-card gma-tile gma-span-2 scroll-mt-24">
                 <TileHead icon={LayoutGrid} name="Local visibility" sub="4 checks" weight="20%" />
-                <div className="gma-mini mt-5">
-                  {GRID.map((r, i) => (
-                    <span key={i} className={i === 4 ? "me" : tier(r)}>
-                      {r ?? "–"}
-                    </span>
-                  ))}
+                <div className="gma-minimap mt-5">
+                  {GRID.map((r, i) =>
+                    i === 4 ? (
+                      <span key={i} className="gma-minihome">
+                        <Store className="h-3.5 w-3.5" strokeWidth={2.2} />
+                      </span>
+                    ) : (
+                      <span
+                        key={i}
+                        className={`gma-pin ${tier(r)}`}
+                        style={{ left: `${GRID_X[i % 3]}%`, top: `${GRID_Y[Math.floor(i / 3)]}%` }}
+                      >
+                        {r ?? "–"}
+                      </span>
+                    ),
+                  )}
                 </div>
-                <p className="mt-4 text-[13.5px] leading-[1.5] text-[var(--body)]">
-                  Top 3 at <b>{TOP3} of 9</b> points · average rank <b>{AVG}</b> where found. Nine
-                  searches, 1 km apart, top 20 read at each.
-                </p>
+                <div className="gma-stats mt-auto pt-5">
+                  <div>
+                    <b>
+                      {TOP3}/9
+                    </b>
+                    in top 3
+                  </div>
+                  <div>
+                    <b>
+                      {found.length}/9
+                    </b>
+                    found
+                  </div>
+                  <div>
+                    <b>{AVG}</b>
+                    avg. rank
+                  </div>
+                </div>
               </article>
 
-              {/* Photos */}
+              {/* Photos — count against the 10 / 50 thresholds, then logo and cover */}
               <article className="cmpa-card gma-tile gma-span-2">
                 <TileHead icon={Camera} name="Photos & content" sub="3 checks" weight="15%" />
                 <div className="gma-photos mt-5">
-                  {[0, 1, 2, 3, 4].map((i) => (
+                  {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                     <span key={i} />
                   ))}
-                  <span className="empty">
-                    <Camera className="h-5 w-5" strokeWidth={1.8} />
+                  <span className="empty">+16</span>
+                </div>
+                <div className="mt-4 flex items-baseline justify-between text-[13px]">
+                  <span>
+                    <b className="text-[15px]">34</b> photos
                   </span>
+                  <span className="text-[var(--muted)]">16 to pass</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between text-[13px]">
-                  <span>34 photos</span>
-                  <span className="text-[var(--muted)]">passes at 50</span>
+                <div className="gma-track mt-2">
+                  <div className="gma-bar">
+                    <i style={{ "--w": 68 } as React.CSSProperties} />
+                  </div>
+                  <span style={{ left: "20%" }}>10</span>
+                  <span style={{ left: "100%" }}>50</span>
                 </div>
-                <div className="gma-bar mt-2">
-                  <i style={{ "--w": 68 } as React.CSSProperties} />
+                <div className="mt-auto grid gap-2 pt-6">
+                  <div className="gma-check">
+                    <span>Logo</span>
+                    <StatusChip s="pass" />
+                  </div>
+                  <div className="gma-check">
+                    <span>Cover photo</span>
+                    <StatusChip s="fail" />
+                  </div>
                 </div>
               </article>
 
-              {/* Website */}
+              {/* Website — the link as a browser bar, the booking action, then checks */}
               <article className="cmpa-card gma-tile gma-span-2">
                 <TileHead icon={Globe} name="Website & actions" sub="4 checks" weight="10%" />
-                <div className="gma-url mt-5">
-                  <span className="text-[var(--accent)]">https://</span>yourbusiness.com/
-                  <mark>?utm_source=gbp</mark>
+                <div className="gma-browser mt-5">
+                  <div className="gma-browser-bar">
+                    <Lock className="h-3.5 w-3.5 text-[var(--accent)]" strokeWidth={2.4} />
+                    yourbusiness.com
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 p-3">
+                    <span className="gma-param">utm_source=gbp</span>
+                    <span className="gma-param">utm_medium=organic</span>
+                  </div>
                 </div>
-                <div className="mt-3 grid gap-2">
+                <div className="gma-book mt-3">
+                  <CalendarPlus className="h-4 w-4" strokeWidth={2} />
+                  Book online
+                  <small>not set</small>
+                </div>
+                <div className="mt-auto grid gap-2 pt-6">
                   <div className="gma-check">
                     <span>HTTPS</span>
                     <StatusChip s="pass" />
@@ -852,11 +903,11 @@ function HeroMap() {
                 Top 3
               </span>
               <span>
-                <i style={{ background: "#5b8bff" }} />
+                <i style={{ background: "#4a8fff" }} />
                 4–10
               </span>
               <span>
-                <i style={{ background: "#a9bde6" }} />
+                <i style={{ background: "#cfd6e4" }} />
                 11–20
               </span>
             </div>

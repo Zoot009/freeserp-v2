@@ -559,7 +559,7 @@ export default function AiRankTrackerPage() {
             {HERO_POINTS.map((p) => (
               <div
                 key={p}
-                className="flex items-start gap-2.5 rounded-[14px] border border-[#46484d0f] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
+                className="flex items-start gap-2.5 rounded-[14px] border border-[#eaeaea] bg-white px-4 py-3.5 text-[14px] leading-[1.4] font-medium"
               >
                 <Check className="mt-px h-4 w-4 shrink-0 text-[var(--accent)]" strokeWidth={2.6} />
                 {p}
@@ -751,7 +751,7 @@ export default function AiRankTrackerPage() {
         {/* ── stats ────────────────────────────────────────────────────── */}
         <section className="pb-20 sm:pb-28">
           <div className={WRAP}>
-            <div className="airt-on-dark airt-panel grid grid-cols-2 gap-y-10 bg-[var(--ink)] px-8 py-12 text-white sm:px-12 lg:grid-cols-4">
+            <div className="airt-on-dark airt-panel airt-ink grid grid-cols-2 gap-y-10 px-8 py-12 text-white sm:px-12 lg:grid-cols-4">
               {STATS.map((s) => (
                 <div key={s.label} className="text-center">
                   <div className="text-[40px] leading-none font-semibold tracking-[-1.5px] sm:text-[52px]">
@@ -832,7 +832,7 @@ export default function AiRankTrackerPage() {
               {CREDIT_PLANS.map((plan) => (
                 <article
                   key={plan.slug}
-                  className={`relative flex flex-col p-7 ${plan.popular ? "airt-panel bg-[var(--ink)] text-white" : "airt-card"}`}
+                  className={`relative flex flex-col p-7 ${plan.popular ? "airt-panel airt-popular text-white" : "airt-card"}`}
                 >
                   {plan.popular && (
                     <span className="absolute -top-3 right-6 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-semibold tracking-[0.04em] text-white uppercase">
@@ -981,7 +981,7 @@ export default function AiRankTrackerPage() {
           is another way to leave the page without signing up. */}
       <footer className="pb-8">
         <div className={WRAP}>
-          <div className="airt-on-dark airt-panel bg-[var(--ink)] px-6 py-16 text-center text-white sm:px-12 sm:py-20">
+          <div className="airt-on-dark airt-panel airt-ink px-6 py-16 text-center text-white sm:px-12 sm:py-20">
             <LogoMark className="mx-auto h-10 w-10" />
             <h2 className="airt-h2 mx-auto mt-6 max-w-[17ch]">
               Find out what the assistants say about you
@@ -1064,9 +1064,9 @@ function ShotBar({ label }: { label?: string }) {
   return (
     <div className="airt-shot-bar">
       <span className="flex gap-1.5" aria-hidden>
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
-        <i className="h-[7px] w-[7px] rounded-full bg-[#46484d29]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
+        <i className="h-[7px] w-[7px] rounded-full bg-[#d1d5db]" />
       </span>
       {label && <span className="truncate text-[11px] text-[var(--muted)]">{label}</span>}
     </div>
