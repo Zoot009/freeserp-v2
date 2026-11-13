@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
@@ -835,6 +837,8 @@ export default function CompetitorAnalysisPage() {
             </div>
           </div>
         </section>
+
+        <SampleReport {...SAMPLE_REPORTS.competitor} spacing="pb-20 sm:pb-28" />
 
         {/* ── pricing ──────────────────────────────────────────────────────
             Prices come from CREDIT_PLANS. An analysis is 25 credits whatever it

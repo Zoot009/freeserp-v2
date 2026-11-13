@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
@@ -832,6 +834,8 @@ export default function AeoGeoAuditPage() {
             </div>
           </div>
         </section>
+
+        <SampleReport {...SAMPLE_REPORTS.aeo} spacing="pb-20 sm:pb-28" />
 
         {/* ── pricing ── */}
         <section id="pricing" className="scroll-mt-24 pb-20 sm:pb-28">

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
@@ -640,6 +642,8 @@ export default function AuditSuitePage() {
             </div>
           </div>
         </section>
+
+        <SampleReport {...SAMPLE_REPORTS.audit} spacing="pb-20 sm:pb-28" />
 
         {/* ── pricing ──────────────────────────────────────────────────────
             Prices come from CREDIT_PLANS. Five credits buy 20 crawled pages, so

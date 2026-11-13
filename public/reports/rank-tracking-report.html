@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rank Tracking Report — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* FreeSerp app light tokens — freeserp-frontend-v2/app/dashboard.css */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --text-soft: #4B5363; --text-mute: #8A93A4;
+    --border: #E7E9EE; --hair: #EEF0F3; --bg-sub: #F7F8FA; --bg-inset: #F2F4F7;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(11,13,18,0.04);
+    --shadow-md: 0 6px 24px -8px rgba(11,13,18,0.08), 0 2px 4px rgba(11,13,18,0.04);
+    --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  /* top bar */
+  .toolbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 28px; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .brand img { display: block; border-radius: 6px; }
+  .tb-right { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: var(--r-sm); border: 1px solid var(--border); background: #fff; color: var(--text); font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .btn:hover { background: var(--bg-inset); }
+  .btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .btn.primary:hover { background: var(--brand-deep); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn:focus-visible, .brand:focus-visible, .table-wrap:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* page */
+  .page { max-width: 1120px; margin: 0 auto; padding: 28px 28px 48px; }
+  .note { display: flex; align-items: center; gap: 8px; margin: 0 0 16px; color: var(--text-mute); font-size: 12.5px; }
+  .note svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); }
+
+  /* report header */
+  .rh { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 24px 28px; }
+  .site { display: flex; align-items: center; gap: 16px; min-width: 0; }
+  .site-tile { display: grid; place-items: center; width: 52px; height: 52px; flex-shrink: 0; border-radius: var(--r-md); background: var(--brand-soft); color: var(--brand); font-size: 22px; font-weight: 700; }
+  .rh h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+  .domain { margin-top: 3px; color: var(--brand); font-weight: 500; font-size: 14px; }
+  .rh-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--brand-soft); color: var(--brand); font-size: 12px; font-weight: 600; }
+  .badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+  .generated { color: var(--text-mute); font-size: 12.5px; }
+
+  /* summary stats */
+  .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
+  .stat { padding: 16px 18px 18px; }
+  .stat .lbl { font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mute); }
+  .stat .val { margin-top: 6px; font-size: 30px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+  .stat .val small { font-size: 14px; font-weight: 500; color: var(--text-mute); letter-spacing: 0; }
+  .stat .sub { margin-top: 4px; font-size: 12.5px; color: var(--text-soft); }
+  .meter { height: 5px; margin-top: 12px; border-radius: 3px; background: var(--bg-inset); overflow: hidden; }
+  .meter i { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+
+  /* movers */
+  .movers { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .panel-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--hair); }
+  .panel-h h2 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+  .panel-h .tag { font-size: 12px; color: var(--text-mute); font-weight: 500; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .movers ul { list-style: none; margin: 0; padding: 6px 0; }
+  .movers li { display: grid; grid-template-columns: 1fr auto 76px; align-items: center; gap: 12px; padding: 9px 20px; font-size: 13.5px; }
+  .movers li + li { border-top: 1px solid var(--hair); }
+  .movers li .now { text-align: right; white-space: nowrap; color: var(--text-mute); font-size: 12.5px; }
+
+  .delta { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .delta.up { color: var(--pos); background: var(--pos-soft); }
+  .delta.down { color: var(--neg); background: var(--neg-soft); }
+  .delta svg { width: 9px; height: 9px; }
+  .none { color: var(--text-mute); }
+
+  /* keyword table */
+  .kw { margin-top: 16px; overflow: hidden; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { position: sticky; top: 0; background: var(--bg-sub); text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-mute); padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th.num, td.num { text-align: right; white-space: nowrap; }
+  th.ctr, td.ctr { text-align: center; white-space: nowrap; }
+  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--hair); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: #FAFBFC; }
+  td:first-child, th:first-child { padding-left: 20px; }
+  td:last-child, th:last-child { padding-right: 20px; }
+  .kw-name { font-weight: 500; }
+  .loc { display: inline-block; margin-top: 3px; padding: 0 5px; border-radius: 4px; background: var(--bg-inset); color: var(--text-soft); font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .pos { display: inline-grid; place-items: center; min-width: 38px; padding: 3px 8px; border-radius: var(--r-sm); background: var(--bg-inset); font-weight: 600; font-size: 13px; }
+  .pos.top3 { background: var(--brand); color: #fff; }
+  .pos.top10 { background: var(--brand-soft); color: var(--brand); }
+  .pos.out { background: transparent; color: var(--text-mute); font-weight: 500; font-size: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 6px; background: var(--bg-inset); color: var(--text-soft); font-size: 11.5px; font-weight: 500; white-space: nowrap; }
+
+  .rf { margin-top: 24px; text-align: center; color: var(--text-mute); font-size: 12px; }
+
+  /* responsive */
+  @media (max-width: 960px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 720px) {
+    .movers { grid-template-columns: 1fr; }
+    table { min-width: 640px; }
+    .rh-meta { align-items: flex-start; }
+  }
+  @media (max-width: 560px) {
+    .toolbar { padding: 10px 16px; }
+    .toolbar .btn.ghost { display: none; }
+    .page { padding: 20px 16px 36px; }
+    .rh { padding: 20px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat .val { font-size: 26px; }
+  }
+
+  /* print */
+  @page { size: A4; margin: 14mm 12mm; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .table-wrap { overflow: visible; }
+    table { min-width: 0; }
+    thead { display: table-header-group; }
+    thead th { position: static; }
+    tr, .stat, .movers li, .rh { break-inside: avoid; }
+    .stats, .movers { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-up" viewBox="0 0 10 10"><path d="M5 1.5 9 8H1z" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 10 10"><path d="M5 8.5 1 2h8z" fill="currentColor"/></symbol>
+</svg>
+
+<div class="toolbar" role="banner">
+  <a class="brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <img src="data:image/png;base64,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" width="24" height="24" alt="">
+    FreeSerp
+  </a>
+  <div class="tb-right">
+    <button type="button" class="btn primary" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+      Download PDF
+    </button>
+    <a class="btn ghost" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="page">
+  <p class="note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    This report uses made-up data, so you can see what FreeSERP sends you. Your report is generated from your own projects.
+  </p>
+
+  <main>
+    <header class="card rh">
+      <div class="site">
+        <div class="site-tile" aria-hidden="true">B</div>
+        <div>
+          <h1>Brightpeak Outdoor</h1>
+          <div class="domain">brightpeak-outdoor.com</div>
+        </div>
+      </div>
+      <div class="rh-meta">
+        <span class="badge"><i></i>Rank report</span>
+        <span class="generated">Generated Nov 9, 2026, 9:14 AM</span>
+      </div>
+    </header>
+
+    <h2 class="sr">Summary</h2>
+    <ul class="stats">
+      <li class="card stat">
+        <div class="lbl">Keywords</div>
+        <div class="val mono">14</div>
+        <div class="sub">tracked in this project</div>
+      </li>
+      <li class="card stat">
+        <div class="lbl">Ranked</div>
+        <div class="val mono">13 <small>/ 14</small></div>
+        <div class="meter" aria-hidden="true"><i style="width:92.9%"></i></div>
+      </li>
+      <li class="card stat">
+        <div class="lbl">Top 3</div>
+        <div class="val mono">3 <small>/ 14</small></div>
+        <div class="meter" aria-hidden="true"><i style="width:21.4%"></i></div>
+      </li>
+      <li class="card stat">
+        <div class="lbl">Top 10</div>
+        <div class="val mono">7 <small>/ 14</small></div>
+        <div class="meter" aria-hidden="true"><i style="width:50%"></i></div>
+      </li>
+      <li class="card stat">
+        <div class="lbl">Avg position</div>
+        <div class="val mono">12.1</div>
+        <div class="sub">across ranked keywords</div>
+      </li>
+    </ul>
+
+    <div class="movers">
+      <section class="card" aria-labelledby="h-gain">
+        <div class="panel-h">
+          <h2 id="h-gain"><span class="dot" style="background:var(--pos)"></span>Top gainers</h2>
+          <span class="tag">Last 7 days</span>
+        </div>
+        <ul>
+          <li><span>trail running vest</span><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>11<span class="sr"> places up</span></span><span class="now mono">#27</span></li>
+          <li><span>camping stove backpacking</span><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>8<span class="sr"> places up</span></span><span class="now mono">#15</span></li>
+          <li><span>waterproof hiking boots women</span><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>5<span class="sr"> places up</span></span><span class="now mono">#7</span></li>
+          <li><span>how to layer for hiking</span><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>4<span class="sr"> places up</span></span><span class="now mono">#9</span></li>
+          <li><span>hiking backpack 40l</span><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>3<span class="sr"> places up</span></span><span class="now mono">#4</span></li>
+        </ul>
+      </section>
+      <section class="card" aria-labelledby="h-lose">
+        <div class="panel-h">
+          <h2 id="h-lose"><span class="dot" style="background:var(--neg)"></span>Top losers</h2>
+          <span class="tag">Last 7 days</span>
+        </div>
+        <ul>
+          <li><span>climbing harness beginner</span><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>13<span class="sr"> places down</span></span><span class="now mono">Not ranked</span></li>
+          <li><span>packable rain jacket</span><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>9<span class="sr"> places down</span></span><span class="now mono">#31</span></li>
+          <li><span>merino wool base layer</span><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>6<span class="sr"> places down</span></span><span class="now mono">#22</span></li>
+          <li><span>best headlamp for camping</span><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>4<span class="sr"> places down</span></span><span class="now mono">#18</span></li>
+          <li><span>ultralight tent 2 person</span><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>2<span class="sr"> places down</span></span><span class="now mono">#12</span></li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="card kw" aria-labelledby="h-kw">
+      <div class="panel-h">
+        <h2 id="h-kw">Keyword rankings</h2>
+        <span class="tag">14 keywords · United States</span>
+      </div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Keyword rankings table">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Keyword</th>
+              <th scope="col" class="ctr">Position</th>
+              <th scope="col" class="ctr">1d</th>
+              <th scope="col" class="ctr">7d</th>
+              <th scope="col" class="ctr">30d</th>
+              <th scope="col">SERP features</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><div class="kw-name">trail running vest</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#27</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>6<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>11<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>19<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Image pack</span><span class="chip">Video pack</span></div></td></tr>
+            <tr><td><div class="kw-name">climbing harness beginner</div><span class="loc">us</span></td><td class="ctr"><span class="pos out">Not ranked</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>13<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>10<span class="sr"> places down</span></span></td><td><span class="none">—</span></td></tr>
+            <tr><td><div class="kw-name">kids hiking shoes</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top10">#6</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>1<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>3<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Image pack</span></div></td></tr>
+            <tr><td><div class="kw-name">packable rain jacket</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#31</span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>2<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>9<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>12<span class="sr"> places down</span></span></td><td><div class="chips"><span class="chip">Image pack</span></div></td></tr>
+            <tr><td><div class="kw-name">best headlamp for camping</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#18</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>4<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>7<span class="sr"> places down</span></span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">People Also Ask</span></div></td></tr>
+            <tr><td><div class="kw-name">how to layer for hiking</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top10">#9</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>1<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>4<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>14<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Featured snippet</span><span class="chip">AI Overview</span><span class="chip">Video pack</span><span class="chip">People Also Ask</span></div></td></tr>
+            <tr><td><div class="kw-name">merino wool base layer</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#22</span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>3<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>6<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>4<span class="sr"> places down</span></span></td><td><div class="chips"><span class="chip">Image pack</span></div></td></tr>
+            <tr><td><div class="kw-name">outdoor gear store denver</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top3">#1</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td><div class="chips"><span class="chip">Local pack</span><span class="chip">Knowledge panel</span></div></td></tr>
+            <tr><td><div class="kw-name">camping stove backpacking</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#15</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>2<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>8<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>11<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Video pack</span><span class="chip">People Also Ask</span></div></td></tr>
+            <tr><td><div class="kw-name">carbon trekking poles</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top3">#2</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>1<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Image pack</span></div></td></tr>
+            <tr><td><div class="kw-name">0 degree down sleeping bag</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top3">#3</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>2<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>5<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Featured snippet</span><span class="chip">People Also Ask</span></div></td></tr>
+            <tr><td><div class="kw-name">ultralight tent 2 person</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono ">#12</span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>1<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>2<span class="sr"> places down</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>4<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Image pack</span><span class="chip">Video pack</span></div></td></tr>
+            <tr><td><div class="kw-name">waterproof hiking boots women</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top10">#7</span></td><td class="ctr"><span class="none" aria-label="no change">—</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>5<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>9<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">Image pack</span><span class="chip">People Also Ask</span></div></td></tr>
+            <tr><td><div class="kw-name">hiking backpack 40l</div><span class="loc">us</span></td><td class="ctr"><span class="pos mono top10">#4</span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>1<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>3<span class="sr"> places up</span></span></td><td class="ctr"><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>6<span class="sr"> places up</span></span></td><td><div class="chips"><span class="chip">Image pack</span><span class="chip">People Also Ask</span></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rf">Generated by FreeSERP · freeserp.com</footer>
+</div>
+
+</body>
+</html>

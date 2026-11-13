@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
@@ -1162,6 +1164,8 @@ export default function AuditSuiteUkPage() {
             </div>
           </div>
         </section>
+
+        <SampleReport {...SAMPLE_REPORTS.audit} spacing="pb-20 sm:pb-28" />
 
         {/* ── pricing ─────────────────────────────────────────────────────
             Amounts come from CREDIT_PLANS; only PRICE_PREFIX is localised. See

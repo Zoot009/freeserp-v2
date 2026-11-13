@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Google Maps Audit Report — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tokens: freeserp-frontend-v2/app/dashboard.css (.fs-app) and app/globals.css (:root);
+     grade / status colours are the Tailwind v4 palette the report's classes compile to. */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --soft: #4B5363; --mute: #8A93A4;
+    --border: #E7E9EE; --bg-sub: #F7F8FA; --muted: #F2F4F7; --card: #FFFFFF;
+    --green-500: #00c758; --green-600: #00a544; --green-700: #008138;
+    --lime-500: #80cd00; --lime-600: #5ea500; --yellow-500: #edb200; --yellow-600: #cd8900;
+    --orange-500: #fe6e00; --red-500: #fb2c36; --red-600: #e40014;
+    --amber-400: #fcbb00; --amber-500: #f99c00; --amber-700: #b75000;
+    --shadow-sm: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1);
+    --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+  h1, h2, p, ul, ol, dl, dd { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  b { font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .m { color: var(--soft); }
+  .xs { font-size: 12px; }
+  .fg { color: var(--text); }
+  .brand { color: var(--brand); }
+  .tr5 { color: var(--red-500); }
+  .t-a { color: var(--green-600); } .t-b { color: var(--lime-600); } .t-c { color: var(--yellow-600); } .t-d { color: var(--orange-500); } .t-f { color: var(--red-500); }
+  .t-warn { color: var(--amber-500); }
+  .f-a { background: var(--green-600); } .f-b { background: var(--lime-500); } .f-c { background: var(--yellow-500); } .f-d { background: var(--orange-500); } .f-f { background: var(--red-500); }
+  .f-amber { background: var(--amber-400); } .f-brand { background: var(--brand); }
+  .trunc { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Sample toolbar: the dashboard's .topbar (dashboard.css:313) with the sidebar brand row (.sb-brand, :158) */
+  .topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .tb-l, .tb-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sb-brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); }
+  .sb-brand:hover { text-decoration: none; }
+  .sb-brand svg { display: block; border-radius: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; font-size: 11px; font-weight: 500; border-radius: 5px; background: var(--brand-soft); color: var(--brand); white-space: nowrap; }
+  /* heroButton / heroButtonPrimary (report.tsx:379-382) */
+  .hb { display: inline-flex; height: 32px; align-items: center; gap: 6px; white-space: nowrap; border-radius: 7px; border: 1px solid var(--border); background: var(--card); padding: 0 12px; font: inherit; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: background-color .15s; }
+  .hb:hover { background: var(--muted); text-decoration: none; }
+  .hb.pri { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .hb.pri:hover { background: var(--brand-deep); }
+  .hb svg { width: 14px; height: 14px; }
+  .notice { background: var(--brand-soft); color: var(--text); font-size: 13px; line-height: 1.5; padding: 10px 28px; text-align: center; border-bottom: 1px solid var(--border); }
+
+  /* .page (dashboard.css:503) */
+  .page { max-width: 1200px; margin: 0 auto; padding: 28px 28px 60px; }
+  .stack > * + * { margin-top: 20px; }
+  .sp4 > * + * { margin-top: 16px; }
+  .sp3 > * + * { margin-top: 12px; }
+
+  /* Lucide icons */
+  .ic { display: inline-block; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .i14 { width: 14px; height: 14px; }
+  .i15 { width: 15px; height: 15px; margin-top: 2px; }
+  .i13 { width: 13px; height: 13px; margin-top: 2px; }
+  /* InfoHint (components/dashboard/widget.tsx:164): Info size-3.5, muted-foreground/50 */
+  .ih { display: inline-flex; flex: none; color: rgba(75,83,99,.5); cursor: help; }
+  .ih:hover { color: var(--text); }
+  .ih svg { width: 14px; height: 14px; }
+
+  /* Panel (report.tsx:74-100) */
+  .panel { display: flex; flex-direction: column; min-width: 0; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-sm); break-inside: avoid; }
+  .panel > header { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 47px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .panel > header h2 { font-size: 15px; font-weight: 600; line-height: 1.25; letter-spacing: -0.005em; }
+  .panel > header .meta { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 13px; color: var(--soft); }
+  .pb { flex: 1; min-width: 0; padding: 16px; }
+  .fl { flex: 1; min-width: 0; }
+  .rows > * + * { border-top: 1px solid var(--border); }
+  .lnk { font-size: 13px; font-weight: 500; color: var(--brand); }
+
+  /* Hero (report.tsx:262-376) */
+  .hero { display: flex; flex-direction: column; gap: 16px; padding: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-sm); break-inside: avoid; }
+  .who { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+  .tile { flex: none; width: 112px; height: 112px; border-radius: 10px; background: var(--muted); color: var(--soft); display: grid; place-items: center; font-size: 18px; font-weight: 600; }
+  .nm { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  .hero h1 { font-size: 18px; font-weight: 600; line-height: 1.375; letter-spacing: -0.01em; }
+  .claimed { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; background: rgba(0,199,88,.1); padding: 2px 8px; font-size: 12px; font-weight: 500; line-height: 16px; color: var(--green-700); cursor: help; }
+  .claimed svg { width: 12px; height: 12px; }
+  .cat { margin-top: 2px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; font-size: 13px; color: var(--soft); }
+  .contact { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: rgba(11,13,18,.8); }
+  .contact > span { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .contact > span:first-child { align-items: flex-start; }
+  .contact > span:first-child svg { margin-top: 2px; }
+  .contact svg { color: var(--soft); }
+  .rating { display: flex; flex: none; flex-direction: column; gap: 6px; }
+  .rating .r1 { display: flex; align-items: center; gap: 8px; }
+  .rating .big { font-size: 30px; font-weight: 600; line-height: 1; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; }
+  .rating .r2 { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; line-height: 1.5; color: var(--soft); }
+  .health { display: flex; flex: none; align-items: center; gap: 16px; border-radius: 16px; background: rgba(242,244,247,.5); padding: 12px 20px 12px 12px; }
+  .health .lbl { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--soft); }
+  .health .vd { margin-top: 2px; font-size: 18px; font-weight: 600; line-height: 1.25; }
+  .health .dl { margin-top: 2px; font-size: 12px; color: var(--soft); }
+  .health a { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 500; color: var(--brand); }
+
+  /* ScoreRing (report.tsx:145-191) */
+  .ring { position: relative; flex: none; }
+  .ring svg { display: block; transform: rotate(-90deg); }
+  .ring .tk { stroke: var(--muted); }
+  .ring .v { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+  .ring .v b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .ring .v small { margin-top: 4px; font-size: 10px; font-weight: 500; color: var(--soft); }
+
+  /* Stars (report.tsx:193-205): Lucide Star, amber-400; empty = fill muted, stroke muted-foreground/30 */
+  .stars { display: inline-flex; align-items: center; gap: 2px; }
+  .stars i { display: block; width: 14px; height: 14px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fcbb00' stroke='%23fcbb00' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'/%3E%3C/svg%3E") center / contain no-repeat; }
+  .stars i.h { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fcbb00' fill-opacity='.5' stroke='%23fcbb00' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'/%3E%3C/svg%3E"); }
+  .stars i.e { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f2f4f7' stroke='%234b5363' stroke-opacity='.3' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'/%3E%3C/svg%3E"); }
+  .stars.lg i { width: 18px; height: 18px; }
+
+  /* Tabs (report.tsx:426-446) */
+  .tabs { display: flex; gap: 24px; overflow-x: auto; overflow-y: hidden; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs a { display: inline-flex; flex: none; align-items: center; gap: 6px; white-space: nowrap; border-bottom: 2px solid transparent; padding: 10px 0; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--soft); transition: color .15s; }
+  .tabs a:hover { color: var(--text); text-decoration: none; }
+  .tabs a[aria-current] { border-bottom-color: var(--brand); color: var(--text); }
+  .tabs .cnt { border-radius: 5px; background: var(--muted); padding: 0 6px; font-size: 11px; font-weight: 500; color: var(--soft); font-variant-numeric: tabular-nums; }
+  .tab-sec { margin-top: 40px; }
+  .tab-sec.first { margin-top: 20px; }
+  .tab-sec > .tabs { margin-bottom: 20px; }
+
+  /* StatCard (components/dashboard/stat-card.tsx) */
+  .g-stats { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+  .stat { min-width: 0; padding: 16px 18px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-sm); break-inside: avoid; }
+  .stat .lb { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--soft); }
+  .stat .v { margin-top: 10px; font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .cap { margin-top: 8px; min-height: 20px; font-size: 13px; color: var(--soft); }
+  .stat .trk { display: block; margin-top: 8px; height: 5px; overflow: hidden; border-radius: 3px; background: var(--muted); }
+  .stat .trk > span { display: block; height: 100%; border-radius: 3px; }
+
+  /* Bar (report.tsx:122) */
+  .bar { display: block; height: 6px; overflow: hidden; border-radius: 999px; background: var(--muted); }
+  .bar > span { display: block; height: 100%; border-radius: 999px; }
+
+  /* Grids (report.tsx Tailwind breakpoints; xl is taken at 1040px here, since the sample has no sidebar) */
+  .g3 { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+  .g3.start { align-items: start; }
+  .gp { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+  .gg { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+
+  /* KeyValues (report.tsx:131) */
+  dl.kv > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 8px 0; font-size: 13px; }
+  dl.kv > div + div { border-top: 1px solid var(--border); }
+  dl.kv > div:first-child { padding-top: 0; }
+  dl.kv > div:last-child { padding-bottom: 0; }
+  dl.kv dt { color: var(--soft); }
+  dl.kv dd { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* CheckRow (report.tsx:217-234) */
+  .ck { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; break-inside: avoid; }
+  .ck .bd { flex: 1; min-width: 0; }
+  .ck .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .ck .top > b { font-size: 13px; font-weight: 500; }
+  .ck .val { display: flex; flex: none; align-items: center; gap: 8px; }
+  .ck .val > span:first-child { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; color: var(--soft); }
+  .ck .dt { margin-top: 2px; font-size: 13px; line-height: 1.625; color: var(--soft); }
+  .ck .fx { margin-top: 4px; font-size: 13px; line-height: 1.625; color: var(--text); }
+  .s-pass { color: var(--green-600); } .s-warn { color: var(--amber-500); } .s-fail { color: var(--red-500); }
+  /* PriorityBadge (report.tsx:60-64, 207) */
+  .pr { flex: none; white-space: nowrap; border-radius: 4px; padding: 1px 6px; font-size: 11px; font-weight: 500; line-height: 16px; }
+  .pr.h { background: rgba(251,44,54,.1); color: var(--red-600); }
+  .pr.md { background: rgba(249,156,0,.1); color: var(--amber-700); }
+  .pr.l { background: var(--muted); color: var(--soft); }
+
+  /* Category health, strengths */
+  .ch li .t { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; font-size: 13px; }
+  .ch li .t > span:first-child { font-weight: 500; }
+  .ch li .t > span:last-child { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+  .ch li .t strong { width: 28px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .strengths { font-size: 13px; }
+  .strengths li { display: flex; align-items: flex-start; gap: 8px; }
+  .strengths li + li { margin-top: 8px; }
+
+  /* Rank grid (components/gbp-audit/rank-grid.tsx; pins: maps-tracker/scan-map.tsx pinScale + app/maps-tracker.css .mt-pin--scored) */
+  .map { position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 16px; background: #eef0f2; container-type: size; }
+  .map.md { height: 360px; }
+  .map.lg { height: 440px; }
+  .map > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .pins { --pad: clamp(31px, 14cqmin, 96px); position: absolute; left: 50%; top: 50%; width: calc(100cqmin - 2 * var(--pad)); aspect-ratio: 1; transform: translate(-50%, -50%); }
+  .pin { position: absolute; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 999px; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 17.6px; font-weight: 600; box-shadow: 0 2px 6px rgba(11,13,18,.20); }
+  .pin.w { font-size: 14.4px; }
+  .map.lg .pin { width: 49px; height: 49px; font-size: 20.6px; }
+  .map.lg .pin.w { font-size: 16.9px; }
+  .zoom { position: absolute; right: 10px; bottom: 10px; width: 40px; border-radius: 2px; background: #fff; box-shadow: 0 1px 4px -1px rgba(0,0,0,.3); color: #666; font: 400 22px/40px Arial, sans-serif; text-align: center; }
+  .zoom span { display: block; height: 40px; }
+  .zoom span + span { border-top: 1px solid #e6e6e6; }
+  .legend { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--soft); }
+  .legend .bands { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .legend .bands span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+  /* rankColor (components/maps-tracker/grid.ts:258) */
+  .k3 { background: #16A34A; color: #fff; } .k7 { background: #84CC16; color: #1A2E05; } .k10 { background: #EAB308; color: #422006; }
+  .k15 { background: #F97316; color: #fff; } .k20 { background: #DC2626; color: #fff; } .k0 { background: #7F1D1D; color: #fff; }
+  /* PointDetail (rank-grid.tsx:126) */
+  .pd { border: 1px solid var(--border); border-radius: 16px; background: rgba(242,244,247,.3); padding: 12px; }
+  .pd .h { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 600; }
+  .pd .h .rk { border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 700; line-height: 16px; }
+  .pd ol { margin-top: 8px; }
+  .pd li { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; }
+  .pd li + li { margin-top: 6px; }
+  .pd li.me { font-weight: 600; color: var(--brand); }
+  .pd li .n { display: flex; flex: none; width: 20px; height: 20px; align-items: center; justify-content: center; border-radius: 999px; background: var(--card); box-shadow: 0 0 0 1px var(--border); font-size: 10px; font-weight: 700; color: var(--text); }
+  .pd li .s { flex: none; color: var(--soft); font-weight: 400; }
+  /* PointList (report.tsx:673) */
+  .plist { overflow: hidden; border: 1px solid var(--border); border-radius: 12px; }
+  .plist li { display: flex; align-items: center; gap: 12px; padding: 7px 12px; font-size: 13px; }
+  .plist li + li { border-top: 1px solid var(--border); }
+  .plist .rb { display: flex; flex: none; width: 32px; height: 20px; align-items: center; justify-content: center; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .plist .pl { flex: none; width: 96px; }
+
+  /* Tables (report.tsx:910-964) */
+  .tw { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 13px; }
+  th { white-space: nowrap; border-bottom: 1px solid var(--border); padding: 10px 8px; text-align: left; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--soft); }
+  td { padding: 10px 8px; vertical-align: middle; }
+  tbody tr + tr td { border-top: 1px solid var(--border); }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th:last-child, td:last-child { padding-right: 16px; }
+  th.r, td.r { text-align: right; }
+  tr { break-inside: avoid; }
+  thead { display: table-header-group; }
+  tbody tr:hover { background: rgba(242,244,247,.6); }
+  tr.you, tr.you:hover { background: rgba(45,91,255,.05); }
+  .rc { display: inline-flex; width: 24px; height: 24px; align-items: center; justify-content: center; border-radius: 999px; font-size: 11px; font-weight: 600; }
+  td.bz { max-width: 320px; }
+  td.bz > div:first-child { font-weight: 500; }
+  .you-tag { margin-left: 6px; border-radius: 4px; background: var(--brand); padding: 0 6px; font-size: 10px; font-weight: 600; color: #fff; vertical-align: 1px; }
+  table.recs tr { vertical-align: top; }
+  table.recs td { vertical-align: top; }
+  table.recs .fixt { margin-top: 2px; line-height: 1.625; color: var(--soft); }
+  td a, .site { color: var(--brand); }
+
+  /* Plan (report.tsx:1092) */
+  .step { display: inline-grid; width: 20px; height: 20px; place-items: center; margin-right: 8px; border-radius: 999px; background: var(--brand); font-size: 11px; font-weight: 600; color: #fff; vertical-align: 1px; }
+  .plan li { display: flex; gap: 10px; font-size: 13px; line-height: 1.625; color: var(--soft); }
+  .plan li + li { margin-top: 8px; }
+  .plan li::before { content: ""; flex: none; width: 4px; height: 4px; margin-top: 9px; border-radius: 999px; background: var(--soft); }
+
+  /* Tag (report.tsx:777) */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { border-radius: 5px; background: var(--muted); padding: 2px 8px; font-size: 12px; line-height: 16px; }
+  .tag.p { background: var(--brand-soft); font-weight: 500; color: var(--brand); }
+  .grp-l { margin-bottom: 6px; font-size: 12px; color: var(--soft); }
+
+  /* Rating breakdown, reviews (report.tsx:826-893) */
+  .dist > div { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+  .dist > div + div { margin-top: 10px; }
+  .dist .k { width: 24px; color: var(--soft); }
+  .dist .bar { flex: 1; }
+  .dist .c { width: 40px; text-align: right; color: var(--soft); font-variant-numeric: tabular-nums; }
+  .topics { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .rv { padding: 12px 16px; break-inside: avoid; }
+  .rv .h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 13px; }
+  .rv .h > b { font-weight: 500; }
+  .rv .st { margin-left: auto; font-size: 12px; color: var(--soft); }
+  .rv .st.ok { color: var(--green-600); }
+  .rv .st.no { font-weight: 500; color: var(--red-500); }
+  .rv .tx { margin-top: 4px; font-size: 13px; line-height: 1.625; color: var(--soft); }
+  .rv .own { margin-top: 6px; border-left: 2px solid var(--border); padding-left: 12px; font-size: 13px; line-height: 1.625; color: var(--soft); }
+  .rv .own b { font-weight: 500; color: var(--text); }
+  .pas { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 10px 16px; font-size: 13px; }
+  .pas span:last-child { flex: none; color: var(--soft); font-variant-numeric: tabular-nums; }
+  .src { font-size: 11px; line-height: 1.625; color: var(--soft); }
+  .past { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 16px; font-size: 13px; }
+  footer.rf { margin-top: 28px; text-align: center; font-size: 11px; color: var(--mute); }
+
+  @media (min-width: 640px) {
+    .g-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 768px) {
+    .hero { flex-direction: row; align-items: center; gap: 24px; }
+    .rating { align-items: flex-end; }
+    .gg.md { grid-template-columns: minmax(0, 1fr) 300px; }
+  }
+  @media (min-width: 1024px) {
+    .gp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .gp.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gg.lg { grid-template-columns: minmax(0, 1fr) 320px; }
+  }
+  @media (min-width: 1040px) {
+    .g-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .span2 { grid-column: span 2 / span 2; }
+  }
+  @media (max-width: 640px) {
+    .topbar { padding: 10px 16px; }
+    .notice { padding: 10px 16px; text-align: left; }
+    .page { padding: 16px 16px 48px; }
+    .tile { width: 72px; height: 72px; }
+    .who { align-items: flex-start; }
+    .health { align-self: stretch; }
+    .ck .top { flex-direction: column; gap: 2px; }
+    .ck .val > span:first-child { max-width: none; white-space: normal; }
+    .plist .pl { width: 88px; }
+    .zoom { display: none; }
+  }
+
+  @page { size: A4; margin: 14mm; }
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .topbar, .np { display: none !important; }
+    .notice { border: 1px solid #d9e1ff; border-radius: 10px; margin: 0 0 14px; }
+    .page { max-width: none; padding: 0; }
+    .panel, .stat, .hero { box-shadow: none; }
+    .tab-sec { break-before: page; margin-top: 0; }
+    .tab-sec.first { break-before: auto; margin-top: 20px; }
+    .tabs { overflow: visible; }
+    .hero { flex-flow: row wrap; align-items: center; gap: 16px 24px; }
+    .who { flex: 1 1 100%; }
+    .tile { width: 80px; height: 80px; }
+    .rating { align-items: flex-end; }
+    .g-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat .v { font-size: 28px; }
+    .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .span2 { grid-column: span 2 / span 2; }
+    .gp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .gp.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gg.md, .gg.lg { grid-template-columns: minmax(0, 1fr) 250px; }
+    .map.md { height: 320px; }
+    .map.lg { height: 380px; }
+    .zoom { display: none; }
+    .tw { overflow: visible; }
+    table { min-width: 0; font-size: 11px; }
+    .panel.flow { break-inside: auto; }
+    tbody tr:hover { background: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Shared shapes: Lucide icons the report uses, and the map basemap (drawn once, used twice). -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-fa" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="mapbg" viewBox="0 0 1200 600">
+    <rect width="1200" height="600" fill="#eef0f2"/>
+    <path d="M0 505 C180 478 330 540 520 522 S860 470 1020 488 S1160 500 1200 492 V600 H0 Z" fill="#d5dee6"/>
+    <rect x="935" y="58" width="190" height="118" rx="14" fill="#e1e9df"/>
+    <rect x="70" y="240" width="140" height="96" rx="12" fill="#e1e9df"/>
+    <rect x="640" y="380" width="70" height="44" rx="8" fill="#e1e9df"/>
+    <g stroke="#fff" stroke-linecap="round" fill="none">
+      <g stroke-width="3.5">
+        <path d="M0 110 H1200 M0 175 H1200 M0 245 H1200 M0 355 H1200 M0 420 H1200 M0 470 H1200"/>
+        <path d="M110 0 V500 M240 0 V510 M380 0 V520 M520 0 V520 M680 0 V505 M820 0 V490 M960 0 V490 M1090 0 V495"/>
+      </g>
+      <path d="M0 300 C300 296 900 304 1200 298" stroke-width="11"/>
+      <path d="M600 0 C596 160 604 360 598 515" stroke-width="11"/>
+      <path d="M0 40 C260 60 700 30 1200 52" stroke-width="7"/>
+      <path d="M30 600 L470 0" stroke-width="6"/>
+      <path d="M1180 600 L880 0" stroke-width="6"/>
+    </g>
+    <g fill="#9aa0a6" font-family="Geist, Inter, system-ui, sans-serif" font-size="12" font-weight="500">
+      <text x="255" y="292">Alder Avenue</text>
+      <text x="608" y="24">Larkmont Road</text>
+      <text x="972" y="122" fill="#8fa08c">Westwood Park</text>
+      <text x="250" y="565" fill="#8c9bab">Larkmont Harbour</text>
+    </g>
+  </symbol>
+</svg>
+
+<div class="topbar" role="banner">
+  <div class="tb-l">
+    <a class="sb-brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+      FreeSerp
+    </a>
+  </div>
+  <div class="tb-r">
+    <button type="button" class="hb" onclick="window.print()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Download PDF</button>
+    <a class="hb pri" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="notice" role="note">This report uses made-up data, so you can see what FreeSERP sends you. Your report is generated from your own Google Business Profile.</div>
+
+<main class="page">
+
+  <!-- ── Header (ReportHero) ───────────────────────────────── -->
+  <section class="hero" aria-label="Business and profile health">
+    <div class="who">
+      <div class="tile" aria-hidden="true">BD</div>
+      <div style="min-width:0">
+        <div class="nm">
+          <h1>Brightpeak Dental Studio</h1>
+          <span class="claimed" title="The owner has verified this business on Google Business Profile. Only they can edit its details, post updates and reply to reviews."><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>Claimed</span>
+        </div>
+        <div class="cat"><span>Dentist</span><span>Keyword: <span class="fg" style="font-weight:500">dentist</span></span></div>
+        <div class="contact">
+          <span><svg class="ic i14" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><span class="sr">Address: </span><span style="line-height:1.375">214 Alder Avenue, Larkmont</span></span>
+          <span><svg class="ic i14" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="sr">Phone: </span><span class="num">(555) 555-0142</span></span>
+          <span><svg class="ic i14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span class="sr">Website: </span><a class="brand" href="#" onclick="return false">brightpeakdental.example</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="rating">
+      <div class="r1"><b class="big">4.6</b><span class="stars lg" role="img" aria-label="4.6 out of 5 stars"><i></i><i></i><i></i><i></i><i class="h"></i></span></div>
+      <span class="r2"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" fill="#34A853"/><path d="M6.4 14a6 6 0 0 1 0-3.9V7.5H3.1a10 10 0 0 0 0 9z" fill="#FBBC05"/><path d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.5l3.3 2.6C7.2 7.8 9.4 6 12 6z" fill="#EA4335"/></svg>Reviews <span class="num fg" style="font-weight:500">(128)</span></span>
+    </div>
+    <div class="health">
+      <div class="ring" style="width:80px;height:80px" role="img" aria-label="Profile health 81 out of 100">
+        <svg width="80" height="80" aria-hidden="true"><circle class="tk" cx="40" cy="40" r="36.5" fill="none" stroke-width="7"/><circle cx="40" cy="40" r="36.5" fill="none" stroke="#2D5BFF" stroke-width="7" stroke-linecap="round" stroke-dasharray="229.34" stroke-dashoffset="43.57"/></svg>
+        <span class="v"><b style="font-size:24px">81</b><small>/100</small></span>
+      </div>
+      <div style="min-width:0">
+        <div class="lbl">Profile health <span class="ih np" role="img" title="FreeSERP's weighted checklist of 25 checks across the profile, reviews, photos, website and local rankings, out of 100. It isn't a score Google publishes." aria-label="FreeSERP's weighted checklist of 25 checks across the profile, reviews, photos, website and local rankings, out of 100. It isn't a score Google publishes."><svg class="ic"><use href="#i-in"/></svg></span></div>
+        <div class="vd">Strong</div>
+        <div class="dl">Up 6 since Oct 12, 2026</div>
+        <a href="#plan">8 things to improve →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Overview ───────────────────────────────────────────── -->
+  <section class="tab-sec first" id="overview" aria-label="Overview">
+    <nav class="tabs" aria-label="Report sections"><a href="#overview" aria-current="location">Overview</a><a href="#profile">Profile audit <span class="cnt">8</span></a><a href="#reviews">Reviews</a><a href="#rankings">Rankings</a><a href="#plan">Action plan</a></nav>
+    <div class="stack">
+      <div class="g-stats">
+        <div class="stat"><div class="lb"><span class="trunc">Owner replies</span><span class="ih np" role="img" title="Of the 20 newest reviews, how many the owner has replied to. Replies show searchers, and Google, that the business is active." aria-label="Of the 20 newest reviews, how many the owner has replied to."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">55%</div><div class="cap">11 of 20 newest reviews</div><span class="trk" aria-hidden="true"><span class="f-f" style="width:55%"></span></span></div>
+        <div class="stat"><div class="lb"><span class="trunc">Rank for “dentist”</span><span class="ih np" role="img" title="Where the business ranks on Google Maps for the keyword, searched from its own location. 20+ means it isn't in the top 20." aria-label="Where the business ranks on Google Maps for the keyword, searched from its own location."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v t-a">#2</div><div class="cap">At the business’s location</div></div>
+        <div class="stat"><div class="lb"><span class="trunc">Grid visibility</span><span class="ih np" role="img" title="How visible the business is across the 9 grid points: top-3 spots count fully, lower ranks less." aria-label="How visible the business is across the 9 grid points."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">76%</div><div class="cap">Top 3 at 4 of 9 points</div><span class="trk" aria-hidden="true"><span class="f-c" style="width:76%"></span></span></div>
+        <div class="stat"><div class="lb"><span class="trunc">Issues found</span><span class="ih np" role="img" title="Checks that failed or need attention, by how much they matter." aria-label="Checks that failed or need attention, by how much they matter."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">8</div><div class="cap"><span class="tr5">3 high</span> · 3 medium · 2 low</div></div>
+      </div>
+
+      <section class="panel">
+        <header><h2>Local rank grid · “dentist”</h2><span class="ih np" role="img" title="A 3×3 Google Maps Tracker scan: the keyword searched on Google Maps from 9 points around the business." aria-label="A 3×3 Google Maps Tracker scan: the keyword searched on Google Maps from 9 points around the business."><svg class="ic"><use href="#i-in"/></svg></span><div class="meta np"><a class="lnk" href="#rankings">Details</a></div></header>
+        <div class="pb">
+          <div class="gg md">
+            <div class="sp3">
+              <div class="map md" role="img" aria-label="3 by 3 rank grid for dentist, 1 km between points. North row: 6, 4, 9. Middle row: 3, 2 at the business, 2. South row: 1, 5, not in the top 20.">
+                <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#mapbg"/></svg>
+                <div class="pins" aria-hidden="true">
+                  <span class="pin k7" style="left:0;top:0">6</span><span class="pin k7" style="left:50%;top:0">4</span><span class="pin k10" style="left:100%;top:0">9</span>
+                  <span class="pin k3" style="left:0;top:50%">3</span><span class="pin k3" style="left:50%;top:50%">2</span><span class="pin k3" style="left:100%;top:50%">2</span>
+                  <span class="pin k3" style="left:0;top:100%">1</span><span class="pin k7" style="left:50%;top:100%">5</span><span class="pin k0 w" style="left:100%;top:100%">20+</span>
+                </div>
+                <div class="zoom np" aria-hidden="true"><span>+</span><span>−</span></div>
+              </div>
+              <div class="legend"><div class="bands"><span><i class="dot k3"></i>Top 3</span><span><i class="dot k7"></i>4–7</span><span><i class="dot k10"></i>8–10</span><span><i class="dot k15"></i>11–15</span><span><i class="dot k20"></i>16–20</span><span><i class="dot k0"></i>Not found</span></div><span>1.00 km between points</span></div>
+            </div>
+            <div class="sp4" style="min-width:0">
+              <dl class="kv">
+                <div><dt>Visibility</dt><dd>76%</dd></div>
+                <div><dt>Top 3 at</dt><dd>4 of 9 points</dd></div>
+                <div><dt>Found at</dt><dd>8 of 9 points</dd></div>
+                <div><dt>Avg. rank where found</dt><dd>4.0</dd></div>
+              </dl>
+              <div class="pd">
+                <div class="h"><span>At the business</span><span class="rk k3">You: #2</span></div>
+                <ol>
+                  <li><span class="n">1</span><span class="trunc" style="flex:1">Maple Street Dental</span><span class="s">4.7★ · 412</span></li>
+                  <li class="me"><span class="n">2</span><span class="trunc" style="flex:1">Brightpeak Dental Studio</span><span class="s">4.6★ · 128</span></li>
+                  <li><span class="n">3</span><span class="trunc" style="flex:1">Riverside Smiles</span><span class="s">4.8★ · 236</span></li>
+                  <li><span class="n">4</span><span class="trunc" style="flex:1">Harbourview Family Dentistry</span><span class="s">4.4★ · 189</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="g3">
+        <section class="panel flow span2">
+          <header><h2>Priority findings</h2><span class="ih np" role="img" title="The issues that matter most, highest priority first." aria-label="The issues that matter most, highest priority first."><svg class="ic"><use href="#i-in"/></svg></span><div class="meta np"><a class="lnk" href="#profile">All 25 checks</a></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-fail" role="img" aria-label="Failed"><use href="#i-fa"/></svg><div class="bd"><div class="top"><b>Low ratings answered</b><span class="val"><span>1 unanswered</span><span class="pr h">High</span></span></div><p class="dt">1 of the latest 20 reviews are 3★ or lower with no reply.</p><p class="fx">→ Reply to every low rating calmly: acknowledge, explain what changed, and offer to continue offline.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Review volume</b><span class="val"><span>128 reviews</span><span class="pr h">High</span></span></div><p class="dt">Competitors ranking nearby have 164 reviews (median).</p><p class="fx">→ Close the gap to 164: ask every customer for a review with a short link, without incentives.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Top 3 across the area</b><span class="val"><span>Top 3 at 4 of 9 points</span><span class="pr h">High</span></span></div><p class="dt">Not in the top 20 at 1 of the grid's points: searchers a short distance away don't see this profile.</p><p class="fx">→ Build prominence beyond the doorstep: more reviews that mention the area, location pages on the website, and local citations. Then track the wider area with Google Maps Tracker.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Photos</b><span class="val"><span>38 photos</span><span class="pr md">Medium</span></span></div><p class="dt">Profiles with more photos get more requests for directions and website clicks.</p><p class="fx">→ Add recent photos of the exterior, interior, team and work. Aim for 50+ and add a few every month.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Business description</b><span class="val"><span>175 characters</span><span class="pr md">Medium</span></span></div><p class="dt">Short descriptions under 250 characters leave out services and the areas you serve.</p><p class="fx">→ Expand the description towards 750 characters: services, specialities, and the neighbourhoods you serve.</p></div></div>
+          </div>
+        </section>
+        <div class="stack">
+          <section class="panel">
+            <header><h2>Health by category</h2><span class="ih np" role="img" title="Each category's checks, weighted. Anything we couldn't verify is left out rather than counted against you." aria-label="Each category's checks, weighted. Anything we couldn't verify is left out rather than counted against you."><svg class="ic"><use href="#i-in"/></svg></span></header>
+            <div class="pb">
+              <ul class="ch sp4">
+                <li><div class="t"><span>Profile information</span><span><span class="xs m">1 to fix</span><strong class="t-a">95</strong></span></div><span class="bar" aria-hidden="true"><span class="f-a" style="width:95%"></span></span></li>
+                <li><div class="t"><span>Reviews &amp; reputation</span><span><span class="xs m">3 to fix</span><strong class="t-d">63</strong></span></div><span class="bar" aria-hidden="true"><span class="f-d" style="width:63%"></span></span></li>
+                <li><div class="t"><span>Photos &amp; content</span><span><span class="xs m">1 to fix</span><strong class="t-c">72</strong></span></div><span class="bar" aria-hidden="true"><span class="f-c" style="width:72%"></span></span></li>
+                <li><div class="t"><span>Website &amp; conversion</span><span><span class="xs m">2 to fix</span><strong class="t-b">85</strong></span></div><span class="bar" aria-hidden="true"><span class="f-b" style="width:85%"></span></span></li>
+                <li><div class="t"><span>Local ranking visibility</span><span><span class="xs m">1 to fix</span><strong class="t-b">85</strong></span></div><span class="bar" aria-hidden="true"><span class="f-b" style="width:85%"></span></span></li>
+              </ul>
+            </div>
+          </section>
+          <section class="panel">
+            <header><h2>Profile</h2></header>
+            <div class="pb">
+              <dl class="kv">
+                <div><dt>Categories</dt><dd>3</dd></div>
+                <div><dt>Photos</dt><dd class="tr5">38</dd></div>
+                <div><dt>Attributes</dt><dd>7</dd></div>
+                <div><dt>Hours</dt><dd>Mon 8:00 AM–6:00 PM</dd></div>
+                <div><dt>Description</dt><dd>175 chars</dd></div>
+              </dl>
+            </div>
+          </section>
+          <section class="panel">
+            <header><h2>Strengths</h2><span class="ih np" role="img" title="The checks this profile already passes that count the most." aria-label="The checks this profile already passes that count the most."><svg class="ic"><use href="#i-in"/></svg></span></header>
+            <div class="pb">
+              <ul class="strengths">
+                <li><svg class="ic i13 s-pass" aria-hidden="true"><use href="#i-ok"/></svg><span>Claimed by the owner <span class="m">· Claimed</span></span></li>
+                <li><svg class="ic i13 s-pass" aria-hidden="true"><use href="#i-ok"/></svg><span>Primary category <span class="m">· Dentist</span></span></li>
+                <li><svg class="ic i13 s-pass" aria-hidden="true"><use href="#i-ok"/></svg><span>Phone number <span class="m">· (555) 555-0142</span></span></li>
+                <li><svg class="ic i13 s-pass" aria-hidden="true"><use href="#i-ok"/></svg><span>Average rating <span class="m">· 4.6 ★</span></span></li>
+                <li><svg class="ic i13 s-pass" aria-hidden="true"><use href="#i-ok"/></svg><span>Website link <span class="m">· brightpeakdental.example</span></span></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <section class="panel">
+        <header><h2>Competitors</h2><span class="ih np" role="img" title="Who ranks for “dentist” on Google Maps, searched from the business’s location." aria-label="Who ranks for dentist on Google Maps, searched from the business’s location."><svg class="ic"><use href="#i-in"/></svg></span><div class="meta np"><a class="lnk" href="#rankings">Compare all</a></div></header>
+        <div class="fl tw">
+          <table>
+            <thead><tr><th style="width:56px">Rank</th><th>Business</th><th class="r" style="width:72px">Rating</th><th class="r" style="width:88px">Reviews</th><th>Category</th><th>Website</th></tr></thead>
+            <tbody>
+              <tr><td><span class="rc k3">1</span></td><td class="bz"><div class="trunc">Maple Street Dental</div><div class="trunc xs m">88 Maple Street, Larkmont</div></td><td class="r num">4.7</td><td class="r num tr5">412</td><td class="m">Dentist</td><td><a href="#" onclick="return false">maplestreetdental.example</a></td></tr>
+              <tr class="you"><td><span class="rc k3">2</span></td><td class="bz"><div class="trunc">Brightpeak Dental Studio<span class="you-tag">You</span></div><div class="trunc xs m">214 Alder Avenue, Larkmont</div></td><td class="r num">4.6</td><td class="r num">128</td><td class="m">Dentist</td><td><a href="#" onclick="return false">brightpeakdental.example</a></td></tr>
+              <tr><td><span class="rc k3">3</span></td><td class="bz"><div class="trunc">Riverside Smiles</div><div class="trunc xs m">5 Riverside Drive, Larkmont</div></td><td class="r num">4.8</td><td class="r num tr5">236</td><td class="m">Cosmetic dentist</td><td><a href="#" onclick="return false">riversidesmiles.example</a></td></tr>
+              <tr><td><span class="rc k7">4</span></td><td class="bz"><div class="trunc">Harbourview Family Dentistry</div><div class="trunc xs m">31 Quay Street, Larkmont</div></td><td class="r num">4.4</td><td class="r num tr5">189</td><td class="m">Dentist</td><td><a href="#" onclick="return false">harbourviewdentistry.example</a></td></tr>
+              <tr><td><span class="rc k7">5</span></td><td class="bz"><div class="trunc">Northgate Dental Care</div><div class="trunc xs m">402 Northgate Road, Larkmont</div></td><td class="r num">4.5</td><td class="r num tr5">301</td><td class="m">Dentist</td><td><a href="#" onclick="return false">northgatedental.example</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="gp plan">
+        <section class="panel"><header><h2><span class="step">1</span>Fix the essentials</h2><div class="meta">Days 1–7</div></header><div class="pb"><ul>
+          <li>Expand the description towards 750 characters: services, specialities, and the neighbourhoods you serve.</li>
+        </ul></div></section>
+        <section class="panel"><header><h2><span class="step">2</span>Build trust and content</h2><div class="meta">Days 8–14</div></header><div class="pb"><ul>
+          <li>Reply to every low rating calmly: acknowledge, explain what changed, and offer to continue offline.</li>
+          <li>Close the gap to 164: ask every customer for a review with a short link, without incentives.</li>
+          <li>Add recent photos of the exterior, interior, team and work. Aim for 50+ and add a few every month.</li>
+          <li>Reply to every review within a few days, personally and by name.</li>
+          <li>Add UTM parameters to the website link (e.g. ?utm_source=google&amp;utm_medium=gbp).</li>
+          <li>If you take bookings or orders, add the link so searchers can act straight from the profile.</li>
+        </ul></div></section>
+        <section class="panel"><header><h2><span class="step">3</span>Grow local visibility</h2><div class="meta">Days 15–30</div></header><div class="pb"><ul>
+          <li>Build prominence beyond the doorstep: more reviews that mention the area, location pages on the website, and local citations. Then track the wider area with Google Maps Tracker.</li>
+          <li>Track the wider area with a bigger grid (7×7 or more) in Google Maps Tracker, then re-run this audit to measure progress.</li>
+        </ul></div></section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Profile audit ──────────────────────────────────────── -->
+  <section class="tab-sec" id="profile" aria-label="Profile audit">
+    <nav class="tabs" aria-label="Report sections"><a href="#overview">Overview</a><a href="#profile" aria-current="location">Profile audit <span class="cnt">8</span></a><a href="#reviews">Reviews</a><a href="#rankings">Rankings</a><a href="#plan">Action plan</a></nav>
+    <div class="g3 start">
+      <div class="stack span2">
+        <section class="panel flow">
+          <header><h2>Profile information</h2><div class="meta"><span>8 passed · 1 to fix</span><span class="num t-a" style="font-size:15px;font-weight:600">95</span></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Claimed by the owner</b><span class="val"><span>Claimed</span></span></div><p class="dt">The owner controls this profile, so edits from the public need approval.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Primary category</b><span class="val"><span>Dentist</span></span></div><p class="dt">The primary category is the strongest relevance signal a profile has.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Additional categories</b><span class="val"><span>2 added</span></span></div><p class="dt">Cosmetic dentist, Emergency dental service</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Business description</b><span class="val"><span>175 characters</span></span></div><p class="dt">Short descriptions under 250 characters leave out services and the areas you serve.</p><p class="fx">→ Expand the description towards 750 characters: services, specialities, and the neighbourhoods you serve.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Phone number</b><span class="val"><span>(555) 555-0142</span></span></div><p class="dt">Searchers can call straight from the listing.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Opening hours</b><span class="val"><span>Open 6 days a week</span></span></div><p class="dt">Hours are listed, so Google can show you as open.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Address</b><span class="val"><span>214 Alder Avenue, Larkmont</span></span></div><p class="dt">A visible address helps Google and customers place the business.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Business name</b><span class="val"><span>Brightpeak Dental Studio</span></span></div><p class="dt">The name reads like a real-world business name.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Attributes</b><span class="val"><span>7 set</span></span></div><p class="dt">Accessibility, Amenities, Payments</p></div></div>
+          </div>
+        </section>
+        <section class="panel flow">
+          <header><h2>Reviews &amp; reputation</h2><div class="meta"><span>2 passed · 3 to fix</span><span class="num t-d" style="font-size:15px;font-weight:600">63</span></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Average rating</b><span class="val"><span>4.6 ★</span></span></div><p class="dt">A rating above 4.5 stands out in the local pack.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Review volume</b><span class="val"><span>128 reviews</span></span></div><p class="dt">Competitors ranking nearby have 164 reviews (median).</p><p class="fx">→ Close the gap to 164: ask every customer for a review with a short link, without incentives.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Recent reviews</b><span class="val"><span>3 days ago</span></span></div><p class="dt">Fresh reviews show searchers the business is active.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Owner responses</b><span class="val"><span>55% answered</span></span></div><p class="dt">The owner replied to 11 of the latest 20 reviews.</p><p class="fx">→ Reply to every review within a few days, personally and by name.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-fail" role="img" aria-label="Failed"><use href="#i-fa"/></svg><div class="bd"><div class="top"><b>Low ratings answered</b><span class="val"><span>1 unanswered</span></span></div><p class="dt">1 of the latest 20 reviews are 3★ or lower with no reply.</p><p class="fx">→ Reply to every low rating calmly: acknowledge, explain what changed, and offer to continue offline.</p></div></div>
+          </div>
+        </section>
+        <section class="panel">
+          <header><h2>Photos &amp; content</h2><div class="meta"><span>2 passed · 1 to fix</span><span class="num t-c" style="font-size:15px;font-weight:600">72</span></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Photos</b><span class="val"><span>38 photos</span></span></div><p class="dt">Profiles with more photos get more requests for directions and website clicks.</p><p class="fx">→ Add recent photos of the exterior, interior, team and work. Aim for 50+ and add a few every month.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Logo</b><span class="val"><span>Set</span></span></div><p class="dt">A logo makes the profile recognisable.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Cover photo</b><span class="val"><span>Set</span></span></div><p class="dt">There is a main image for the profile.</p></div></div>
+          </div>
+        </section>
+        <section class="panel">
+          <header><h2>Website &amp; conversion</h2><div class="meta"><span>2 passed · 2 to fix</span><span class="num t-b" style="font-size:15px;font-weight:600">85</span></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Website link</b><span class="val"><span>brightpeakdental.example</span></span></div><p class="dt">Searchers can go from the profile to your site.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Secure website (HTTPS)</b><span class="val"><span>HTTPS</span></span></div><p class="dt">The linked site loads over a secure connection.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Trackable website link</b><span class="val"><span>No UTM tags</span></span></div><p class="dt">Clicks from the profile show up as generic organic traffic in analytics.</p><p class="fx">→ Add UTM parameters to the website link (e.g. ?utm_source=google&amp;utm_medium=gbp).</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Booking / action links</b><span class="val"><span>None</span></span></div><p class="dt">No booking, appointment, order or menu link on the profile.</p><p class="fx">→ If you take bookings or orders, add the link so searchers can act straight from the profile.</p></div></div>
+          </div>
+        </section>
+        <section class="panel">
+          <header><h2>Local ranking visibility</h2><div class="meta"><span>3 passed · 1 to fix</span><span class="num t-b" style="font-size:15px;font-weight:600">85</span></div></header>
+          <div class="fl rows">
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Rank at the business</b><span class="val"><span>#2 for “dentist”</span></span></div><p class="dt">In the local pack when searched from the business’s own location.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-warn" role="img" aria-label="Needs attention"><use href="#i-wa"/></svg><div class="bd"><div class="top"><b>Top 3 across the area</b><span class="val"><span>Top 3 at 4 of 9 points</span></span></div><p class="dt">Not in the top 20 at 1 of the grid's points: searchers a short distance away don't see this profile.</p><p class="fx">→ Build prominence beyond the doorstep: more reviews that mention the area, location pages on the website, and local citations. Then track the wider area with Google Maps Tracker.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Rating vs. competitors</b><span class="val"><span>4.6 vs 4.5</span></span></div><p class="dt">At or above the average rating of the businesses ranking around you.</p></div></div>
+            <div class="ck"><svg class="ic i15 s-pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><div class="bd"><div class="top"><b>Category vs. top competitors</b><span class="val"><span>Dentist</span></span></div><p class="dt">You share the category most of the top competitors use (7 of 10).</p></div></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section class="panel">
+          <header><h2>Score</h2><span class="ih np" role="img" title="Each check counts by its weight: passed in full, needs attention as half, failed as nothing. Categories weigh Profile 30, Reviews 25, Local visibility 20, Photos 15, Website 10. FreeSERP's checklist, not a score Google publishes." aria-label="How the score is weighted"><svg class="ic"><use href="#i-in"/></svg></span></header>
+          <div class="pb">
+            <div style="display:flex;align-items:center;gap:20px">
+              <div class="ring" style="width:76px;height:76px" role="img" aria-label="Score 81 out of 100">
+                <svg width="76" height="76" aria-hidden="true"><circle class="tk" cx="38" cy="38" r="34.5" fill="none" stroke-width="7"/><circle cx="38" cy="38" r="34.5" fill="none" stroke="#80cd00" stroke-width="7" stroke-linecap="round" stroke-dasharray="216.77" stroke-dashoffset="41.19"/></svg>
+                <span class="v"><b style="font-size:23px">81</b></span>
+              </div>
+              <dl class="kv" style="flex:1">
+                <div><dt class="s-pass">Passed</dt><dd>17</dd></div>
+                <div><dt class="s-warn">Needs attention</dt><dd>7</dd></div>
+                <div><dt class="s-fail">Failed</dt><dd>1</dd></div>
+                <div><dt>Not verified</dt><dd>0</dd></div>
+              </dl>
+            </div>
+            <p class="m" style="margin-top:14px;font-size:12px;line-height:1.625">Each check counts by its weight: passed in full, needs attention as half, failed as nothing. Categories weigh Profile 30, Reviews 25, Local visibility 20, Photos 15, Website 10. FreeSERP's checklist, not a score Google publishes.</p>
+          </div>
+        </section>
+        <section class="panel">
+          <header><h2>Opening hours</h2></header>
+          <div class="pb">
+            <dl class="kv">
+              <div><dt>Monday</dt><dd>8:00 AM–6:00 PM</dd></div>
+              <div><dt>Tuesday</dt><dd>8:00 AM–6:00 PM</dd></div>
+              <div><dt>Wednesday</dt><dd>8:00 AM–6:00 PM</dd></div>
+              <div><dt>Thursday</dt><dd>8:00 AM–7:00 PM</dd></div>
+              <div><dt>Friday</dt><dd>8:00 AM–5:00 PM</dd></div>
+              <div><dt>Saturday</dt><dd>9:00 AM–2:00 PM</dd></div>
+              <div><dt>Sunday</dt><dd class="tr5">Closed</dd></div>
+            </dl>
+          </div>
+        </section>
+        <section class="panel">
+          <header><h2>Categories &amp; attributes</h2></header>
+          <div class="pb" style="font-size:13px">
+            <div style="display:grid;gap:14px">
+              <div class="tags"><span class="tag p">Dentist</span><span class="tag">Cosmetic dentist</span><span class="tag">Emergency dental service</span></div>
+              <div><div class="grp-l">Accessibility</div><div class="tags"><span class="tag">Wheelchair-accessible entrance</span><span class="tag">Wheelchair-accessible parking lot</span></div></div>
+              <div><div class="grp-l">Amenities</div><div class="tags"><span class="tag">Restroom</span><span class="tag">Wi-Fi</span></div></div>
+              <div><div class="grp-l">Payments</div><div class="tags"><span class="tag">Credit cards</span><span class="tag">Debit cards</span><span class="tag">NFC mobile payments</span></div></div>
+              <p class="m" style="line-height:1.625">Brightpeak Dental Studio is a family and cosmetic dental practice offering check-ups, cleanings, fillings, whitening and same-day emergency appointments. New patients welcome.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Reviews ────────────────────────────────────────────── -->
+  <section class="tab-sec" id="reviews" aria-label="Reviews">
+    <nav class="tabs" aria-label="Report sections"><a href="#overview">Overview</a><a href="#profile">Profile audit <span class="cnt">8</span></a><a href="#reviews" aria-current="location">Reviews</a><a href="#rankings">Rankings</a><a href="#plan">Action plan</a></nav>
+    <div class="stack">
+      <div class="g-stats">
+        <div class="stat"><div class="lb"><span class="trunc">Rating</span><span class="ih np" role="img" title="The average star rating Google shows." aria-label="The average star rating Google shows."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">4.6</div><div class="cap">128 reviews</div><span class="trk" aria-hidden="true"><span class="f-amber" style="width:92%"></span></span></div>
+        <div class="stat"><div class="lb"><span class="trunc">Owner replies</span><span class="ih np" role="img" title="Of the 20 newest reviews, how many have a reply from the owner." aria-label="Of the 20 newest reviews, how many have a reply from the owner."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">55%</div><div class="cap">11 of 20 newest</div><span class="trk" aria-hidden="true"><span class="f-brand" style="width:55%"></span></span></div>
+        <div class="stat"><div class="lb"><span class="trunc">Newest review</span><span class="ih np" role="img" title="How long ago the most recent review was left." aria-label="How long ago the most recent review was left."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">3d</div><div class="cap">Nov 6, 2026</div></div>
+        <div class="stat"><div class="lb"><span class="trunc">Low ratings</span><span class="ih np" role="img" title="Reviews of 3★ or lower among the 20 newest, and how many have no reply." aria-label="Reviews of 3 stars or lower among the 20 newest, and how many have no reply."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v tr5">2</div><div class="cap">1 without a reply</div></div>
+      </div>
+
+      <div class="g3 start">
+        <section class="panel">
+          <header><h2>Rating breakdown</h2><span class="ih np" role="img" title="How the stars are spread, as Google shows it." aria-label="How the stars are spread, as Google shows it."><svg class="ic"><use href="#i-in"/></svg></span></header>
+          <div class="pb">
+            <div class="dist" role="img" aria-label="Rating breakdown: 5 stars 98, 4 stars 18, 3 stars 5, 2 stars 3, 1 star 4">
+              <div><span class="k">5★</span><span class="bar"><span class="f-amber" style="width:76.6%"></span></span><span class="c">98</span></div>
+              <div><span class="k">4★</span><span class="bar"><span class="f-amber" style="width:14.1%"></span></span><span class="c">18</span></div>
+              <div><span class="k">3★</span><span class="bar"><span class="f-amber" style="width:3.9%"></span></span><span class="c">5</span></div>
+              <div><span class="k">2★</span><span class="bar"><span class="f-amber" style="width:2.3%"></span></span><span class="c">3</span></div>
+              <div><span class="k">1★</span><span class="bar"><span class="f-amber" style="width:3.1%"></span></span><span class="c">4</span></div>
+            </div>
+            <div class="topics">
+              <div class="xs m" style="margin-bottom:8px">What reviewers mention</div>
+              <div class="tags"><span class="tag">cleaning <span class="m">14</span></span><span class="tag">hygienist <span class="m">11</span></span><span class="tag">staff <span class="m">9</span></span><span class="tag">appointment <span class="m">8</span></span><span class="tag">emergency <span class="m">5</span></span><span class="tag">parking <span class="m">4</span></span><span class="tag">whitening <span class="m">3</span></span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel flow span2">
+          <header><h2>Newest reviews</h2><span class="ih np" role="img" title="Low ratings without a reply are marked." aria-label="Low ratings without a reply are marked."><svg class="ic"><use href="#i-in"/></svg></span></header>
+          <div class="fl rows">
+            <div class="rv"><div class="h"><b>Priya S.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">3 days ago</span><span class="st ok">Replied</span></div><p class="tx">Quick, gentle cleaning and the hygienist explained everything.</p><p class="own"><b>Owner: </b>Thank you, Priya! See you at your next check-up.</p></div>
+            <div class="rv"><div class="h"><b>Marcus T.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">5 days ago</span><span class="st">No reply</span></div><p class="tx">Got me in the same day for a cracked tooth. Very grateful.</p></div>
+            <div class="rv"><div class="h"><b>Elena R.</b><span class="stars" role="img" aria-label="2.0 out of 5 stars"><i></i><i></i><i class="e"></i><i class="e"></i><i class="e"></i></span><span class="xs m">a week ago</span><span class="st no">Needs a reply</span></div><p class="tx">Waited 40 minutes past my appointment time and nobody explained why.</p></div>
+            <div class="rv"><div class="h"><b>Tom W.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">a week ago</span><span class="st ok">Replied</span></div><p class="tx">Friendly front desk, and they called to remind me the day before.</p><p class="own"><b>Owner: </b>Thanks, Tom. We're glad the reminder helped.</p></div>
+            <div class="rv"><div class="h"><b>Aisha K.</b><span class="stars" role="img" aria-label="4.0 out of 5 stars"><i></i><i></i><i></i><i></i><i class="e"></i></span><span class="xs m">2 weeks ago</span><span class="st ok">Replied</span></div><p class="tx">Good care. Parking can be tight at lunchtime.</p><p class="own"><b>Owner: </b>Thanks, Aisha. There's extra parking behind the building on Alder Lane.</p></div>
+            <div class="rv"><div class="h"><b>Daniel M.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 weeks ago</span><span class="st">No reply</span></div><p class="tx">Best dental visit I've had in years.</p></div>
+            <div class="rv"><div class="h"><b>Sofia L.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 weeks ago</span><span class="st ok">Replied</span></div><p class="tx">Whitening results were great and the price was clear up front.</p><p class="own"><b>Owner: </b>Thank you, Sofia, enjoy the new smile!</p></div>
+            <div class="rv"><div class="h"><b>Ben H.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">3 weeks ago</span><span class="st">No reply</span></div><p class="tx">Kids were nervous but the team made it fun.</p></div>
+            <div class="rv"><div class="h"><b>Grace P.</b><span class="stars" role="img" aria-label="3.0 out of 5 stars"><i></i><i></i><i></i><i class="e"></i><i class="e"></i></span><span class="xs m">3 weeks ago</span><span class="st ok">Replied</span></div><p class="tx">Treatment was fine but the bill was higher than the estimate.</p><p class="own"><b>Owner: </b>Hi Grace, we're sorry about the surprise. Please call us and we'll go through it together.</p></div>
+            <div class="rv"><div class="h"><b>Omar F.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">3 weeks ago</span><span class="st ok">Replied</span></div><p class="tx">Professional and on time.</p><p class="own"><b>Owner: </b>Thanks for the kind words, Omar.</p></div>
+            <div class="rv"><div class="h"><b>Hannah J.</b><span class="stars" role="img" aria-label="4.0 out of 5 stars"><i></i><i></i><i></i><i></i><i class="e"></i></span><span class="xs m">a month ago</span><span class="st">No reply</span></div><p class="tx">Thorough check-up. Would have liked an earlier appointment slot.</p></div>
+            <div class="rv"><div class="h"><b>Lucas B.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">a month ago</span><span class="st ok">Replied</span></div><p class="tx">Explained my options for a crown without any pressure.</p><p class="own"><b>Owner: </b>Thank you, Lucas. Glad it helped you decide.</p></div>
+            <div class="rv"><div class="h"><b>Mei C.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">a month ago</span><span class="st">No reply</span></div><p class="tx">Clean, modern office and a very calm atmosphere.</p></div>
+            <div class="rv"><div class="h"><b>Ryan D.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">a month ago</span><span class="st ok">Replied</span></div><p class="tx">Emergency appointment on a Saturday. Lifesaver.</p><p class="own"><b>Owner: </b>Glad we could help, Ryan. Hope the tooth is feeling better.</p></div>
+            <div class="rv"><div class="h"><b>Chloe N.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">a month ago</span><span class="st">No reply</span></div></div>
+            <div class="rv"><div class="h"><b>Victor A.</b><span class="stars" role="img" aria-label="4.0 out of 5 stars"><i></i><i></i><i></i><i></i><i class="e"></i></span><span class="xs m">2 months ago</span><span class="st ok">Replied</span></div><p class="tx">Good experience overall.</p><p class="own"><b>Owner: </b>Thanks, Victor!</p></div>
+            <div class="rv"><div class="h"><b>Nina G.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 months ago</span><span class="st">No reply</span></div><p class="tx">The hygienist was gentle and very patient.</p></div>
+            <div class="rv"><div class="h"><b>Sam O.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 months ago</span><span class="st ok">Replied</span></div><p class="tx">Been coming here for years. Always reliable.</p><p class="own"><b>Owner: </b>Thank you for sticking with us, Sam.</p></div>
+            <div class="rv"><div class="h"><b>Laura V.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 months ago</span><span class="st">No reply</span></div><p class="tx">Easy to get to and they run on time.</p></div>
+            <div class="rv"><div class="h"><b>Jacob E.</b><span class="stars" role="img" aria-label="5.0 out of 5 stars"><i></i><i></i><i></i><i></i><i></i></span><span class="xs m">2 months ago</span><span class="st ok">Replied</span></div><p class="tx">Great with anxious patients.</p><p class="own"><b>Owner: </b>Thanks, Jacob. We'll keep the headphones ready for next time.</p></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Rankings ───────────────────────────────────────────── -->
+  <section class="tab-sec" id="rankings" aria-label="Rankings">
+    <nav class="tabs" aria-label="Report sections"><a href="#overview">Overview</a><a href="#profile">Profile audit <span class="cnt">8</span></a><a href="#reviews">Reviews</a><a href="#rankings" aria-current="location">Rankings</a><a href="#plan">Action plan</a></nav>
+    <div class="stack">
+      <div class="g-stats">
+        <div class="stat"><div class="lb"><span class="trunc">Rank for “dentist”</span><span class="ih np" role="img" title="Searched on Google Maps from the business's own location." aria-label="Searched on Google Maps from the business's own location."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">#2</div><div class="cap">At the business</div></div>
+        <div class="stat"><div class="lb"><span class="trunc">Reviews</span><span class="ih np" role="img" title="This profile's reviews against the median of the businesses ranking around it." aria-label="This profile's reviews against the median of the businesses ranking around it."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v tr5">128</div><div class="cap">Median nearby: 164</div></div>
+        <div class="stat"><div class="lb"><span class="trunc">Rating</span><span class="ih np" role="img" title="This profile's rating against the average of the businesses ranking around it." aria-label="This profile's rating against the average of the businesses ranking around it."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v">4.6</div><div class="cap">Average nearby: 4.5</div></div>
+        <div class="stat"><div class="lb"><span class="trunc">Top category nearby</span><span class="ih np" role="img" title="The category most of the businesses ranking around it use." aria-label="The category most of the businesses ranking around it use."><svg class="ic"><use href="#i-in"/></svg></span></div><div class="v"><span style="font-size:22px">Dentist</span></div><div class="cap">7 of 10 competitors</div></div>
+      </div>
+
+      <section class="panel">
+        <header><h2>Local rank grid · “dentist”</h2><span class="ih np" role="img" title="A 3×3 Google Maps Tracker scan: the keyword searched on Google Maps from 9 points around the business." aria-label="A 3×3 Google Maps Tracker scan: the keyword searched on Google Maps from 9 points around the business."><svg class="ic"><use href="#i-in"/></svg></span></header>
+        <div class="pb">
+          <div class="gg lg">
+            <div class="sp3">
+              <div class="map lg" role="img" aria-label="3 by 3 rank grid for dentist, 1 km between points. North row: 6, 4, 9. Middle row: 3, 2 at the business, 2. South row: 1, 5, not in the top 20.">
+                <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#mapbg"/></svg>
+                <div class="pins" aria-hidden="true">
+                  <span class="pin k7" style="left:0;top:0">6</span><span class="pin k7" style="left:50%;top:0">4</span><span class="pin k10" style="left:100%;top:0">9</span>
+                  <span class="pin k3" style="left:0;top:50%">3</span><span class="pin k3" style="left:50%;top:50%">2</span><span class="pin k3" style="left:100%;top:50%">2</span>
+                  <span class="pin k3" style="left:0;top:100%">1</span><span class="pin k7" style="left:50%;top:100%">5</span><span class="pin k0 w" style="left:100%;top:100%">20+</span>
+                </div>
+                <div class="zoom np" aria-hidden="true"><span>+</span><span>−</span></div>
+              </div>
+              <div class="legend"><div class="bands"><span><i class="dot k3"></i>Top 3</span><span><i class="dot k7"></i>4–7</span><span><i class="dot k10"></i>8–10</span><span><i class="dot k15"></i>11–15</span><span><i class="dot k20"></i>16–20</span><span><i class="dot k0"></i>Not found</span></div><span>1.00 km between points</span></div>
+            </div>
+            <div class="sp4" style="min-width:0">
+              <dl class="kv">
+                <div><dt>Visibility</dt><dd>76%</dd></div>
+                <div><dt>Top 3 at</dt><dd>4 of 9 points</dd></div>
+                <div><dt>Found at</dt><dd>8 of 9 points</dd></div>
+                <div><dt>Avg. rank where found</dt><dd>4.0</dd></div>
+              </dl>
+              <div class="pd">
+                <div class="h"><span>At the business</span><span class="rk k3">You: #2</span></div>
+                <ol>
+                  <li><span class="n">1</span><span class="trunc" style="flex:1">Maple Street Dental</span><span class="s">4.7★ · 412</span></li>
+                  <li class="me"><span class="n">2</span><span class="trunc" style="flex:1">Brightpeak Dental Studio</span><span class="s">4.6★ · 128</span></li>
+                  <li><span class="n">3</span><span class="trunc" style="flex:1">Riverside Smiles</span><span class="s">4.8★ · 236</span></li>
+                  <li><span class="n">4</span><span class="trunc" style="flex:1">Harbourview Family Dentistry</span><span class="s">4.4★ · 189</span></li>
+                </ol>
+              </div>
+              <ul class="plist" aria-label="Rank at each grid point">
+                <li><span class="rb k7">6</span><span class="pl">North-west</span><span class="trunc m" style="flex:1">#1 Northgate Dental Care</span></li>
+                <li><span class="rb k7">4</span><span class="pl">North</span><span class="trunc m" style="flex:1">#1 Maple Street Dental</span></li>
+                <li><span class="rb k10">9</span><span class="pl">North-east</span><span class="trunc m" style="flex:1">#1 Northgate Dental Care</span></li>
+                <li><span class="rb k3">3</span><span class="pl">West</span><span class="trunc m" style="flex:1">#1 Maple Street Dental</span></li>
+                <li><span class="rb k3">2</span><span class="pl">At the business</span><span class="trunc m" style="flex:1">#1 Maple Street Dental</span></li>
+                <li><span class="rb k3">2</span><span class="pl">East</span><span class="trunc m" style="flex:1">#1 Riverside Smiles</span></li>
+                <li><span class="rb k3">1</span><span class="pl">South-west</span><span class="trunc m" style="flex:1">You lead here</span></li>
+                <li><span class="rb k7">5</span><span class="pl">South</span><span class="trunc m" style="flex:1">#1 Riverside Smiles</span></li>
+                <li><span class="rb k0">20+</span><span class="pl">South-east</span><span class="trunc m" style="flex:1">#1 Lakeshore Dental Group</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel flow">
+        <header><h2>Google Maps results</h2><span class="ih np" role="img" title="The top 20 results for “dentist” at the business’s location. Ads are left out." aria-label="The top 20 results for dentist at the business’s location. Ads are left out."><svg class="ic"><use href="#i-in"/></svg></span></header>
+        <div class="fl tw">
+          <table>
+            <thead><tr><th style="width:56px">Rank</th><th>Business</th><th class="r" style="width:72px">Rating</th><th class="r" style="width:88px">Reviews</th><th>Category</th><th>Website</th></tr></thead>
+            <tbody>
+              <tr><td><span class="rc k3">1</span></td><td class="bz"><div class="trunc">Maple Street Dental</div><div class="trunc xs m">88 Maple Street, Larkmont</div></td><td class="r num">4.7</td><td class="r num tr5">412</td><td class="m">Dentist</td><td><a href="#" onclick="return false">maplestreetdental.example</a></td></tr>
+              <tr class="you"><td><span class="rc k3">2</span></td><td class="bz"><div class="trunc">Brightpeak Dental Studio<span class="you-tag">You</span></div><div class="trunc xs m">214 Alder Avenue, Larkmont</div></td><td class="r num">4.6</td><td class="r num">128</td><td class="m">Dentist</td><td><a href="#" onclick="return false">brightpeakdental.example</a></td></tr>
+              <tr><td><span class="rc k3">3</span></td><td class="bz"><div class="trunc">Riverside Smiles</div><div class="trunc xs m">5 Riverside Drive, Larkmont</div></td><td class="r num">4.8</td><td class="r num tr5">236</td><td class="m">Cosmetic dentist</td><td><a href="#" onclick="return false">riversidesmiles.example</a></td></tr>
+              <tr><td><span class="rc k7">4</span></td><td class="bz"><div class="trunc">Harbourview Family Dentistry</div><div class="trunc xs m">31 Quay Street, Larkmont</div></td><td class="r num">4.4</td><td class="r num tr5">189</td><td class="m">Dentist</td><td><a href="#" onclick="return false">harbourviewdentistry.example</a></td></tr>
+              <tr><td><span class="rc k7">5</span></td><td class="bz"><div class="trunc">Northgate Dental Care</div><div class="trunc xs m">402 Northgate Road, Larkmont</div></td><td class="r num">4.5</td><td class="r num tr5">301</td><td class="m">Dentist</td><td><a href="#" onclick="return false">northgatedental.example</a></td></tr>
+              <tr><td><span class="rc k7">6</span></td><td class="bz"><div class="trunc">Cedar Lane Dental</div><div class="trunc xs m">17 Cedar Lane, Larkmont</div></td><td class="r num">4.6</td><td class="r num">97</td><td class="m">Dentist</td><td><a href="#" onclick="return false">cedarlanedental.example</a></td></tr>
+              <tr><td><span class="rc k7">7</span></td><td class="bz"><div class="trunc">Lakeshore Dental Group</div><div class="trunc xs m">950 Lakeshore Boulevard, Larkmont</div></td><td class="r num">4.3</td><td class="r num tr5">158</td><td class="m">Dentist</td><td><a href="#" onclick="return false">lakeshoredental.example</a></td></tr>
+              <tr><td><span class="rc k10">8</span></td><td class="bz"><div class="trunc">Larkmont Orthodontics</div><div class="trunc xs m">60 Station Street, Larkmont</div></td><td class="r num">4.9</td><td class="r num">64</td><td class="m">Orthodontist</td><td><a href="#" onclick="return false">larkmontortho.example</a></td></tr>
+              <tr><td><span class="rc k10">9</span></td><td class="bz"><div class="trunc">Bluebird Family Dental</div><div class="trunc xs m">233 Westwood Road, Larkmont</div></td><td class="r num">4.2</td><td class="r num tr5">170</td><td class="m">Dentist</td><td><a href="#" onclick="return false">bluebirddental.example</a></td></tr>
+              <tr><td><span class="rc k10">10</span></td><td class="bz"><div class="trunc">Summit Smile Clinic</div><div class="trunc xs m">12 Summit Place, Larkmont</div></td><td class="r num">4.5</td><td class="r num">52</td><td class="m">Cosmetic dentist</td><td><span class="m">—</span></td></tr>
+              <tr><td><span class="rc k15">11</span></td><td class="bz"><div class="trunc">Elm Court Dental</div><div class="trunc xs m">4 Elm Court, Larkmont</div></td><td class="r num">4.1</td><td class="r num">121</td><td class="m">Dentist</td><td><a href="#" onclick="return false">elmcourtdental.example</a></td></tr>
+              <tr><td><span class="rc k15">12</span></td><td class="bz"><div class="trunc">Parkside Dental Arts</div><div class="trunc xs m">71 Westwood Road, Larkmont</div></td><td class="r num">4.6</td><td class="r num">88</td><td class="m">Dentist</td><td><a href="#" onclick="return false">parksidedentalarts.example</a></td></tr>
+              <tr><td><span class="rc k15">13</span></td><td class="bz"><div class="trunc">Oakridge Dental Centre</div><div class="trunc xs m">300 Oakridge Avenue, Larkmont</div></td><td class="r num">4.0</td><td class="r num tr5">143</td><td class="m">Dentist</td><td><a href="#" onclick="return false">oakridgedental.example</a></td></tr>
+              <tr><td><span class="rc k15">14</span></td><td class="bz"><div class="trunc">Willow Creek Dentistry</div><div class="trunc xs m">9 Willow Creek Road, Larkmont</div></td><td class="r num">4.7</td><td class="r num">45</td><td class="m">Dentist</td><td><a href="#" onclick="return false">willowcreekdentistry.example</a></td></tr>
+              <tr><td><span class="rc k15">15</span></td><td class="bz"><div class="trunc">Brightwater Kids Dental</div><div class="trunc xs m">58 Harbour Street, Larkmont</div></td><td class="r num">4.9</td><td class="r num">76</td><td class="m">Pediatric dentist</td><td><a href="#" onclick="return false">brightwaterkids.example</a></td></tr>
+              <tr><td><span class="rc k20">16</span></td><td class="bz"><div class="trunc">Hillcrest Denture Clinic</div><div class="trunc xs m">140 Hillcrest Road, Larkmont</div></td><td class="r num">4.4</td><td class="r num">39</td><td class="m">Denturist</td><td><span class="m">—</span></td></tr>
+              <tr><td><span class="rc k20">17</span></td><td class="bz"><div class="trunc">Granite Row Dental</div><div class="trunc xs m">22 Granite Row, Larkmont</div></td><td class="r num">4.3</td><td class="r num">61</td><td class="m">Dentist</td><td><a href="#" onclick="return false">graniterowdental.example</a></td></tr>
+              <tr><td><span class="rc k20">18</span></td><td class="bz"><div class="trunc">Juniper Dental Studio</div><div class="trunc xs m">7 Juniper Way, Larkmont</div></td><td class="r num">4.8</td><td class="r num">29</td><td class="m">Dentist</td><td><a href="#" onclick="return false">juniperdental.example</a></td></tr>
+              <tr><td><span class="rc k20">19</span></td><td class="bz"><div class="trunc">Fernhill Dental Office</div><div class="trunc xs m">415 Fernhill Road, Larkmont</div></td><td class="r num">3.9</td><td class="r num">34</td><td class="m">Dentist</td><td><span class="m">—</span></td></tr>
+              <tr><td><span class="rc k20">20</span></td><td class="bz"><div class="trunc">Copperfield Endodontics</div><div class="trunc xs m">88 Copperfield Street, Larkmont</div></td><td class="r num">4.6</td><td class="r num">22</td><td class="m">Endodontist</td><td><a href="#" onclick="return false">copperfieldendo.example</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="gp two">
+        <section class="panel">
+          <header><h2>See the whole area</h2></header>
+          <div class="pb"><p class="m" style="font-size:13px;line-height:1.625">This audit runs a 3×3 grid 1 km apart. Google Maps Tracker scans up to 21×21, tracks it over time, and compares you with each competitor point by point.</p></div>
+        </section>
+        <section class="panel">
+          <header><h2>People also search for</h2><span class="ih np" role="img" title="Google's own list of related businesses." aria-label="Google's own list of related businesses."><svg class="ic"><use href="#i-in"/></svg></span></header>
+          <div class="fl rows">
+            <div class="pas"><span class="trunc">Maple Street Dental</span><span>4.7★ · 412</span></div>
+            <div class="pas"><span class="trunc">Riverside Smiles</span><span>4.8★ · 236</span></div>
+            <div class="pas"><span class="trunc">Northgate Dental Care</span><span>4.5★ · 301</span></div>
+            <div class="pas"><span class="trunc">Cedar Lane Dental</span><span>4.6★ · 97</span></div>
+            <div class="pas"><span class="trunc">Brightwater Kids Dental</span><span>4.9★ · 76</span></div>
+            <div class="pas"><span class="trunc">Larkmont Orthodontics</span><span>4.9★ · 64</span></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Action plan ────────────────────────────────────────── -->
+  <section class="tab-sec" id="plan" aria-label="Action plan">
+    <nav class="tabs" aria-label="Report sections"><a href="#overview">Overview</a><a href="#profile">Profile audit <span class="cnt">8</span></a><a href="#reviews">Reviews</a><a href="#rankings">Rankings</a><a href="#plan" aria-current="location">Action plan</a></nav>
+    <div class="stack">
+      <div class="gp plan">
+        <section class="panel"><header><h2><span class="step">1</span>Fix the essentials</h2><div class="meta">Days 1–7</div></header><div class="pb"><ul>
+          <li>Expand the description towards 750 characters: services, specialities, and the neighbourhoods you serve.</li>
+        </ul></div></section>
+        <section class="panel"><header><h2><span class="step">2</span>Build trust and content</h2><div class="meta">Days 8–14</div></header><div class="pb"><ul>
+          <li>Reply to every low rating calmly: acknowledge, explain what changed, and offer to continue offline.</li>
+          <li>Close the gap to 164: ask every customer for a review with a short link, without incentives.</li>
+          <li>Add recent photos of the exterior, interior, team and work. Aim for 50+ and add a few every month.</li>
+          <li>Reply to every review within a few days, personally and by name.</li>
+          <li>Add UTM parameters to the website link (e.g. ?utm_source=google&amp;utm_medium=gbp).</li>
+          <li>If you take bookings or orders, add the link so searchers can act straight from the profile.</li>
+        </ul></div></section>
+        <section class="panel"><header><h2><span class="step">3</span>Grow local visibility</h2><div class="meta">Days 15–30</div></header><div class="pb"><ul>
+          <li>Build prominence beyond the doorstep: more reviews that mention the area, location pages on the website, and local citations. Then track the wider area with Google Maps Tracker.</li>
+          <li>Track the wider area with a bigger grid (7×7 or more) in Google Maps Tracker, then re-run this audit to measure progress.</li>
+        </ul></div></section>
+      </div>
+
+      <section class="panel flow">
+        <header><h2>Every recommendation</h2><span class="ih np" role="img" title="All findings, highest priority first." aria-label="All findings, highest priority first."><svg class="ic"><use href="#i-in"/></svg></span></header>
+        <div class="fl tw">
+          <table class="recs">
+            <thead><tr><th>Recommendation</th><th style="width:160px">Found</th><th style="width:176px">Area</th><th class="r" style="width:90px">Priority</th></tr></thead>
+            <tbody>
+              <tr><td><div style="font-weight:500">Low ratings answered</div><div class="fixt">Reply to every low rating calmly: acknowledge, explain what changed, and offer to continue offline.</div></td><td class="m">1 unanswered</td><td class="m">Reviews &amp; reputation</td><td class="r"><span class="pr h">High</span></td></tr>
+              <tr><td><div style="font-weight:500">Review volume</div><div class="fixt">Close the gap to 164: ask every customer for a review with a short link, without incentives.</div></td><td class="m">128 reviews</td><td class="m">Reviews &amp; reputation</td><td class="r"><span class="pr h">High</span></td></tr>
+              <tr><td><div style="font-weight:500">Top 3 across the area</div><div class="fixt">Build prominence beyond the doorstep: more reviews that mention the area, location pages on the website, and local citations. Then track the wider area with Google Maps Tracker.</div></td><td class="m">Top 3 at 4 of 9 points</td><td class="m">Local ranking visibility</td><td class="r"><span class="pr h">High</span></td></tr>
+              <tr><td><div style="font-weight:500">Photos</div><div class="fixt">Add recent photos of the exterior, interior, team and work. Aim for 50+ and add a few every month.</div></td><td class="m">38 photos</td><td class="m">Photos &amp; content</td><td class="r"><span class="pr md">Medium</span></td></tr>
+              <tr><td><div style="font-weight:500">Business description</div><div class="fixt">Expand the description towards 750 characters: services, specialities, and the neighbourhoods you serve.</div></td><td class="m">175 characters</td><td class="m">Profile information</td><td class="r"><span class="pr md">Medium</span></td></tr>
+              <tr><td><div style="font-weight:500">Owner responses</div><div class="fixt">Reply to every review within a few days, personally and by name.</div></td><td class="m">55% answered</td><td class="m">Reviews &amp; reputation</td><td class="r"><span class="pr md">Medium</span></td></tr>
+              <tr><td><div style="font-weight:500">Trackable website link</div><div class="fixt">Add UTM parameters to the website link (e.g. ?utm_source=google&amp;utm_medium=gbp).</div></td><td class="m">No UTM tags</td><td class="m">Website &amp; conversion</td><td class="r"><span class="pr l">Low</span></td></tr>
+              <tr><td><div style="font-weight:500">Booking / action links</div><div class="fixt">If you take bookings or orders, add the link so searchers can act straight from the profile.</div></td><td class="m">None</td><td class="m">Website &amp; conversion</td><td class="r"><span class="pr l">Low</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <div class="stack" style="margin-top:20px">
+    <p class="src">Data from Google via DataForSEO, fetched Nov 9, 2026, 9:14 AM. The rank grid is a Google Maps Tracker scan. The profile score is FreeSERP's weighted checklist, not a score Google publishes.</p>
+
+    <section class="panel">
+      <header><h2>Earlier audits of this profile</h2></header>
+      <div class="fl rows"><div class="past"><span>Oct 12, 2026</span><b class="num t-c">75</b></div></div>
+    </section>
+  </div>
+
+  <footer class="rf">Generated by FreeSERP · freeserp.com</footer>
+</main>
+
+</body>
+</html>

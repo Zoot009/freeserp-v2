@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Website Audit Report — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Styled to match the on-screen report: freeserp-frontend-v2/components/page-audit/audit-ui.tsx
+     (AuditReportResults) with the light tokens from app/globals.css + app/dashboard.css.
+     Tailwind v4 palette colours are copied as their oklch() source values. */
+  :root {
+    --background: #f7f8fa; --foreground: #0b0d12; --card: #fff;
+    --muted: #f2f4f7; --muted-foreground: #4b5363; --accent: #2d5bff; --border: #e7e9ee;
+    --brand-soft: #eef2ff; --brand-deep: #1e40d8;
+    --green-500: oklch(72.3% .219 149.579); --green-600: oklch(62.7% .194 149.214);
+    --lime-500: oklch(76.8% .233 130.85); --yellow-500: oklch(79.5% .184 86.047);
+    --orange-500: oklch(70.5% .213 47.604); --orange-600: oklch(64.6% .222 41.116);
+    --red-500: oklch(63.7% .237 25.331); --rose-600: oklch(58.6% .253 17.585);
+    --amber-400: oklch(82.8% .189 84.429); --amber-600: oklch(66.6% .179 58.318);
+    --emerald-600: oklch(59.6% .145 163.225); --cyan-500: oklch(71.5% .143 215.221); --cyan-600: oklch(60.9% .126 221.723);
+    --blue-400: oklch(70.7% .165 254.624);
+    --b40: color-mix(in oklab, var(--border) 40%, transparent);
+    --b60: color-mix(in oklab, var(--border) 60%, transparent);
+    --sans: "Geist", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; border-color: var(--border); }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--background); color: var(--foreground); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  h1, h2, h3, p { margin: 0; font-size: inherit; font-weight: inherit; }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .mono { font-family: var(--mono); }
+  .num { font-variant-numeric: tabular-nums; }
+  .i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pass { color: var(--green-500); } .fail { color: var(--red-500); } .info { color: var(--blue-400); }
+  .gA { color: var(--green-600); stroke: var(--green-600); } .gB { color: var(--lime-500); stroke: var(--lime-500); } .gC { color: var(--yellow-500); stroke: var(--yellow-500); }
+  .track { stroke: var(--b40); }
+
+  /* Sample toolbar + notice (not part of the app report) */
+  .toolbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 24px; background: var(--card); border-bottom: 1px solid var(--border); }
+  .tb-l, .tb-r { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+  .brand svg { display: block; }
+  .pill { font-size: 12px; font-weight: 500; color: var(--brand-deep); background: var(--brand-soft); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 10px; font: 500 14px/1 var(--sans); white-space: nowrap; cursor: pointer; border: 1px solid transparent; transition: background-color .15s; }
+  .btn .i { width: 14px; height: 14px; }
+  .btn-o { background: var(--background); border-color: var(--border); box-shadow: 0 1px 2px 0 rgb(0 0 0 / .05); color: var(--foreground); }
+  .btn-o:hover { background: var(--accent); color: #fff; }
+  .btn-p { background: var(--accent); color: #fff; }
+  .btn-p:hover { background: color-mix(in oklab, var(--accent) 90%, transparent); }
+  .notice { display: flex; align-items: flex-start; justify-content: center; gap: 8px; padding: 10px 24px; font-size: 13px; line-height: 1.5; background: color-mix(in oklab, var(--accent) 5%, var(--card)); border-bottom: 1px solid color-mix(in oklab, var(--accent) 25%, transparent); }
+  .notice .i { width: 14px; height: 14px; margin-top: 3px; color: var(--accent); }
+
+  /* Page frame — shared view: max-w-[1400px] px-4 py-8 */
+  .page { max-width: 1400px; margin: 0 auto; padding: 32px 16px; }
+
+  /* Results header — section.border-b.bg-card.pt-8.pb-8 > .max-w-5xl.px-6 */
+  .hdr { background: var(--card); border-bottom: 1px solid var(--b40); padding: 32px 0; }
+  .hdr-in { max-width: 1024px; margin: 0 auto; padding: 0 16px; }
+  .crumb { display: flex; align-items: center; gap: 8px; min-width: 0; margin-bottom: 32px; }
+  .fav { display: flex; width: 28px; height: 28px; flex: none; align-items: center; justify-content: center; border-radius: 10px; border: 1px solid var(--b60); background: color-mix(in oklab, var(--muted) 50%, transparent); font: 700 12px/1 var(--mono); color: rgb(11 13 18 / .6); }
+  .crumb h1 { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 14px; line-height: 20px; }
+  .crumb .lbl { color: var(--muted-foreground); font-weight: 400; }
+  .crumb .host { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .crumb .ext { color: rgb(75 83 99 / .4); display: inline-flex; flex: none; }
+  .crumb .ext .i { width: 14px; height: 14px; }
+  .crumb .pages { margin-left: 4px; flex: none; font-size: 12px; color: var(--muted-foreground); font-weight: 400; }
+  .intro { max-width: 768px; margin: -16px 0 32px; font-size: 14px; line-height: 1.625; color: var(--muted-foreground); }
+
+  .hero { display: grid; grid-template-columns: 1fr; gap: 40px; margin-bottom: 32px; }
+  .overall { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .ring { position: relative; }
+  .ring svg { display: block; }
+  .ring .ltr { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; line-height: 1; }
+  .tagline { font-size: 16px; line-height: 24px; font-weight: 600; color: rgb(11 13 18 / .9); text-align: center; }
+  .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
+  .gpill { display: inline-flex; align-items: center; border: 1px solid; border-radius: 999px; padding: 4px 12px; font-size: 12px; line-height: 16px; font-weight: 500; }
+  .gpill.grade { background: color-mix(in oklab, var(--yellow-500) 10%, transparent); border-color: color-mix(in oklab, var(--yellow-500) 30%, transparent); color: var(--yellow-500); }
+  .gpill.issues { background: color-mix(in oklab, var(--orange-500) 10%, transparent); border-color: color-mix(in oklab, var(--orange-500) 20%, transparent); color: var(--orange-600); }
+  .shots { position: relative; height: 288px; width: 100%; margin: 0; user-select: none; }
+  .shot { position: absolute; overflow: hidden; border-radius: 12px; border: 1px solid var(--b40); background: var(--card); }
+  .shot svg { display: block; width: 100%; height: 100%; }
+  .shot.d { left: 0; top: 0; width: 90%; height: 95%; box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1); }
+  .shot.m { right: 0; top: 12%; width: 30%; height: 90%; box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1); }
+
+  .cats { border: 1px solid var(--b40); border-radius: 16px; background: color-mix(in oklab, var(--background) 50%, transparent); padding: 16px; display: flex; flex-direction: column; gap: 24px; align-items: center; }
+  .cats ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .cats li { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .cats .ltr { font-size: 14px; line-height: 20px; }
+  .cats .cl { max-width: 72px; text-align: center; font-size: 10px; line-height: 1.25; }
+  .radar { flex: none; overflow: visible; }
+
+  /* Main content — px-4 sm:px-6 lg:px-8 pt-8, quick-links rail at lg */
+  .body { padding: 32px 16px; }
+  .rail { display: none; }
+  .stack > * + * { margin-top: 24px; }
+  .stack { min-width: 0; }
+  .card { overflow: hidden; border-radius: 16px; border: 1px solid var(--b40); background: var(--card); }
+  .card-h { border-bottom: 1px solid var(--b40); padding: 24px 24px 20px; }
+  .card-h h2, .sec-h h2, .bl h2 { font-size: 18px; line-height: 28px; font-weight: 700; }
+  .sub { margin-top: 4px; font-size: 14px; line-height: 20px; color: var(--muted-foreground); }
+  .desc { margin-top: 12px; max-width: 768px; font-size: 14px; line-height: 1.625; color: var(--muted-foreground); }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .chip { display: inline-block; border-radius: 999px; padding: 4px 10px; font-size: 12px; line-height: 16px; font-weight: 600; white-space: nowrap; }
+  .p1 { background: color-mix(in oklab, oklch(64.5% .246 16.439) 10%, transparent); color: var(--rose-600); }
+  .p2 { background: color-mix(in oklab, oklch(76.9% .188 70.08) 10%, transparent); color: var(--amber-600); }
+  .p3 { background: color-mix(in oklab, oklch(69.6% .17 162.48) 10%, transparent); color: var(--emerald-600); }
+  .conf { background: color-mix(in oklab, var(--green-500) 10%, transparent); color: var(--green-600); padding: 2px 10px; vertical-align: 2px; margin-left: 8px; }
+
+  /* Recommendations table (RecommendationsSection) */
+  table { border-collapse: collapse; width: 100%; font-size: 14px; line-height: 20px; }
+  .rec { min-width: 600px; }
+  .rec tbody tr { border-bottom: 1px solid var(--b40); }
+  .rec tbody tr:last-child { border-bottom: 0; }
+  .rec td { padding: 14px 12px; vertical-align: middle; text-align: right; white-space: nowrap; color: var(--muted-foreground); }
+  .rec td:first-child { width: 100%; padding-left: 24px; text-align: left; white-space: normal; font-weight: 600; color: var(--foreground); }
+  .rec td:last-child { padding-right: 24px; }
+  .rec .pg b { display: block; font-size: 13px; font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; }
+  .rec .pg span { display: block; font-size: 11px; line-height: 14px; }
+  .rec .pg .sw { font-size: 12px; font-weight: 600; }
+
+  /* Internal links (InternalLinkSection) */
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); border-bottom: 1px solid var(--b40); margin: 0; padding: 0; list-style: none; }
+  .stats li { padding: 16px 20px; }
+  .stats li:not(:last-child) { border-right: 1px solid var(--b40); border-bottom: 1px solid var(--b40); }
+  .stats .k { font-size: 12px; line-height: 16px; color: var(--muted-foreground); }
+  .stats .v { margin-top: 2px; font: 700 24px/32px var(--mono); letter-spacing: -0.025em; }
+  .blk { border-bottom: 1px solid var(--b40); padding: 20px 24px; }
+  .blk h3 { margin-bottom: 12px; font-size: 14px; line-height: 20px; font-weight: 600; color: rgb(11 13 18 / .9); }
+  .tl { margin: 0; padding: 0; list-style: none; }
+  .tl li { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .tl li + li { margin-top: 10px; }
+  .tl .l { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .tl .n { width: 16px; flex: none; text-align: right; font: 12px/16px var(--mono); color: rgb(75 83 99 / .5); }
+  .tl .t { min-width: 0; }
+  .tl a { display: flex; align-items: center; gap: 4px; min-width: 0; font-size: 14px; line-height: 20px; color: rgb(11 13 18 / .8); transition: color .15s; }
+  .tl a:hover { color: var(--accent); }
+  .tl a span, .tl .u { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tl a .i { width: 12px; height: 12px; opacity: .4; }
+  .tl .u { display: block; font-size: 12px; line-height: 16px; color: rgb(75 83 99 / .7); }
+  .tl .in { flex: none; font-size: 12px; color: var(--muted-foreground); }
+  .orph { display: flex; align-items: flex-start; gap: 10px; padding: 16px 24px; }
+  .orph .i { margin-top: 2px; color: var(--orange-500); }
+  .orph p { font-size: 14px; line-height: 20px; font-weight: 500; }
+  .orph p + p { margin-top: 2px; font-size: 12px; line-height: 16px; font-weight: 400; color: var(--muted-foreground); }
+
+  /* Category result sections (CategoryResultSection + GaugeDial + AuditCheckRow) */
+  .sec-h { border-bottom: 1px solid var(--b40); padding: 24px; }
+  .sec-h h2 { margin-bottom: 20px; }
+  .sec-row { display: flex; align-items: center; gap: 32px; }
+  .sec-row .ring { flex: none; }
+  .sec-row .ltr { font-size: 36px; }
+  .sec-row .tg { margin-bottom: 8px; font-size: 16px; line-height: 24px; font-weight: 600; }
+  .sec-row .dsc { max-width: 768px; font-size: 14px; line-height: 1.625; color: var(--muted-foreground); }
+  .sec-row > div:last-child { min-width: 0; flex: 1; }
+  .checks { padding: 0 24px; }
+  .ck { border-bottom: 1px solid var(--b40); padding: 20px 0; }
+  .ck:last-child { border-bottom: 0; }
+  .ck-h { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .ck-h h3 { font-size: 15px; line-height: 1.375; font-weight: 600; }
+  .ck > p { margin-bottom: 12px; font-size: 14px; line-height: 20px; color: var(--muted-foreground); overflow-wrap: anywhere; }
+  details.passed { border-top: 1px solid var(--b40); }
+  details.passed:first-child { border-top: 0; }
+  details.passed summary { display: flex; align-items: center; gap: 8px; padding: 16px 0; list-style: none; cursor: pointer; font-size: 14px; line-height: 20px; font-weight: 500; color: var(--muted-foreground); transition: color .15s; }
+  details.passed summary::-webkit-details-marker { display: none; }
+  details.passed summary:hover { color: var(--foreground); }
+  details.passed summary .chev { transition: transform .15s; }
+  details.passed[open] summary .chev { transform: rotate(180deg); }
+  details.passed > div { border-top: 1px solid var(--b40); }
+  .sec-f { border-top: 1px solid var(--b40); padding: 24px; }
+
+  /* Backlinks (BacklinksView embedded) */
+  .bl > .desc { margin-top: 6px; margin-bottom: 20px; }
+  .bl .desc a { font-weight: 500; color: #0454ff; }
+  .bl .desc a:hover { text-decoration: underline; }
+  .bl-top { display: flex; flex-direction: column; gap: 24px; }
+  .tiles { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .tiles li { border: 1px solid var(--border); border-radius: 16px; background: color-mix(in oklab, var(--muted) 30%, transparent); padding: 12px; }
+  .tiles .k { font-size: 11px; line-height: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: .025em; color: var(--muted-foreground); }
+  .tiles .v { margin-top: 4px; font-size: 20px; line-height: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tiles .v.warn { color: var(--amber-600); }
+  .tiles .h { margin-top: 2px; font-size: 10px; line-height: 14px; color: var(--muted-foreground); }
+  .donut { display: flex; align-items: center; gap: 16px; }
+  .donut svg { flex: none; display: block; }
+  .legend { font-size: 12px; line-height: 16px; }
+  .legend div { display: flex; align-items: center; gap: 8px; }
+  .legend div + div { margin-top: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 4px; }
+  .legend span { color: var(--muted-foreground); }
+  .legend b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bl h3 { margin-top: 28px; font-size: 14px; line-height: 20px; font-weight: 600; }
+  .bl h3 + p { margin-bottom: 12px; font-size: 12px; line-height: 16px; color: var(--muted-foreground); }
+  .tbl { border: 1px solid var(--border); border-radius: 16px; }
+  .bk { min-width: 640px; }
+  .bk thead { background: color-mix(in oklab, var(--muted) 40%, transparent); text-align: left; }
+  .bk th { padding: 10px 16px; font-size: 11px; line-height: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: .025em; color: var(--muted-foreground); }
+  .bk th:first-child { width: 96px; }
+  .bk tbody tr { border-top: 1px solid var(--b60); vertical-align: top; }
+  .bk td { padding: 12px 16px; }
+  .ds { display: inline-flex; min-width: 36px; align-items: center; justify-content: center; border-radius: 10px; padding: 2px 8px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; background: color-mix(in oklab, var(--cyan-500) 10%, transparent); color: var(--cyan-600); }
+  .bk a { display: block; word-break: break-all; font-size: 12px; line-height: 16px; font-weight: 500; color: #0454ff; }
+  .bk a:hover { text-decoration: underline; }
+  .bk .pt { margin-top: 2px; font-size: 12px; line-height: 16px; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bk .an { font-size: 12px; line-height: 16px; }
+
+  footer.rf { margin-top: 32px; font-size: 12px; color: rgb(75 83 99 / .5); text-align: center; }
+
+  @media (min-width: 640px) {
+    .hdr-in { padding: 0 24px; }
+    .hero { grid-template-columns: 1fr 1fr; align-items: center; }
+    .cats { flex-direction: row; justify-content: space-between; }
+    .cats ul { justify-content: flex-start; gap: 20px; }
+    .body { padding: 32px 24px; }
+    .stats { grid-template-columns: repeat(3, 1fr); }
+    .tiles { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 639.98px) {
+    .crumb .lbl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .toolbar, .notice { padding-left: 16px; padding-right: 16px; }
+    .notice { justify-content: flex-start; }
+  }
+  @media (min-width: 1024px) {
+    .body { padding: 32px; display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 32px; }
+    .rail { display: block; }
+    .rail > div { position: sticky; top: 96px; }
+    .rail p { padding: 0 12px; font-size: 11px; line-height: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: rgb(75 83 99 / .7); }
+    .rail nav { margin-top: 12px; border-left: 1px solid var(--border); }
+    .rail nav div { display: flex; align-items: stretch; }
+    .rail nav a { flex: 1; margin-left: -1px; border-left: 2px solid transparent; padding: 6px 8px 6px 12px; font-size: 14px; line-height: 20px; color: var(--muted-foreground); transition: color .15s, border-color .15s; }
+    .rail nav a:hover { border-color: var(--border); color: var(--foreground); }
+    .rail nav a.on { border-color: var(--accent); font-weight: 500; color: var(--foreground); }
+    .rail nav .i { align-self: center; width: 14px; height: 14px; margin: 0 6px; color: rgb(75 83 99 / .5); transform: rotate(-90deg); }
+    .bl-top { flex-direction: row; align-items: center; }
+    .tiles { grid-template-columns: repeat(5, 1fr); }
+    .donut { flex-direction: column; }
+  }
+
+  @page { size: A4; margin: 14mm; }
+  @media print {
+    body { background: #fff; }
+    .toolbar, .rail { display: none !important; }
+    .notice { border: 1px solid color-mix(in oklab, var(--accent) 25%, transparent); border-radius: 12px; margin-bottom: 16px; }
+    .page, .body { padding: 0; }
+    .body { display: block; margin-top: 24px; }
+    .hdr { padding-top: 0; }
+    .scroll { overflow: visible; }
+    .rec, .bk { min-width: 0; }
+    .shot { box-shadow: none; }
+    .hero, .cats, .ck, .stats, .tiles li, tr, .tl li, .sec-h, .card-h, .orph { break-inside: avoid; }
+    .card-h, .sec-h h2, .bl h3 { break-after: avoid; }
+    details.passed summary .chev { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+</svg>
+
+<div class="toolbar" role="banner">
+  <div class="tb-l">
+    <a class="brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+      FreeSerp
+    </a>
+  </div>
+  <div class="tb-r">
+    <button type="button" class="btn btn-o" onclick="window.print()"><svg class="i" aria-hidden="true"><use href="#i-dl"/></svg>Download PDF</button>
+    <a class="btn btn-p" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="notice" role="note"><svg class="i" aria-hidden="true"><use href="#i-info"/></svg><span>This report uses made-up data, so you can see what FreeSERP sends you. Your report is generated from your own website.</span></div>
+
+<main class="page">
+
+  <!-- ── Results header ── -->
+  <section class="hdr" aria-labelledby="title">
+    <div class="hdr-in">
+      <div class="crumb">
+        <div class="fav" aria-hidden="true">B</div>
+        <h1 id="title"><span class="lbl">Audit results for</span> <span class="host">brightpeak-outdoor.com</span><a class="ext" aria-label="Open brightpeak-outdoor.com"><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="pages num">22 pages</span></h1>
+      </div>
+      <p class="intro">This report grades your website across a range of important factors — on-page SEO, links, usability, performance, social, security and more. The overall grade is on an A+ to F scale; most industry-leading sites sit in the A range. Improving your grade gives users a better experience and helps search engines rank and surface your site.</p>
+
+      <div class="hero">
+        <div class="overall">
+          <div class="ring" style="width:200px;height:200px">
+            <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Overall grade C+, score 74.4 out of 100">
+              <circle class="track" cx="100" cy="100" r="90" fill="none" stroke-width="14"/>
+              <circle class="gC" cx="100" cy="100" r="90" fill="none" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="74.4 100" transform="rotate(-90 100 100)"/>
+            </svg>
+            <span class="ltr gC" style="font-size:56px" aria-hidden="true">C+</span>
+          </div>
+          <div>
+            <p class="tagline">Your page could be better</p>
+            <div class="pills">
+              <span class="gpill grade">Grade C+</span>
+              <span class="gpill issues">55 issues found</span>
+            </div>
+          </div>
+        </div>
+        <figure class="shots" role="img" aria-label="Illustration of the brightpeak-outdoor.com homepage on desktop and mobile, standing in for the screenshots the real report captures">
+          <div class="shot d">
+            <svg viewBox="0 0 400 250" preserveAspectRatio="xMinYMin slice" aria-hidden="true">
+              <rect width="400" height="250" fill="#fff"/>
+              <text x="16" y="24" font-size="11" font-weight="700" fill="#1f3b2d" font-family="Geist, system-ui, sans-serif">Brightpeak Outdoor</text>
+              <g fill="#6d6d6d" font-size="7.5" font-family="Geist, system-ui, sans-serif"><text x="210" y="23">Shop</text><text x="240" y="23">Tents</text><text x="272" y="23">Guides</text><text x="308" y="23">About</text><text x="340" y="23">Contact</text></g>
+              <rect x="0" y="36" width="400" height="150" fill="#dfe9e2"/>
+              <path d="M0 186 L90 104 L150 150 L230 80 L320 160 L400 118 L400 186 Z" fill="#7fa58d"/>
+              <path d="M0 186 L70 150 L160 176 L260 132 L400 170 L400 186 Z" fill="#3f6b52"/>
+              <path d="M230 80 L248 97 L238 95 L230 102 L222 95 L213 96 Z" fill="#fff"/>
+              <text x="20" y="74" font-size="16" font-weight="700" fill="#14281d" font-family="Geist, system-ui, sans-serif">Gear for the long trail</text>
+              <rect x="20" y="84" width="150" height="6" rx="3" fill="#14281d" opacity=".35"/>
+              <rect x="20" y="100" width="64" height="18" rx="5" fill="#14281d"/>
+              <text x="31" y="112" font-size="8" fill="#fff" font-family="Geist, system-ui, sans-serif">Shop tents</text>
+              <g fill="#f5f6f8" stroke="#eaeaea"><rect x="16" y="198" width="114" height="40" rx="6"/><rect x="143" y="198" width="114" height="40" rx="6"/><rect x="270" y="198" width="114" height="40" rx="6"/></g>
+              <g fill="#cfd8d2"><rect x="24" y="206" width="40" height="24" rx="4"/><rect x="151" y="206" width="40" height="24" rx="4"/><rect x="278" y="206" width="40" height="24" rx="4"/></g>
+            </svg>
+          </div>
+          <div class="shot m">
+            <svg viewBox="0 0 120 260" preserveAspectRatio="xMinYMin slice" aria-hidden="true">
+              <rect width="120" height="260" fill="#fff"/>
+              <text x="10" y="20" font-size="8" font-weight="700" fill="#1f3b2d" font-family="Geist, system-ui, sans-serif">Brightpeak</text>
+              <g fill="#1f3b2d"><rect x="98" y="13" width="12" height="1.6" rx=".8"/><rect x="98" y="17" width="12" height="1.6" rx=".8"/><rect x="98" y="21" width="12" height="1.6" rx=".8"/></g>
+              <rect x="0" y="30" width="120" height="120" fill="#dfe9e2"/>
+              <path d="M0 150 L30 104 L55 128 L80 92 L120 132 L120 150 Z" fill="#7fa58d"/>
+              <path d="M0 150 L28 132 L70 146 L120 136 L120 150 Z" fill="#3f6b52"/>
+              <text x="10" y="54" font-size="10" font-weight="700" fill="#14281d" font-family="Geist, system-ui, sans-serif">Gear for the</text>
+              <text x="10" y="66" font-size="10" font-weight="700" fill="#14281d" font-family="Geist, system-ui, sans-serif">long trail</text>
+              <rect x="10" y="74" width="70" height="4" rx="2" fill="#14281d" opacity=".35"/>
+              <rect x="10" y="84" width="44" height="13" rx="4" fill="#14281d"/>
+              <g fill="#f5f6f8" stroke="#eaeaea"><rect x="10" y="160" width="100" height="40" rx="6"/><rect x="10" y="208" width="100" height="40" rx="6"/></g>
+              <g fill="#cfd8d2"><rect x="16" y="166" width="28" height="28" rx="4"/><rect x="16" y="214" width="28" height="28" rx="4"/></g>
+              <g fill="#e2e8f0"><rect x="52" y="172" width="48" height="5" rx="2.5"/><rect x="52" y="182" width="32" height="5" rx="2.5"/><rect x="52" y="220" width="48" height="5" rx="2.5"/><rect x="52" y="230" width="32" height="5" rx="2.5"/></g>
+            </svg>
+          </div>
+        </figure>
+      </div>
+
+      <div class="cats">
+        <h2 class="sr">Category grades</h2>
+        <ul>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="On-Page SEO: grade C, score 58.4"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gC" cx="34" cy="34" r="30" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="58.4 100" transform="rotate(-90 34 34)"/></svg><span class="ltr gC" aria-hidden="true">C</span></div><span class="cl gC">On-Page SEO</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Technical: grade B, score 82.6"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gB" cx="34" cy="34" r="30" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="82.6 100" transform="rotate(-90 34 34)"/></svg><span class="ltr gB" aria-hidden="true">B</span></div><span class="cl gB">Technical</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Links: grade A+, score 100"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gA" cx="34" cy="34" r="30" fill="none" stroke-width="5"/></svg><span class="ltr gA" aria-hidden="true">A+</span></div><span class="cl gA">Links</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Security: grade A+, score 100"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gA" cx="34" cy="34" r="30" fill="none" stroke-width="5"/></svg><span class="ltr gA" aria-hidden="true">A+</span></div><span class="cl gA">Security</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Performance: grade C, score 61.7"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gC" cx="34" cy="34" r="30" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="61.7 100" transform="rotate(-90 34 34)"/></svg><span class="ltr gC" aria-hidden="true">C</span></div><span class="cl gC">Performance</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Accessibility: grade B, score 83.2"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gB" cx="34" cy="34" r="30" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="83.2 100" transform="rotate(-90 34 34)"/></svg><span class="ltr gB" aria-hidden="true">B</span></div><span class="cl gB">Accessibility</span></li>
+          <li><div class="ring" style="width:68px;height:68px"><svg width="68" height="68" viewBox="0 0 68 68" role="img" aria-label="Structured Data: grade B, score 76.5"><circle class="track" cx="34" cy="34" r="30" fill="none" stroke-width="5"/><circle class="gB" cx="34" cy="34" r="30" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="76.5 100" transform="rotate(-90 34 34)"/></svg><span class="ltr gB" aria-hidden="true">B</span></div><span class="cl gB">Structured Data</span></li>
+        </ul>
+        <!-- RadarChart: 164px, maxR 60, graded categories only -->
+        <svg class="radar" width="164" height="164" viewBox="0 0 164 164" aria-hidden="true">
+          <g fill="none" stroke="rgb(231 233 238 / .3)" stroke-width="1">
+            <polygon points="82,67 93.73,72.65 96.62,85.34 88.51,95.51 75.49,95.51 67.38,85.34 70.27,72.65"/>
+            <polygon points="82,52 105.45,63.3 111.25,88.68 95.02,109.03 68.98,109.03 52.75,88.68 58.55,63.3"/>
+            <polygon points="82,37 117.18,53.94 125.87,92.01 101.52,122.54 62.48,122.54 38.13,92.01 46.82,53.94"/>
+            <polygon points="82,22 128.91,44.59 140.5,95.35 108.03,136.06 55.97,136.06 23.5,95.35 35.09,44.59"/>
+            <path d="M82 82L82 22M82 82L128.91 44.59M82 82L140.5 95.35M82 82L108.03 136.06M82 82L55.97 136.06M82 82L23.5 95.35M82 82L35.09 44.59"/>
+          </g>
+          <polygon points="82,46.96 120.75,51.1 140.5,95.35 108.03,136.06 65.94,115.35 33.33,93.11 46.11,53.38" fill="rgb(45 91 255 / .2)" stroke="rgb(45 91 255 / .5)" stroke-width="2"/>
+          <g fill="#2d5bff"><circle cx="82" cy="46.96" r="3"/><circle cx="120.75" cy="51.1" r="3"/><circle cx="140.5" cy="95.35" r="3"/><circle cx="108.03" cy="136.06" r="3"/><circle cx="65.94" cy="115.35" r="3"/><circle cx="33.33" cy="93.11" r="3"/><circle cx="46.11" cy="53.38" r="3"/></g>
+          <g font-size="8" fill="#4b5363" text-anchor="middle" dominant-baseline="middle" font-family="Geist, system-ui, sans-serif">
+            <text x="82" y="6">On-Page</text><text x="141.42" y="34.61">Technical</text><text x="156.09" y="98.91">Links</text><text x="114.98" y="150.47">Security</text><text x="49.02" y="150.47">Performance</text><text x="7.91" y="98.91">Accessibility</text><text x="22.58" y="34.61">Structured</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="body">
+    <!-- Quick links rail (lg+) -->
+    <aside class="rail" aria-label="Quick links">
+      <div>
+        <p>Quick links</p>
+        <nav>
+          <div><a class="on" href="#sec-rec">Recommendations</a></div>
+          <div><a href="#sec-internal-links">Internal Links</a></div>
+          <div><a href="#sec-ON_PAGE">On-Page SEO</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-TECHNICAL">Technical</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-LINKS">Links</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-SECURITY">Security</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-PERFORMANCE">Performance</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-ACCESSIBILITY">Accessibility</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+          <div><a href="#sec-STRUCTURED_DATA">Structured Data</a><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></div>
+        </nav>
+      </div>
+    </aside>
+
+    <div class="stack">
+
+      <!-- ── Recommendations ── -->
+      <section id="sec-rec" class="card" aria-labelledby="recs">
+        <div class="card-h">
+          <h2 id="recs">Recommendations (16)</h2>
+          <p class="sub">55 issues, grouped by problem and ordered by priority. “Pages” is how many pages each one affects.</p>
+        </div>
+        <div class="scroll">
+          <table class="rec">
+            <thead class="sr"><tr><th scope="col">Recommendation</th><th scope="col">Category</th><th scope="col">Pages</th><th scope="col">Priority</th></tr></thead>
+            <tbody>
+              <tr><td>Slow LCP on Mobile</td><td>Performance</td><td class="pg"><b>1</b><span>page</span></td><td><span class="chip p1">High Priority</span></td></tr>
+              <tr><td>Missing Twitter Card Tags</td><td>Structured Data</td><td class="pg"><b>9</b><span>pages</span></td><td><span class="chip p1">High Priority</span></td></tr>
+              <tr><td>Missing Meta Description</td><td>On-Page SEO</td><td class="pg"><b>3</b><span>pages</span></td><td><span class="chip p1">High Priority</span></td></tr>
+              <tr><td>Mobile Performance Needs Improvement</td><td>Performance</td><td class="pg"><b>1</b><span>page</span></td><td><span class="chip p1">High Priority</span></td></tr>
+              <tr><td>Images Not Using Modern Formats</td><td>Performance</td><td class="pg"><b>7</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Images Missing Alt Text</td><td>On-Page SEO</td><td class="pg"><b>6</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Moderate Page Load Time</td><td>Performance</td><td class="pg"><b>5</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Canonical Tag not used</td><td>On-Page SEO</td><td class="pg"><b>4</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Some Tap Targets Too Small</td><td>Accessibility</td><td class="pg"><b>4</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Thin Content Detected</td><td>On-Page SEO</td><td class="pg"><b>3</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Deprecated HTML Tags Detected</td><td>Technical</td><td class="pg"><b>2</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Multiple H1 Tags</td><td>On-Page SEO</td><td class="pg"><b>2</b><span>pages</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Poor Core Web Vitals</td><td>Performance</td><td class="pg"><b>1</b><span>page</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Incomplete Organization Schema</td><td>Structured Data</td><td class="pg"><span class="sw">Site-wide</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Missing DMARC Record</td><td>Technical</td><td class="pg"><span class="sw">Site-wide</span></td><td><span class="chip p2">Medium Priority</span></td></tr>
+              <tr><td>Title Tag Too Long</td><td>On-Page SEO</td><td class="pg"><b>5</b><span>pages</span></td><td><span class="chip p3">Low Priority</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Internal Link Analysis ── -->
+      <section id="sec-internal-links" class="card" aria-labelledby="ila">
+        <div class="card-h">
+          <h2 id="ila">Internal Link Analysis <span class="chip conf">high confidence</span></h2>
+          <p class="sub">Full-site crawl · 22 pages · max depth 3</p>
+          <p class="desc">A map of how the pages on your site link to each other. A strong internal link structure helps search engines discover and understand your content, spreads ranking authority (PageRank) to your most important pages, and guides visitors deeper into your site. Below you’ll find your crawl stats and your most-linked pages — watch for orphan pages (pages with no internal links pointing to them) and make sure your key pages are well linked.</p>
+        </div>
+        <ul class="stats">
+          <li><p class="k">Pages Crawled</p><p class="v">22</p></li>
+          <li><p class="k">Total Links</p><p class="v">318</p></li>
+          <li><p class="k">Orphan Pages</p><p class="v">1</p></li>
+          <li><p class="k">Hub Pages</p><p class="v">4</p></li>
+          <li><p class="k">Authority Pages</p><p class="v">3</p></li>
+          <li><p class="k">Avg Links / Page</p><p class="v">14.5</p></li>
+        </ul>
+        <div class="blk">
+          <h3>Top Linked Pages</h3>
+          <ol class="tl">
+            <li><div class="l"><span class="n">1</span><div class="t"><a><span>Brightpeak Outdoor | Gear for the Long Trail</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/</span></div></div><span class="in">21 inbound</span></li>
+            <li><div class="l"><span class="n">2</span><div class="t"><a><span>Shop All Gear | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shop</span></div></div><span class="in">21 inbound</span></li>
+            <li><div class="l"><span class="n">3</span><div class="t"><a><span>Contact Us | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/contact</span></div></div><span class="in">21 inbound</span></li>
+            <li><div class="l"><span class="n">4</span><div class="t"><a><span>Shipping &amp; Returns | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shipping-returns</span></div></div><span class="in">20 inbound</span></li>
+            <li><div class="l"><span class="n">5</span><div class="t"><a><span>Trail Guides | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/guides</span></div></div><span class="in">18 inbound</span></li>
+            <li><div class="l"><span class="n">6</span><div class="t"><a><span>Backpacking Tents | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shop/tents</span></div></div><span class="in">12 inbound</span></li>
+            <li><div class="l"><span class="n">7</span><div class="t"><a><span>Hiking Backpacks | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shop/backpacks</span></div></div><span class="in">11 inbound</span></li>
+            <li><div class="l"><span class="n">8</span><div class="t"><a><span>Sleeping Bags | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shop/sleeping-bags</span></div></div><span class="in">10 inbound</span></li>
+            <li><div class="l"><span class="n">9</span><div class="t"><a><span>About Brightpeak | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/about</span></div></div><span class="in">9 inbound</span></li>
+            <li><div class="l"><span class="n">10</span><div class="t"><a><span>Rain &amp; Insulated Jackets | Brightpeak Outdoor</span><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg></a><span class="u">https://brightpeak-outdoor.com/shop/jackets</span></div></div><span class="in">8 inbound</span></li>
+          </ol>
+        </div>
+        <div class="orph">
+          <svg class="i" aria-hidden="true"><use href="#i-alert"/></svg>
+          <div><p>1 orphan page found</p><p>These pages have no inbound internal links and may be missed by search engine crawlers.</p></div>
+        </div>
+      </section>
+
+      <!-- ── Detailed results by category, CATEGORY_SCORES_DEF order. Open checks first
+           (On-Page/Technical: failures, then informational, then passes, by CHECK_ORDER);
+           passed checks folded into <details> as on screen. ── -->
+
+      <section id="sec-ON_PAGE" class="card" aria-labelledby="r-onpage">
+        <div class="sec-h">
+          <h2 id="r-onpage">On-Page SEO Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade C, score 58.4"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gC" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="43.8 56.2"/></g></svg><span class="ltr gC" aria-hidden="true">C</span></div>
+            <div><p class="tg">On-Page SEO: Could be better</p><p class="dsc">The content signals on each page — title tag, meta description, headings, keyword usage and images — that tell search engines and visitors what the page is about. These are the easiest wins to control and edit directly.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Title Tag</h3></div><p>Title tag is too long (68 chars).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Meta Description</h3></div><p>Meta description is missing.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>H1 Tag</h3></div><p>Multiple H1 tags found (2).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Word Count</h3></div><p>Thin content (212 words).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Image Alt Text</h3></div><p>7 of 18 images are missing alt text.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Canonical Tag</h3></div><p>Canonical Tag not used</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>SERP Snippet</h3></div><p>SERP snippet preview ready.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Hreflang</h3></div><p>No hreflang tags found (single-language site).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>H2-H6 Header Tag Usage</h3></div><p>Your page is making use of multiple levels of Header Tags.</p></div>
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>3 passed checks<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Language</h3></div><p>Language declared as "en".</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Keyword Consistency</h3></div><p>Good keyword consistency across title, description, and headings.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Favicon</h3></div><p>Favicon is configured.</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="sec-TECHNICAL" class="card" aria-labelledby="r-tech">
+        <div class="sec-h">
+          <h2 id="r-tech">Technical Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade B, score 82.6"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gB" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="61.95 38.05"/></g></svg><span class="ltr gB" aria-hidden="true">B</span></div>
+            <div><p class="tg">Technical: Good</p><p class="dsc">The behind-the-scenes signals that let search engines crawl and index your site cleanly — indexability (noindex / robots), HTTPS, redirects, canonical tags, sitemaps and more. Get these right and everything else has a solid foundation to build on.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Deprecated HTML Tags</h3></div><p>2 deprecated HTML tag(s) detected.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>DMARC Record</h3></div><p>No DMARC record found.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>DNS Nameservers</h3></div><p>2 nameserver(s) detected.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>IP Address</h3></div><p>Server IP: 203.0.113.42</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Web Server</h3></div><p>Web server: nginx</p></div>
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>13 passed checks<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Noindex HTTP Header</h3></div><p>No blocking X-Robots-Tag header detected.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Noindex Tag</h3></div><p>Your page is not using the Noindex Tag which prevents indexing.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>SSL Certificate</h3></div><p>Your website has SSL enabled.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Robots.txt</h3></div><p>Robots.txt file found.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>XML Sitemap</h3></div><p>XML sitemap found with 22 URLs.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Charset UTF-8</h3></div><p>Charset is set to UTF-8.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Analytics</h3></div><p>1 analytics tool(s) detected: Google Analytics.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>HTTPS Redirect</h3></div><p>Your page successfully redirects to a HTTPS (SSL secure) version.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Robots.txt Blocking</h3></div><p>Robots.txt allows crawling of all 22 pages.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>SPF Record</h3></div><p>Valid SPF record found.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>HTTP/2</h3></div><p>HTTP/2 is enabled.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>JavaScript Errors</h3></div><p>No JavaScript errors detected.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Inline Styles</h3></div><p>14 inline style(s) found (acceptable).</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="sec-LINKS" class="card" aria-labelledby="r-links">
+        <div class="sec-h">
+          <h2 id="r-links">Links Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade A+, score 100"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gA" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/></g></svg><span class="ltr gA" aria-hidden="true">A+</span></div>
+            <div><p class="tg">Links: Excellent</p><p class="dsc">How your pages link to each other and out to the wider web. Good linking spreads ranking authority to your most important pages and helps users and search engines navigate your site.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>1 passed check<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Link Structure</h3></div><p>Healthy link structure: 64 links (86% internal).</p></div>
+            </div>
+          </details>
+        </div>
+        <div class="sec-f bl">
+          <h2 id="bl">Backlink Profile</h2>
+          <p class="desc">An overview of the external websites linking to <a>brightpeak-outdoor.com</a>. Backlinks are one of the strongest off-page SEO signals — the more high-quality referring domains point to your site, the more authority and trust it tends to earn with search engines. Below you’ll find your overall link metrics, the dofollow vs nofollow split, and the highest-value pages linking to you. This section is informational and doesn’t affect your audit score.</p>
+          <div class="bl-top">
+            <ul class="tiles">
+              <li><p class="k">Domain Rank</p><p class="v">214</p><p class="h">0–1000 authority</p></li>
+              <li><p class="k">Total backlinks</p><p class="v">3,842</p></li>
+              <li><p class="k">Referring domains</p><p class="v">287</p></li>
+              <li><p class="k">Referring IPs</p><p class="v">241</p></li>
+              <li><p class="k">Broken backlinks</p><p class="v warn">36</p></li>
+            </ul>
+            <div class="donut">
+              <svg width="132" height="132" viewBox="0 0 132 132" role="img" aria-label="Dofollow: 71% of backlinks">
+                <g transform="rotate(-90 66 66)"><circle cx="66" cy="66" r="58" fill="none" stroke="#fbbf24" stroke-width="16"/><circle cx="66" cy="66" r="58" fill="none" stroke="#22c55e" stroke-width="16" pathLength="100" stroke-dasharray="71 29"/></g>
+                <text x="50%" y="46%" text-anchor="middle" fill="#0b0d12" font-size="22" font-weight="700" font-family="Geist, system-ui, sans-serif">71%</text>
+                <text x="50%" y="62%" text-anchor="middle" fill="#4b5363" font-size="10" font-family="Geist, system-ui, sans-serif">dofollow</text>
+              </svg>
+              <div class="legend">
+                <div><i style="background:var(--green-500)"></i><span>Dofollow</span><b>2,728</b></div>
+                <div><i style="background:var(--amber-400)"></i><span>Nofollow</span><b>1,114</b></div>
+              </div>
+            </div>
+          </div>
+          <h3>Top Backlinks</h3>
+          <p>The highest-value external pages we found linking to your site.</p>
+          <div class="scroll tbl">
+            <table class="bk">
+              <thead><tr><th scope="col">Domain Strength</th><th scope="col">Referring Page</th><th scope="col">Anchor Text</th></tr></thead>
+              <tbody>
+                <tr><td><span class="ds">58</span></td><td><a href="https://trailnotes-quarterly.com/gear/best-backpacking-tents" rel="nofollow">https://trailnotes-quarterly.com/gear/best-backpacking-tents</a><p class="pt">The 12 Best Backpacking Tents of 2026</p></td><td><span class="an">Ridgeline 2P tent</span></td></tr>
+                <tr><td><span class="ds">52</span></td><td><a href="https://campcraft-dispatch.com/fall-gear-roundup" rel="nofollow">https://campcraft-dispatch.com/fall-gear-roundup</a><p class="pt">Fall Gear Roundup: What We Packed This Season</p></td><td><span class="an">brightpeak-outdoor.com</span></td></tr>
+                <tr><td><span class="ds">47</span></td><td><a href="https://pinewood-hiking-circle.org/learn/layering" rel="nofollow">https://pinewood-hiking-circle.org/learn/layering</a><p class="pt">A Beginner's Guide to Layering</p></td><td><span class="an">layering guide</span></td></tr>
+                <tr><td><span class="ds">44</span></td><td><a href="https://summitgear-labnotes.net/reviews/down-bags" rel="nofollow">https://summitgear-labnotes.net/reviews/down-bags</a><p class="pt">Our Favorite Down Sleeping Bags</p></td><td><span class="an">Summit Down Bag 20</span></td></tr>
+                <tr><td><span class="ds">39</span></td><td><a href="https://northfork-trailjournal.blog/outfitters" rel="nofollow">https://northfork-trailjournal.blog/outfitters</a><p class="pt">Outfitters We Trust</p></td><td><span class="an">Brightpeak Outdoor</span></td></tr>
+                <tr><td><span class="ds">35</span></td><td><a href="https://wildcanyon-weekender.com/gifts/hikers" rel="nofollow">https://wildcanyon-weekender.com/gifts/hikers</a><p class="pt">Gift Ideas for the Hiker in Your Life</p></td><td><span class="an">hiking gifts</span></td></tr>
+                <tr><td><span class="ds">31</span></td><td><a href="https://milesandmeadows-trail.net/packing-list-3-day" rel="nofollow">https://milesandmeadows-trail.net/packing-list-3-day</a><p class="pt">Packing List: A Three-Day Loop</p></td><td><span class="an">Trailhead 45L Pack</span></td></tr>
+                <tr><td><span class="ds">28</span></td><td><a href="https://emberoak-campfire.com/kitchen-essentials" rel="nofollow">https://emberoak-campfire.com/kitchen-essentials</a><p class="pt">Camp Kitchen Essentials</p></td><td><span class="an">—</span></td></tr>
+                <tr><td><span class="ds">24</span></td><td><a href="https://quietridge-outdoorclub.org/resources/lnt" rel="nofollow">https://quietridge-outdoorclub.org/resources/lnt</a><p class="pt">Leave No Trace, Explained</p></td><td><span class="an">leave no trace basics</span></td></tr>
+                <tr><td><span class="ds">21</span></td><td><a href="https://switchback-diaries.net/granite-lakes-report" rel="nofollow">https://switchback-diaries.net/granite-lakes-report</a><p class="pt">Weekend Trip Report: Granite Lakes</p></td><td><span class="an">rain shell</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-SECURITY" class="card" aria-labelledby="r-sec">
+        <div class="sec-h">
+          <h2 id="r-sec">Security Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade A+, score 100"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gA" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/></g></svg><span class="ltr gA" aria-hidden="true">A+</span></div>
+            <div><p class="tg">Security: Excellent</p><p class="dsc">Whether your site protects visitors and their data — HTTPS encryption, secure response headers, and no exposed sensitive information. Security issues erode trust and can hurt rankings.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>1 passed check<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Email Privacy</h3></div><p>No exposed email addresses found.</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="sec-PERFORMANCE" class="card" aria-labelledby="r-perf">
+        <div class="sec-h">
+          <h2 id="r-perf">Performance Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade C, score 61.7"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gC" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="46.28 53.72"/></g></svg><span class="ltr gC" aria-hidden="true">C</span></div>
+            <div><p class="tg">Performance: Could be better</p><p class="dsc">How quickly your pages load and respond for real users. Speed and Core Web Vitals affect rankings, bounce rate and conversions — slow pages quietly cost you traffic and sales.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Core Web Vitals</h3></div><p>1 Core Web Vital(s) need improvement.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Load Time</h3></div><p>Page load time needs improvement (2.84s).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Mobile Performance</h3></div><p>Mobile performance score: 62/100 — needs improvement.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Image Optimization</h3></div><p>9 of 31 images (29%) use legacy formats.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Google AMP</h3></div><p>Google AMP is not implemented.</p></div>
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>6 passed checks<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Compression</h3></div><p>Brotli compression is enabled.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Flash</h3></div><p>No Flash content detected.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Page Size</h3></div><p>Page size is 2.14MB (acceptable).</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Desktop Performance</h3></div><p>Excellent desktop performance score: 91/100.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>LLM Readability</h3></div><p>Excellent LLM readability (12% JS-rendered).</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>HTTP Requests</h3></div><p>Resource count is optimized (64 resources).</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="sec-ACCESSIBILITY" class="card" aria-labelledby="r-a11y">
+        <div class="sec-h">
+          <h2 id="r-a11y">Accessibility Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade B, score 83.2"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gB" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="62.4 37.6"/></g></svg><span class="ltr gB" aria-hidden="true">B</span></div>
+            <div><p class="tg">Accessibility: Good</p><p class="dsc">How usable your site is for everyone, including people using assistive technology — image alt text, form labels, colour contrast and semantic structure. Accessible sites reach more people and tend to be better-built overall.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Tap Target Size</h3></div><p>6 tap target(s) too small.</p></div>
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>3 passed checks<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Mobile Viewport</h3></div><p>Mobile viewport is properly configured.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Font Size</h3></div><p>All text uses readable font sizes.</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>IFrame Usage</h3></div><p>1 iframe(s) found (acceptable).</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="sec-STRUCTURED_DATA" class="card" aria-labelledby="r-sd">
+        <div class="sec-h">
+          <h2 id="r-sd">Structured Data Results</h2>
+          <div class="sec-row">
+            <div class="ring" style="width:128px;height:128px"><svg width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Grade B, score 76.5"><g transform="rotate(135 64 64)" fill="none" stroke-width="10" stroke-linecap="round"><circle class="track" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="75 25"/><circle class="gB" cx="64" cy="64" r="59" pathLength="100" stroke-dasharray="57.38 42.62"/></g></svg><span class="ltr gB" aria-hidden="true">B</span></div>
+            <div><p class="tg">Structured Data: Good</p><p class="dsc">Schema.org markup that helps search engines understand your content and can unlock rich results — star ratings, FAQs, breadcrumbs and more — making your listings stand out in search.</p></div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Identity Schema</h3></div><p>Organization schema found but missing 2 field(s).</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Facebook Page</h3></div><p>Facebook page is linked.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Facebook Pixel</h3></div><p>No Facebook Pixel detected.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Instagram Profile</h3></div><p>Instagram profile is linked.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>LinkedIn Profile</h3></div><p>No LinkedIn link found.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i fail" role="img" aria-label="Failed"><use href="#i-x"/></svg><h3>Twitter Card Tags</h3></div><p>Missing 2 Twitter Card tag(s): twitter:image, twitter:description.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Twitter/X Account</h3></div><p>No Twitter/X link found.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>YouTube Activity</h3></div><p>YouTube channel is linked.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>YouTube Channel</h3></div><p>YouTube channel is linked.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Google Business Profile</h3></div><p>Google Business Profile check applies to local businesses.</p></div>
+          <div class="ck"><div class="ck-h"><svg class="i info" role="img" aria-label="Informational"><use href="#i-info"/></svg><h3>Local Business Schema</h3></div><p>LocalBusiness schema check applies to local businesses.</p></div>
+          <details class="passed">
+            <summary><svg class="i pass" aria-hidden="true"><use href="#i-ok"/></svg>2 passed checks<svg class="i chev" aria-hidden="true"><use href="#i-chev"/></svg></summary>
+            <div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Open Graph Tags</h3></div><p>Open Graph tags fully configured (5 tags).</p></div>
+              <div class="ck"><div class="ck-h"><svg class="i pass" role="img" aria-label="Passed"><use href="#i-ok"/></svg><h3>Local SEO Signals</h3></div><p>Phone number and address are present.</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <footer class="rf">Generated by FreeSERP · freeserp.com</footer>
+    </div>
+  </div>
+</main>
+<script>
+  // Passed checks are folded on screen (as in the app); print them all.
+  addEventListener('beforeprint', function () { document.querySelectorAll('details.passed').forEach(function (d) { d.open = true; }); });
+</script>
+</body>
+</html>

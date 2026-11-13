@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import { Bebas_Neue, Geist } from "next/font/google";
 import Header from "@/components/rank-tracking-tools/Header";
 import Hero from "@/components/rank-tracking-tools/Hero";
@@ -49,6 +51,7 @@ export default function RankTrackingToolsPage() {
       <Features />
       <AiTracker />
       <HowItWorks />
+      <SampleReport {...SAMPLE_REPORTS.rank} />
       <Pricing />
       <Faq />
       <FinalCta />

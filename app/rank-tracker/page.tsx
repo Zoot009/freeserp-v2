@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { Steps } from "@/components/serp-checker/Steps";
@@ -55,6 +57,7 @@ export default function RankTrackerPage() {
       <Steps sub="Our rank tracker runs a clean, depersonalized search engine query from the country and device you specify — so you see exactly what your customers see, not what your browser history shows you." />
       <WhyTracker />
       <UseCases />
+      <SampleReport {...SAMPLE_REPORTS.rank} />
       <Faq />
       <Cta />
       <Footer />

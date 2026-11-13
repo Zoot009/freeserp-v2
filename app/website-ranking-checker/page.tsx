@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { SampleReport } from "@/components/landing/SampleReport";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import { Steps } from "@/components/serp-checker/Steps";
@@ -54,6 +56,7 @@ export default function WebsiteRankingCheckerPage() {
       <Steps />
       <WhyChecker />
       <WhoUses />
+      <SampleReport {...SAMPLE_REPORTS.rank} />
       <Faq />
       <Footer />
     </>
