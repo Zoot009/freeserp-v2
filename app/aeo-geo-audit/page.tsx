@@ -46,7 +46,7 @@ import { AeoDemo } from "@/components/demos/AeoDemo";
  * the answer bots), engine/checks/crawl-access/ai-crawlers.ts (exact bot
  * names), engine/visibility (10 questions per engine, 5 engines measured,
  * cited / read / named / absent), engine/report.ts (fixes ranked by points per
- * effort), credits/catalog.ts (5 base + 5 per engine unit). Things the tool
+ * effort), credits/catalog.ts ((9 base + 12 per engine unit) × CREDIT_PRICE_MULTIPLIER 5). Things the tool
  * does NOT do — share links, CSV, AI grading of the writing, measuring
  * Copilot — are deliberately never claimed.
  *
@@ -278,10 +278,12 @@ const BENEFITS = [
   },
 ];
 
+// The free plan's 100 credits are below the cheapest audit (105), so nothing
+// here may promise an audit on it.
 const FREE_POINTS = [
-  "Every check and both scores",
-  "Real answers from the engines you pick",
-  "The full Fix first list",
+  "100 credits every month",
+  "Rank tracking, site audits and research",
+  "AEO audits from 105 credits on a paid plan",
   "No credit card required",
 ];
 
@@ -307,7 +309,7 @@ const FAQS = [
   },
   {
     q: "What does an audit cost?",
-    a: "5 credits for the crawl and checks, plus the engines you ask: ChatGPT, Gemini and AI Overviews add 5 each, Perplexity 10 and Claude 100. So ChatGPT alone is 10 credits, everything except Claude is 30, and all five engines are 130. At least one engine is required. A failed audit is refunded automatically.",
+    a: "45 credits for the crawl and checks, plus the engines you ask: ChatGPT, Gemini and AI Overviews add 60 each, Perplexity 120 and Claude 1,200. So ChatGPT alone is 105 credits, everything except Claude is 345, and all five engines are 1,545. At least one engine is required. A failed audit is refunded automatically.",
   },
   {
     q: "How many pages does it read?",
@@ -323,8 +325,8 @@ const FAQS = [
   },
 ];
 
-/** The cheapest audit: 5 base + one 1-unit engine (5) — credits/catalog.ts. */
-const CREDITS_PER_AUDIT = 10;
+/** The cheapest audit: (9 base + one 1-unit engine at 12) × 5 — credits/catalog.ts. */
+const CREDITS_PER_AUDIT = 105;
 
 const WRAP = "mx-auto w-full max-w-[1139px] px-5 sm:px-8";
 
@@ -863,8 +865,8 @@ export default function AeoGeoAuditPage() {
                   Not sure which engines to ask?
                 </p>
                 <p className="mt-1.5 max-w-[62ch] text-[14.5px] leading-[1.55] text-[var(--body)]">
-                  ChatGPT alone is 10 credits an audit, every engine except Claude is 30, and all
-                  five are 130. Tell us how many sites you look after and we will size the balance
+                  ChatGPT alone is 105 credits an audit, every engine except Claude is 345, and all
+                  five are 1,545. Tell us how many sites you look after and we will size the balance
                   for you.
                 </p>
               </div>
@@ -1057,7 +1059,9 @@ function PricingGrid({
           $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
         </p>
         <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-          100 credits — about {Math.floor(100 / perUnit)} {unit}
+          {Math.floor(100 / perUnit) > 0
+            ? `100 credits — about ${Math.floor(100 / perUnit)} ${unit}`
+            : `100 credits — an audit starts at ${perUnit}, so audits need a paid plan`}
         </p>
         <Cta placement="pricing_free" label="Get started" size="sm" variant="ghost" arrow={false} className="mt-6 w-full" />
         <p className="mt-7 mb-4 text-[12.5px] font-semibold">Features included:</p>

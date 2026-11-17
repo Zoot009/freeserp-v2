@@ -225,7 +225,7 @@ export const TOOLS: Tool[] = [
       "Real questions put to up to five AI engines, with who got cited",
       "Fixes ranked by points gained per unit of effort",
     ],
-    cost: "From 10 credits an audit",
+    cost: "From 105 credits an audit",
     href: "/aeo-geo-audit",
   },
   {
@@ -238,7 +238,7 @@ export const TOOLS: Tool[] = [
       "A 3×3 local rank grid around the business",
       "A 30-day action plan in three phases",
     ],
-    cost: "5 credits an audit",
+    cost: "95 credits an audit",
     href: "/google-maps-audit",
   },
   {

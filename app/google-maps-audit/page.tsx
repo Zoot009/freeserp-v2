@@ -46,8 +46,8 @@ import { GbpAuditDemo } from "@/components/demos/GbpAuditDemo";
  * report.ts (25 checks, category weights 30/25/20/15/10, pass 1 / warn ½ /
  * fail 0, "Not verified" checks left out of the score, the 30-day plan's three
  * phases), gridScan.ts (3×3 grid, 1 km to the edge), gbpCache.ts (20 newest
- * reviews, 10-day shared cache), credits/catalog.ts (2 + 3 for the grid = 5),
- * billing/spendGate.ts (3 a day on free) and the frontend's verdict bands.
+ * reviews, 10-day shared cache), credits/catalog.ts ((12 + 7 for the grid) × 5 = 95),
+ * billing/spendGate.ts and the frontend's verdict bands.
  * Things the tool does NOT do — sentiment, posts, Q&A, AI writing, share
  * links, CSV, letter grades — are deliberately never mentioned.
  *
@@ -219,7 +219,7 @@ const STEPS = [
 const STATS = [
   { value: "25", label: "checks on every profile" },
   { value: "9", label: "rank grid points" },
-  { value: "5", label: "credits an audit" },
+  { value: "95", label: "credits an audit" },
   { value: "100", label: "free credits every month" },
 ];
 
@@ -257,7 +257,7 @@ const BENEFITS = [
 ];
 
 const FREE_POINTS = [
-  "Up to 3 audits a day",
+  "One full audit a month",
   "All 25 checks and the rank grid",
   "The full 30-day action plan",
   "No credit card required",
@@ -289,7 +289,7 @@ const FAQS = [
   },
   {
     q: "What does an audit cost?",
-    a: "5 credits: 2 for the listing and reviews and 3 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. Free accounts can run up to 3 audits a day.",
+    a: "95 credits: 60 for the listing and reviews and 35 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. The free plan's 100 monthly credits cover one full audit.",
   },
   {
     q: "Can I give the report to a client?",
@@ -301,8 +301,8 @@ const FAQS = [
   },
 ];
 
-/** Credits per full audit: gbp.audit (2) + the 3×3 grid's maps.scan.point (3). */
-const CREDITS_PER_AUDIT = 5;
+/** Credits per full audit: gbp.audit (60) + the 3×3 grid's maps.scan.point (35), both after the 5× multiplier. */
+const CREDITS_PER_AUDIT = 95;
 
 const WRAP = "mx-auto w-full max-w-[1139px] px-5 sm:px-8";
 
@@ -824,7 +824,7 @@ export default function GoogleMapsAuditPage() {
                   Auditing listings for clients?
                 </p>
                 <p className="mt-1.5 max-w-[62ch] text-[14.5px] leading-[1.55] text-[var(--body)]">
-                  A full audit is 5 credits, and re-running one within 10 days often costs less.
+                  A full audit is 95 credits, and re-running one within 10 days often costs less.
                   Tell us how many locations you look after and we will size the balance for you.
                 </p>
               </div>
