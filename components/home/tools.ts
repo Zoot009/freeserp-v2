@@ -153,7 +153,7 @@ export const TOOLS: Tool[] = [
       "Findings ranked Critical, Warning and Notice, counted across every page",
       "Share the report, export it to PDF or CSV, re-crawl whenever you like",
     ],
-    cost: "5 credits per 20 pages",
+    cost: "5 credits per page",
     shot: {
       src: "/shots/site-audit-report.png",
       width: 3200,
@@ -392,7 +392,7 @@ export const CREDIT_COSTS: { action: string; cost: string; note: string }[] = [
   { action: "Local map grid scan", cost: "35–1,475", note: "3×3 costs 35, 11×11 costs 415, 21×21 costs 1,475" },
   { action: "AI answer", cost: "5–35", note: "Per answer sampled; 10 on Perplexity, 35 on Claude" },
   { action: "Page audit", cost: "5", note: "One URL, 63 checks" },
-  { action: "Website audit", cost: "5 / 20 pages", note: "A 1,000-page crawl costs 250" },
+  { action: "Website audit", cost: "5 / page", note: "A 100-page crawl costs 500" },
   { action: "Competitor analysis", cost: "25", note: "Your page against the real top 10" },
   { action: "Internal link analysis", cost: "10", note: "Up to 150 pages crawled and graphed" },
   { action: "Keyword research", cost: "35–190", note: "35 for 100 keywords, 190 for the full page" },

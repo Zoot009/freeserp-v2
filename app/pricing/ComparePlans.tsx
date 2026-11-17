@@ -54,7 +54,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
     rows: [
       { feature: "Keyword Magic Tool", tag: "35–190 / search", values: [true, true, true, true] },
       { feature: "Rows per keyword search", values: [100, "1,000", "1,000", "1,000"] },
-      { feature: "Website Audit", tag: "5 / 20 pages", values: [true, true, true, true] },
+      { feature: "Website Audit", tag: "5 / page", values: [true, true, true, true] },
       { feature: "Page Audit", tag: "5 / audit", values: [true, true, true, true] },
       { feature: "AEO & GEO Audit", tag: "10–130 / audit", values: [true, true, true, true] },
       { feature: "Google Maps Audit", tag: "5 / audit", values: [true, true, true, true] },

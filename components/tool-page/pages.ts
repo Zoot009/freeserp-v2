@@ -138,7 +138,7 @@ export const TOOL_PAGES = {
       },
       {
         q: "How much does a website audit cost?",
-        a: "5 credits per 20 pages crawled, so a full 1,000-page crawl costs 250 credits.",
+        a: "5 credits per page crawled, so a 100-page crawl costs 500 credits.",
       },
       {
         q: "Can I share the report?",

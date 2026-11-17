@@ -15,7 +15,7 @@ export const TOOLS: Tool[] = [
   { name: "AI Prompt Tracker", what: "Brand mentions in ChatGPT, Claude, Gemini, Perplexity", cost: "" },
   { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "35–1,475 / scan" },
   { name: "YouTube Rank Tracker", what: "Video positions, with views and age", cost: "5 / keyword" },
-  { name: "Website Audit", what: "A real browser crawl and 63 SEO rules", cost: "5 / 20 pages" },
+  { name: "Website Audit", what: "A real browser crawl and 63 SEO rules", cost: "5 / page" },
   { name: "Page Audit", what: "One URL, every issue, with an AI plan", cost: "" },
   { name: "Competitor Analysis", what: "Your page against the ones outranking it", cost: "25 / analysis" },
   { name: "AI Internal Linking", what: "Your link graph, with orphans and hubs surfaced", cost: "10 / crawl" },
@@ -89,7 +89,7 @@ export const FAQS: Faq[] = [
   },
   {
     q: "What is a credit?",
-    a: "One unit of work. A tracked keyword costs 5, an audit costs 5 per 20 pages, a competitor analysis costs 25. The full rate card is above.",
+    a: "One unit of work. A tracked keyword costs 5, an audit costs 5 per page, a competitor analysis costs 25. The full rate card is above.",
   },
   {
     q: "Can I share results with a client?",

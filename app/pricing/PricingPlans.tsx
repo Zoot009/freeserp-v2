@@ -55,7 +55,7 @@ function whatItBuys(credits: number): string[] {
     `${Math.floor(credits / 5).toLocaleString()} rank checks`,
     `${Math.floor(credits / 150).toLocaleString()} keywords tracked daily`,
     `${Math.floor(credits / 415).toLocaleString()} local map grid scans`, // an 11×11 grid
-    `${Math.floor(credits / 25).toLocaleString()} full site audits`, // a 100-page crawl
+    `${Math.floor(credits / 500).toLocaleString()} 100-page site audits`, // 5 credits a page
   ];
 }
 
@@ -138,7 +138,7 @@ function packBuys(credits: number): string[] {
   return [
     `${Math.floor(credits / 5).toLocaleString()} rank checks`,
     `or ${Math.floor(credits / 415).toLocaleString()} local grid scans`, // an 11×11 grid
-    `or ${Math.floor(credits / 25).toLocaleString()} site audits`, // a 100-page crawl
+    `or ${Math.floor(credits / 500).toLocaleString()} 100-page site audits`, // 5 credits a page
   ];
 }
 

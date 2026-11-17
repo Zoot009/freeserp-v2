@@ -131,7 +131,7 @@ const HERO_POINTS = [
   "Up to 1,000 pages in one crawl",
   "Findings ranked Critical, Warning, Notice",
   "Every issue counted across every page",
-  "5 credits per 20 pages",
+  "5 credits per page",
 ];
 
 interface Feature {
@@ -383,7 +383,7 @@ const FAQS = [
   },
   {
     q: "What does each tool cost in credits?",
-    a: "A website crawl is 5 credits per 20 pages, so 100 pages is 25. A page audit is 5 credits, and a follow-up question on it is 5 more. Competitor analysis is 25 an analysis, internal link analysis is 10 a crawl, the Keyword Score Checker is 15 a page, and the Keyword Magic Tool is 35 a search — 190 for the fuller result page on a paid plan.",
+    a: "A website crawl is 5 credits a page, so 100 pages is 500. A page audit is 5 credits, and a follow-up question on it is 5 more. Competitor analysis is 25 an analysis, internal link analysis is 10 a crawl, the Keyword Score Checker is 15 a page, and the Keyword Magic Tool is 35 a search — 190 for the fuller result page on a paid plan.",
   },
   {
     q: "How many pages will the site audit crawl?",
