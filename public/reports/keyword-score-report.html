@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Keyword Score Checker — Sample results — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* FreeSerp app light tokens — freeserp-frontend-v2/app/dashboard.css */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --text-soft: #4B5363; --text-mute: #8A93A4;
+    --border: #E7E9EE; --border-strong: #D7DBE3; --hair: #EEF0F3; --bg-sub: #F7F8FA; --bg-inset: #F2F4F7;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB; --warn: #C28B00; --warn-soft: #FBF3DC;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(11,13,18,0.04);
+    --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  h1, h2, h3, h4, p { margin: 0; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--text-mute); }
+  .i { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* top bar */
+  .toolbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 28px; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .brand svg { display: block; }
+  .tb-right { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: var(--r-sm); border: 1px solid var(--border); background: #fff; color: var(--text); font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .btn:hover { background: var(--bg-inset); }
+  .btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .btn.primary:hover { background: var(--brand-deep); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn:focus-visible, .brand:focus-visible, .table-wrap:focus-visible, summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* page */
+  .page { max-width: 1120px; margin: 0 auto; padding: 28px 28px 48px; }
+  .note { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 16px; color: var(--text-mute); font-size: 12.5px; }
+  .note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .rf { margin-top: 24px; text-align: center; color: var(--text-mute); font-size: 12px; }
+
+  @media (max-width: 560px) {
+    .toolbar { padding: 10px 16px; }
+    .toolbar .btn.ghost { display: none; }
+    .page { padding: 20px 16px 36px; }
+  }
+  @page { size: A4; margin: 14mm 12mm; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .table-wrap { overflow: visible; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+  }
+
+  .ph { margin-bottom: 20px; }
+  .back { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--r-sm); background: #fff; font-size: 12px; font-weight: 500; }
+  .eyebrow { margin: 14px 0 6px; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--brand); }
+  .ph h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.025em; overflow-wrap: anywhere; }
+  .facts { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin-top: 6px; font-size: 13.5px; color: var(--text-mute); }
+  .facts span { display: inline-flex; align-items: center; gap: 5px; }
+  .facts .url { color: var(--brand); overflow-wrap: anywhere; }
+  .card { padding: 20px; margin-bottom: 16px; }
+  .card-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .card-h b { display: block; font-size: 14px; font-weight: 600; }
+  .card-h .muted { display: block; margin-top: 2px; font-size: 11.5px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 5px; background: var(--bg-inset); color: var(--text-soft); font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .chip .i { width: 12px; height: 12px; }
+  .chip.brand { background: var(--brand-soft); color: var(--brand); }
+  .chip.pos { background: var(--pos-soft); color: var(--pos); }
+  .chip.neg { background: var(--neg-soft); color: var(--neg); }
+  .chip.outline { background: transparent; border: 1px solid var(--border); }
+  .meter { height: 6px; border-radius: 999px; background: var(--bg-inset); overflow: hidden; }
+  .meter span { display: block; height: 100%; border-radius: inherit; }
+  .meter.sm { background: #fff; }
+
+  .hero { display: flex; align-items: center; gap: 28px; }
+  .ring { position: relative; width: 120px; height: 120px; flex-shrink: 0; }
+  .ring svg { display: block; }
+  .ring-v { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; text-align: center; }
+  .ring-v div { font-size: 34px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ring-v small { margin-top: 3px; font-size: 11px; font-weight: 500; color: var(--text-mute); }
+  .hero-main { flex: 1; min-width: 0; }
+  .hero-h { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+  .hero-h b { font-size: 16px; font-weight: 600; }
+  .grade { padding: 4px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+  .hint { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--border-strong); color: var(--text-mute); font-size: 10px; font-weight: 600; cursor: help; }
+  .verdict { margin: 8px 0 18px; max-width: 720px; font-size: 14px; color: var(--text-soft); }
+  .parts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 32px; max-width: 760px; }
+  .part-h { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+  .part-l { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--text-mute); }
+  .part-w { margin-left: 6px; font-weight: 500; letter-spacing: 0; text-transform: none; opacity: .8; }
+  .part-v { font-size: 20px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+  .mt { min-width: 0; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--bg-inset); font-size: 11.5px; }
+  .mt-l { margin-bottom: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-mute); }
+  .mt-v { font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .mt-h { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+  .mt-h .mt-l { margin: 0; }
+  .mt p { margin: 0; }
+  .auth { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .auth-v { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .auth-v small { margin-left: 2px; font-size: 12px; font-weight: 500; color: var(--text-mute); letter-spacing: 0; }
+  .auth-c { margin-top: 2px; color: var(--text-mute); }
+  .foot-note { margin-top: 14px; font-size: 11.5px; color: var(--text-mute); }
+
+  .factor { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 240px) 56px; gap: 6px 20px; align-items: center; padding: 11px 0; border-top: 1px solid var(--border); }
+  .factor:first-child { border-top: 0; padding-top: 0; }
+  .factor b { display: block; font-size: 13px; font-weight: 600; }
+  .factor .muted { display: block; margin-top: 1px; font-size: 12px; }
+  .fv { text-align: right; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .fv small { font-size: 11.5px; font-weight: 500; color: var(--text-mute); }
+
+  .every { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin: 24px 0 12px; }
+  .every b { font-size: 15px; font-weight: 600; }
+  .every .muted { margin-top: 2px; font-size: 11.5px; }
+  details.sec { padding: 0; margin-bottom: 12px; overflow: hidden; }
+  details.sec summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; cursor: pointer; list-style: none; }
+  details.sec summary::-webkit-details-marker { display: none; }
+  .sec-t { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .sec-t b { display: block; font-size: 15px; font-weight: 600; }
+  .sec-t .muted { display: block; margin-top: 2px; font-size: 11.5px; }
+  .sec-ic { display: grid; place-items: center; width: 32px; height: 32px; flex-shrink: 0; border-radius: var(--r-sm); background: var(--brand-soft); }
+  .sec-ic.content { background: var(--pos-soft); } .sec-ic.images { background: var(--warn-soft); } .sec-ic.technical { background: var(--bg-inset); }
+  .sec-r { display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .chev { color: var(--text-mute); transition: transform .15s; }
+  details[open] .chev { transform: rotate(90deg); }
+  .sec-b { display: flex; flex-direction: column; gap: 14px; padding: 16px 18px 20px; border-top: 1px solid var(--border); }
+  .tiles { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tiles > * { flex: 1 1 var(--min); }
+  .subh { margin-bottom: 8px; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-mute); }
+  .chk { display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--pos); }
+  .chk.no { border-left-color: var(--neg); background: var(--neg-soft); }
+  .ci { display: inline-flex; flex-shrink: 0; }
+  .chk.ok .ci { color: var(--pos); } .chk.no .ci { color: var(--neg); }
+  .canon { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .canon .mono, .ell { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .g2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .pl { padding: 0; overflow: hidden; }
+  .pl .subh { padding: 12px 14px 6px; margin: 0; }
+  .pl-r { display: flex; justify-content: space-between; gap: 10px; padding: 8px 14px; border-top: 1px solid var(--border); }
+  .pl-r:nth-child(2) { border-top: 0; }
+  .pl-r b { flex-shrink: 0; padding: 2px 8px; border-radius: 999px; background: #fff; color: var(--text-mute); font-variant-numeric: tabular-nums; }
+  .cap { text-transform: capitalize; }
+  .ctr { text-align: center; }
+  .hier { display: flex; flex-direction: column; gap: 6px; }
+  .hier > div { display: flex; align-items: flex-start; gap: 8px; }
+  .hier .sect { margin-left: auto; flex-shrink: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .il { display: flex; flex-direction: column; gap: 6px; }
+  .il > div { display: flex; gap: 8px; min-width: 0; }
+  .il .muted:first-child { flex-shrink: 0; }
+  .il .u { margin-left: auto; flex-shrink: 0; max-width: min(220px, 40%); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .imgs { display: flex; flex-direction: column; gap: 10px; }
+  .imgs > div { display: flex; align-items: flex-start; gap: 10px; }
+  .thumb { width: 36px; height: 36px; flex-shrink: 0; border: 1px solid var(--border); border-radius: var(--r-sm); background: linear-gradient(135deg, #E4E8EF, #F5F6F8); }
+  .ell-w { min-width: 0; flex: 1; }
+  .ir { display: flex; align-items: center; gap: 6px; min-width: 0; }
+
+  @media (max-width: 720px) {
+    .auth { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 560px) {
+    .card { padding: 16px; }
+    .hero { flex-direction: column; align-items: stretch; gap: 16px; }
+    .ring { align-self: center; }
+    .parts, .g2 { grid-template-columns: minmax(0, 1fr); }
+    .factor { grid-template-columns: minmax(0, 1fr) 56px; }
+    .factor .meter { grid-column: 1 / -1; grid-row: 2; }
+    details.sec summary { padding: 14px; }
+    .sec-b { padding: 14px; }
+    .sec-ic { display: none; }
+  }
+  @media print {
+    .card, .factor, .mt, .tiles { break-inside: avoid; }
+    details.sec { break-inside: auto; }
+    .chev { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar" role="banner">
+  <a class="brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+    FreeSerp
+  </a>
+  <div class="tb-right">
+    <button type="button" class="btn primary" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print</button>
+    <a class="btn ghost" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="page">
+  <p class="note" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>Example data for a made-up page. This shows what the Keyword Score Checker’s results screen contains. Results open in your dashboard; the tool has no downloadable report.</span></p>
+
+  <main>
+    <div class="ph">
+      <span class="back">‹ Back</span>
+      <div class="eyebrow">Keyword score report</div>
+      <h1>dental implants cost</h1>
+      <div class="facts">
+        <span class="url">example-dental.com/services/dental-implants-cost ↗</span>
+        <span>Nov 16, 2026</span>
+        <span style="color:var(--pos);font-weight:600">HTTP 200</span>
+        <span>1,140 words</span>
+        <span>Crawled in 6.8s</span>
+      </div>
+    </div>
+
+    <section class="card hero" aria-label="Overall score">
+      <div class="ring"><svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Overall score 64 out of 100"><circle cx="60" cy="60" r="55" fill="none" stroke="var(--bg-inset)" stroke-width="10"/><circle cx="60" cy="60" r="55" fill="none" stroke="var(--brand)" stroke-width="10" stroke-dasharray="345.58" stroke-dashoffset="124.41" stroke-linecap="round" transform="rotate(-90 60 60)"/></svg><div class="ring-v" aria-hidden="true"><div style="color:var(--brand)">64</div><small>/ 100</small></div></div>
+      <div class="hero-main">
+        <div class="hero-h">
+          <b>Overall score</b>
+          <span class="grade" style="background:var(--brand-soft);color:var(--brand)">Grade C · Fair</span>
+          <span class="hint" title="On-page SEO counts for 30% of this score and off-page authority (Domain and Page Authority, backlinks) for 70%. When authority can't be measured, the score is on-page only.">i</span>
+        </div>
+        <p class="verdict">The page itself is in good shape. Its authority and backlinks are what hold the score down.</p>
+        <div class="parts">
+          <div><div class="part-h"><span class="part-l">On-page SEO<span class="part-w">· 30% of score</span></span><span class="part-v">72</span></div><div class="meter"><span style="width:72.0%;background:var(--brand)"></span></div></div>
+          <div><div class="part-h"><span class="part-l">Off-page SEO<span class="part-w">· 70% of score</span></span><span class="part-v">60</span></div><div class="meter"><span style="width:60.0%;background:var(--brand)"></span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-auth">
+      <div class="card-h"><div><b id="h-auth">Authority &amp; backlinks</b><span class="muted">Off-page: 70% of the score</span></div><span class="chip outline">Moz</span></div>
+      <div class="auth">
+        <div class="mt"><div class="mt-l">Domain Authority</div><div class="auth-v">52<small>/100</small></div><div class="auth-c">Site-wide</div><div style="margin-top:8px"><div class="meter"><span style="width:52.0%;background:var(--neg)"></span></div></div></div>
+        <div class="mt"><div class="mt-l">Page Authority</div><div class="auth-v">41<small>/100</small></div><div class="auth-c">This page</div><div style="margin-top:8px"><div class="meter"><span style="width:41.0%;background:var(--neg)"></span></div></div></div>
+        <div class="mt"><div class="mt-l">Domain backlinks</div><div class="auth-v">38,400</div><div class="auth-c">Site-wide</div></div>
+        <div class="mt"><div class="mt-l">Page backlinks</div><div class="auth-v">640</div><div class="auth-c">This page</div></div>
+      </div>
+      <p class="foot-note">Authority grows as relevant sites link to yours. It moves slowly, so the on-page factors are the quicker wins.</p>
+    </section>
+
+    <section class="card" aria-labelledby="h-fac">
+      <div class="card-h"><div><b id="h-fac">On-page factors</b><span class="muted">Biggest gaps first: the top of this list is where points are easiest to win.</span></div><span class="chip outline num">72 / 100</span></div>
+      <div>
+        <div class="factor"><div><b>Meta description</b><span class="muted">120–160 characters, with the keyword in it</span></div><div class="meter"><span style="width:50.0%;background:var(--warn)"></span></div><span class="fv">4<small>/8</small></span></div>
+        <div class="factor"><div><b>Content</b><span class="muted">1,500+ words, with the keyword in the first 100</span></div><div class="meter"><span style="width:66.7%;background:var(--warn)"></span></div><span class="fv">8<small>/12</small></span></div>
+        <div class="factor"><div><b>Headings</b><span class="muted">One H1 with the keyword, 3+ H2s, the keyword in an H2 and an H3</span></div><div class="meter"><span style="width:60.0%;background:var(--warn)"></span></div><span class="fv">6<small>/10</small></span></div>
+        <div class="factor"><div><b>Rich content</b><span class="muted">A table of contents, an FAQ section and a video</span></div><div class="meter"><span style="width:33.3%;background:var(--neg)"></span></div><span class="fv">2<small>/6</small></span></div>
+        <div class="factor"><div><b>Lighthouse</b><span class="muted">Google's performance, SEO, accessibility and best-practice scores</span></div><div class="meter"><span style="width:76.0%;background:var(--warn)"></span></div><span class="fv">11.4<small>/15</small></span></div>
+        <div class="factor"><div><b>Page speed</b><span class="muted">Fast TTFB, FCP, LCP and TBT, and a low CLS</span></div><div class="meter"><span style="width:70.0%;background:var(--warn)"></span></div><span class="fv">7<small>/10</small></span></div>
+        <div class="factor"><div><b>Links</b><span class="muted">10+ internal and 3+ external links, the keyword in internal anchors</span></div><div class="meter"><span style="width:75.0%;background:var(--warn)"></span></div><span class="fv">9<small>/12</small></span></div>
+        <div class="factor"><div><b>Images</b><span class="muted">Alt text on every image, and the keyword in one</span></div><div class="meter"><span style="width:60.0%;background:var(--warn)"></span></div><span class="fv">3<small>/5</small></span></div>
+        <div class="factor"><div><b>Link placement</b><span class="muted">Links in the main content, header and footer, the keyword in one</span></div><div class="meter"><span style="width:80.0%;background:var(--pos)"></span></div><span class="fv">4<small>/5</small></span></div>
+        <div class="factor"><div><b>URL</b><span class="muted">The keyword in the domain and the page's path</span></div><div class="meter"><span style="width:100.0%;background:var(--pos)"></span></div><span class="fv">5<small>/5</small></span></div>
+        <div class="factor"><div><b>Title tag</b><span class="muted">30–60 characters, with the keyword in it</span></div><div class="meter"><span style="width:100.0%;background:var(--pos)"></span></div><span class="fv">10<small>/10</small></span></div>
+        <div class="factor"><div><b>Structured data</b><span class="muted">Schema markup on the page</span></div><div class="meter"><span style="width:100.0%;background:var(--pos)"></span></div><span class="fv">5<small>/5</small></span></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="h-every">
+      <div class="every"><div><b id="h-every">Every check</b><div class="muted">Section by section. The ones with issues are open.</div></div></div>
+      <details class="card sec" open>
+        <summary><span class="sec-t"><span class="sec-ic meta" style="color:var(--brand)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span><span><b>Meta Tags</b><span class="muted">Title, description, canonical, and Open Graph data</span></span></span><span class="sec-r"><span class="chip neg">1 issue</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="mt"><div class="mt-h"><span class="mt-l">Title</span><span style="color:var(--pos)">57 chars</span></div><p>Dental Implants Cost: Prices &amp; Financing | Example Dental</p></div>
+          <div class="mt"><div class="mt-h"><span class="mt-l">Meta Description</span><span style="color:var(--warn)">183 chars</span></div><p class="muted">How much do dental implants cost? See 2026 prices for single implants, implant bridges and All-on-4, what insurance covers, and the monthly financing plans we offer at Example Dental.</p></div>
+          <div class="mt"><div class="mt-l">Canonical URL</div><div class="canon"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="mono">https://example-dental.com/services/dental-implants-cost</span></div></div>
+          <div class="tiles" style="--min:150px"><div class="mt"><div class="mt-l">Language</div><div class="mt-v">en-US</div></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>HTTPS<span class="muted"> · Secure</span></span></div></div>
+          <div><div class="subh">Open Graph</div><div class="tiles" style="--min:200px"><div class="mt"><div class="mt-l">og:title</div><div class="ell">Dental Implants Cost: Prices &amp; Financing</div></div><div class="mt"><div class="mt-l">og:description</div><div class="ell">See 2026 prices for single implants, bridges and All-on-4…</div></div><div class="mt"><div class="mt-l">og:type</div><div class="ell">article</div></div><div class="mt"><div class="mt-l">og:url</div><div class="ell">https://example-dental.com/services/dental-implants-cost</div></div><div class="mt"><div class="mt-l">og:image</div><div class="ell">https://example-dental.com/img/og-implants.jpg</div></div><div class="mt"><div class="mt-l">og:site_name</div><div class="ell">Example Dental</div></div></div></div>
+        </div>
+      </details>
+      <details class="card sec">
+        <summary><span class="sec-t"><span class="sec-ic keyword" style="color:var(--brand)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg></span><span><b>Keyword Analysis</b><span class="muted">Target: &quot;dental implants cost&quot;</span></span></span><span class="sec-r"><span class="chip pos"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Passed</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="tiles" style="--min:160px"><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>In Title</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>In H1</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>In Meta Desc</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>In First 100 Words</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>In URL</span></div></div>
+          <div class="tiles" style="--min:120px"><div class="mt"><div class="mt-l">Occurrences</div><div class="mt-v">14</div></div><div class="mt"><div class="mt-l">Density</div><div class="mt-v">1.2%</div></div></div>
+          <div><div class="subh">Density by Section</div><div class="tiles" style="--min:170px"><div class="mt"><div class="mt-l">main</div><div>12 hits · 1.3%</div><div class="muted">924 words</div></div><div class="mt"><div class="mt-l">header</div><div>1 hit · 2.9%</div><div class="muted">34 words</div></div><div class="mt"><div class="mt-l">footer</div><div>1 hit · 0.6%</div><div class="muted">182 words</div></div></div></div>
+          <div class="g2"><div class="mt pl"><div class="subh">Two-word Phrases</div><div class="pl-r"><span>dental implants</span><b>31×</b></div><div class="pl-r"><span>implant cost</span><b>12×</b></div><div class="pl-r"><span>all-on-4 implants</span><b>7×</b></div><div class="pl-r"><span>bone grafting</span><b>6×</b></div><div class="pl-r"><span>monthly plans</span><b>5×</b></div><div class="pl-r"><span>free consultation</span><b>5×</b></div><div class="pl-r"><span>implant bridge</span><b>4×</b></div><div class="pl-r"><span>dental insurance</span><b>4×</b></div></div><div class="mt pl"><div class="subh">Three-word Phrases</div><div class="pl-r"><span>dental implants cost</span><b>14×</b></div><div class="pl-r"><span>single tooth implant</span><b>6×</b></div><div class="pl-r"><span>cost of implants</span><b>5×</b></div><div class="pl-r"><span>dental implant financing</span><b>4×</b></div><div class="pl-r"><span>does insurance cover</span><b>3×</b></div><div class="pl-r"><span>implant bridge cost</span><b>3×</b></div><div class="pl-r"><span>book a consultation</span><b>3×</b></div><div class="pl-r"><span>how much does</span><b>3×</b></div></div></div>
+        </div>
+      </details>
+      <details class="card sec">
+        <summary><span class="sec-t"><span class="sec-ic content" style="color:var(--pos)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></span><span><b>Content Analysis</b><span class="muted">1,140 words, 68 sentences</span></span></span><span class="sec-r"><span class="chip pos"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Passed</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="tiles" style="--min:110px"><div class="mt"><div class="mt-l">Word Count</div><div class="mt-v" style="color:var(--pos)">1,140</div></div><div class="mt"><div class="mt-l">Unique Words</div><div class="mt-v">512</div></div><div class="mt"><div class="mt-l">Paragraphs</div><div class="mt-v">24</div></div><div class="mt"><div class="mt-l">Reading Time</div><div class="mt-v">5m</div></div><div class="mt"><div class="mt-l">Sentences</div><div class="mt-v">68</div></div></div>
+          <div class="g2"><div class="mt"><div class="mt-h"><span class="mt-l">Readability (Flesch Score)</span><b class="num">58.4</b></div><div class="meter sm"><span style="width:58.4%;background:var(--warn)"></span></div></div><div class="mt"><div class="mt-l">Grade Level (Flesch-Kincaid)</div><div class="mt-v">9.2</div></div></div>
+          <div><div class="subh">Page Sections</div><div class="tiles" style="--min:170px"><div class="mt"><div class="cap"><b>header</b></div><div class="muted">34 words</div><div class="muted">H1: 0, H2: 0, H3: 0</div><div class="muted">14 internal, 0 external links</div></div><div class="mt"><div class="cap"><b>main</b></div><div class="muted">924 words</div><div class="muted">H1: 1, H2: 5, H3: 6</div><div class="muted">21 internal, 6 external links</div></div><div class="mt"><div class="cap"><b>footer</b></div><div class="muted">182 words</div><div class="muted">H1: 0, H2: 0, H3: 0</div><div class="muted">14 internal, 3 external links</div></div></div></div>
+        </div>
+      </details>
+      <details class="card sec">
+        <summary><span class="sec-t"><span class="sec-ic headings" style="color:var(--brand)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></span><span><b>Heading Structure</b><span class="muted">1 H1, 5 H2, 6 H3</span></span></span><span class="sec-r"><span class="chip pos"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Passed</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="tiles" style="--min:80px"><div class="mt ctr"><div class="mt-l">H1</div><div class="mt-v">1</div></div><div class="mt ctr"><div class="mt-l">H2</div><div class="mt-v">5</div></div><div class="mt ctr"><div class="mt-l">H3</div><div class="mt-v">6</div></div><div class="mt ctr"><div class="mt-l">H4</div><div class="mt-v">0</div></div><div class="mt ctr"><div class="mt-l">H5</div><div class="mt-v">0</div></div><div class="mt ctr"><div class="mt-l">H6</div><div class="mt-v">0</div></div></div>
+          <div class="mt"><div class="subh">Heading Hierarchy</div><div class="hier"><div style="padding-left:0px"><span class="chip brand">H1</span><span>Dental Implants Cost in 2026</span><span class="muted sect">[main]</span></div><div style="padding-left:14px"><span class="chip outline">H2</span><span>How much does a dental implant cost?</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Single tooth implant cost</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Implant bridge and All-on-4 cost</span><span class="muted sect">[main]</span></div><div style="padding-left:14px"><span class="chip outline">H2</span><span>What affects the price</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Bone grafting and extractions</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Materials and the crown</span><span class="muted sect">[main]</span></div><div style="padding-left:14px"><span class="chip outline">H2</span><span>Does insurance cover dental implants?</span><span class="muted sect">[main]</span></div><div style="padding-left:14px"><span class="chip outline">H2</span><span>Paying for implants: financing</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Monthly plans</span><span class="muted sect">[main]</span></div><div style="padding-left:14px"><span class="chip outline">H2</span><span>Dental implants cost FAQ</span><span class="muted sect">[main]</span></div><div style="padding-left:28px"><span class="chip outline">H3</span><span>Is a free consultation available?</span><span class="muted sect">[main]</span></div></div></div>
+        </div>
+      </details>
+      <details class="card sec">
+        <summary><span class="sec-t"><span class="sec-ic links" style="color:var(--brand)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></span><span><b>Link Analysis</b><span class="muted">58 total (49 internal, 9 external)</span></span></span><span class="sec-r"><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="tiles" style="--min:120px"><div class="mt"><div class="mt-l">Internal</div><div class="mt-v">49</div></div><div class="mt"><div class="mt-l">External</div><div class="mt-v">9</div></div><div class="mt"><div class="mt-l">Nofollow</div><div class="mt-v">2</div></div><div class="mt"><div class="mt-l">Self-references</div><div class="mt-v">3</div></div></div>
+          <div><div class="subh">Links by Section</div><div class="tiles" style="--min:170px"><div class="mt"><div class="mt-l cap">header</div><div>14 internal, 0 external</div></div><div class="mt"><div class="mt-l cap">main</div><div>21 internal, 6 external</div></div><div class="mt"><div class="mt-l cap">footer</div><div>14 internal, 3 external</div></div></div></div>
+          <div class="mt"><div class="subh">External Domains (6)</div><div class="chips"><span class="chip outline">ada.org</span><span class="chip outline">aaid.org</span><span class="chip outline">carecredit.com</span><span class="chip outline">facebook.com</span><span class="chip outline">instagram.com</span><span class="chip outline">google.com</span></div></div>
+          <div class="mt"><div class="subh">Internal Links (top 20)</div><div class="il"><div><span class="muted">[header]</span><span class="ell">Services</span><span class="mono muted u">/services</span></div><div><span class="muted">[header]</span><span class="ell">About</span><span class="mono muted u">/about</span></div><div><span class="muted">[header]</span><span class="ell">Blog</span><span class="mono muted u">/blog</span></div><div><span class="muted">[header]</span><span class="ell">Locations</span><span class="mono muted u">/locations</span></div><div><span class="muted">[header]</span><span class="ell">Book now</span><span class="mono muted u">/book-appointment</span></div><div><span class="muted">[main]</span><span class="ell">dental implants</span><span class="mono muted u">/services/dental-implants</span></div><div><span class="muted">[main]</span><span class="ell">All-on-4 implants</span><span class="mono muted u">/services/dental-implants#all-on-4</span></div><div><span class="muted">[main]</span><span class="ell">dental implant financing</span><span class="mono muted u">/patients/financing</span></div><div><span class="muted">[main]</span><span class="ell">insurance we accept</span><span class="mono muted u">/patients/insurance</span></div><div><span class="muted">[main]</span><span class="ell">How long do implants last?</span><span class="mono muted u">/blog/how-long-do-implants-last</span></div><div><span class="muted">[main]</span><span class="ell">bone grafting</span><span class="mono muted u">/services/bone-grafting</span></div><div><span class="muted">[main]</span><span class="ell">free consultation</span><span class="mono muted u">/book-appointment</span></div><div><span class="muted">[main]</span><span class="ell">see our pricing</span><span class="mono muted u">/pricing</span></div><div><span class="muted">[main]</span><span class="ell">patient reviews</span><span class="mono muted u">/reviews</span></div><div><span class="muted">[main]</span><span class="ell">Dr. Lena Ortiz</span><span class="mono muted u">/about/team/dr-lena-ortiz</span></div><div><span class="muted">[footer]</span><span class="ell">Contact</span><span class="mono muted u">/contact</span></div><div><span class="muted">[footer]</span><span class="ell">Downtown</span><span class="mono muted u">/locations/downtown</span></div><div><span class="muted">[footer]</span><span class="ell">Northside</span><span class="mono muted u">/locations/northside</span></div><div><span class="muted">[footer]</span><span class="ell">Westfield</span><span class="mono muted u">/locations/westfield</span></div><div><span class="muted">[footer]</span><span class="ell">Privacy policy</span><span class="mono muted u">/privacy</span></div></div></div>
+        </div>
+      </details>
+      <details class="card sec" open>
+        <summary><span class="sec-t"><span class="sec-ic images" style="color:var(--warn)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span><span><b>Image Analysis</b><span class="muted">14 images, 3 missing alt</span></span></span><span class="sec-r"><span class="chip neg">1 issue</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div class="tiles" style="--min:120px"><div class="mt"><div class="mt-l">Total Images</div><div class="mt-v">14</div></div><div class="mt"><div class="mt-l">With Alt Text</div><div class="mt-v">11</div></div><div class="mt"><div class="mt-l">Missing Alt</div><div class="mt-v" style="color:var(--warn)">3</div></div><div class="mt"><div class="mt-l">Lazy Loaded</div><div class="mt-v">10</div></div></div>
+          <div class="mt"><div class="subh">Images (showing 14)</div><div class="imgs"><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--neg)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span class="ell">(no alt text)</span></div><div class="mono muted ell">/img/implant-diagram.svg</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--neg)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span class="ell">(no alt text)</span></div><div class="mono muted ell">/img/financing-badge.png</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--neg)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span class="ell">(no alt text)</span></div><div class="mono muted ell">/img/team-photo-2.jpg</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Dental implant cost comparison chart</span></div><div class="mono muted ell">/img/implant-cost-chart.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Single tooth dental implant</span></div><div class="mono muted ell">/img/single-implant.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">All-on-4 implant bridge</span></div><div class="mono muted ell">/img/all-on-4.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Dr. Lena Ortiz, implant dentist</span></div><div class="mono muted ell">/img/dr-ortiz.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Example Dental downtown clinic</span></div><div class="mono muted ell">/img/clinic-downtown.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Patient smiling after implants</span></div><div class="mono muted ell">/img/patient-smile.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Implant consultation 3D scan</span></div><div class="mono muted ell">/img/3d-scan.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Example Dental logo</span></div><div class="mono muted ell">/img/logo.svg</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Insurance logos</span></div><div class="mono muted ell">/img/insurers.png</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Before and after implant</span></div><div class="mono muted ell">/img/before-after.webp</div></div></div><div><span class="thumb" aria-hidden="true"></span><div class="ell-w"><div class="ir"><span class="ci" style="color:var(--pos)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="ell">Google rating 4.9 stars</span></div><div class="mono muted ell">/img/rating.svg</div></div></div></div></div>
+        </div>
+      </details>
+      <details class="card sec">
+        <summary><span class="sec-t"><span class="sec-ic technical" style="color:var(--text-mute)" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span><b>Technical SEO</b><span class="muted">Performance, structured data, and technical checks</span></span></span><span class="sec-r"><span class="chip pos"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Passed</span><svg class="i chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></span></summary>
+        <div class="sec-b">
+          
+          <div><div class="subh">Performance</div><div class="tiles" style="--min:100px"><div class="mt"><div class="mt-l">TTFB</div><div class="mt-v" style="color:var(--pos)">412ms</div></div><div class="mt"><div class="mt-l">DOM Interactive</div><div class="mt-v">1140ms</div></div><div class="mt"><div class="mt-l">DOM Loaded</div><div class="mt-v">1620ms</div></div><div class="mt"><div class="mt-l">FCP</div><div class="mt-v" style="color:var(--pos)">1280ms</div></div><div class="mt"><div class="mt-l">LCP</div><div class="mt-v" style="color:var(--warn)">2940ms</div></div><div class="mt"><div class="mt-l">CLS</div><div class="mt-v" style="color:var(--pos)">0.04</div></div></div></div>
+          <div><div class="subh">Technical Checks</div><div class="tiles" style="--min:140px"><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Favicon</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Viewport</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Schema Markup</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>HTTPS</span></div></div></div>
+          <div class="mt"><div class="subh">Schema Markup (3)</div><div class="chips"><span class="chip brand">Dentist</span><span class="chip brand">FAQPage</span><span class="chip brand">BreadcrumbList</span></div></div>
+          <div class="tiles" style="--min:120px"><div class="mt"><div class="mt-l">Scripts</div><div class="mt-v">21</div></div><div class="mt"><div class="mt-l">Stylesheets</div><div class="mt-v">6</div></div><div class="mt"><div class="mt-l">Inline Styles</div><div class="mt-v">14</div></div></div>
+          <div><div class="subh">Trust Signals</div><div class="tiles" style="--min:140px"><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Privacy Policy</span></div><div class="mt chk no"><span class="ci" role="img" aria-label="Failed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span>Terms of Service</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Contact Info</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Social Links</span></div></div></div>
+          <div><div class="subh">Content Structure</div><div class="tiles" style="--min:160px"><div class="mt chk no"><span class="ci" role="img" aria-label="Failed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span>Table of Contents</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>FAQ Section</span></div><div class="mt chk no"><span class="ci" role="img" aria-label="Failed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span><span>Video</span></div><div class="mt chk ok"><span class="ci" role="img" aria-label="Passed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span>Breadcrumb</span></div><div class="mt"><div class="mt-l">Lists</div><div class="mt-v">6</div></div><div class="mt"><div class="mt-l">Bullet Points</div><div class="mt-v">31</div></div></div></div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="rf">Generated by FreeSERP · freeserp.com</footer>
+</div>
+<script>addEventListener('beforeprint', function () { document.querySelectorAll('details.sec').forEach(function (d) { d.open = true; }); });</script>
+</body>
+</html>

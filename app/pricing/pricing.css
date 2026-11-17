@@ -264,6 +264,12 @@
   color: #0b1220;
 }
 
+/* Tailwind's preflight makes svg display:block, which text-align can't centre —
+   that left the tick and dash icons hugging the left edge of their cell. */
+.pr-compare tbody td > svg {
+  margin: 0 auto;
+}
+
 .pr-compare tbody tr:last-child td {
   border-bottom: none;
 }

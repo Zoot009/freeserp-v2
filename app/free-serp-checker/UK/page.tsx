@@ -5,6 +5,10 @@ import { Check, MapPin, Quote } from "lucide-react";
 import { LogoMark } from "@/components/landing/ui/Logo";
 import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { brands } from "@/lib/landing/content";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { HeroReportButton } from "@/components/site/HeroReportButton";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 
 import { Cta } from "./Cta";
 import { CheckForm } from "./CheckForm";
@@ -12,6 +16,8 @@ import { UkMap } from "./UkMap";
 import { VisibilityMock, RankReportMock, ThematicMock } from "./Mockups";
 import { content } from "./content";
 import "./ads.css";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 /**
  * /free-serp-checker/UK — the paid-acquisition landing page for the UK market.
@@ -83,27 +89,12 @@ export default function FreeSerpCheckerUkPage() {
       lang="en-GB"
       className={`uk-scope ${sans.variable} ${mono.variable}`}
     >
-      <main>
-        {/* ── hero ──────────────────────────────────────────────────────────
-            The top bar carries the mark and one button, and that button is the
-            conversion action rather than a way out of the page. Still no nav: a
-            paid visitor arrived for one question, and a row of links up here is
-            an invitation to leave before it is answered. */}
-        <section className="uk-hero pt-5 pb-16 sm:pb-20">
-          <div className={`${WRAP} uk-enter`}>
-            <div className="uk-topbar">
-              <span className="uk-wordmark">
-                <LogoMark className="h-[22px] w-[22px]" />
-                FreeSERP
-              </span>
-              <Cta
-                placement="topbar"
-                label={content.topbarCta}
-                size="sm"
-                variant="ghost"
-              />
-            </div>
+      <Nav solid />
 
+      <main>
+        {/* ── hero ────────────────────────────────────────────────────────── */}
+        <section className="uk-hero pt-16 pb-16 sm:pb-20">
+          <div className={`${WRAP} uk-enter`}>
             <h1 className="uk-h1 mx-auto mt-16 max-w-[19ch] text-center text-balance">
               {content.hero.headline1}{" "}
               <span className="uk-hero-accent">
@@ -119,8 +110,15 @@ export default function FreeSerpCheckerUkPage() {
             </p>
 
             <CheckForm dict={content.check} />
+            <div className="mt-6 flex justify-center">
+              <HeroReportButton href={SAMPLE_REPORTS.rank.href} variant="onLight" />
+            </div>
           </div>
         </section>
+
+        <DemoSection title="Click a keyword, see its history">
+          <RankTrackerDemo />
+        </DemoSection>
 
         {/* ── the demo ──────────────────────────────────────────────────────
             Lifted out of the hero into a panel of its own, so the clip is the
@@ -462,24 +460,7 @@ export default function FreeSerpCheckerUkPage() {
         </section>
       </main>
 
-      <footer className="pb-12">
-        <div
-          className={`${WRAP} flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]`}
-        >
-          <span>{content.finalCta.copyright}</span>
-          <div className="flex flex-wrap gap-6">
-            <a href="/terms" className="hover:text-[var(--ink)]">
-              {content.finalCta.legal}
-            </a>
-            <a href="/privacy" className="hover:text-[var(--ink)]">
-              {content.finalCta.privacy}
-            </a>
-            <a href="/privacy" className="hover:text-[var(--ink)]">
-              {content.finalCta.doNotSell}
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

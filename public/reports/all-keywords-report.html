@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>All Keywords — Sample results — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tokens: freeserp-frontend-v2/app/dashboard.css (.fs-app) */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --soft: #4B5363; --mute: #8A93A4;
+    --border: #E7E9EE; --border-strong: #D7DBE3; --bg-sub: #F7F8FA; --muted: #F2F4F7; --card: #FFFFFF;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB; --warn: #C28B00; --warn-soft: #FBF3DC;
+    --shadow-sm: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1);
+    --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+  h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  b { font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .m { color: var(--soft); }
+  .mu { color: var(--mute); }
+  .xs { font-size: 12px; }
+  .trunc { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lnk { color: var(--brand); }
+
+  /* Sample toolbar: the dashboard's .topbar with the sidebar brand row */
+  .topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .tb-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sb-brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); }
+  .sb-brand:hover { text-decoration: none; }
+  .sb-brand svg { display: block; border-radius: 6px; }
+  .hb { display: inline-flex; height: 32px; align-items: center; gap: 6px; white-space: nowrap; border-radius: 7px; border: 1px solid var(--border); background: var(--card); padding: 0 12px; font: inherit; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: background-color .15s; }
+  .hb:hover { background: var(--muted); text-decoration: none; }
+  .hb.pri { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .hb.pri:hover { background: var(--brand-deep); }
+  .hb svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .notice { background: var(--brand-soft); color: var(--text); font-size: 13px; line-height: 1.5; padding: 10px 28px; text-align: center; border-bottom: 1px solid var(--border); }
+
+  /* .page (dashboard.css) */
+  .page { max-width: 1200px; margin: 0 auto; padding: 28px 28px 60px; }
+  .stack > * + * { margin-top: 20px; }
+
+  /* Page header (.page-h) */
+  .page-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .page-h h1 { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  .crumb { font-size: 12px; color: var(--soft); margin-bottom: 4px; }
+  .sub { margin-top: 4px; font-size: 13px; color: var(--soft); }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font: inherit; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: default; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.sm { height: 28px; padding: 0 10px; font-size: 12px; }
+
+  /* Cards, StatTile */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-sm); min-width: 0; break-inside: avoid; }
+  .card.flow { break-inside: auto; }
+  .card-h { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .card-h .t { font-size: 14px; font-weight: 600; }
+  .pb { padding: 16px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { padding: 16px 18px; }
+  .stat .lb { font-size: 13px; font-weight: 500; color: var(--soft); }
+  .stat .v { margin-top: 10px; font-size: 30px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .cap { margin-top: 8px; font-size: 12.5px; color: var(--soft); }
+  .trk { display: block; margin-top: 8px; height: 5px; overflow: hidden; border-radius: 3px; background: var(--muted); }
+  .trk > span { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+  .sec-h { margin: 28px 0 10px; }
+  .sec-h h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .sec-h p { margin-top: 2px; font-size: 12.5px; color: var(--soft); }
+  .info { display: flex; gap: 8px; align-items: flex-start; padding: 10px 14px; font-size: 12.5px; color: var(--soft); }
+  .info svg { flex: none; width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Chips, position badges, deltas */
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; background: var(--muted); color: var(--soft); font-size: 11.5px; font-weight: 500; white-space: nowrap; line-height: 16px; }
+  .chip.outline { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+  .chip.brand { background: var(--brand-soft); color: var(--brand); }
+  .chip.pos { background: var(--pos-soft); color: var(--pos); }
+  .chip.neg { background: var(--neg-soft); color: var(--neg); }
+  .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pos-badge { display: inline-grid; place-items: center; min-width: 34px; height: 26px; padding: 0 7px; border-radius: 7px; background: var(--muted); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .pos-badge.top3 { background: var(--pos-soft); color: var(--pos); }
+  .pos-badge.top10 { background: var(--brand-soft); color: var(--brand); }
+  .delta { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .delta.up { color: var(--pos); } .delta.down { color: var(--neg); } .delta.flat { color: var(--mute); font-weight: 400; }
+  .delta svg { width: 9px; height: 9px; }
+
+  /* Tables (.tbl) */
+  .tw { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--bg-sub); text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th:last-child, td:last-child { padding-right: 16px; }
+  th.r, td.r { text-align: right; }
+  tr { break-inside: avoid; }
+  thead { display: table-header-group; }
+  .kw { font-weight: 500; }
+
+  footer.rf { margin-top: 28px; text-align: center; font-size: 11px; color: var(--mute); }
+
+  @media (min-width: 1040px) { .grid.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid.g6 { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (min-width: 640px) and (max-width: 1039px) { .grid.g3, .grid.g6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 640px) {
+    .topbar { padding: 10px 16px; }
+    .notice { padding: 10px 16px; text-align: left; }
+    .page { padding: 16px 16px 48px; }
+    .page-h h1 { font-size: 22px; }
+    .stat { padding: 14px; }
+    .stat .v { font-size: 24px; }
+  }
+  @media (max-width: 400px) { .tb-r .hb:not(.pri) { display: none; } }
+
+  @page { size: A4 landscape; margin: 12mm; }
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .topbar { display: none !important; }
+    .notice { border: 1px solid #d9e1ff; border-radius: 10px; margin: 0 0 14px; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .tw { overflow: visible; }
+    table { min-width: 0 !important; font-size: 11px; }
+  }
+
+  /* All Keywords (app/[locale]/dashboard/keywords/page.tsx; .filter-row, .pill-toggle, SummaryChip) */
+  .filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .fake-input { display: inline-flex; align-items: center; gap: 8px; width: 260px; height: 36px; padding: 0 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-size: 13px; color: var(--mute); }
+  .fake-input svg, .dd svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .dd { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font-size: 13px; font-weight: 500; }
+  .pill { display: inline-flex; padding: 3px; border-radius: 9px; background: var(--muted); }
+  .pill span { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 12px; border-radius: 7px; font-size: 13px; font-weight: 500; color: var(--soft); }
+  .pill span.on { background: var(--brand); color: #fff; }
+  .pill svg { width: 9px; height: 9px; }
+  .pill.r { margin-left: auto; }
+  .sumchips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .sumchip { display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); font-size: 12.5px; color: var(--soft); }
+  .sumchip b { font-size: 17px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .sumchip small { font-size: 12px; color: var(--mute); }
+  .star { width: 16px; height: 16px; fill: none; stroke: var(--mute); stroke-width: 1.8; stroke-linejoin: round; }
+  .star.on { fill: #F5B400; stroke: #F5B400; }
+  .kwmeta { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; color: var(--mute); }
+  .loc { display: inline-block; padding: 0 5px; border-radius: 4px; background: var(--muted); color: var(--soft); font-size: 10px; font-weight: 600; letter-spacing: .04em; }
+  .url { display: block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; color: var(--soft); }
+  .chip.feat.cited { background: var(--pos-soft); color: var(--pos); }
+  .spark { display: block; }
+  @media (max-width: 640px) { .fake-input { width: 100%; } .pill.r { margin-left: 0; } }
+  td .kw { min-width: 180px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-up" viewBox="0 0 10 10"><path d="M5 1.5 9 8H1z" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 10 10"><path d="M5 8.5 1 2h8z" fill="currentColor"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+</svg>
+
+<div class="topbar" role="banner">
+  <a class="sb-brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+    FreeSerp
+  </a>
+  <div class="tb-r">
+    <button type="button" class="hb" onclick="window.print()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print this page</button>
+    <a class="hb pri" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
+  <symbol id="sp-a" viewBox="0 0 80 28"><path d="M0 22 L11.4 20 L22.9 18 L34.3 15 L45.7 16 L57.1 10 L68.6 8 L80 4" fill="none" stroke="#2D5BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sp-b" viewBox="0 0 80 28"><path d="M0 14 L11.4 12 L22.9 15 L34.3 13 L45.7 14 L57.1 12 L68.6 15 L80 13" fill="none" stroke="#2D5BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sp-c" viewBox="0 0 80 28"><path d="M0 18 L11.4 22 L22.9 16 L34.3 8 L45.7 4 L57.1 9 L68.6 17 L80 21" fill="none" stroke="#2D5BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sp-d" viewBox="0 0 80 28"><path d="M0 6 L11.4 8 L22.9 9 L34.3 12 L45.7 14 L57.1 17 L68.6 19 L80 22" fill="none" stroke="#2D5BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="sp-e" viewBox="0 0 80 28"><path d="M0 24 L11.4 6 L22.9 20 L34.3 22 L45.7 21 L57.1 23 L68.6 8 L80 19" fill="none" stroke="#2D5BFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="notice" role="note">Example data. This page shows what the All Keywords screen contains, filled in for three made-up projects. Yours lists every keyword you track, across all your projects.</div>
+
+<main class="page">
+  <div class="page-h">
+    <div>
+      <h1>12 keywords tracked</h1>
+      <div class="sub">Daily-updated rankings across all your projects</div>
+    </div>
+  </div>
+
+  <div class="filter-row" aria-hidden="true">
+    <span class="fake-input"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search keywords…</span>
+    <span class="dd">All projects (3)<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+    <span class="pill"><span class="on">All devices</span><span>Desktop</span><span>Mobile</span></span>
+    <span class="pill r"><span class="on">All</span><span><svg><use href="#i-up"/></svg>Winning</span><span><svg><use href="#i-down"/></svg>Losing</span></span>
+  </div>
+
+  <h2 class="sr">Summary</h2>
+  <div class="sumchips">
+    <span class="sumchip">Showing <b>12</b> <small>of 12</small></span>
+    <span class="sumchip">Avg position <b>#9.1</b></span>
+    <span class="sumchip">Top 3 <b>3</b> <small>(27%)</small></span>
+    <span class="sumchip">Top 10 <b>7</b> <small>(64%)</small></span>
+    <span class="sumchip">Est. traffic <b>5,825</b></span>
+  </div>
+
+  <section class="card flow" aria-label="Keywords across all projects">
+    <div class="tw">
+      <table style="min-width:1120px">
+        <thead><tr><th style="width:36px"><span class="sr">Favourite</span></th><th>Keyword</th><th>Position</th><th>Δ</th><th>Ranking URL</th><th>Volume</th><th>Traffic</th><th>Project</th><th style="min-width:116px">SERP</th><th>Trend</th></tr></thead>
+        <tbody>
+          <tr><td><svg class="star on" role="img" aria-label="Favourite"><use href="#i-star"/></svg></td><td><div class="kw">waterproof hiking boots wide</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge top3">2</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>1</span></td><td><span class="url">brightpeak-outdoor.example/boots/wide-fit</span></td><td class="num">6,600</td><td class="num">1,170</td><td><span class="chip">brightpeak-outdoor.example</span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">Image pack</span><span class="chip">Shopping</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-a"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">dentist larkmont</div><div class="kwmeta"><span class="loc">US</span>Mobile</div></td><td><span class="pos-badge top3">1</span></td><td><span class="delta flat">—</span></td><td><span class="url">brightpeakdental.example/</span></td><td class="num">2,900</td><td class="num">920</td><td><span class="chip">brightpeakdental.example</span></td><td><div class="chips"><span class="chip">Local pack</span><span class="chip">Knowledge graph</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-b"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">emergency dentist near me</div><div class="kwmeta"><span class="loc">US</span>Mobile</div></td><td><span class="pos-badge top3">3</span></td><td><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>1</span></td><td><span class="url">brightpeakdental.example/emergency</span></td><td class="num">12,100</td><td class="num">1,210</td><td><span class="chip">brightpeakdental.example</span></td><td><div class="chips"><span class="chip">Local pack</span><span class="chip">People also ask</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-b"/></svg></td></tr>
+          <tr><td><svg class="star on" role="img" aria-label="Favourite"><use href="#i-star"/></svg></td><td><div class="kw">merino base layer</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge top10">4</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>3</span></td><td><span class="url">brightpeak-outdoor.example/base-layers/merino</span></td><td class="num">22,200</td><td class="num">1,630</td><td><span class="chip">brightpeak-outdoor.example</span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">Shopping</span><span class="chip">Image pack</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-c"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">cold brew concentrate</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge top10">6</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>2</span></td><td><span class="url">larkmont-coffee.example/shop/cold-brew</span></td><td class="num">8,100</td><td class="num">260</td><td><span class="chip">larkmont-coffee.example</span></td><td><div class="chips"><span class="chip">Shopping</span><span class="chip">Video carousel</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-c"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">ultralight tent 2 person</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge top10">7</span></td><td><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>2</span></td><td><span class="url">brightpeak-outdoor.example/tents/ultralight-2p</span></td><td class="num">9,900</td><td class="num">300</td><td><span class="chip">brightpeak-outdoor.example</span></td><td><div class="chips"><span class="chip">Image pack</span><span class="chip">Video carousel</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-a"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">teeth whitening cost</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge top10">9</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>5</span></td><td><span class="url">brightpeakdental.example/whitening</span></td><td class="num">5,400</td><td class="num">120</td><td><span class="chip">brightpeakdental.example</span></td><td><div class="chips"><span class="chip feat cited">AI Overview — you're cited</span><span class="chip">People also ask</span><span class="chip">Featured snippet</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-b"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">best coffee beans for espresso</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge">12</span></td><td><span class="delta flat">—</span></td><td><span class="url">larkmont-coffee.example/blog/espresso-beans</span></td><td class="num">14,800</td><td class="num">150</td><td><span class="chip">larkmont-coffee.example</span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">People also ask</span><span class="chip">Video carousel</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-e"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">trail running vest</div><div class="kwmeta"><span class="loc">US</span>Mobile</div></td><td><span class="pos-badge">15</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>4</span></td><td><span class="url">brightpeak-outdoor.example/packs/running-vest</span></td><td class="num">4,400</td><td class="num">40</td><td><span class="chip">brightpeak-outdoor.example</span></td><td><div class="chips"><span class="chip">Image pack</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-a"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">clear aligners larkmont</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge">18</span></td><td><span class="delta down"><svg aria-hidden="true"><use href="#i-down"/></svg>3</span></td><td><span class="url">brightpeakdental.example/aligners</span></td><td class="num">720</td><td class="num">5</td><td><span class="chip">brightpeakdental.example</span></td><td><div class="chips"><span class="chip">Local pack</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-d"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">how to layer for hiking</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="pos-badge">23</span></td><td><span class="delta up"><svg aria-hidden="true"><use href="#i-up"/></svg>6</span></td><td><span class="url">brightpeak-outdoor.example/guides/layering</span></td><td class="num">3,600</td><td class="num">20</td><td><span class="chip">brightpeak-outdoor.example</span></td><td><div class="chips"><span class="chip">Featured snippet</span><span class="chip">People also ask</span><span class="chip">Video carousel</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-c"/></svg></td></tr>
+          <tr><td><svg class="star" role="img" aria-label="Not a favourite"><use href="#i-star"/></svg></td><td><div class="kw">coffee subscription</div><div class="kwmeta"><span class="loc">US</span>Desktop</div></td><td><span class="chip" title="Not found in the top 100">100+</span></td><td><span class="delta flat">—</span></td><td><span class="xs mu">—</span></td><td class="num">18,100</td><td class="num">—</td><td><span class="chip">larkmont-coffee.example</span></td><td><div class="chips"><span class="chip">AI Overview</span><span class="chip">Shopping</span></div></td><td><svg class="spark" width="80" height="28" role="img" aria-label="Search volume trend"><use href="#sp-b"/></svg></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <p class="xs mu" style="margin-top:8px">Δ is the change since the previous check. Traffic is the estimated monthly visits from the keyword at its current position. Trend is the keyword’s search-volume history. 100+ means it was not found in the positions checked.</p>
+
+  <footer class="rf">Example data · FreeSERP · freeserp.com</footer>
+</main>
+
+</body>
+</html>

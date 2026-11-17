@@ -24,7 +24,7 @@ import {
   Trophy,
   type LucideIcon,
 } from "lucide-react";
-import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
+import { LogoMark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
@@ -33,6 +33,10 @@ import { SignupPopup } from "./SignupPopup";
 // copied so the ad pages share one theme. maps.css adds this page's visuals.
 import "../competitor-analysis/ads.css";
 import "./maps.css";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { GbpAuditDemo } from "@/components/demos/GbpAuditDemo";
 
 /**
  * /google-maps-audit — paid-acquisition landing page for the Google Maps
@@ -324,15 +328,7 @@ export default function GoogleMapsAuditPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <header className="absolute inset-x-0 top-0 z-50">
-        <div className={`${WRAP} flex h-[76px] items-center justify-between gap-4 sm:h-[84px]`}>
-          <a href="#top" className="flex items-center gap-2.5 text-white">
-            <LogoMark className="h-7 w-7 rounded-[8px]" />
-            <Wordmark className="text-[19px] font-semibold tracking-[-0.6px]" />
-          </a>
-          <Cta placement="nav" label="Start free" size="sm" variant="white" arrow="up-right" />
-        </div>
-      </header>
+      <Nav />
 
       <main>
         {/* ── hero: copy on the left, a live-looking rank grid on the right ── */}
@@ -357,8 +353,13 @@ export default function GoogleMapsAuditPage() {
 
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
                 <Cta placement="hero" label="Audit my listing free" />
-                <a href="#checks" className="cmpa-btn cmpa-btn-lg cmpa-btn-ghost">
-                  See what it checks
+                <a
+                  href={SAMPLE_REPORTS.maps.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cmpa-btn cmpa-btn-lg cmpa-btn-ghost"
+                >
+                  View sample report
                 </a>
               </div>
             </div>
@@ -380,6 +381,10 @@ export default function GoogleMapsAuditPage() {
             ))}
           </div>
         </div>
+
+        <DemoSection title="Fix a check, watch the score climb">
+          <GbpAuditDemo />
+        </DemoSection>
 
         {/* ── bento: the five scored areas, each shown as the report shows it ── */}
         <section id="checks" className="scroll-mt-24 pt-20 sm:pt-28">
@@ -849,9 +854,10 @@ export default function GoogleMapsAuditPage() {
               <Cta placement="final_cta" label="Audit my listing free" />
             </div>
           </div>
-          <FooterLinks />
         </div>
       </footer>
+
+      <Footer />
 
       <SignupPopup />
     </div>
@@ -1108,20 +1114,5 @@ function Faq({ faqs }: { faqs: { q: string; a: string }[] }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function FooterLinks() {
-  return (
-    <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-      <span>© {new Date().getFullYear()} FreeSERP. All rights reserved.</span>
-      <div className="flex flex-wrap gap-6">
-        <a href="/privacy" className="transition-colors hover:text-[var(--ink)]">Privacy</a>
-        <a href="/terms" className="transition-colors hover:text-[var(--ink)]">Terms</a>
-        <a href="mailto:support@freeserp.com" className="transition-colors hover:text-[var(--ink)]">
-          support@freeserp.com
-        </a>
-      </div>
-    </div>
   );
 }

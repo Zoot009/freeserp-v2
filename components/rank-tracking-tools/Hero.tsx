@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 
 export default function Hero() {
   return (
@@ -25,6 +26,14 @@ export default function Hero() {
             </a>
             <a href="#tools" className="l2-btn-ghost">
               See every tool
+            </a>
+            <a
+              href={SAMPLE_REPORTS.rank.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="l2-btn-ghost"
+            >
+              View sample report
             </a>
           </div>
           <p className="l2-hero-note l2-mono">

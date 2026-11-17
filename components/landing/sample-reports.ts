@@ -1,20 +1,26 @@
 import { SAMPLE_REPORT_EN, type SampleReportCopy } from "./SampleReport";
 
 /**
- * The five sample reports in public/reports/, one per report the
- * product actually generates, and the landing-page copy that introduces each.
- * Every point here must be true of the real report the sample mirrors.
+ * The sample reports in public/reports/ and the landing-page copy that
+ * introduces each. Every point here must be true of the real report or results
+ * screen the sample mirrors.
  *
- *   rank        → rank-tracker, website-ranking-checker, tracking-suite,
- *                 rank-tracking-tools
- *                 (not /serp-checker or /free-serp-checker/* — removed at the
- *                 owner's request)
- *   audit       → audit-suite, audit-suite/us, audit-suite/uk
- *   competitor  → competitor-analysis
- *   aeo         → aeo-geo-audit
- *   maps        → google-maps-audit
+ *   rank            → rank-tracker, website-ranking-checker, tracking-suite,
+ *                     rank-tracking-tools, free-serp-checker/* (hero button
+ *                     only; /serp-checker still has none, at the owner's request)
+ *   audit           → audit-suite, audit-suite/us, audit-suite/uk, site-audit,
+ *                     page-audit (both tools open the same report and PDF)
+ *   competitor      → competitor-analysis
+ *   aeo             → aeo-geo-audit
+ *   maps            → google-maps-audit
+ *   keywordResearch → keyword-research (mirrors the real keyword-magic PDF)
  *
- * /ai-rank-tracker has none: the AI prompt tracker has no report download.
+ * Sample *results* pages — the tool has no downloadable report, so the file
+ * mirrors its results screen and says so:
+ *   ai → ai-rank-tracker · mapsTracker → google-maps-rank-tracker ·
+ *   youtube → youtube-rank-tracker · allKeywords → all-keywords ·
+ *   linkGraph → internal-link-analysis · keywordScore → keyword-score-checker ·
+ *   searchConsole → search-console
  */
 
 export interface SampleReportEntry {
@@ -34,6 +40,8 @@ const entry = (
   reportName,
   copy: { ...SAMPLE_REPORT_EN, ...copy },
 });
+
+const RESULTS_NOTE = "Example data showing the tool's results screen — opens in a new tab.";
 
 export const SAMPLE_REPORTS = {
   rank: entry("rank-tracking-report", "Rank Tracking Report", {
@@ -96,6 +104,113 @@ export const SAMPLE_REPORTS = {
       "All 25 checks with pass, warn or fail",
       "The 3×3 local rank grid and competitors",
       "A 30-day action plan",
+    ],
+  }),
+
+  // ── Sample *results* pages: these tools have no downloadable report, so
+  // each file mirrors the tool's results screen and says so; the copy below
+  // never promises a PDF.
+  ai: entry("ai-visibility-report", "AI Visibility Tracker", {
+    eyebrow: "Sample results",
+    title: "See what the AI tracker shows you",
+    description:
+      "Open the results screens — your prompts scored on every assistant, the answers themselves and who gets named instead of you, filled with example data.",
+    points: [
+      "Mention rate, citation and prominence per prompt",
+      "Every assistant side by side",
+      "The stored answers, with your brand highlighted",
+      "Who gets named instead of you",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  mapsTracker: entry("maps-rank-tracker-report", "Google Maps Rank Tracker", {
+    eyebrow: "Sample results",
+    title: "See a geo-grid scan before you run one",
+    description:
+      "Open a finished scan — the rank at every point on the map, SoLV, ARP and ATRP, and the businesses beating you street by street.",
+    points: [
+      "A rank pin at every grid point",
+      "SoLV, ARP and ATRP",
+      "Who else appears in the grid",
+      "What Google showed at any one point",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  youtube: entry("youtube-rank-report", "YouTube Rank Tracker", {
+    eyebrow: "Sample results",
+    title: "See the YouTube rank screen",
+    description:
+      "Open the results screen for a tracked channel — every keyword's position, the ranking video and the YouTube results around it.",
+    points: [
+      "Position, absolute rank and result block",
+      "The ranking video with views and age",
+      "The full results page behind a keyword",
+      "Channel totals: top 3, top 10, not ranking",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  allKeywords: entry("all-keywords-report", "All Keywords", {
+    eyebrow: "Sample results",
+    title: "See every project in one table",
+    description:
+      "Open the All Keywords screen — every tracked keyword across your projects with position, movement, volume, traffic and SERP features.",
+    points: [
+      "Average position, top 3 and top 10",
+      "Position and movement per keyword",
+      "Volume, estimated traffic and ranking URL",
+      "SERP features beside every keyword",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  linkGraph: entry("internal-link-report", "Internal Link Analysis", {
+    eyebrow: "Sample results",
+    title: "See your link structure before you crawl",
+    description:
+      "Open a finished analysis — the link graph, every page's inbound and outbound links, the hubs, the authorities and the orphan pages.",
+    points: [
+      "Pages, links, orphans, hubs and authorities",
+      "The internal link graph",
+      "Inbound, outbound and depth for every page",
+      "Orphan pages, named",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  keywordScore: entry("keyword-score-report", "Keyword Score Checker", {
+    eyebrow: "Sample results",
+    title: "See a keyword score before you run one",
+    description:
+      "Open a finished check — the score and grade, the on-page and off-page split, authority and backlinks, and every check behind it.",
+    points: [
+      "One grade over on-page and off-page",
+      "Domain and Page Authority, and backlinks",
+      "Every on-page factor, biggest gap first",
+      "TTFB, FCP, LCP and CLS",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  searchConsole: entry("search-console-report", "Search Console", {
+    eyebrow: "Sample results",
+    title: "See Search Console inside FreeSERP",
+    description:
+      "Open the Search Console screen — clicks, impressions, CTR and position with their change, the clicks trend and the query table.",
+    points: [
+      "Clicks, impressions, CTR and average position",
+      "Change against the previous period",
+      "The clicks trend over time",
+      "Every query, with tracked ones tagged",
+    ],
+    note: RESULTS_NOTE,
+  }),
+  // keyword-magic-pdf.ts: this one IS a real export, so the default copy applies.
+  keywordResearch: entry("keyword-research-report", "Keyword Research Report", {
+    title: "See the keyword report you'll get",
+    description:
+      "Open the keyword report FreeSERP exports — the seed, totals and every keyword with volume, difficulty, CPC, intent and SERP features.",
+    points: [
+      "Keywords, total volume and average difficulty",
+      "Volume, KD, CPC and intent per keyword",
+      "SERP features for every keyword",
+      "Word groups from the results screen",
     ],
   }),
 } satisfies Record<string, SampleReportEntry>;

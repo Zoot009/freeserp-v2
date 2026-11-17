@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AI Visibility Tracker — Sample results — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tokens: freeserp-frontend-v2/app/dashboard.css (.fs-app) */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --soft: #4B5363; --mute: #8A93A4;
+    --border: #E7E9EE; --border-strong: #D7DBE3; --bg-sub: #F7F8FA; --muted: #F2F4F7; --card: #FFFFFF;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB; --warn: #C28B00; --warn-soft: #FBF3DC;
+    --shadow-sm: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1);
+    --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+  h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  b { font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .m { color: var(--soft); }
+  .mu { color: var(--mute); }
+  .xs { font-size: 12px; }
+  .trunc { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lnk { color: var(--brand); }
+
+  /* Sample toolbar: the dashboard's .topbar with the sidebar brand row */
+  .topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .tb-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sb-brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); }
+  .sb-brand:hover { text-decoration: none; }
+  .sb-brand svg { display: block; border-radius: 6px; }
+  .hb { display: inline-flex; height: 32px; align-items: center; gap: 6px; white-space: nowrap; border-radius: 7px; border: 1px solid var(--border); background: var(--card); padding: 0 12px; font: inherit; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: background-color .15s; }
+  .hb:hover { background: var(--muted); text-decoration: none; }
+  .hb.pri { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .hb.pri:hover { background: var(--brand-deep); }
+  .hb svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .notice { background: var(--brand-soft); color: var(--text); font-size: 13px; line-height: 1.5; padding: 10px 28px; text-align: center; border-bottom: 1px solid var(--border); }
+
+  /* .page (dashboard.css) */
+  .page { max-width: 1200px; margin: 0 auto; padding: 28px 28px 60px; }
+  .stack > * + * { margin-top: 20px; }
+
+  /* Page header (.page-h) */
+  .page-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .page-h h1 { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  .crumb { font-size: 12px; color: var(--soft); margin-bottom: 4px; }
+  .sub { margin-top: 4px; font-size: 13px; color: var(--soft); }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font: inherit; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: default; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.sm { height: 28px; padding: 0 10px; font-size: 12px; }
+
+  /* Cards, StatTile */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-sm); min-width: 0; break-inside: avoid; }
+  .card.flow { break-inside: auto; }
+  .card-h { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .card-h .t { font-size: 14px; font-weight: 600; }
+  .pb { padding: 16px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { padding: 16px 18px; }
+  .stat .lb { font-size: 13px; font-weight: 500; color: var(--soft); }
+  .stat .v { margin-top: 10px; font-size: 30px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .cap { margin-top: 8px; font-size: 12.5px; color: var(--soft); }
+  .trk { display: block; margin-top: 8px; height: 5px; overflow: hidden; border-radius: 3px; background: var(--muted); }
+  .trk > span { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+  .sec-h { margin: 28px 0 10px; }
+  .sec-h h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .sec-h p { margin-top: 2px; font-size: 12.5px; color: var(--soft); }
+  .info { display: flex; gap: 8px; align-items: flex-start; padding: 10px 14px; font-size: 12.5px; color: var(--soft); }
+  .info svg { flex: none; width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Chips, position badges, deltas */
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; background: var(--muted); color: var(--soft); font-size: 11.5px; font-weight: 500; white-space: nowrap; line-height: 16px; }
+  .chip.outline { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+  .chip.brand { background: var(--brand-soft); color: var(--brand); }
+  .chip.pos { background: var(--pos-soft); color: var(--pos); }
+  .chip.neg { background: var(--neg-soft); color: var(--neg); }
+  .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pos-badge { display: inline-grid; place-items: center; min-width: 34px; height: 26px; padding: 0 7px; border-radius: 7px; background: var(--muted); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .pos-badge.top3 { background: var(--pos-soft); color: var(--pos); }
+  .pos-badge.top10 { background: var(--brand-soft); color: var(--brand); }
+  .delta { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .delta.up { color: var(--pos); } .delta.down { color: var(--neg); } .delta.flat { color: var(--mute); font-weight: 400; }
+  .delta svg { width: 9px; height: 9px; }
+
+  /* Tables (.tbl) */
+  .tw { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--bg-sub); text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th:last-child, td:last-child { padding-right: 16px; }
+  th.r, td.r { text-align: right; }
+  tr { break-inside: avoid; }
+  thead { display: table-header-group; }
+  .kw { font-weight: 500; }
+
+  footer.rf { margin-top: 28px; text-align: center; font-size: 11px; color: var(--mute); }
+
+  @media (min-width: 1040px) { .grid.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid.g6 { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (min-width: 640px) and (max-width: 1039px) { .grid.g3, .grid.g6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 640px) {
+    .topbar { padding: 10px 16px; }
+    .notice { padding: 10px 16px; text-align: left; }
+    .page { padding: 16px 16px 48px; }
+    .page-h h1 { font-size: 22px; }
+    .stat { padding: 14px; }
+    .stat .v { font-size: 24px; }
+  }
+  @media (max-width: 400px) { .tb-r .hb:not(.pri) { display: none; } }
+
+  @page { size: A4 landscape; margin: 12mm; }
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .topbar { display: none !important; }
+    .notice { border: 1px solid #d9e1ff; border-radius: 10px; margin: 0 0 14px; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .tw { overflow: visible; }
+    table { min-width: 0 !important; font-size: 11px; }
+  }
+
+  /* AI tracker (dashboard.css "AI ENGINE PAGES" + run-state-cell.tsx) */
+  .pm { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 4px; color: #fff; font-size: 9.5px; font-weight: 700; flex: none; }
+  .pm.chat_gpt { background: #343541; } .pm.gemini { background: #9168C0; } .pm.perplexity { background: #20808D; } .pm.claude { background: #FE883E; }
+  .plat { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .grp td { border-top: 1px solid var(--border-strong); }
+  tbody tr.grp:first-child td { border-top: 0; }
+  td.span { vertical-align: top; padding-top: 12px; }
+  .rate b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .trend { margin-left: 6px; font-size: 11.5px; font-weight: 600; }
+  .trend.up { color: var(--pos); } .trend.down { color: var(--neg); }
+  .aio { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .aio .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pos); }
+  .aio.not-cited { color: var(--mute); } .aio.not-cited .dot { background: var(--border-strong); }
+  .sched { display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border: 1px solid var(--border); border-radius: 7px; font-size: 12.5px; font-weight: 500; white-space: nowrap; }
+  .nextrun { margin-top: 4px; font-size: 11.5px; color: var(--mute); }
+  .eng-hero { padding: 18px 20px; border-left: 4px solid #20808D; }
+  .eng-hero .k { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+  .eng-hero .k .pm { width: 26px; height: 26px; font-size: 14px; border-radius: 7px; }
+  .eng-hero p { margin-top: 6px; max-width: 720px; font-size: 13px; color: var(--soft); line-height: 1.55; }
+  .srcs li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto minmax(60px, 160px) 28px; align-items: center; gap: 12px; padding: 10px 16px; font-size: 13px; }
+  .srcs li + li { border-top: 1px solid var(--border); }
+  .srcs li.own { background: rgba(32,128,141,.06); }
+  .fav { width: 18px; height: 18px; border-radius: 4px; background: var(--muted); color: var(--soft); display: grid; place-items: center; font-size: 10px; font-weight: 700; }
+  .srcs .n { display: flex; flex-direction: column; min-width: 0; }
+  .srcs .n span { font-size: 12px; color: var(--soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar { display: block; height: 6px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+  .bar > i { display: block; height: 100%; border-radius: 999px; background: #20808D; }
+  .srcs .ct { text-align: right; font-variant-numeric: tabular-nums; }
+  .board-h { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--border); border-left: 4px solid #20808D; border-radius: 12px 12px 0 0; }
+  .avatar { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: #E7F3F4; color: #186670; font-size: 12px; font-weight: 700; }
+  .board-h .t { font-size: 14px; font-weight: 600; }
+  .board-h .sp { flex: 1; }
+  .board-rate { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .board-rate i { font-style: normal; margin-left: 3px; font-size: 11px; font-weight: 500; color: var(--mute); }
+  .pr-t { display: block; font-weight: 500; }
+  .pr-s { display: block; font-size: 11.5px; color: var(--mute); }
+  .spark { display: block; }
+  .srcdots { display: inline-flex; align-items: center; }
+  .srcdots i { width: 14px; height: 14px; border-radius: 50%; background: var(--muted); box-shadow: 0 0 0 2px #fff; margin-right: -4px; }
+  .srcdots b { margin-left: 10px; font-size: 12px; font-weight: 600; }
+  .sov-bar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; background: var(--muted); }
+  .sov-bar span { display: block; min-width: 2px; }
+  .sov-key { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+  .sov-key div { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--soft); }
+  .sov-key i { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+  .sov-key b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .qhero { position: relative; overflow: hidden; padding: 20px; border-left: 4px solid #20808D; }
+  .qhero-in { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .qhero h1 { margin-top: 4px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; max-width: 720px; }
+  .who { display: flex; gap: 10px; align-items: center; padding: 10px 14px; border-radius: 10px; background: #E7F3F4; }
+  .who .pm { width: 24px; height: 24px; font-size: 13px; border-radius: 6px; }
+  .who .lbl { font-size: 11px; color: var(--soft); }
+  .who .n { font-size: 14px; font-weight: 600; }
+  .who .md { font-size: 11.5px; color: var(--soft); }
+  .qswitch { display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .qswitch > div { padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+  .qswitch > div.on { border-color: #20808D; box-shadow: inset 0 0 0 1px #20808D; background: #E7F3F4; }
+  .qswitch .top { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; }
+  .qswitch .v { display: block; margin-top: 8px; font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .qswitch .k { font-size: 11.5px; color: var(--mute); }
+  .stat .dl { display: inline-block; margin-top: 8px; padding: 1px 7px; border-radius: 999px; font-size: 12px; font-weight: 600; background: var(--pos-soft); color: var(--pos); }
+  .tabs { display: flex; gap: 24px; overflow-x: auto; border-bottom: 1px solid var(--border); margin: 24px 0 16px; scrollbar-width: none; }
+  .tabs a { flex: none; padding: 10px 0; border-bottom: 2px solid transparent; font-size: 14px; font-weight: 500; color: var(--soft); white-space: nowrap; }
+  .tabs a:hover { color: var(--text); text-decoration: none; }
+  .tabs a[aria-current] { border-bottom-color: #20808D; color: var(--text); }
+  .rivals { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 14px; }
+  .rivals .chip b, .ans-f .chip b { margin-left: 4px; color: var(--text); }
+  .ans { margin-top: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); overflow: hidden; break-inside: avoid; }
+  .ans.hit { border-color: #9FD0D6; }
+  .ans-h { display: flex; align-items: center; gap: 8px; padding: 9px 14px; border-bottom: 1px solid var(--border); background: var(--bg-sub); }
+  .ans-n { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--card); box-shadow: 0 0 0 1px var(--border); font-size: 11px; font-weight: 700; }
+  .ans-b { padding: 14px 16px; font-size: 13px; line-height: 1.65; }
+  .ans-b p { margin: 0 0 10px; } .ans-b p:last-child { margin: 0; }
+  .ans-b ul, .ans-b ol { margin: 0 0 10px; padding-left: 20px; } .ans-b ul { list-style: disc; } .ans-b ol { list-style: decimal; }
+  .ans-b li { margin: 3px 0; }
+  .ans-b mark { background: #CFE8EB; color: #0B3C42; border-radius: 3px; padding: 0 2px; font-weight: 600; }
+  .ans-f { display: flex; flex-direction: column; gap: 6px; padding: 10px 14px; border-top: 1px solid var(--border); }
+  .ans-f .r { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .ans-f .r > span:first-child { font-size: 12px; color: var(--mute); margin-right: 2px; }
+  .chart { display: block; width: 100%; height: auto; }
+  .ss { margin-top: 36px; padding-top: 4px; border-top: 1px dashed var(--border-strong); }
+  .ss-k { display: inline-block; margin-top: 16px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+  @media (max-width: 760px) { .qswitch { grid-template-columns: repeat(2, minmax(0, 1fr)); } .srcs li { grid-template-columns: 18px minmax(0, 1fr) auto 28px; } .srcs li .bar { display: none; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-up" viewBox="0 0 10 10"><path d="M5 1.5 9 8H1z" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 10 10"><path d="M5 8.5 1 2h8z" fill="currentColor"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+</svg>
+
+<div class="topbar" role="banner">
+  <a class="sb-brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+    FreeSerp
+  </a>
+  <div class="tb-r">
+    <button type="button" class="hb" onclick="window.print()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print this page</button>
+    <a class="hb pri" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="notice" role="note">Example data. This page shows what the AI Visibility Tracker's results screens contain, filled in for a made-up brand. Your results come from your own prompts and the answers the assistants give them.</div>
+
+<main class="page">
+
+  <!-- ── Brand page: AI Prompt Tracker · project ─────────────────── -->
+  <div class="page-h">
+    <div>
+      <div class="crumb">AI Prompt Tracker · Brightpeak Outdoor</div>
+      <h1>Brightpeak Outdoor</h1>
+      <div class="sub">brightpeak-outdoor.example · 4 prompts across ChatGPT, Gemini, Perplexity and Claude</div>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card stat"><div class="lb">Prompts tracked</div><div class="v">4</div></div>
+    <div class="card stat"><div class="lb">Prompts you appear in</div><div class="v">3 of 4</div><div class="cap">at least one answer named you</div></div>
+    <div class="card stat"><div class="lb">Average mention rate</div><div class="v">50%</div><div class="cap">across completed runs</div></div>
+  </div>
+
+  <div class="card info" style="margin-top:12px"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-in"/></svg><span>AI answers vary between runs, so each prompt is asked 3 times per platform and scored as a rate. A single tick would flip run to run.</span></div>
+
+  <section class="card flow" style="margin-top:12px" aria-label="Prompts">
+    <div class="tw">
+      <table style="min-width:900px">
+        <thead><tr><th>Prompt</th><th>Platform</th><th>Status</th><th class="r">Mention rate</th><th class="r">Cited</th><th class="r">Prominence</th><th>Schedule</th></tr></thead>
+        <tbody>
+          <tr class="grp"><td class="span" rowspan="4"><span class="kw">best waterproof hiking boots for wide feet</span></td><td><span class="plat"><i class="pm chat_gpt">C</i>ChatGPT</span></td><td class="xs mu">2h ago</td><td class="r"><span class="rate"><b>67%</b><span class="trend up">+34</span></span></td><td class="r"><span class="aio"><i class="dot"></i>33%</span></td><td class="r num">18%</td><td class="span" rowspan="4"><span class="sched">Daily</span><div class="nextrun">Next in 22h</div></td></tr>
+          <tr><td><span class="plat"><i class="pm gemini">G</i>Gemini</span></td><td class="xs mu">2h ago</td><td class="r"><span class="rate"><b>33%</b></span></td><td class="r"><span class="aio not-cited"><i class="dot"></i>Not cited</span></td><td class="r num">41%</td></tr>
+          <tr><td><span class="plat"><i class="pm perplexity">P</i>Perplexity</span></td><td class="xs mu">2h ago</td><td class="r"><span class="rate"><b>100%</b><span class="trend up">+33</span></span></td><td class="r"><span class="aio"><i class="dot"></i>67%</span></td><td class="r num">9%</td></tr>
+          <tr><td><span class="plat"><i class="pm claude">C</i>Claude</span></td><td class="xs mu">2h ago</td><td class="r"><span class="rate"><b>67%</b></span></td><td class="r"><span class="aio not-cited"><i class="dot"></i>Not cited</span></td><td class="r num">27%</td></tr>
+
+          <tr class="grp"><td class="span" rowspan="2"><span class="kw">lightweight backpacking tent under 2 kg</span></td><td><span class="plat"><i class="pm chat_gpt">C</i>ChatGPT</span></td><td class="xs mu">yesterday</td><td class="r"><span class="rate"><b>33%</b><span class="trend down">-34</span></span></td><td class="r"><span class="aio not-cited"><i class="dot"></i>Not cited</span></td><td class="r num">62%</td><td class="span" rowspan="2"><span class="sched">Weekly</span><div class="nextrun">Next in 6d</div></td></tr>
+          <tr><td><span class="plat"><i class="pm perplexity">P</i>Perplexity</span></td><td class="xs mu">yesterday</td><td class="r"><span class="rate"><b>67%</b><span class="trend up">+34</span></span></td><td class="r"><span class="aio"><i class="dot"></i>33%</span></td><td class="r num">35%</td></tr>
+
+          <tr class="grp"><td class="span" rowspan="2"><span class="kw">brightpeak outdoor vs summitline</span></td><td><span class="plat"><i class="pm chat_gpt">C</i>ChatGPT</span></td><td class="xs mu">yesterday</td><td class="r"><span class="rate"><b>100%</b></span></td><td class="r"><span class="aio"><i class="dot"></i>67%</span></td><td class="r num">4%</td><td class="span" rowspan="2"><span class="sched">Weekly</span><div class="nextrun">Next in 6d</div></td></tr>
+          <tr><td><span class="plat"><i class="pm claude">C</i>Claude</span></td><td class="xs mu">yesterday</td><td class="r"><span class="rate"><b>100%</b></span></td><td class="r"><span class="aio not-cited"><i class="dot"></i>Not cited</span></td><td class="r num">6%</td></tr>
+
+          <tr class="grp"><td class="span" rowspan="2"><span class="kw">where to buy merino base layers online</span></td><td><span class="plat"><i class="pm gemini">G</i>Gemini</span></td><td class="xs mu">2d ago</td><td class="r"><span class="rate"><b>0%</b></span></td><td class="r"><span class="aio not-cited"><i class="dot"></i>Not cited</span></td><td class="r"><span class="xs mu" title="No answer named this brand, so there is no position to report">n/a</span></td><td class="span" rowspan="2"><span class="sched">Every 3 days</span><div class="nextrun">Next tomorrow</div></td></tr>
+          <tr><td><span class="plat"><i class="pm perplexity">P</i>Perplexity</span></td><td class="xs mu">2d ago</td><td class="r"><span class="rate"><b>33%</b><span class="trend down">-34</span></span></td><td class="r"><span class="aio"><i class="dot"></i>33%</span></td><td class="r num">71%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <p class="xs mu" style="margin-top:8px">Mention rate: share of answers that named the brand. Cited: share of answers that linked to the brand's site. Prominence: how far into the answer the first mention lands, so lower is better. The figure after a rate is the change in points since the previous run.</p>
+
+  <!-- ── Assistant page: Perplexity ─────────────────────────────── -->
+  <div class="ss"><span class="ss-k">Assistant page</span></div>
+  <header class="card eng-hero" style="margin-top:10px">
+    <div class="k"><i class="pm perplexity">P</i>Perplexity</div>
+    <p>A search engine that writes. Every answer is retrieved and sourced, so on this page a citation — not a mention — is the score that counts.</p>
+    <p class="xs">1 brand · 3 prompts</p>
+  </header>
+
+  <div class="grid g4" style="margin-top:14px">
+    <div class="card stat"><div class="lb">Cited as a source</div><div class="v">3</div><div class="cap">prompts where the assistant linked to you</div></div>
+    <div class="card stat"><div class="lb">Average mention rate</div><div class="v">67%</div><div class="cap">across completed Perplexity runs</div></div>
+    <div class="card stat"><div class="lb">You appear in</div><div class="v">3 of 3</div><div class="cap">prompts where at least one answer named you</div></div>
+    <div class="card stat"><div class="lb">Prompts tracked</div><div class="v">3</div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px;padding:14px 15px 6px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><b style="font-size:13px">Average mention rate on Perplexity</b><span class="xs mu">last 6 runs</span></div>
+    <svg class="chart" viewBox="0 0 760 150" role="img" aria-label="Average mention rate on Perplexity over the last 6 runs: 44%, 44%, 56%, 56%, 56%, 67%">
+      <g stroke="#EEF0F3" stroke-width="1"><path d="M40 20H750M40 65H750M40 110H750"/></g>
+      <g fill="#8A93A4" font-size="11" font-family="Geist, sans-serif"><text x="0" y="24">100%</text><text x="8" y="69">50%</text><text x="16" y="114">0%</text></g>
+      <path d="M50 70.4 L190 70.4 L330 60.2 L470 60.2 L610 60.2 L740 49.7" fill="none" stroke="#20808D" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <g fill="#20808D"><circle cx="50" cy="70.4" r="3.5"/><circle cx="190" cy="70.4" r="3.5"/><circle cx="330" cy="60.2" r="3.5"/><circle cx="470" cy="60.2" r="3.5"/><circle cx="610" cy="60.2" r="3.5"/><circle cx="740" cy="49.7" r="3.5"/></g>
+    </svg>
+  </div>
+
+  <div class="sec-h"><h2>Where Perplexity reads about your category</h2><p>Domains cited across the newest run of every prompt</p></div>
+  <section class="card" aria-label="Cited sources on Perplexity">
+    <ol class="srcs">
+      <li><span class="fav">T</span><span class="n"><b>trailgear-review.example</b><span>Best hiking boots for wide feet, tested</span></span><span></span><span class="bar" role="img" aria-label="6 answers cited this"><i style="width:100%"></i></span><b class="ct">6</b></li>
+      <li class="own"><span class="fav">B</span><span class="n"><b>brightpeak-outdoor.example</b><span>Wide-fit hiking boots — Brightpeak Outdoor</span></span><span class="chip brand">You</span><span class="bar" role="img" aria-label="4 answers cited this"><i style="width:67%"></i></span><b class="ct">4</b></li>
+      <li><span class="fav">H</span><span class="n"><b>hikersforum.example</b><span>2 prompts</span></span><span></span><span class="bar" role="img" aria-label="4 answers cited this"><i style="width:67%"></i></span><b class="ct">4</b></li>
+      <li><span class="fav">S</span><span class="n"><b>summitline.example</b><span>Trekker GTX wide fit</span></span><span></span><span class="bar" role="img" aria-label="3 answers cited this"><i style="width:50%"></i></span><b class="ct">3</b></li>
+      <li><span class="fav">O</span><span class="n"><b>outdoorlab.example</b><span>Ultralight tent buyer’s guide</span></span><span></span><span class="bar" role="img" aria-label="3 answers cited this"><i style="width:50%"></i></span><b class="ct">3</b></li>
+      <li><span class="fav">P</span><span class="n"><b>packweight.example</b><span>1 prompt</span></span><span></span><span class="bar" role="img" aria-label="2 answers cited this"><i style="width:33%"></i></span><b class="ct">2</b></li>
+      <li><span class="fav">R</span><span class="n"><b>ridgecrestgear.example</b><span>Merino base layers</span></span><span></span><span class="bar" role="img" aria-label="1 answer cited this"><i style="width:17%"></i></span><b class="ct">1</b></li>
+    </ol>
+  </section>
+
+  <div class="sec-h"><h2>Your prompts on Perplexity</h2><p>1 brand, newest run for each</p></div>
+  <section class="card flow" aria-label="Brightpeak Outdoor prompts on Perplexity">
+    <div class="board-h">
+      <span class="avatar" aria-hidden="true">BO</span>
+      <div><div class="t">Brightpeak Outdoor</div><div class="xs m">Brightpeak Outdoor · brightpeak-outdoor.example</div></div>
+      <span class="sp"></span>
+      <span class="board-rate" title="Average mention rate for this brand on Perplexity">67%<i>avg</i></span>
+      <span class="chip outline">3 prompts</span>
+    </div>
+    <div class="tw">
+      <table style="min-width:820px">
+        <thead><tr><th>Prompt</th><th style="width:80px">Trend</th><th style="width:150px">Status</th><th class="r" style="width:120px">Mention rate</th><th class="r" style="width:105px">Cited</th><th style="width:110px">Sources</th></tr></thead>
+        <tbody>
+          <tr style="box-shadow:inset 3px 0 0 #20808D"><td><span class="pr-t">best waterproof hiking boots for wide feet</span><span class="pr-s">3 answers per run</span></td><td><svg class="spark" width="64" height="22" viewBox="0 0 64 22" aria-label="Rate trend: rising"><path d="M2 9 L17 9 L32 16 L47 9 L62 2" fill="none" stroke="#20808D" stroke-width="1.6" stroke-linejoin="round"/></svg></td><td class="xs mu">2h ago</td><td class="r"><span class="rate"><b>100%</b><span class="trend up">+33</span></span></td><td class="r"><span class="aio"><i class="dot"></i>67%</span></td><td><span class="srcdots" title="6 distinct sources cited"><i></i><i></i><i></i><b>6</b></span></td></tr>
+          <tr><td><span class="pr-t">lightweight backpacking tent under 2 kg</span><span class="pr-s">3 answers per run</span></td><td><svg class="spark" width="64" height="22" viewBox="0 0 64 22" aria-label="Rate trend: mixed"><path d="M2 9 L22 16 L42 16 L62 9" fill="none" stroke="#20808D" stroke-width="1.6" stroke-linejoin="round"/></svg></td><td class="xs mu">yesterday</td><td class="r"><span class="rate"><b>67%</b><span class="trend up">+34</span></span></td><td class="r"><span class="aio"><i class="dot"></i>33%</span></td><td><span class="srcdots" title="4 distinct sources cited"><i></i><i></i><i></i><b>4</b></span></td></tr>
+          <tr><td><span class="pr-t">where to buy merino base layers online</span><span class="pr-s">3 answers per run</span></td><td><svg class="spark" width="64" height="22" viewBox="0 0 64 22" aria-label="Rate trend: falling"><path d="M2 9 L32 9 L62 16" fill="none" stroke="#20808D" stroke-width="1.6" stroke-linejoin="round"/></svg></td><td class="xs mu">2d ago</td><td class="r"><span class="rate"><b>33%</b><span class="trend down">-34</span></span></td><td class="r"><span class="aio"><i class="dot"></i>33%</span></td><td><span class="srcdots" title="5 distinct sources cited"><i></i><i></i><i></i><b>5</b></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="sec-h"><h2>Who gets named instead of you</h2><p>Share of voice across completed Perplexity answers, and who those answers linked to</p></div>
+  <section class="card pb" aria-label="Share of voice">
+    <div class="sov-bar" role="img" aria-label="Share of voice among named competitors: Summitline 41%, Ridgecrest Gear 27%, Trailhaven 23%, Alpenwick 9%">
+      <span style="width:41%;background:#4B5363"></span><span style="width:27%;background:#8A93A4"></span><span style="width:23%;background:#D7DBE3"></span><span style="width:9%;background:#F2F4F7"></span>
+    </div>
+    <div class="sov-key">
+      <div><i style="background:#4B5363"></i>Summitline <b>41%</b><span class="mu" style="margin-left:6px">· cited in 3</span></div>
+      <div><i style="background:#8A93A4"></i>Ridgecrest Gear <b>27%</b><span class="mu" style="margin-left:6px">· cited in 1</span></div>
+      <div><i style="background:#D7DBE3"></i>Trailhaven <b>23%</b></div>
+      <div><i style="background:#F2F4F7;box-shadow:inset 0 0 0 1px #D7DBE3"></i>Alpenwick <b>9%</b></div>
+    </div>
+    <p class="xs mu" style="margin-top:8px">“Cited” means Perplexity linked to them as a source. Add a competitor’s domain in brand settings to track it.</p>
+  </section>
+
+  <!-- ── Prompt page: one question, one assistant's answers ─────── -->
+  <div class="ss"><span class="ss-k">Prompt page</span></div>
+  <header class="card qhero" style="margin-top:10px">
+    <div class="qhero-in">
+      <div style="min-width:0">
+        <div class="crumb">AI Prompt Tracker · Brightpeak Outdoor</div>
+        <h1>best waterproof hiking boots for wide feet</h1>
+      </div>
+      <div class="who"><i class="pm perplexity">P</i><div><div class="lbl">Answers from</div><div class="n">Perplexity</div><div class="md">sonar · 3 of 3 answers</div></div></div>
+    </div>
+  </header>
+
+  <div class="sec-h"><h2>This question, on every assistant</h2><p>One question answered four ways — that difference is the whole point</p></div>
+  <div class="qswitch">
+    <div><span class="top"><i class="pm chat_gpt">C</i>ChatGPT</span><span class="v">67%</span><span class="k">mention rate</span></div>
+    <div><span class="top"><i class="pm gemini">G</i>Gemini</span><span class="v">33%</span><span class="k">mention rate</span></div>
+    <div class="on" aria-current="true"><span class="top"><i class="pm perplexity">P</i>Perplexity</span><span class="v">100%</span><span class="k">mention rate</span></div>
+    <div><span class="top"><i class="pm claude">C</i>Claude</span><span class="v">67%</span><span class="k">mention rate</span></div>
+  </div>
+
+  <div class="grid g4" style="margin-top:16px">
+    <div class="card stat"><div class="lb">Mention rate</div><div class="v">100%</div><span class="dl">+33 pts</span><div class="cap">on Perplexity, latest run</div></div>
+    <div class="card stat"><div class="lb">Cited as a source</div><div class="v">67%</div><div class="cap">Perplexity linked to you</div></div>
+    <div class="card stat"><div class="lb">Position in answer</div><div class="v">9%</div><div class="cap">how far in your first mention lands — lower is better</div></div>
+    <div class="card stat"><div class="lb">Last checked</div><div class="v">2h ago</div><div class="cap">3 of 3 answers collected</div></div>
+  </div>
+
+  <nav class="tabs" aria-label="Prompt sections"><a href="#answers" aria-current="location">Answers (3)</a><a href="#history">Rate over time</a><a href="#sources">Cited sources</a></nav>
+
+  <section id="answers" aria-label="Answers">
+    <div class="card rivals"><span class="xs mu">Also named across these answers:</span><span class="chip outline">Summitline<b>3</b></span><span class="chip outline">Trailhaven<b>2</b></span><span class="chip outline">Ridgecrest Gear<b>1</b></span></div>
+
+    <article class="ans hit">
+      <header class="ans-h"><span class="ans-n" aria-hidden="true">1</span><span class="chip brand">Mentioned</span><span class="chip pos">Cited</span></header>
+      <div class="ans-b">
+        <p>For wide feet, look for boots sold in a dedicated wide (2E/4E) last rather than a standard boot sized up. Good waterproof options:</p>
+        <ol>
+          <li><b><mark>Brightpeak Outdoor</mark> Ridgeline Wide</b> — built on a wide last with a roomy toe box and a waterproof membrane; reviewers note it needs little break-in.</li>
+          <li><b>Summitline Trekker GTX Wide</b> — a stiffer, more supportive boot for heavy packs and rough trails.</li>
+          <li><b>Trailhaven Pathfinder</b> — lighter and cheaper, with a wide option in most sizes, but less durable over long seasons.</li>
+        </ol>
+        <p>If you are between sizes, try boots on in the afternoon with the socks you hike in.</p>
+      </div>
+      <footer class="ans-f">
+        <div class="r"><span>Also named</span><span class="chip outline">Summitline</span><span class="chip outline">Trailhaven</span></div>
+        <div class="r"><span>Also cited</span><span class="chip pos">Summitline</span></div>
+      </footer>
+    </article>
+
+    <article class="ans hit">
+      <header class="ans-h"><span class="ans-n" aria-hidden="true">2</span><span class="chip brand">Mentioned</span><span class="chip pos">Cited</span></header>
+      <div class="ans-b">
+        <p>The most-recommended waterproof boots for wide feet are the Summitline Trekker GTX Wide and the <mark>Brightpeak Outdoor</mark> Ridgeline Wide. Both come in true wide widths. The Summitline is the more rugged of the two; the Ridgeline is lighter and more comfortable out of the box.</p>
+        <p>Budget pick: Ridgecrest Gear’s Canyon Mid, which runs slightly wide in its regular width.</p>
+      </div>
+      <footer class="ans-f">
+        <div class="r"><span>Also named</span><span class="chip outline">Summitline</span><span class="chip outline">Ridgecrest Gear</span></div>
+        <div class="r"><span>Also cited</span><span class="chip pos">Summitline</span></div>
+      </footer>
+    </article>
+
+    <article class="ans hit">
+      <header class="ans-h"><span class="ans-n" aria-hidden="true">3</span><span class="chip brand">Mentioned</span></header>
+      <div class="ans-b">
+        <p>Start with Summitline, which makes most of its waterproof models in a wide fit, and Trailhaven, whose Pathfinder runs generously. <mark>Brightpeak Outdoor</mark> also sells a wide version of its Ridgeline boot. Whichever you choose, check that the waterproof liner goes all the way up the tongue.</p>
+      </div>
+      <footer class="ans-f">
+        <div class="r"><span>Also named</span><span class="chip outline">Summitline</span><span class="chip outline">Trailhaven</span></div>
+        <div class="r"><span>Also cited</span><span class="chip pos">Summitline</span></div>
+      </footer>
+    </article>
+  </section>
+
+  <section id="history" class="card" style="margin-top:20px" aria-label="Rate over time">
+    <div class="card-h"><div><div class="t">Mention rate over time</div><div class="xs mu">5 runs · oldest to newest</div></div></div>
+    <div class="pb">
+      <svg class="chart" viewBox="0 0 760 200" role="img" aria-label="Mention rate on Perplexity over 5 runs: 67%, 67%, 33%, 67%, 100%">
+        <g stroke="#EEF0F3" stroke-width="1"><path d="M40 20H750M40 95H750M40 170H750"/></g>
+        <g fill="#8A93A4" font-size="11" font-family="Geist, sans-serif"><text x="0" y="24">100%</text><text x="8" y="99">50%</text><text x="16" y="174">0%</text></g>
+        <path d="M50 70 L222 70 L395 120 L567 70 L740 20" fill="none" stroke="#20808D" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <g fill="#20808D"><circle cx="50" cy="70" r="3.5"/><circle cx="222" cy="70" r="3.5"/><circle cx="395" cy="120" r="3.5"/><circle cx="567" cy="70" r="3.5"/><circle cx="740" cy="20" r="3.5"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <section id="sources" class="card" style="margin-top:20px" aria-label="Cited sources for this prompt">
+    <ol class="srcs">
+      <li><span class="fav">T</span><span class="n"><b>trailgear-review.example</b><span class="lnk">Best hiking boots for wide feet, tested</span></span><span></span><span class="bar" role="img" aria-label="3 answers cited this"><i style="width:100%"></i></span><b class="ct">3</b></li>
+      <li class="own"><span class="fav">B</span><span class="n"><b>brightpeak-outdoor.example</b><span class="lnk">Wide-fit hiking boots — Brightpeak Outdoor</span></span><span class="chip brand">You</span><span class="bar" role="img" aria-label="2 answers cited this"><i style="width:67%"></i></span><b class="ct">2</b></li>
+      <li><span class="fav">S</span><span class="n"><b>summitline.example</b><span class="lnk">Trekker GTX wide fit</span></span><span></span><span class="bar" role="img" aria-label="2 answers cited this"><i style="width:67%"></i></span><b class="ct">2</b></li>
+      <li><span class="fav">H</span><span class="n"><b>hikersforum.example</b><span class="lnk">Wide feet boot thread</span></span><span></span><span class="bar" role="img" aria-label="1 answer cited this"><i style="width:33%"></i></span><b class="ct">1</b></li>
+      <li><span class="fav">P</span><span class="n"><b>packweight.example</b><span class="lnk">Boot fit guide</span></span><span></span><span class="bar" role="img" aria-label="1 answer cited this"><i style="width:33%"></i></span><b class="ct">1</b></li>
+      <li><span class="fav">O</span><span class="n"><b>outdoorlab.example</b><span class="lnk">Waterproof membranes compared</span></span><span></span><span class="bar" role="img" aria-label="1 answer cited this"><i style="width:33%"></i></span><b class="ct">1</b></li>
+    </ol>
+  </section>
+
+  <footer class="rf">Example data · FreeSERP · freeserp.com</footer>
+</main>
+
+</body>
+</html>

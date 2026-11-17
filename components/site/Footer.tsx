@@ -2,6 +2,33 @@ import { appUrl } from "./constants";
 
 const COLS = [
   { h: "Product", l: ["Features", "Rank Tracker", "Website Ranking Checker", "Blog", "Dashboard"] },
+  {
+    h: "Rank Tracking",
+    l: [
+      "Free SERP Checker",
+      "Rank Tracking Tools",
+      "Tracking Suite",
+      "AI Rank Tracker",
+      "Google Maps Rank Tracker",
+      "YouTube Rank Tracker",
+      "All Keywords",
+      "Search Console",
+    ],
+  },
+  {
+    h: "Audits & Research",
+    l: [
+      "Audit Suite",
+      "Site Audit",
+      "Page Audit",
+      "Competitor Analysis",
+      "AEO & GEO Audit",
+      "Google Maps Audit",
+      "Internal Link Analysis",
+      "Keyword Research",
+      "Keyword Score Checker",
+    ],
+  },
   { h: "Legal", l: ["Privacy Policy", "Terms of Service", "Refund Policy"] },
   { h: "Connect", l: ["Contact Us", "support@freeserp.com"] },
 ] as const;
@@ -11,6 +38,23 @@ const FOOTER_HREFS: Record<string, string> = {
   "Rank Tracker": "/rank-tracker",
   "Website Ranking Checker": "/website-ranking-checker",
   Blog: "/blog",
+  "Free SERP Checker": "/serp-checker",
+  "Rank Tracking Tools": "/rank-tracking-tools",
+  "AI Rank Tracker": "/ai-rank-tracker",
+  "Competitor Analysis": "/competitor-analysis",
+  "AEO & GEO Audit": "/aeo-geo-audit",
+  "Google Maps Audit": "/google-maps-audit",
+  "Tracking Suite": "/tracking-suite",
+  "Audit Suite": "/audit-suite",
+  "Google Maps Rank Tracker": "/google-maps-rank-tracker",
+  "YouTube Rank Tracker": "/youtube-rank-tracker",
+  "All Keywords": "/all-keywords",
+  "Search Console": "/search-console",
+  "Site Audit": "/site-audit",
+  "Page Audit": "/page-audit",
+  "Internal Link Analysis": "/internal-link-analysis",
+  "Keyword Research": "/keyword-research",
+  "Keyword Score Checker": "/keyword-score-checker",
   Dashboard: appUrl("/dashboard"),
   "Privacy Policy": "/privacy",
   "Terms of Service": "/terms",
@@ -42,18 +86,19 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer style={{ background: "#0a0a14", color: "#fff" }}>
+    <footer className="fs-site-footer" style={{ background: "#0a0a14", color: "#fff" }}>
       <div className="fs-footer-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "80px 40px 40px" }}>
         <div
           className="fs-row"
           style={{
             display: "flex",
             justifyContent: "space-between",
-            gap: 60,
+            gap: 40,
             flexWrap: "wrap",
           }}
         >
-          <div style={{ maxWidth: 320 }}>
+          {/* Shrinks to 180px so Connect stays on the same row as the link columns. */}
+          <div style={{ flex: "1 1 180px", maxWidth: 320 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 700, fontSize: 22 }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
                 <path d="M12 0 C12.3 6.6 17.4 11.7 24 12 C17.4 12.3 12.3 17.4 12 24 C11.7 17.4 6.6 12.3 0 12 C6.6 11.7 11.7 6.6 12 0 Z" />

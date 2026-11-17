@@ -15,6 +15,8 @@ import {
   HOWTO_SCHEMA,
   FAQ_SCHEMA,
 } from "@/components/rank-tracker/data";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 const PAGE_URL = "https://freeserp.com/rank-tracker";
 const DESCRIPTION =
@@ -54,6 +56,9 @@ export default function RankTrackerPage() {
 
       <Nav currentNav="Free SERP Checker" />
       <Hero />
+      <DemoSection title="Click a keyword, see its history">
+        <RankTrackerDemo />
+      </DemoSection>
       <Steps sub="Our rank tracker runs a clean, depersonalized search engine query from the country and device you specify — so you see exactly what your customers see, not what your browser history shows you." />
       <WhyTracker />
       <UseCases />

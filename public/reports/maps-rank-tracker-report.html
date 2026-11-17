@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Google Maps Tracker — Sample results — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Tokens: freeserp-frontend-v2/app/dashboard.css (.fs-app) */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --soft: #4B5363; --mute: #8A93A4;
+    --border: #E7E9EE; --border-strong: #D7DBE3; --bg-sub: #F7F8FA; --muted: #F2F4F7; --card: #FFFFFF;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB; --warn: #C28B00; --warn-soft: #FBF3DC;
+    --shadow-sm: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1);
+    --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+  h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  b { font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .m { color: var(--soft); }
+  .mu { color: var(--mute); }
+  .xs { font-size: 12px; }
+  .trunc { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lnk { color: var(--brand); }
+
+  /* Sample toolbar: the dashboard's .topbar with the sidebar brand row */
+  .topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .tb-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sb-brand { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); }
+  .sb-brand:hover { text-decoration: none; }
+  .sb-brand svg { display: block; border-radius: 6px; }
+  .hb { display: inline-flex; height: 32px; align-items: center; gap: 6px; white-space: nowrap; border-radius: 7px; border: 1px solid var(--border); background: var(--card); padding: 0 12px; font: inherit; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: background-color .15s; }
+  .hb:hover { background: var(--muted); text-decoration: none; }
+  .hb.pri { border-color: var(--brand); background: var(--brand); color: #fff; }
+  .hb.pri:hover { background: var(--brand-deep); }
+  .hb svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .notice { background: var(--brand-soft); color: var(--text); font-size: 13px; line-height: 1.5; padding: 10px 28px; text-align: center; border-bottom: 1px solid var(--border); }
+
+  /* .page (dashboard.css) */
+  .page { max-width: 1200px; margin: 0 auto; padding: 28px 28px 60px; }
+  .stack > * + * { margin-top: 20px; }
+
+  /* Page header (.page-h) */
+  .page-h { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .page-h h1 { font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  .crumb { font-size: 12px; color: var(--soft); margin-bottom: 4px; }
+  .sub { margin-top: 4px; font-size: 13px; color: var(--soft); }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); font: inherit; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: default; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .btn.sm { height: 28px; padding: 0 10px; font-size: 12px; }
+
+  /* Cards, StatTile */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-sm); min-width: 0; break-inside: avoid; }
+  .card.flow { break-inside: auto; }
+  .card-h { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .card-h .t { font-size: 14px; font-weight: 600; }
+  .pb { padding: 16px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { padding: 16px 18px; }
+  .stat .lb { font-size: 13px; font-weight: 500; color: var(--soft); }
+  .stat .v { margin-top: 10px; font-size: 30px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .stat .cap { margin-top: 8px; font-size: 12.5px; color: var(--soft); }
+  .trk { display: block; margin-top: 8px; height: 5px; overflow: hidden; border-radius: 3px; background: var(--muted); }
+  .trk > span { display: block; height: 100%; border-radius: 3px; background: var(--brand); }
+  .sec-h { margin: 28px 0 10px; }
+  .sec-h h2 { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .sec-h p { margin-top: 2px; font-size: 12.5px; color: var(--soft); }
+  .info { display: flex; gap: 8px; align-items: flex-start; padding: 10px 14px; font-size: 12.5px; color: var(--soft); }
+  .info svg { flex: none; width: 13px; height: 13px; margin-top: 2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Chips, position badges, deltas */
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; background: var(--muted); color: var(--soft); font-size: 11.5px; font-weight: 500; white-space: nowrap; line-height: 16px; }
+  .chip.outline { background: transparent; box-shadow: inset 0 0 0 1px var(--border); }
+  .chip.brand { background: var(--brand-soft); color: var(--brand); }
+  .chip.pos { background: var(--pos-soft); color: var(--pos); }
+  .chip.neg { background: var(--neg-soft); color: var(--neg); }
+  .chip.warn { background: var(--warn-soft); color: var(--warn); }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pos-badge { display: inline-grid; place-items: center; min-width: 34px; height: 26px; padding: 0 7px; border-radius: 7px; background: var(--muted); font-weight: 600; font-size: 13px; font-variant-numeric: tabular-nums; }
+  .pos-badge.top3 { background: var(--pos-soft); color: var(--pos); }
+  .pos-badge.top10 { background: var(--brand-soft); color: var(--brand); }
+  .delta { display: inline-flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .delta.up { color: var(--pos); } .delta.down { color: var(--neg); } .delta.flat { color: var(--mute); font-weight: 400; }
+  .delta svg { width: 9px; height: 9px; }
+
+  /* Tables (.tbl) */
+  .tw { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--bg-sub); text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: 0; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th:last-child, td:last-child { padding-right: 16px; }
+  th.r, td.r { text-align: right; }
+  tr { break-inside: avoid; }
+  thead { display: table-header-group; }
+  .kw { font-weight: 500; }
+
+  footer.rf { margin-top: 28px; text-align: center; font-size: 11px; color: var(--mute); }
+
+  @media (min-width: 1040px) { .grid.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid.g6 { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  @media (min-width: 640px) and (max-width: 1039px) { .grid.g3, .grid.g6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 640px) {
+    .topbar { padding: 10px 16px; }
+    .notice { padding: 10px 16px; text-align: left; }
+    .page { padding: 16px 16px 48px; }
+    .page-h h1 { font-size: 22px; }
+    .stat { padding: 14px; }
+    .stat .v { font-size: 24px; }
+  }
+  @media (max-width: 400px) { .tb-r .hb:not(.pri) { display: none; } }
+
+  @page { size: A4 landscape; margin: 12mm; }
+  @media print {
+    body { background: #fff; font-size: 12px; }
+    .topbar { display: none !important; }
+    .notice { border: 1px solid #d9e1ff; border-radius: 10px; margin: 0 0 14px; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .tw { overflow: visible; }
+    table { min-width: 0 !important; font-size: 11px; }
+  }
+
+  /* Maps tracker report (app/maps-tracker.css .mt-*; colours: components/maps-tracker/grid.ts rankColor) */
+  .sheet { max-width: 1000px; margin: 0 auto; padding: 32px; }
+  .lh { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+  .lh .bn { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+  .lh .bn svg { border-radius: 8px; }
+  .kwchips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .kwchip { display: inline-flex; align-items: center; gap: 10px; height: 36px; padding: 0 14px; border: 1px solid var(--border); border-radius: 9px; background: var(--card); font-size: 13.5px; font-weight: 500; }
+  .kwchip .pct { font-variant-numeric: tabular-nums; color: var(--soft); }
+  .kwchip[aria-selected="true"] { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .kwchip[aria-selected="true"] .pct { color: rgba(255,255,255,.85); }
+  .eyebrow { margin-bottom: 10px; font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+  .lede-h { font-size: 28px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
+  .lede { margin-top: 10px; max-width: 680px; font-size: 14px; line-height: 1.6; color: var(--soft); }
+  .rstats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 32px 0 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .rstats > div { padding: 18px 20px 18px 0; }
+  .rstats > div + div { padding-left: 20px; border-left: 1px solid var(--border); }
+  .rstats .l { font-size: 12.5px; color: var(--soft); }
+  .rstats .val { margin: 6px 0 4px; font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--brand); font-variant-numeric: tabular-nums; }
+  .rstats .ac { font-size: 11.5px; color: var(--mute); letter-spacing: .06em; }
+  .map { position: relative; overflow: hidden; height: 520px; border: 1px solid var(--border); border-radius: 16px; background: #eef0f2; container-type: size; }
+  .map > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .pins { --pad: clamp(28px, 9cqmin, 64px); position: absolute; left: 50%; top: 50%; width: calc(100cqmin - 2 * var(--pad)); aspect-ratio: 1; transform: translate(-50%, -50%); }
+  .pin { position: absolute; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 17px; font-weight: 600; box-shadow: 0 2px 6px rgba(11,13,18,.20); }
+  .pin.w { font-size: 14px; }
+  .pin.ctr { box-shadow: 0 0 0 3px #fff, 0 0 0 5px #DC2626, 0 2px 6px rgba(11,13,18,.2); }
+  .zoom { position: absolute; right: 10px; bottom: 10px; width: 40px; border-radius: 2px; background: #fff; box-shadow: 0 1px 4px -1px rgba(0,0,0,.3); color: #666; font: 400 22px/40px Arial, sans-serif; text-align: center; }
+  .zoom span { display: block; height: 40px; } .zoom span + span { border-top: 1px solid #e6e6e6; }
+  .k3 { background: #16A34A; color: #fff; } .k7 { background: #84CC16; color: #1A2E05; } .k10 { background: #EAB308; color: #422006; }
+  .k15 { background: #F97316; color: #fff; } .k20 { background: #DC2626; color: #fff; } .k0 { background: #7F1D1D; color: #fff; }
+  .scale { margin-top: 10px; text-align: center; font-size: 12px; color: var(--mute); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; margin: 12px 0 40px; font-size: 12.5px; color: var(--soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 999px; }
+  .dist { display: flex; height: 10px; border-radius: 999px; overflow: hidden; margin: 0 auto 10px; max-width: 760px; }
+  .dist span { display: block; height: 100%; }
+  .rsec-t { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .cmp-sum { margin-bottom: 12px; font-size: 13.5px; line-height: 1.55; }
+  .cmp-list { border: 1px solid var(--border); border-radius: 14px; background: var(--card); overflow: hidden; }
+  .cmp-cols, .cmp-head { display: grid; grid-template-columns: minmax(0, 1fr) 84px 70px 150px 16px; align-items: center; gap: 14px; }
+  .cmp-cols { padding: 10px 16px; background: var(--bg-sub); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
+  .cmp-cols .c-num { text-align: right; }
+  .cmp { border-top: 1px solid var(--border); break-inside: avoid; }
+  .cmp:first-of-type { border-top: 0; }
+  .cmp[data-target] { background: rgba(45,91,255,.05); }
+  .cmp-head { padding: 12px 16px; }
+  .cmp-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .rb { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .av { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: var(--muted); color: var(--soft); font-size: 13px; font-weight: 600; }
+  .cmp-id .nm { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; }
+  .you { border-radius: 4px; background: var(--brand); padding: 0 6px; font-size: 10px; font-weight: 600; color: #fff; }
+  .cmp-id .sb { display: block; font-size: 12px; color: var(--soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .stars { font-size: 12px; color: var(--soft); white-space: nowrap; }
+  .stars .s { color: #F59E0B; letter-spacing: 1px; }
+  .stars b { color: var(--text); font-weight: 600; }
+  .cmp-num { text-align: right; font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cmp-num .of { color: var(--mute); font-weight: 400; }
+  .vis { display: flex; align-items: center; gap: 8px; }
+  .vis .track { flex: 1; height: 6px; border-radius: 999px; background: var(--muted); overflow: hidden; }
+  .vis .track i { display: block; height: 100%; border-radius: 999px; }
+  .vis .p { width: 34px; text-align: right; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .chev { width: 15px; height: 15px; fill: none; stroke: var(--mute); stroke-width: 2; }
+  .cmp-body { padding: 4px 16px 16px 102px; }
+  .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .facts > div { padding: 10px 12px; border-radius: 10px; background: var(--bg-sub); }
+  .facts .l { display: block; font-size: 11px; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
+  .facts .v { display: block; margin-top: 2px; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .diff { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); font-size: 12px; font-weight: 600; }
+  .cmp-acts { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .drawer { margin-top: 40px; max-width: 460px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: 0 6px 24px -8px rgba(11,13,18,.12); overflow: hidden; break-inside: avoid; }
+  .drawer-h { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .drawer-facts { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .dk { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; color: var(--mute); }
+  .pack { padding: 8px; }
+  .packrow { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px; }
+  .packrow.me { background: var(--brand-soft); }
+  .ppos { flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 999px; background: var(--muted); font-size: 11px; font-weight: 600; }
+  .ppos.k3 { background: #16A34A; color: #fff; }
+  .packrow .t { font-size: 13px; font-weight: 500; line-height: 1.3; }
+  .packrow.me .t { font-weight: 600; }
+  .note-k { display: inline-block; margin: 40px 0 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+  @media (max-width: 760px) {
+    .sheet { padding: 20px 16px; }
+    .lede-h { font-size: 22px; }
+    .rstats .val { font-size: 26px; }
+    .rstats > div { padding-right: 10px; } .rstats > div + div { padding-left: 10px; }
+    .map { height: 360px; }
+    .pin { width: 30px; height: 30px; font-size: 12px; } .pin.w { font-size: 10px; }
+    .zoom { display: none; }
+    .cmp-cols { display: none; }
+    .cmp-head { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
+    .cmp-head .cmp-id { grid-column: 1 / -1; }
+    .cmp-num::before { content: attr(data-label) " "; font-weight: 400; color: var(--mute); font-size: 12px; }
+    .cmp-num { text-align: left; }
+    .vis { grid-column: 1 / -1; }
+    .chev { display: none; }
+    .cmp-body { padding: 4px 16px 16px; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media print { .sheet { padding: 0; } .map { height: 460px; } .zoom { display: none; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-up" viewBox="0 0 10 10"><path d="M5 1.5 9 8H1z" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 10 10"><path d="M5 8.5 1 2h8z" fill="currentColor"/></symbol>
+  <symbol id="i-in" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+</svg>
+
+<div class="topbar" role="banner">
+  <a class="sb-brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+    FreeSerp
+  </a>
+  <div class="tb-r">
+    <button type="button" class="hb" onclick="window.print()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print this page</button>
+    <a class="hb pri" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mapbg" viewBox="0 0 1200 600">
+    <rect width="1200" height="600" fill="#eef0f2"/>
+    <path d="M0 505 C180 478 330 540 520 522 S860 470 1020 488 S1160 500 1200 492 V600 H0 Z" fill="#d5dee6"/>
+    <rect x="935" y="58" width="190" height="118" rx="14" fill="#e1e9df"/>
+    <rect x="70" y="240" width="140" height="96" rx="12" fill="#e1e9df"/>
+    <rect x="640" y="380" width="70" height="44" rx="8" fill="#e1e9df"/>
+    <g stroke="#fff" stroke-linecap="round" fill="none">
+      <g stroke-width="3.5">
+        <path d="M0 110 H1200 M0 175 H1200 M0 245 H1200 M0 355 H1200 M0 420 H1200 M0 470 H1200"/>
+        <path d="M110 0 V500 M240 0 V510 M380 0 V520 M520 0 V520 M680 0 V505 M820 0 V490 M960 0 V490 M1090 0 V495"/>
+      </g>
+      <path d="M0 300 C300 296 900 304 1200 298" stroke-width="11"/>
+      <path d="M600 0 C596 160 604 360 598 515" stroke-width="11"/>
+      <path d="M0 40 C260 60 700 30 1200 52" stroke-width="7"/>
+      <path d="M30 600 L470 0" stroke-width="6"/>
+      <path d="M1180 600 L880 0" stroke-width="6"/>
+    </g>
+    <g fill="#9aa0a6" font-family="Geist, Inter, system-ui, sans-serif" font-size="12" font-weight="500">
+      <text x="255" y="292">Alder Avenue</text>
+      <text x="608" y="24">Larkmont Road</text>
+      <text x="972" y="122" fill="#8fa08c">Westwood Park</text>
+      <text x="250" y="565" fill="#8c9bab">Larkmont Harbour</text>
+    </g>
+  </symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+</svg>
+
+<div class="notice" role="note">Example data. This page shows what a finished Google Maps Tracker scan contains, filled in for a made-up business. Your report is built from your own scan.</div>
+
+<main class="page">
+  <div class="card sheet">
+
+    <div class="lh">
+      <span class="bn"><svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>FreeSERP</span>
+      <span class="xs mu num">NOV 9, 2026, 9:14 AM</span>
+    </div>
+
+    <div class="kwchips" role="tablist" aria-label="Keyword">
+      <span class="kwchip" role="tab" aria-selected="true"><span>dentist</span><span class="pct">40%</span></span>
+      <span class="kwchip" role="tab" aria-selected="false"><span>emergency dentist</span><span class="pct">28%</span></span>
+      <span class="kwchip" role="tab" aria-selected="false"><span>teeth whitening larkmont</span><span class="pct">52%</span></span>
+    </div>
+
+    <div style="max-width:680px">
+      <div class="eyebrow">Google Maps · “dentist”</div>
+      <h1 class="lede-h">Top 3 across 40% of the neighbourhood</h1>
+      <p class="lede">Brightpeak Dental Studio, 214 Alder Avenue, Larkmont. 25 searches on a 5 × 5 grid, 2.00km radius, each one a real Google Maps query from that coordinate.</p>
+    </div>
+
+    <div class="rstats">
+      <div><div class="l">Top-3 coverage</div><div class="val">40%</div><div class="ac">SOLV</div></div>
+      <div><div class="l">Average rank where found</div><div class="val">5.8</div><div class="ac">ARP</div></div>
+      <div><div class="l">Average rank across grid</div><div class="val">7.0</div><div class="ac">ATRP</div></div>
+    </div>
+
+    <div class="map" role="img" aria-label="5 by 5 rank grid for dentist, 1 km between points. Row 1 (north): 6, 4, 3, 9, 14. Row 2: 3, 2, 1, 4, 11. Row 3: 2, 1, 1 at the business, 2, 8. Row 4: 5, 2, 3, 6, not found. Row 5 (south): 12, 7, 10, 17, not found.">
+      <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#mapbg"/></svg>
+      <div class="pins" aria-hidden="true">
+        <span class="pin k7" style="left:0;top:0">6</span><span class="pin k7" style="left:25%;top:0">4</span><span class="pin k3" style="left:50%;top:0">3</span><span class="pin k10" style="left:75%;top:0">9</span><span class="pin k15" style="left:100%;top:0">14</span>
+        <span class="pin k3" style="left:0;top:25%">3</span><span class="pin k3" style="left:25%;top:25%">2</span><span class="pin k3" style="left:50%;top:25%">1</span><span class="pin k7" style="left:75%;top:25%">4</span><span class="pin k15" style="left:100%;top:25%">11</span>
+        <span class="pin k3" style="left:0;top:50%">2</span><span class="pin k3" style="left:25%;top:50%">1</span><span class="pin k3" style="left:50%;top:50%">1</span><span class="pin k3" style="left:75%;top:50%">2</span><span class="pin k10" style="left:100%;top:50%">8</span>
+        <span class="pin k7" style="left:0;top:75%">5</span><span class="pin k3" style="left:25%;top:75%">2</span><span class="pin k3" style="left:50%;top:75%">3</span><span class="pin k7" style="left:75%;top:75%">6</span><span class="pin k0 w" style="left:100%;top:75%">20+</span>
+        <span class="pin k15" style="left:0;top:100%">12</span><span class="pin k7" style="left:25%;top:100%">7</span><span class="pin k10" style="left:50%;top:100%">10</span><span class="pin k20" style="left:75%;top:100%">17</span><span class="pin k0 w" style="left:100%;top:100%">20+</span>
+      </div>
+      <div class="zoom" aria-hidden="true"><span>+</span><span>−</span></div>
+    </div>
+    <div class="scale">1.00 km between map pins</div>
+    <div class="legend">
+      <span><i class="k3"></i>Top 3 · 10</span><span><i class="k7"></i>4–7 · 6</span><span><i class="k10"></i>8–10 · 3</span><span><i class="k15"></i>11–15 · 3</span><span><i class="k20"></i>16–20 · 1</span><span><i class="k0"></i>Not found · 2</span>
+    </div>
+
+    <section aria-labelledby="h-cmp">
+      <h2 class="rsec-t" id="h-cmp">Who else appears in this grid</h2>
+      <p class="xs m" style="margin:2px 0 14px">Ranked by how often each business lands in the top 3. Open one to compare it on the map.</p>
+      <p class="cmp-sum">You rank 2 of 8 businesses here, behind a leader holding 56% of top-3 spots. Your top-3 ring reaches 1.24 km against a market average of 1.37 km.</p>
+      <div class="cmp-list">
+        <div class="cmp-cols" aria-hidden="true"><span>Business</span><span class="c-num">Found in</span><span class="c-num">Top 3</span><span>Visibility</span><span></span></div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k3" title="Average rank 3.1">3</span><span class="av" aria-hidden="true">MS</span><span style="min-width:0"><span class="nm">Maple Street Dental</span><span class="sb">88 Maple Street, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★★</span> <b>4.7</b> (412)</span></span></span>
+            <span class="cmp-num" data-label="Found in">25<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">56%</span>
+            <span class="vis"><span class="track"><i class="k3" style="width:90%"></i></span><span class="p">90%</span></span>
+            <svg class="chev" style="transform:rotate(180deg)" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+          <div class="cmp-body">
+            <div class="facts"><div><span class="l">Top 3</span><span class="v">56%</span></div><div><span class="l">Found at</span><span class="v">25/25</span></div><div><span class="l">Avg rank</span><span class="v">3.1</span></div><div><span class="l">Coverage</span><span class="v">100%</span></div></div>
+            <span class="diff" title="A heuristic, not a measurement. It combines how often one business holds the top spot across the grid with how many reviews the top-3 businesses carry. Same value for every business here — it describes the area, not you.">Medium difficulty</span>
+            <div class="cmp-acts"><span class="btn sm">Open in Google Maps</span><span class="btn sm">Compare on map</span></div>
+          </div>
+        </div>
+
+        <div class="cmp" data-target>
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k7" title="Average rank 5.8">6</span><span class="av" aria-hidden="true">BD</span><span style="min-width:0"><span class="nm">Brightpeak Dental Studio<span class="you">You</span></span><span class="sb">214 Alder Avenue, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★★</span> <b>4.6</b> (128)</span></span></span>
+            <span class="cmp-num" data-label="Found in">23<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">40%</span>
+            <span class="vis"><span class="track"><i class="k7" style="width:70%"></i></span><span class="p">70%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k7" title="Average rank 4.6">5</span><span class="av" aria-hidden="true">RS</span><span style="min-width:0"><span class="nm">Riverside Smiles</span><span class="sb">5 Riverside Drive, Larkmont · Cosmetic dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★★</span> <b>4.8</b> (236)</span></span></span>
+            <span class="cmp-num" data-label="Found in">24<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">32%</span>
+            <span class="vis"><span class="track"><i class="k7" style="width:79%"></i></span><span class="p">79%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k7" title="Average rank 6.9">7</span><span class="av" aria-hidden="true">ND</span><span style="min-width:0"><span class="nm">Northgate Dental Care</span><span class="sb">402 Northgate Road, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★☆</span> <b>4.5</b> (301)</span></span></span>
+            <span class="cmp-num" data-label="Found in">22<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">20%</span>
+            <span class="vis"><span class="track"><i class="k10" style="width:62%"></i></span><span class="p">62%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k10" title="Average rank 8.4">8</span><span class="av" aria-hidden="true">HF</span><span style="min-width:0"><span class="nm">Harbourview Family Dentistry</span><span class="sb">31 Quay Street, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★☆</span> <b>4.4</b> (189)</span></span></span>
+            <span class="cmp-num" data-label="Found in">19<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">12%</span>
+            <span class="vis"><span class="track"><i class="k15" style="width:48%"></i></span><span class="p">48%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k10" title="Average rank 10.2">10</span><span class="av" aria-hidden="true">CL</span><span style="min-width:0"><span class="nm">Cedar Lane Dental</span><span class="sb">17 Cedar Lane, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★★</span> <b>4.6</b> (97)</span></span></span>
+            <span class="cmp-num" data-label="Found in">15<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">4%</span>
+            <span class="vis"><span class="track"><i class="k15" style="width:32%"></i></span><span class="p">32%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k15" title="Average rank 13.1">13</span><span class="av" aria-hidden="true">LD</span><span style="min-width:0"><span class="nm">Lakeshore Dental Group</span><span class="sb">950 Lakeshore Boulevard, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★☆</span> <b>4.3</b> (158)</span></span></span>
+            <span class="cmp-num" data-label="Found in">9<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">0%</span>
+            <span class="vis"><span class="track"><i class="k20" style="width:14%"></i></span><span class="p">14%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+
+        <div class="cmp">
+          <div class="cmp-head">
+            <span class="cmp-id"><span class="rb k20" title="Average rank 15.5">16</span><span class="av" aria-hidden="true">BF</span><span style="min-width:0"><span class="nm">Bluebird Family Dental</span><span class="sb">233 Westwood Road, Larkmont · Dentist</span><span class="stars"><span class="s" aria-hidden="true">★★★★☆</span> <b>4.2</b> (170)</span></span></span>
+            <span class="cmp-num" data-label="Found in">6<span class="of"> / 25</span></span>
+            <span class="cmp-num" data-label="Top 3">0%</span>
+            <span class="vis"><span class="track"><i class="k20" style="width:7%"></i></span><span class="p">7%</span></span>
+            <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <span class="note-k">Opened from a pin on the map</span>
+    <aside class="drawer" aria-label="Grid point detail">
+      <div class="drawer-h">
+        <div style="font-size:15px;font-weight:600">What Google showed here</div>
+        <div class="xs mu" style="margin-top:2px">1.41 km NE · “dentist”</div>
+      </div>
+      <div class="drawer-facts">
+        <div><div class="dk">YOUR RANK</div><div class="num" style="font-size:22px;font-weight:600;margin-top:2px;color:#84CC16">#4</div></div>
+        <div><div class="dk">MATCHED ON</div><div class="xs" style="margin-top:5px">Place ID</div></div>
+        <div><div class="dk">COORDINATES</div><div class="xs num" style="margin-top:6px">40.02172, -105.25826</div></div>
+      </div>
+      <div class="pack">
+        <div class="packrow"><span class="ppos k3">1</span><div style="min-width:0"><div class="t">Maple Street Dental</div><div class="xs mu">Dentist · 4.7 ★ (412)</div></div></div>
+        <div class="packrow"><span class="ppos k3">2</span><div style="min-width:0"><div class="t">Riverside Smiles</div><div class="xs mu">Cosmetic dentist · 4.8 ★ (236)</div></div></div>
+        <div class="packrow"><span class="ppos k3">3</span><div style="min-width:0"><div class="t">Northgate Dental Care</div><div class="xs mu">Dentist · 4.5 ★ (301)</div></div></div>
+        <div class="packrow me"><span class="ppos">4</span><div style="min-width:0"><div class="t">Brightpeak Dental Studio <span class="xs" style="color:var(--brand)">You</span></div><div class="xs mu">Dentist · 4.6 ★ (128)</div></div></div>
+        <div class="packrow"><span class="ppos">5</span><div style="min-width:0"><div class="t">Harbourview Family Dentistry</div><div class="xs mu">Dentist · 4.4 ★ (189)</div></div></div>
+        <div class="packrow"><span class="ppos">6</span><div style="min-width:0"><div class="t">Cedar Lane Dental</div><div class="xs mu">Dentist · 4.6 ★ (97)</div></div></div>
+        <div class="packrow"><span class="ppos">7</span><div style="min-width:0"><div class="t">Lakeshore Dental Group</div><div class="xs mu">Dentist · 4.3 ★ (158)</div></div></div>
+        <div class="packrow"><span class="ppos">8</span><div style="min-width:0"><div class="t">Larkmont Orthodontics</div><div class="xs mu">Orthodontist · 4.9 ★ (64)</div></div></div>
+        <div class="xs mu" style="padding:10px 8px 4px">12 more results captured at this point</div>
+      </div>
+    </aside>
+
+    <p class="xs mu" style="margin-top:40px;padding-top:18px;border-top:1px solid var(--border)">Prepared by FreeSERP · every figure measured from the 25 searches above</p>
+    <p class="xs mu" style="margin-top:8px">SoLV: share of grid points where the business ranks in the top 3. ARP: average rank over the points where it was found. ATRP: average rank over every point, with a point where it wasn’t found in the top 20 counted as 21.</p>
+  </div>
+  <footer class="rf">Example data · FreeSERP · freeserp.com</footer>
+</main>
+
+</body>
+</html>

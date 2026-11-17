@@ -10,8 +10,9 @@ import { pushDataLayer } from "@/lib/gtm";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { useSession } from "@/lib/useSession";
 
-export function Nav({ currentNav }: { currentNav?: NavItem }) {
-  const scrolled = useScrolled(40);
+/** `solid` keeps the dark bar from the top, for pages whose hero is light — white links would vanish on it. */
+export function Nav({ currentNav, solid = false }: { currentNav?: NavItem; solid?: boolean }) {
+  const scrolled = useScrolled(40) || solid;
   const [menuOpen, setMenuOpen] = useState(false);
   const appUrl = useAppUrl();
   // Signed-in visitors get sent to their dashboard rather than asked to sign up.

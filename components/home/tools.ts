@@ -125,7 +125,9 @@ export interface Tool {
   text: string;
   points: string[];
   cost: string;
-  shot: Shot;
+  /** Tools with no dashboard screenshot yet show a link card to `href` instead. */
+  shot?: Shot;
+  href?: string;
 }
 
 /**
@@ -212,6 +214,32 @@ export const TOOLS: Tool[] = [
       height: 1680,
       alt: "FreeSERP Internal Links Analysis: 428 pages crawled with 3,914 internal links, 4 orphan pages and a max depth of 5, drawn as a node graph",
     },
+  },
+  {
+    label: "AEO & GEO",
+    kicker: "AEO & GEO AUDIT",
+    title: "Can AI answer engines read, trust and cite you?",
+    text: "FreeSERP checks whether ChatGPT, Gemini, Perplexity, Claude and AI Overviews can actually get at your site — crawler access, rendering, schema, content structure, trust and freshness — scores it for AEO and GEO, then asks those engines real questions to see who they cite instead of you.",
+    points: [
+      "AEO and GEO scores over seven checked categories",
+      "Real questions put to up to five AI engines, with who got cited",
+      "Fixes ranked by points gained per unit of effort",
+    ],
+    cost: "From 10 credits an audit",
+    href: "/aeo-geo-audit",
+  },
+  {
+    label: "Maps Audit",
+    kicker: "GOOGLE MAPS AUDIT",
+    title: "Find out why the listing is not showing up",
+    text: "Paste a Google Maps link and FreeSERP audits the Business Profile in 25 checks — profile, reviews, photos, website and visibility — runs a 3×3 local rank grid around the business, compares it with the listings nearby and hands back a 30-day action plan.",
+    points: [
+      "25 checks across profile, reviews, photos, website and visibility",
+      "A 3×3 local rank grid around the business",
+      "A 30-day action plan in three phases",
+    ],
+    cost: "5 credits an audit",
+    href: "/google-maps-audit",
   },
   {
     label: "Keyword Research",

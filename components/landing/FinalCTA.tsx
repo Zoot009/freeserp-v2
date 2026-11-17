@@ -75,21 +75,6 @@ export default function FinalCTA({ dict }: { dict: FinalCtaDict }) {
             </RevealItem>
           ))}
         </RevealGroup>
-
-        <div className="relative mx-auto mt-14 flex max-w-[1160px] flex-wrap items-center justify-between gap-4 border-t border-[#1e2740] pt-6.5 text-[13px] text-[#8a91a3]">
-          <span>{dict.copyright}</span>
-          <div className="flex gap-7">
-            <a href="#top" className="transition-colors hover:text-white">
-              {dict.legal}
-            </a>
-            <a href="#top" className="transition-colors hover:text-white">
-              {dict.privacy}
-            </a>
-            <a href="#top" className="transition-colors hover:text-white">
-              {dict.doNotSell}
-            </a>
-          </div>
-        </div>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/sanity";
+import { TOOL_PAGES } from "@/components/tool-page/pages";
 
 // The marketing site's canonical origin. Hardcoded on purpose — freeserp.com is
 // fixed across environments, and a sitemap must always point at the production
@@ -64,5 +65,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }));
 
-  return [...staticRoutes, ...postRoutes];
+  const toolRoutes: MetadataRoute.Sitemap = Object.values(TOOL_PAGES).map((p) => ({
+    url: `${SITE}${p.path}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...toolRoutes, ...postRoutes];
 }

@@ -23,13 +23,22 @@ import {
   Star,
   Wallet,
 } from "lucide-react";
-import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
+import { LogoMark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "../_locale/Cta";
 import { SignupPopup } from "../_locale/SignupPopup";
 import { Point, SectionHead, ShotFrame, WRAP, type Shot } from "../_locale/pieces";
 import "../_locale/audit.css";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { SiteAuditDemo } from "@/components/demos/SiteAuditDemo";
+import { PageAuditDemo } from "@/components/demos/PageAuditDemo";
+import { CompetitorDemo } from "@/components/demos/CompetitorDemo";
+import { LinkGraphDemo } from "@/components/demos/LinkGraphDemo";
+import { KeywordMagicDemo } from "@/components/demos/KeywordMagicDemo";
+import { KeywordScoreDemo } from "@/components/demos/KeywordScoreDemo";
 
 /**
  * /audit-suite/us — the US paid-acquisition landing page for the audit
@@ -566,33 +575,7 @@ export default function AuditSuiteUsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* ── floating header ───────────────────────────────────────────────
-          `fixed`, not `sticky`, for the same reason the site Nav is:
-          globals.css puts overflow-x: hidden on <body>, which makes it a scroll
-          container and stops sticky from ever sticking. The hero carries the
-          matching top padding.
-          The two taglines drop out at md and lg rather than wrapping — a
-          three-line capsule would eat the top of the hero on a laptop. */}
-      <header className="fixed inset-x-0 top-3 z-50 px-4 sm:top-5">
-        <div className="mx-auto flex w-full max-w-[1072px] items-center gap-4 rounded-full border border-[#0d10201f] bg-white/80 py-2.5 pr-4 pl-4 backdrop-blur-xl sm:pr-6 sm:pl-6">
-          <a href="#top" className="flex shrink-0 items-center gap-2.5">
-            <LogoMark className="h-6.5 w-6.5" />
-            <Wordmark className="text-[16px] font-semibold tracking-[-0.02em] text-[var(--ink)]" />
-          </a>
-
-          <p className="hidden min-w-0 items-center gap-3 truncate text-[13px] text-[var(--body)] md:flex">
-            <span className="font-semibold text-[var(--ink)]">
-              Audit. Analyze. Improve. All in One SEO Platform.
-            </span>
-            <span className="text-[var(--line)]" aria-hidden>
-              |
-            </span>
-            <span className="hidden xl:inline">
-              100 Free Credits Every Month · Multiple Tools · One Account. No Credit Card.
-            </span>
-          </p>
-        </div>
-      </header>
+      <Nav solid />
 
       <main>
         {/* ── hero ────────────────────────────────────────────────────────
@@ -630,6 +613,14 @@ export default function AuditSuiteUsPage() {
               <a href="#toolkit" className="audit-btn audit-btn-lg audit-btn-ghost">
                 Explore the multiple tools
               </a>
+              <a
+                href={SAMPLE_REPORTS.audit.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="audit-btn audit-btn-lg audit-btn-ghost"
+              >
+                View sample report
+              </a>
             </div>
 
             <p className="mt-5 text-[14px] text-[var(--muted)]">
@@ -653,6 +644,18 @@ export default function AuditSuiteUsPage() {
             />
           </div>
         </section>
+
+        <DemoSection
+          title="Every audit tool, hands-on"
+          tabs={[
+            { label: "Site audit", demo: <SiteAuditDemo /> },
+            { label: "Page audit", demo: <PageAuditDemo /> },
+            { label: "Competitors", demo: <CompetitorDemo /> },
+            { label: "Internal links", demo: <LinkGraphDemo /> },
+            { label: "Keyword research", demo: <KeywordMagicDemo /> },
+            { label: "Keyword score", demo: <KeywordScoreDemo /> },
+          ]}
+        />
 
         {/* ── the problem ─────────────────────────────────────────────────
             Sits between the hero shot and the audience row, per the brief: the
@@ -1246,26 +1249,10 @@ export default function AuditSuiteUsPage() {
               ))}
             </ul>
           </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-            <span>© {new Date().getFullYear()} FreeSERP. All rights reserved.</span>
-            <div className="flex flex-wrap gap-6">
-              <a href="/privacy" className="transition-colors hover:text-[var(--ink)]">
-                Privacy
-              </a>
-              <a href="/terms" className="transition-colors hover:text-[var(--ink)]">
-                Terms
-              </a>
-              <a
-                href="mailto:support@freeserp.com"
-                className="transition-colors hover:text-[var(--ink)]"
-              >
-                support@freeserp.com
-              </a>
-            </div>
-          </div>
         </div>
       </footer>
+
+      <Footer />
 
       {/* The inline "Turn Your Website Into Your Next SEO Opportunity" band used
           to live under the hero. It is this instead: the same offer, asked for

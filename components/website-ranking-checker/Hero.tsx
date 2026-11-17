@@ -1,5 +1,7 @@
 import { Reveal } from "@/components/site/Reveal";
 import { SerpForm } from "@/components/serp-checker/SerpForm";
+import { HeroReportButton } from "@/components/site/HeroReportButton";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 
 export function Hero() {
   return (
@@ -52,6 +54,9 @@ export function Hero() {
 
         <Reveal delay={0.1}>
           <SerpForm />
+          <div style={{ marginTop: 24 }}>
+            <HeroReportButton href={SAMPLE_REPORTS.rank.href} />
+          </div>
         </Reveal>
       </div>
     </header>

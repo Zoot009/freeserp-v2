@@ -14,6 +14,8 @@ import {
   HOWTO_SCHEMA,
   FAQ_SCHEMA,
 } from "@/components/website-ranking-checker/data";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 const PAGE_URL = "https://freeserp.com/website-ranking-checker";
 const DESCRIPTION =
@@ -53,6 +55,9 @@ export default function WebsiteRankingCheckerPage() {
 
       <Nav currentNav="Free SERP Checker" />
       <Hero />
+      <DemoSection title="Click a keyword, see its history">
+        <RankTrackerDemo />
+      </DemoSection>
       <Steps />
       <WhyChecker />
       <WhoUses />

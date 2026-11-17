@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Search Console — Sample results — FreeSERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* FreeSerp app light tokens — freeserp-frontend-v2/app/dashboard.css */
+  :root {
+    --brand: #2D5BFF; --brand-soft: #EEF2FF; --brand-deep: #1E40D8;
+    --text: #0B0D12; --text-soft: #4B5363; --text-mute: #8A93A4;
+    --border: #E7E9EE; --border-strong: #D7DBE3; --hair: #EEF0F3; --bg-sub: #F7F8FA; --bg-inset: #F2F4F7;
+    --pos: #16A34A; --pos-soft: #E8F7EE; --neg: #DC2626; --neg-soft: #FCEBEB; --warn: #C28B00; --warn-soft: #FBF3DC;
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+    --shadow-sm: 0 1px 2px rgba(11,13,18,0.04);
+    --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; background: var(--bg-sub); color: var(--text); font-family: var(--font-sans); font-size: 14px; line-height: 1.45; letter-spacing: -0.005em; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  h1, h2, h3, h4, p { margin: 0; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .num { font-variant-numeric: tabular-nums; }
+  .muted { color: var(--text-mute); }
+  .i { width: 14px; height: 14px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* top bar */
+  .toolbar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 28px; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .brand svg { display: block; }
+  .tb-right { display: flex; align-items: center; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: var(--r-sm); border: 1px solid var(--border); background: #fff; color: var(--text); font: inherit; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; white-space: nowrap; }
+  .btn:hover { background: var(--bg-inset); }
+  .btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .btn.primary:hover { background: var(--brand-deep); }
+  .btn svg { width: 15px; height: 15px; }
+  .btn:focus-visible, .brand:focus-visible, .table-wrap:focus-visible, summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* page */
+  .page { max-width: 1120px; margin: 0 auto; padding: 28px 28px 48px; }
+  .note { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 16px; color: var(--text-mute); font-size: 12.5px; }
+  .note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: var(--r-md); box-shadow: var(--shadow-sm); }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .rf { margin-top: 24px; text-align: center; color: var(--text-mute); font-size: 12px; }
+
+  @media (max-width: 560px) {
+    .toolbar { padding: 10px 16px; }
+    .toolbar .btn.ghost { display: none; }
+    .page { padding: 20px 16px 36px; }
+  }
+  @page { size: A4; margin: 14mm 12mm; }
+  @media print {
+    body { background: #fff; }
+    .toolbar { display: none; }
+    .page { max-width: none; padding: 0; }
+    .card { box-shadow: none; }
+    .table-wrap { overflow: visible; }
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; }
+  }
+
+  .ph { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .back { color: var(--text-mute); font-size: 12.5px; }
+  .ph h1 { margin-top: 8px; font-size: 26px; font-weight: 600; letter-spacing: -0.025em; }
+  .ph .sub { margin-top: 4px; font-size: 13.5px; color: var(--text-mute); }
+  .acct { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .acct .mono { font-size: 11.5px; color: var(--text-mute); }
+  .fake-btn { display: inline-flex; align-items: center; padding: 7px 13px; border: 1px solid var(--neg); border-radius: var(--r-sm); background: #fff; color: var(--neg); font-size: 13px; font-weight: 500; }
+  .range { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+  .range .mono { font-size: 12px; color: var(--text-mute); }
+  .seg { display: inline-flex; padding: 2px; border: 1px solid var(--border); border-radius: var(--r-sm); background: #fff; box-shadow: var(--shadow-sm); }
+  .seg span { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--text-soft); }
+  .seg span.on { background: var(--brand); color: #fff; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 0 0 14px; padding: 0; list-style: none; }
+  .kpi { min-width: 0; padding: 16px 20px; border: 1px solid var(--border); border-radius: var(--r-lg); background: #fff; box-shadow: var(--shadow-sm); }
+  .kpi.on { border-color: transparent; background: var(--brand); color: #fff; }
+  .kpi-h { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--text-soft); }
+  .kpi.on .kpi-h { color: rgba(255,255,255,.9); }
+  .box { display: grid; place-items: center; width: 16px; height: 16px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 4px; }
+  .kpi.on .box { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.2); }
+  .box .i { width: 12px; height: 12px; }
+  .ico { width: 16px; height: 16px; opacity: .7; }
+  .kpi.on .ico { opacity: 1; }
+  .kpi-l { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hint { display: inline-grid; place-items: center; width: 14px; height: 14px; flex-shrink: 0; border: 1px solid currentColor; border-radius: 50%; font-size: 9px; font-weight: 600; opacity: .6; cursor: help; }
+  .kpi-b { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 8px; }
+  .kpi-v { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .delta { display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 999px; font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .delta .i { width: 12px; height: 12px; }
+  .delta.up { background: rgba(16,185,129,.1); color: #059669; }
+  .delta.down { background: rgba(239,68,68,.1); color: #DC2626; }
+  .kpi.on .delta { background: rgba(255,255,255,.2); color: #fff; }
+
+  .panel { padding: 18px; margin-bottom: 14px; }
+  .chart-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+  .lg { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--text-soft); }
+  .lg i { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); }
+  .chart-h .mono { font-size: 12px; color: var(--text-mute); }
+  .chart svg { display: block; width: 100%; height: auto; }
+  .chart .grid line { stroke: var(--border); stroke-opacity: .7; }
+  .xt { position: relative; height: 22px; margin-top: 6px; font-size: 12px; color: var(--text-mute); }
+  .xt span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+  @media (max-width: 560px) { .xt span:nth-child(even) { display: none; } }
+  .pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+  .pager .mono { font-size: 12px; color: var(--text-mute); }
+  .pg-c { display: flex; align-items: center; gap: 6px; }
+  .pg-b { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; font-size: 12px; font-weight: 500; color: var(--text-soft); }
+  .pg-b.off { opacity: .4; }
+  .dots { display: flex; align-items: center; gap: 4px; padding: 0 4px; }
+  .dots i { width: 6px; height: 6px; border-radius: 999px; background: rgba(138,147,164,.3); }
+  .dots i.on { width: 20px; background: var(--brand); }
+
+  .tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--border); }
+  .tab { margin-bottom: -1px; padding: 9px 14px; border-bottom: 2px solid transparent; font-size: 13px; font-weight: 500; color: var(--text-mute); }
+  .tab.on { border-bottom-color: var(--brand); color: var(--text); font-weight: 600; }
+  .tbl-wrap { margin-top: 12px; }
+  table { width: 100%; min-width: 620px; border-collapse: separate; border-spacing: 0; font-size: 13px; font-variant-numeric: tabular-nums; }
+  thead th { padding: 8px 12px; background: var(--bg-sub); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: left; font-size: 11.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; color: var(--text-mute); white-space: nowrap; }
+  thead th:first-child { border-left: 1px solid var(--border); border-top-left-radius: var(--r-sm); }
+  thead th:last-child { border-right: 1px solid var(--border); border-top-right-radius: var(--r-sm); }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid var(--hair); }
+  tbody td:first-child { border-left: 1px solid var(--border); }
+  tbody td:last-child { border-right: 1px solid var(--border); }
+  tbody tr:last-child td { border-bottom-color: var(--border); }
+  tbody tr:last-child td:first-child { border-bottom-left-radius: var(--r-sm); }
+  tbody tr:last-child td:last-child { border-bottom-right-radius: var(--r-sm); }
+  th.r, td.r { text-align: right; }
+  .cb-c { width: 32px; }
+  .cb { display: block; width: 14px; height: 14px; border: 1px solid #B9C0CC; border-radius: 3px; background: #fff; }
+  .cb.off { background: var(--bg-inset); border-color: var(--border); }
+  td.q span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.q { display: flex; align-items: center; gap: 6px; max-width: 360px; }
+  .tag { flex-shrink: 0; padding: 1px 6px; border-radius: 5px; background: var(--brand-soft); color: var(--brand); font-size: 10.5px; font-weight: 600; }
+  .tbl-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-mute); }
+  .tbl-foot .l { display: flex; gap: 12px; flex-wrap: wrap; }
+  .sel { padding: 2px 6px; border: 1px solid var(--border); border-radius: 6px; color: var(--text); }
+
+  @media (max-width: 860px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) {
+    .acct { align-items: flex-start; }
+    .kpi { padding: 14px; }
+    .kpi-v { font-size: 20px; }
+    .kpi-b { flex-wrap: wrap; }
+    .panel { padding: 14px; }
+    .tab { padding: 8px 10px; }
+  }
+  @media print {
+    table { min-width: 0; }
+    .kpis, .panel.chart { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar" role="banner">
+  <a class="brand" href="https://freeserp.com" target="_top" aria-label="FreeSerp home">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="#2D5BFF"/><path d="M12 4.5c.6 4.3 2.7 6.4 7 7-4.3.6-6.4 2.7-7 7-.6-4.3-2.7-6.4-7-7 4.3-.6 6.4-2.7 7-7z" fill="#fff"/></svg>
+    FreeSerp
+  </a>
+  <div class="tb-right">
+    <button type="button" class="btn primary" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>Print</button>
+    <a class="btn ghost" href="https://app.freeserp.com/signup" target="_top">Start free</a>
+  </div>
+</div>
+
+<div class="page">
+  <p class="note" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>Example data for a made-up site. This shows what the Search Console view inside a FreeSERP project contains, once your Google Search Console property is connected. It is a screen in your dashboard, not a downloadable report.</span></p>
+
+  <main>
+    <div class="ph">
+      <div>
+        <span class="back">← Back to project</span>
+        <h1>Search Console</h1>
+        <p class="sub">Clicks, impressions, CTR and position from Google Search Console</p>
+      </div>
+      <div class="acct"><span class="mono">owner@example-dental.com</span><span class="fake-btn" aria-hidden="true">Disconnect</span></div>
+    </div>
+
+    <div class="range">
+      <span class="mono">example-dental.com</span>
+      <div class="seg" aria-label="Date range: 3 months"><span>7 days</span><span>28 days</span><span class="on">3 months</span><span>Custom</span></div>
+    </div>
+
+    <h2 class="sr">Totals for the last 3 months, against the 3 months before</h2>
+    <ul class="kpis">
+        <li class="kpi on">
+          <div class="kpi-h"><span class="box" aria-hidden="true"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><svg class="i ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 9 5 12 1.8-5.2L21 14Z"/><path d="M7.2 2.2 8 5.1"/><path d="m5.1 8-2.9-.8"/><path d="M14 4.1 12 6"/><path d="m6 12-1.9 2"/></svg><span class="kpi-l">Total clicks</span><span class="hint" title="Times someone clicked through to your site from Google, for this property and range.">i</span></div>
+          <div class="kpi-b"><span class="kpi-v">7,079</span><span class="delta up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>1,203<span class="sr"> up vs the previous 90 days</span></span></div>
+        </li>
+        <li class="kpi">
+          <div class="kpi-h"><span class="box" aria-hidden="true"></span><svg class="i ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg><span class="kpi-l">Total impressions</span><span class="hint" title="Times a link to your site appeared in results. High impressions with few clicks usually means you rank, but not high enough.">i</span></div>
+          <div class="kpi-b"><span class="kpi-v">229,206</span><span class="delta up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>27,505<span class="sr"> up vs the previous 90 days</span></span></div>
+        </li>
+        <li class="kpi">
+          <div class="kpi-h"><span class="box" aria-hidden="true"></span><svg class="i ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><span class="kpi-l">Average CTR</span><span class="hint" title="Clicks divided by impressions. Compared against the previous period in percentage points, not percent — a move from 1% to 2% is +1 pp.">i</span></div>
+          <div class="kpi-b"><span class="kpi-v">3.1%</span><span class="delta up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>0.18 pp<span class="sr"> up vs the previous 90 days</span></span></div>
+        </li>
+        <li class="kpi">
+          <div class="kpi-h"><span class="box" aria-hidden="true"></span><svg class="i ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg><span class="kpi-l">Average position</span><span class="hint" title="Your average position across every query that showed your site. Lower is better, so a green arrow here means the number went down.">i</span></div>
+          <div class="kpi-b"><span class="kpi-v">13.0</span><span class="delta up"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>1.7<span class="sr"> better (lower) vs the previous 90 days</span></span></div>
+        </li>
+    </ul>
+
+    <section class="card panel chart" aria-labelledby="h-chart">
+      <div class="chart-h">
+        <h2 id="h-chart" class="lg"><i></i>Total clicks</h2>
+        <span class="mono">2026-08-18 → 2026-11-15</span>
+      </div>
+      <svg viewBox="0 0 1000 340" role="img" aria-label="Daily clicks from Oct 17 to Nov 15: from 74 to 63 a day, lower on weekends.">
+        <g class="grid"><line vector-effect="non-scaling-stroke" x1="12" x2="988" y1="10" y2="10"/><line vector-effect="non-scaling-stroke" x1="12" x2="988" y1="91.5" y2="91.5"/><line vector-effect="non-scaling-stroke" x1="12" x2="988" y1="173" y2="173"/><line vector-effect="non-scaling-stroke" x1="12" x2="988" y1="254.5" y2="254.5"/><line vector-effect="non-scaling-stroke" x1="12" x2="988" y1="336" y2="336"/></g>
+        <path d="M12,175.2 C17.6,182.1 34.4,223.7 45.7,216.5 C56.9,209.2 68.1,145.8 79.3,131.7 C90.5,117.6 101.7,132.8 113,131.7 C124.2,130.6 135.4,122.7 146.6,125.2 C157.8,127.7 169.1,148.7 180.3,146.9 C191.5,145.1 202.7,109.6 213.9,114.3 C225.1,119 236.4,159.2 247.6,175.2 C258.8,191.1 270,219.4 281.2,209.9 C292.5,200.5 303.7,131.7 314.9,118.7 C326.1,105.6 337.3,127.7 348.6,131.7 C359.8,135.7 371,146.2 382.2,142.6 C393.4,139 404.6,111.4 415.9,110 C427.1,108.5 438.3,120.5 449.5,133.9 C460.7,147.3 472,178.4 483.2,190.4 C494.4,202.3 505.6,215.4 516.8,205.6 C528,195.8 539.3,148.4 550.5,131.7 C561.7,115 572.9,111.4 584.1,105.6 C595.4,99.8 606.6,98 617.8,96.9 C629,95.8 640.2,97.7 651.4,99.1 C662.7,100.6 673.9,95.5 685.1,105.6 C696.3,115.8 707.5,146.9 718.8,160 C730,173 741.2,194 752.4,183.9 C763.6,173.7 774.9,111.1 786.1,99.1 C797.3,87.2 808.5,111.1 819.7,112.1 C830.9,113.2 842.2,104.2 853.4,105.6 C864.6,107.1 875.8,117.6 887,120.8 C898.3,124.1 909.5,116.9 920.7,125.2 C931.9,133.5 943.1,158.5 954.3,170.8 C965.6,183.1 982.4,194.4 988,199.1" fill="none" stroke="#2d5bff" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <div class="xt" aria-hidden="true"><span style="left:7.9%">Oct 19</span><span style="left:24.8%">Oct 24</span><span style="left:41.6%">Oct 29</span><span style="left:58.4%">Nov 3</span><span style="left:75.2%">Nov 8</span><span style="left:92.1%">Nov 13</span></div>
+      <div class="pager">
+        <span class="mono">Oct 17 – Nov 15</span>
+        <div class="pg-c" aria-hidden="true"><span class="pg-b">←</span><span class="dots"><i></i><i></i><i class="on"></i></span><span class="pg-b off">→</span></div>
+      </div>
+    </section>
+
+    <section class="card panel" aria-labelledby="h-q">
+      <div class="tabs-row">
+        <div class="tabs" aria-hidden="true"><span class="tab on">Queries</span><span class="tab">Pages</span><span class="tab">Countries</span><span class="tab">Devices</span><span class="tab">Search appearance</span><span class="tab">Days</span></div>
+      </div>
+      <h2 id="h-q" class="sr">Queries</h2>
+      <div class="table-wrap tbl-wrap" tabindex="0" role="region" aria-label="Queries table">
+        <table>
+          <thead><tr><th class="cb-c" scope="col"><span class="cb" aria-hidden="true"></span><span class="sr">Select</span></th><th scope="col">Query</th><th class="r" scope="col">Total clicks</th><th class="r" scope="col">Total impressions</th><th class="r" scope="col">Average CTR</th><th class="r" scope="col">Average position</th></tr></thead>
+          <tbody>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>example dental</span></td><td class="r">1,184</td><td class="r">4,210</td><td class="r">28.1%</td><td class="r">1.1</td></tr>
+              <tr><td class="cb-c"><span class="cb off" aria-hidden="true"></span></td><td class="q"><span>dentist near me</span><span class="tag">Tracked</span></td><td class="r">512</td><td class="r">38,400</td><td class="r">1.3%</td><td class="r">7.8</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>example dental downtown</span></td><td class="r">344</td><td class="r">1,520</td><td class="r">22.6%</td><td class="r">1.3</td></tr>
+              <tr><td class="cb-c"><span class="cb off" aria-hidden="true"></span></td><td class="q"><span>dental implants cost</span><span class="tag">Tracked</span></td><td class="r">291</td><td class="r">14,800</td><td class="r">2.0%</td><td class="r">6.4</td></tr>
+              <tr><td class="cb-c"><span class="cb off" aria-hidden="true"></span></td><td class="q"><span>emergency dentist</span><span class="tag">Tracked</span></td><td class="r">248</td><td class="r">11,200</td><td class="r">2.2%</td><td class="r">5.9</td></tr>
+              <tr><td class="cb-c"><span class="cb off" aria-hidden="true"></span></td><td class="q"><span>teeth whitening near me</span><span class="tag">Tracked</span></td><td class="r">196</td><td class="r">9,300</td><td class="r">2.1%</td><td class="r">8.2</td></tr>
+              <tr><td class="cb-c"><span class="cb off" aria-hidden="true"></span></td><td class="q"><span>invisalign cost</span><span class="tag">Tracked</span></td><td class="r">171</td><td class="r">8,650</td><td class="r">2.0%</td><td class="r">9.1</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dentist northside</span></td><td class="r">158</td><td class="r">2,400</td><td class="r">6.6%</td><td class="r">2.7</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>kids dentist near me</span></td><td class="r">132</td><td class="r">6,100</td><td class="r">2.2%</td><td class="r">7.4</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>root canal cost</span></td><td class="r">118</td><td class="r">7,900</td><td class="r">1.5%</td><td class="r">10.6</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>how long do dental implants last</span></td><td class="r">104</td><td class="r">12,500</td><td class="r">0.8%</td><td class="r">8.8</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>veneers cost</span></td><td class="r">92</td><td class="r">6,800</td><td class="r">1.4%</td><td class="r">11.3</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dentist westfield</span></td><td class="r">88</td><td class="r">1,650</td><td class="r">5.3%</td><td class="r">3.2</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>same day emergency dentist</span></td><td class="r">81</td><td class="r">3,900</td><td class="r">2.1%</td><td class="r">6.1</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>invisalign vs braces</span></td><td class="r">74</td><td class="r">9,100</td><td class="r">0.8%</td><td class="r">12.4</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>teeth whitening myths</span></td><td class="r">63</td><td class="r">5,400</td><td class="r">1.2%</td><td class="r">9.7</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dentist open saturday</span></td><td class="r">59</td><td class="r">2,700</td><td class="r">2.2%</td><td class="r">5.4</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>root canal recovery</span></td><td class="r">52</td><td class="r">6,200</td><td class="r">0.8%</td><td class="r">13.8</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>all on 4 dental implants</span></td><td class="r">47</td><td class="r">5,100</td><td class="r">0.9%</td><td class="r">14.2</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dental financing</span></td><td class="r">43</td><td class="r">3,300</td><td class="r">1.3%</td><td class="r">11.9</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dr lena ortiz dentist</span></td><td class="r">41</td><td class="r">240</td><td class="r">17.1%</td><td class="r">1.0</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dentist that takes delta dental</span></td><td class="r">38</td><td class="r">2,900</td><td class="r">1.3%</td><td class="r">9.3</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>porcelain veneers near me</span></td><td class="r">34</td><td class="r">2,600</td><td class="r">1.3%</td><td class="r">12.8</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>dental anxiety tips</span></td><td class="r">29</td><td class="r">4,100</td><td class="r">0.7%</td><td class="r">15.6</td></tr>
+              <tr><td class="cb-c"><span class="cb" aria-hidden="true"></span></td><td class="q"><span>first dental visit checklist</span></td><td class="r">24</td><td class="r">1,800</td><td class="r">1.3%</td><td class="r">10.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tbl-foot">
+        <div class="l"><span>Rows per page: <span class="sel">25</span></span><span class="num">1–25 of 412</span></div>
+        <div class="pg-c" aria-hidden="true"><span class="pg-b off">←</span><span class="mono">1 / 17</span><span class="pg-b">→</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rf">Generated by FreeSERP · freeserp.com</footer>
+</div>
+</body>
+</html>

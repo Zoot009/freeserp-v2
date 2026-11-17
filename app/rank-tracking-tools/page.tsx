@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { SampleReport } from "@/components/landing/SampleReport";
 import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import { Bebas_Neue, Geist } from "next/font/google";
-import Header from "@/components/rank-tracking-tools/Header";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
 import Hero from "@/components/rank-tracking-tools/Hero";
 import Stats from "@/components/rank-tracking-tools/Stats";
 import Problem from "@/components/rank-tracking-tools/Problem";
@@ -13,8 +14,12 @@ import HowItWorks from "@/components/rank-tracking-tools/HowItWorks";
 import Pricing from "@/components/rank-tracking-tools/Pricing";
 import Faq from "@/components/rank-tracking-tools/Faq";
 import FinalCta from "@/components/rank-tracking-tools/FinalCta";
-import Footer from "@/components/rank-tracking-tools/Footer";
 import "@/components/rank-tracking-tools/rank-tracking-tools.css";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
+import { GeoGridDemo } from "@/components/demos/GeoGridDemo";
+import { YouTubeRankDemo } from "@/components/demos/YouTubeRankDemo";
+import { AiAnswerDemo } from "@/components/demos/AiAnswerDemo";
 
 // This page's own type stack, not the site's. The root layout puts Archivo on
 // <body>; the design is set in Geist with Bebas Neue display headings, so both
@@ -42,20 +47,33 @@ export const metadata: Metadata = {
 
 export default function RankTrackingToolsPage() {
   return (
-    <div className={`l2 ${bebas.variable} ${geist.variable}`}>
-      <Header />
-      <Hero />
-      <Stats />
-      <Problem />
-      <Tools />
-      <Features />
-      <AiTracker />
-      <HowItWorks />
-      <SampleReport {...SAMPLE_REPORTS.rank} />
-      <Pricing />
-      <Faq />
-      <FinalCta />
+    <>
+      <Nav solid />
+      <div className={`l2 ${bebas.variable} ${geist.variable}`}>
+        {/* Room for the fixed nav, which replaced this page's in-flow header. */}
+        <div style={{ height: 68 }} aria-hidden />
+        <Hero />
+        <DemoSection
+          title="Every tracker, hands-on"
+          tabs={[
+            { label: "Google & Bing", demo: <RankTrackerDemo /> },
+            { label: "Google Maps", demo: <GeoGridDemo /> },
+            { label: "YouTube", demo: <YouTubeRankDemo /> },
+            { label: "AI answers", demo: <AiAnswerDemo /> },
+          ]}
+        />
+        <Stats />
+        <Problem />
+        <Tools />
+        <Features />
+        <AiTracker />
+        <HowItWorks />
+        <SampleReport {...SAMPLE_REPORTS.rank} />
+        <Pricing />
+        <Faq />
+        <FinalCta />
+      </div>
       <Footer />
-    </div>
+    </>
   );
 }

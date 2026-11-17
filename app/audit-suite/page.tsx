@@ -18,12 +18,21 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
+import { LogoMark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
 import { SignupPopup } from "./SignupPopup";
 import "./ads.css";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { SiteAuditDemo } from "@/components/demos/SiteAuditDemo";
+import { PageAuditDemo } from "@/components/demos/PageAuditDemo";
+import { CompetitorDemo } from "@/components/demos/CompetitorDemo";
+import { LinkGraphDemo } from "@/components/demos/LinkGraphDemo";
+import { KeywordMagicDemo } from "@/components/demos/KeywordMagicDemo";
+import { KeywordScoreDemo } from "@/components/demos/KeywordScoreDemo";
 
 /**
  * /audit-suite — the paid-acquisition landing page for the audit and research
@@ -419,27 +428,7 @@ export default function AuditSuitePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* ── nav ───────────────────────────────────────────────────────────
-          No bar: the header is transparent and sits directly on the hero, so
-          the top of the page is the headline rather than a chrome strip above
-          it. That is only readable while there is hero behind it, so this is
-          `absolute` at the top of the document rather than `fixed` — a
-          transparent bar pinned over the scrolling body would drag a floating
-          logo and a white pill across every card below.
-          Logo one side, the CTA the other, nothing in between: the anchors that
-          were here read as a site nav, and this is a landing page with one
-          thing to do. The pill is white rather than the accent because it sits
-          on colour — on the hero it is the only white object in the frame. */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <div className={`${WRAP} flex h-[76px] items-center justify-between gap-4 sm:h-[84px]`}>
-          <a href="#top" className="flex items-center gap-2.5">
-            <LogoMark className="h-7 w-7 rounded-[8px]" />
-            <Wordmark className="text-[19px] font-semibold tracking-[-0.6px] text-[var(--ink)]" />
-          </a>
-
-          <Cta placement="nav" label="Start free" size="sm" variant="white" arrow="up-right" />
-        </div>
-      </header>
+      <Nav solid />
 
       <main>
         {/* ── hero ─────────────────────────────────────────────────────────
@@ -468,6 +457,16 @@ export default function AuditSuitePage() {
               single page against 63 checks. Put yourself beside the pages outranking
               you, map your internal links, and find the keywords worth writing for.
             </p>
+            <div className="mt-8 flex justify-center">
+              <a
+                href={SAMPLE_REPORTS.audit.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ads-btn ads-btn-lg ads-btn-ghost"
+              >
+                View sample report
+              </a>
+            </div>
           </div>
 
           <div className={`${WRAP} mt-12 sm:mt-16`}>
@@ -500,6 +499,18 @@ export default function AuditSuitePage() {
             </p>
           </div>
         </section>
+
+        <DemoSection
+          title="Every audit tool, hands-on"
+          tabs={[
+            { label: "Site audit", demo: <SiteAuditDemo /> },
+            { label: "Page audit", demo: <PageAuditDemo /> },
+            { label: "Competitors", demo: <CompetitorDemo /> },
+            { label: "Internal links", demo: <LinkGraphDemo /> },
+            { label: "Keyword research", demo: <KeywordMagicDemo /> },
+            { label: "Keyword score", demo: <KeywordScoreDemo /> },
+          ]}
+        />
 
         {/* ── personas ─────────────────────────────────────────────────── */}
         <section className="py-20 sm:py-28">
@@ -849,26 +860,10 @@ export default function AuditSuitePage() {
               <Cta placement="final_cta" label="Start free — 100 credits" />
             </div>
           </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-            <span>© {new Date().getFullYear()} FreeSERP. All rights reserved.</span>
-            <div className="flex flex-wrap gap-6">
-              <a href="/privacy" className="transition-colors hover:text-[var(--ink)]">
-                Privacy
-              </a>
-              <a href="/terms" className="transition-colors hover:text-[var(--ink)]">
-                Terms
-              </a>
-              <a
-                href="mailto:support@freeserp.com"
-                className="transition-colors hover:text-[var(--ink)]"
-              >
-                support@freeserp.com
-              </a>
-            </div>
-          </div>
         </div>
       </footer>
+
+      <Footer />
 
       <SignupPopup />
     </div>

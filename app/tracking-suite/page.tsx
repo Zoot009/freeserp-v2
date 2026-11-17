@@ -27,6 +27,13 @@ import { Cta } from "./Cta";
 import { PLATFORMS } from "./PlatformMarks";
 import { SignupPopup } from "./SignupPopup";
 import "./ads.css";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
+import { GeoGridDemo } from "@/components/demos/GeoGridDemo";
+import { YouTubeRankDemo } from "@/components/demos/YouTubeRankDemo";
+import { AiAnswerDemo } from "@/components/demos/AiAnswerDemo";
 
 /**
  * /tracking-suite — the paid-acquisition landing page for the four trackers.
@@ -378,6 +385,8 @@ export default function TrackingSuitePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      <Nav solid />
+
       <main>
         {/* ── hero ────────────────────────────────────────────────────────
             The screenshot is the real keywords dashboard, not an illustration.
@@ -388,7 +397,7 @@ export default function TrackingSuitePage() {
             fold carries the promise and the proof and nothing else. With the
             nav capsule gone the section needs only enough top padding to
             breathe. */}
-        <section id="top" className="relative pt-14 pb-6 sm:pt-20">
+        <section id="top" className="relative pt-28 pb-6 sm:pt-32">
           <div className={`${WRAP} text-center`}>
             <span className="ads-tag">
               Google Search | Google Maps | Youtube | AI - All in one Rank Tracker
@@ -403,6 +412,16 @@ export default function TrackingSuitePage() {
               street, your YouTube videos, and whether ChatGPT, Gemini, Perplexity and
               Claude recommend you — in one dashboard, updated every day.
             </p>
+            <div className="mt-8 flex justify-center">
+              <a
+                href={SAMPLE_REPORTS.rank.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ads-btn ads-btn-lg ads-btn-ghost"
+              >
+                View sample report
+              </a>
+            </div>
 
           </div>
 
@@ -441,6 +460,16 @@ export default function TrackingSuitePage() {
             </div>
           </div>
         </section>
+
+        <DemoSection
+          title="Every tracker, hands-on"
+          tabs={[
+            { label: "Google & Bing", demo: <RankTrackerDemo /> },
+            { label: "Google Maps", demo: <GeoGridDemo /> },
+            { label: "YouTube", demo: <YouTubeRankDemo /> },
+            { label: "AI answers", demo: <AiAnswerDemo /> },
+          ]}
+        />
 
         {/* ── personas ────────────────────────────────────────────────────
             Paid traffic arrives from one ad group with one idea of the product.
@@ -788,26 +817,10 @@ export default function TrackingSuitePage() {
               ))}
             </ul>
           </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-            <span>© {new Date().getFullYear()} FreeSERP. All rights reserved.</span>
-            <div className="flex flex-wrap gap-6">
-              <a href="/privacy" className="transition-colors hover:text-[var(--ink)]">
-                Privacy
-              </a>
-              <a href="/terms" className="transition-colors hover:text-[var(--ink)]">
-                Terms
-              </a>
-              <a
-                href="mailto:support@freeserp.com"
-                className="transition-colors hover:text-[var(--ink)]"
-              >
-                support@freeserp.com
-              </a>
-            </div>
-          </div>
         </div>
       </footer>
+
+      <Footer />
 
       <SignupPopup />
     </div>

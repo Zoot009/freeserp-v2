@@ -66,7 +66,7 @@ export function Toolkit() {
       <SectionHead
         tag="AUDIT & RESEARCH"
         title="Find what is holding the site back"
-        sub="Rankings tell you where you stand. These tell you why — and what to change. Seven tools, all on the same credit balance, none locked behind a higher tier."
+        sub="Rankings tell you where you stand. These tell you why — and what to change. Nine tools, all on the same credit balance, none locked behind a higher tier."
       />
 
       <Reveal style={{ marginTop: 48 }}>
@@ -139,18 +139,41 @@ export function Toolkit() {
             </div>
 
             <div className="fs-tool-media">
-              <div className="fs-app-frame">
-                <div className="fs-app-frame-shot">
-                  <Image
-                    src={tool.shot.src}
-                    alt={tool.shot.alt}
-                    width={tool.shot.width}
-                    height={tool.shot.height}
-                    loading="lazy"
-                    sizes="(max-width: 1000px) 100vw, 700px"
-                  />
+              {tool.shot ? (
+                <div className="fs-app-frame">
+                  <div className="fs-app-frame-shot">
+                    <Image
+                      src={tool.shot.src}
+                      alt={tool.shot.alt}
+                      width={tool.shot.width}
+                      height={tool.shot.height}
+                      loading="lazy"
+                      sizes="(max-width: 1000px) 100vw, 700px"
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <a
+                  href={tool.href}
+                  className="fs-app-frame"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 12,
+                    minHeight: 320,
+                    padding: 32,
+                    textAlign: "center",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <span className="fs-tracker-kicker">{tool.kicker}</span>
+                  <span style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.02em" }}>{tool.title}</span>
+                  <span style={{ color: COLORS.blue, fontWeight: 600, fontSize: 15 }}>See how it works →</span>
+                </a>
+              )}
             </div>
           </div>
         ))}

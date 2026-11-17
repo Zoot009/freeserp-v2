@@ -5,6 +5,10 @@ import { Check, X } from "lucide-react";
 import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { SerpForm } from "@/components/serp-checker/SerpForm";
 import { brands } from "@/lib/landing/content";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { HeroReportButton } from "@/components/site/HeroReportButton";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 
 import { Cta } from "./Cta";
 import { UsMap } from "./UsMap";
@@ -15,6 +19,8 @@ import {
 } from "./FeatureSections";
 import { content } from "./content";
 import "./ads.css";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 /**
  * /free-serp-checker/US — the paid-acquisition landing page for the US market.
@@ -66,28 +72,13 @@ const WRAP = "us-wrap";
 export default function FreeSerpCheckerUsPage() {
   return (
     <div className={`us-scope ${archivo.variable}`}>
-      <header className={WRAP}>
-        <div className="us-nav">
-          <span className="us-nav-brand">
-            <span className="us-nav-mark" aria-hidden>
-              F
-            </span>
-            FreeSERP
-          </span>
-          <div className="flex items-center gap-5">
-            <span className="us-eyebrow hidden sm:inline-flex">
-              {content.nav.credits}
-            </span>
-            <Cta placement="nav" label={content.nav.cta} size="sm" />
-          </div>
-        </div>
-      </header>
+      <Nav solid />
 
       <main>
         {/* ── hero ────────────────────────────────────────────────────────
             Left-aligned and full-width: the headline is the largest thing on
             the page and centring it would waste the measure it needs. */}
-        <section className="pt-10 pb-14 sm:pt-16 sm:pb-20">
+        <section className="pt-28 pb-14 sm:pt-32 sm:pb-20">
           <div className={`${WRAP} us-hero-in`}>
             <span className="us-eyebrow us-eyebrow-accent">
               {content.hero.eyebrow}
@@ -109,8 +100,15 @@ export default function FreeSerpCheckerUsPage() {
             </div>
 
             <span className="us-note">{content.hero.disclaimer}</span>
+            <div className="mt-6">
+              <HeroReportButton href={SAMPLE_REPORTS.rank.href} variant="onLight" />
+            </div>
           </div>
         </section>
+
+        <DemoSection title="Click a keyword, see its history">
+          <RankTrackerDemo />
+        </DemoSection>
 
         {/* ── the demo ────────────────────────────────────────────────────
             The clip is the section: the heading only exists to introduce it.
@@ -416,25 +414,7 @@ export default function FreeSerpCheckerUsPage() {
         </section>
       </main>
 
-      <footer className="pb-12">
-        <div className={WRAP}>
-          <hr className="us-rule mb-6" />
-          <div className="flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-            <span>{content.finalCta.copyright}</span>
-            <div className="flex flex-wrap gap-6">
-              <a href="/terms" className="hover:text-[var(--ink)]">
-                {content.finalCta.legal}
-              </a>
-              <a href="/privacy" className="hover:text-[var(--ink)]">
-                {content.finalCta.privacy}
-              </a>
-              <a href="/privacy" className="hover:text-[var(--ink)]">
-                {content.finalCta.doNotSell}
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

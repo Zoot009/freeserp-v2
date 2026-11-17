@@ -9,6 +9,8 @@ import { domainExists } from "@/lib/landing/domainCheck";
 import { LazyDemoVideo } from "@/components/landing/ui/LazyDemoVideo";
 import { normalizeDomain } from "@/lib/landing/previewData";
 import { trackLanding } from "@/components/landing/track";
+import { HeroReportButton } from "@/components/site/HeroReportButton";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import type { PreviewController, PreviewOverlayDict } from "@/components/landing/preview/PreviewOverlay";
 
 // The preview overlay pulls in framer-motion and the entire replica dashboard —
@@ -266,6 +268,9 @@ export default function Hero({
           {message}
         </p>
         <PersonalizedNote dict={personalization} locale={locale} />
+        <div className="mt-6">
+          <HeroReportButton href={SAMPLE_REPORTS.rank.href} variant="onLight" />
+        </div>
 
         {showDemo && <TiltCard liveDemo={dict.liveDemo} demoAlt={dict.demoAlt} />}
       </div>

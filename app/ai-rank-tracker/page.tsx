@@ -19,13 +19,18 @@ import {
   Target,
   Wallet,
 } from "lucide-react";
-import { LogoMark, Wordmark } from "@/components/landing/ui/Logo";
+import { LogoMark } from "@/components/landing/ui/Logo";
 import { TESTIMONIALS } from "@/components/home/data";
 import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 import { Cta } from "./Cta";
 import { PlatformMark, type PlatformId } from "./PlatformMarks";
 import { SignupPopup } from "./SignupPopup";
 import "./ads.css";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
+import { AiAnswerDemo } from "@/components/demos/AiAnswerDemo";
 
 /**
  * /ai-rank-tracker — the paid-acquisition landing page for the AI Prompt
@@ -463,23 +468,7 @@ export default function AiRankTrackerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      {/* ── nav ───────────────────────────────────────────────────────────
-          No bar: the header is transparent and sits directly on the dark hero
-          band, so the top of the page is the headline rather than a chrome
-          strip above it. That is only readable while there is band behind it,
-          so this is `absolute` at the top of the document rather than `fixed`.
-          Logo one side, the CTA the other, nothing in between: anchors here read
-          as a site nav, and this is a landing page with one thing to do. */}
-      <header className="absolute inset-x-0 top-0 z-50">
-        <div className={`${WRAP} flex h-[76px] items-center justify-between gap-4 sm:h-[84px]`}>
-          <a href="#top" className="flex items-center gap-2.5 text-white">
-            <LogoMark className="h-7 w-7 rounded-[8px]" />
-            <Wordmark className="text-[19px] font-semibold tracking-[-0.6px]" />
-          </a>
-
-          <Cta placement="nav" label="Start free" size="sm" variant="white" arrow="up-right" />
-        </div>
-      </header>
+      <Nav />
 
       <main>
         {/* ── hero ─────────────────────────────────────────────────────────
@@ -519,6 +508,14 @@ export default function AiRankTrackerPage() {
               <Cta placement="hero" label="Start free — 100 credits" />
               <a href="#platforms" className="airt-btn airt-btn-lg airt-btn-ghost">
                 See the platforms
+              </a>
+              <a
+                href={SAMPLE_REPORTS.ai.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="airt-btn airt-btn-lg airt-btn-ghost"
+              >
+                View sample report
               </a>
             </div>
 
@@ -570,6 +567,10 @@ export default function AiRankTrackerPage() {
             Above: one brand&rsquo;s prompts, scored on every platform
           </p>
         </div>
+
+        <DemoSection title="Read the answers, see who gets named">
+          <AiAnswerDemo />
+        </DemoSection>
 
         {/* ── the four platforms ────────────────────────────────────────────
             The centre of the page. Copy on the left, the capability spec on the
@@ -994,26 +995,10 @@ export default function AiRankTrackerPage() {
               <Cta placement="final_cta" label="Start free — 100 credits" />
             </div>
           </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-[13px] text-[var(--muted)]">
-            <span>© {new Date().getFullYear()} FreeSERP. All rights reserved.</span>
-            <div className="flex flex-wrap gap-6">
-              <a href="/privacy" className="transition-colors hover:text-[var(--ink)]">
-                Privacy
-              </a>
-              <a href="/terms" className="transition-colors hover:text-[var(--ink)]">
-                Terms
-              </a>
-              <a
-                href="mailto:support@freeserp.com"
-                className="transition-colors hover:text-[var(--ink)]"
-              >
-                support@freeserp.com
-              </a>
-            </div>
-          </div>
         </div>
       </footer>
+
+      <Footer />
 
       <SignupPopup />
     </div>

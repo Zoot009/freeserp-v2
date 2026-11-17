@@ -1,4 +1,7 @@
-import Header from "@/components/landing/Header";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { DemoSection } from "@/components/demos/DemoSection";
+import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 import UrgencyBanner from "@/components/landing/UrgencyBanner";
 import Hero from "@/components/landing/Hero";
 import LogoStripSteps from "@/components/landing/LogoStripSteps";
@@ -22,14 +25,19 @@ export default async function LandingHome({
 
   return (
     <div className="w-full overflow-x-hidden">
+      <Nav solid />
+      {/* Room for the fixed nav, so it does not cover the banner. */}
+      <div style={{ height: 68 }} aria-hidden />
       <UrgencyBanner dict={dict.urgency} />
-      <Header dict={dict.header} />
       <Hero
         dict={dict.hero}
         personalization={dict.personalization}
         preview={dict.preview}
         locale={localeTag(lang)}
       />
+      <DemoSection title="Click a keyword, see its history">
+        <RankTrackerDemo />
+      </DemoSection>
       <LogoStripSteps dict={dict.logoStrip} />
       <FeatureVisibility dict={dict.visibility} />
       <FeatureCompetitors dict={dict.competitors} />
@@ -37,6 +45,7 @@ export default async function LandingHome({
       <Stats dict={dict.stats} />
       <Testimonial dict={dict.testimonial} />
       <FinalCTA dict={dict.finalCta} />
+      <Footer />
     </div>
   );
 }

@@ -349,3 +349,13 @@
     transform: translateY(0);
   }
 }
+
+/* ─── site chrome keeps the home page font ──────────────────────────
+   Landing pages wrap everything in their own font (Inter etc.); the shared
+   nav and footer sit inside those wrappers, so they restate the body font. */
+.fs-nav,
+.fs-mobile-menu,
+.fs-site-footer {
+  font-family: var(--font-archivo), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
