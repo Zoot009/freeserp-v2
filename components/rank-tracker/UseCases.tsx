@@ -13,8 +13,8 @@ export function UseCases() {
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead
-        title="Who uses this free Rank Tracker?"
-        sub="The free rank tracker is built for anyone who needs accurate ranking data without paying for enterprise tools they will not fully use."
+        title="Who tracks rankings with this free Rank Tracker?"
+        sub="Anyone who needs to know whether their search visibility is growing or slipping — without paying for an enterprise suite they will barely use."
       />
       <div className="fs-grid-3" style={{ marginTop: 56 }}>
         {USE_CASES.map((u, i) => (

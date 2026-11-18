@@ -39,10 +39,39 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "FreeSERP — Track rankings in Google, Maps, YouTube and AI chatbots",
+  title: "Rank Tracking Tools for Mobile & Desktop | FreeSERP",
   description:
-    "One dashboard that tells you where you rank, who is beating you, and exactly what to fix. 12 tools unlocked on the free plan, 190+ countries, no credit card.",
+    "Track keyword rankings on mobile and desktop in 190+ countries, plus Google Maps, YouTube and AI answers. History, alerts, competitors, exports. Free plan.",
+  keywords: [
+    "rank tracking tools",
+    "rank tracker",
+    "keyword rank tracker",
+    "mobile rank tracking",
+    "desktop vs mobile rankings",
+    "mobile-first indexing",
+    "Google rank tracker",
+    "local rank tracking",
+    "Google Maps rank tracker",
+    "YouTube rank tracker",
+    "AI rank tracker",
+    "SERP position tracking",
+    "competitor rank tracking",
+  ],
   alternates: { canonical: "/rank-tracking-tools" },
+  openGraph: {
+    title: "Rank tracking on mobile and desktop, in every engine that matters",
+    description:
+      "Daily positions per device and country, with history, alerts and competitors. Google, Maps, YouTube and AI answers in one dashboard. Free plan, no card.",
+    url: "/rank-tracking-tools",
+    siteName: "FreeSERP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rank tracking on mobile and desktop, in every engine that matters",
+    description:
+      "Track keyword positions per device and country, plus Google Maps, YouTube and AI answers. History, alerts and exports. Free plan.",
+  },
 };
 
 export default function RankTrackingToolsPage() {

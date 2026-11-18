@@ -11,7 +11,7 @@ export type Tool = {
 };
 
 export const TOOLS: Tool[] = [
-  { name: "Keyword Rank Tracker", what: "Daily positions in any country, with history", cost: "5 / keyword" },
+  { name: "Keyword Rank Tracker", what: "Daily mobile and desktop positions in any country, with history", cost: "5 / keyword" },
   { name: "AI Prompt Tracker", what: "Brand mentions in ChatGPT, Claude, Gemini, Perplexity", cost: "" },
   { name: "Google Maps Tracker", what: "A geo-grid of local rankings, block by block", cost: "35–1,475 / scan" },
   { name: "YouTube Rank Tracker", what: "Video positions, with views and age", cost: "5 / keyword" },
@@ -57,7 +57,7 @@ export const STEPS: Step[] = [
   {
     n: "03",
     title: "Pick keywords",
-    body: "Choose the engine, country and device for each.",
+    body: "Choose the engine, country and device (mobile or desktop) for each.",
     shot: "/screenshots/10-add-keywords.png",
     width: 1040,
     height: 585,
@@ -85,7 +85,23 @@ export const FAQS: Faq[] = [
   },
   {
     q: "Which countries and devices?",
-    a: "190+ countries and all devices. You set the engine, the location and the device per keyword.",
+    a: "190+ countries, on mobile and desktop. You set the engine, the location and the device per keyword, down to a single city.",
+  },
+  {
+    q: "Why track mobile and desktop rankings separately?",
+    a: "Because they often disagree. Google uses the mobile version of a page for indexing and ranking, and the same keyword can sit several places apart on a phone and a laptop. A tracker that only checks one device, or averages both, can tell you all is well while half your searchers see you on page two.",
+  },
+  {
+    q: "How are mobile and desktop results different?",
+    a: "Phone results show less text per listing, lean harder on images, video and other rich blocks, and weigh the searcher's location more heavily because people search on the move. All of that can push organic listings further down the screen, so a top-5 spot on mobile is worth checking on its own.",
+  },
+  {
+    q: "What makes a good rank tracking tool?",
+    a: "Filters for engine, country, city and device; daily checks with a history you can scroll back through; a view of the competitors ranking around you; alerts when a keyword moves; and reports and CSV or PDF exports you can share. FreeSERP covers all of these, plus Maps, YouTube and AI answers on the same balance.",
+  },
+  {
+    q: "How do I improve my mobile rankings?",
+    a: "Start with the basics: a responsive layout, no pop-ups that cover the content, buttons big enough to tap, structured data for rich results, and copy written for a small screen first. Compress images (WebP and lazy loading help) and keep video short and captioned. Then run an audit and watch your mobile positions to see what actually moved.",
   },
   {
     q: "What is a credit?",

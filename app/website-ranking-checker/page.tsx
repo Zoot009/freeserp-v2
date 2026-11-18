@@ -19,20 +19,20 @@ import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 const PAGE_URL = "https://freeserp.com/website-ranking-checker";
 const DESCRIPTION =
-  "Check your website ranking free. No account needed. Instant website rank finder for any domain or keyword.";
+  "Check where your website ranks on Google for any keyword, country and device. See your exact top-100 position, who outranks you and how to climb higher.";
 
 export const metadata: Metadata = {
-  title: "Website Ranking Checker Free | Freeserp.com",
+  title: "Website Ranking Checker — Where Does My Site Rank? | FreeSERP",
   description: DESCRIPTION,
   keywords:
-    "website ranking checker, check website ranking, website rank finder, website ranking free, check website ranking free",
+    "website ranking checker, check website ranking, website rank checker, check my website ranking on Google, website rank finder, Google ranking checker, improve website ranking, why did my ranking drop",
   alternates: { canonical: PAGE_URL },
   authors: [{ name: "FreeSERP" }],
   creator: "FreeSERP",
   publisher: "FreeSERP",
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Website Ranking Checker Free | Freeserp.com",
+    title: "Website Ranking Checker — Where Does My Site Rank? | FreeSERP",
     description: DESCRIPTION,
     url: PAGE_URL,
     siteName: "FreeSERP",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Website Ranking Checker Free | Freeserp.com",
+    title: "Website Ranking Checker — Where Does My Site Rank? | FreeSERP",
     description: DESCRIPTION,
   },
 };

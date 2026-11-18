@@ -17,8 +17,9 @@ const FEATURES: Feature[] = [
   {
     tag: "Keyword Rank Tracker",
     title: "Daily positions in any country, with history",
-    body: "Add the keywords you care about, pick the engine, the location and the device, and watch the line move. Checked every day without you clicking anything.",
+    body: "Add the keywords you care about, pick the engine, the location and the device — mobile or desktop — and watch the line move. Checked every day without you clicking anything.",
     checks: [
+      "Mobile and desktop tracked separately, so device gaps show up",
       "Per-keyword history charts and SERP snapshots",
       "Email alerts when a position jumps or drops",
       "Search Console and GA4 clicks beside your positions — free",

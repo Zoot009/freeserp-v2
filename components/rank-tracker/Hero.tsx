@@ -48,7 +48,7 @@ export function Hero() {
               opacity: 0.92,
             }}
           >
-            Check where any domain ranks for any keyword — across any country, on any device — completely free. No signup, no credit card, no limits on manual rank checks.
+            Monitor where your site ranks on Google for every keyword that matters — by country, city and device — with daily position history, SERP features and competitor positions in one place. One-off checks need no signup and no credit card.
           </p>
         </Reveal>
 

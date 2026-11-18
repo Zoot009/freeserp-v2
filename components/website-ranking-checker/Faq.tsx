@@ -25,7 +25,7 @@ export function Faq() {
               Frequently asked questions
             </h2>
             <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5 }}>
-              Common questions about website ranking checker accuracy and tracking. Still stuck? Email{" "}
+              How to check your website ranking, why it changes, and how to improve it. Still stuck? Email{" "}
               support@freeserp.com.
             </p>
           </Reveal>

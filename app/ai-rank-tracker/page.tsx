@@ -75,17 +75,39 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Rank Tracker for ChatGPT, Claude, Gemini and Perplexity — FreeSERP",
+  title: "AI Rank Tracker: ChatGPT, Claude, Gemini, Perplexity | FreeSERP",
   description:
-    "Track whether AI assistants name you. FreeSERP runs your prompts on ChatGPT, Claude, Gemini and Perplexity and scores mention rate, citation rate, prominence and share of voice. 100 free credits every month, no credit card.",
+    "Track your AI visibility. See whether ChatGPT, Claude, Gemini and Perplexity name and cite your brand or your competitors. 100 free credits a month.",
+  keywords: [
+    "AI rank tracker",
+    "AI visibility tracker",
+    "LLM rank tracking",
+    "ChatGPT rank tracker",
+    "generative engine optimization",
+    "GEO",
+    "answer engine optimization",
+    "AEO",
+    "AI brand mentions",
+    "AI citation tracking",
+    "AI share of voice",
+    "Perplexity rank tracking",
+    "Gemini brand visibility",
+    "Claude brand monitoring",
+  ],
   alternates: { canonical: "/ai-rank-tracker" },
   openGraph: {
-    title: "Do the AI assistants name you?",
+    title: "Do ChatGPT, Claude, Gemini and Perplexity name your brand?",
     description:
-      "Rank tracking for ChatGPT, Claude, Gemini and Perplexity — mention rate, citations, prominence and share of voice, on a schedule.",
+      "An AI visibility tracker for GEO and AEO — brand mentions, citations, prominence and share of voice against your competitors, re-checked on a schedule.",
     url: "/ai-rank-tracker",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Do ChatGPT, Claude, Gemini and Perplexity name your brand?",
+    description:
+      "Track AI visibility for GEO and AEO: mentions, citations, prominence and share of voice on every platform. 100 free credits a month.",
   },
   // Paid-traffic destination, kept out of the index on purpose, exactly as
   // /audit-suite and /tracking-suite are: it restates the home page and the
@@ -307,12 +329,12 @@ const METRICS = [
   {
     icon: Quote,
     title: "Share of voice",
-    text: "Which of the competitors you named turned up in the same answer. Not a leaderboard you cannot verify — the rivals you listed, counted in the answers you paid for.",
+    text: "Which of the competitors you listed turned up in the same answer, and how often. Not a leaderboard you cannot verify — your rivals, counted in the answers you paid for.",
   },
   {
     icon: Search,
     title: "Fan-out queries",
-    text: "The searches the assistant actually ran to build its answer. Almost nobody surfaces these, and they are the most directly actionable thing on the page: those are the terms to go and rank for.",
+    text: "The searches the assistant actually ran to build its answer. Almost nobody surfaces these, and they are the most directly actionable thing on the page: those are the terms to go and rank for, and the questions your next page should answer.",
   },
   {
     icon: MessageSquareText,
@@ -374,7 +396,7 @@ const BENEFITS = [
   {
     icon: Clock,
     title: "Runs without you",
-    text: "Give a prompt a cadence and it re-runs itself. Movement lands in the dashboard instead of waiting for you to remember to look.",
+    text: "Give a prompt a cadence — weekly is the default — and it re-runs itself. Movement lands in the dashboard, so you can see whether a change you shipped moved the numbers.",
   },
   {
     icon: Globe,
@@ -415,19 +437,39 @@ const PAID_POINTS = [
 const FAQS = [
   {
     q: "What does the AI Rank Tracker actually do?",
-    a: "It asks the AI assistants the questions your buyers ask, on a schedule, and scores what comes back. For every prompt you get the share of answers that named you, the share that linked to you as a source, how early in the answer you appeared, which competitors were named alongside you, and the full text of every answer it collected.",
+    a: "It measures your AI visibility. It asks the AI assistants the questions your buyers ask, on a schedule, and scores what comes back. For every prompt you get the share of answers that named your brand, the share that linked to you as a source, how early in the answer you appeared, which competitors were named alongside you, and the full text of every answer it collected.",
+  },
+  {
+    q: "What are GEO and AEO, and why do they matter in 2026?",
+    a: "Generative engine optimization (GEO) and answer engine optimization (AEO) are two names for the same job: getting your brand named, and ideally linked, inside the answers AI assistants write. They matter because more and more research that used to happen across a page of search results now happens inside a single answer. If that answer recommends a handful of brands and you are not one of them, you were never on the shortlist. You cannot improve that without measuring it first, which is what this tracker is for.",
+  },
+  {
+    q: "How do AI assistants decide which brands to mention?",
+    a: "Broadly in three steps. They retrieve: the assistant searches the web and can only use pages it is able to reach and read. They weigh trust: whether what your site says about you matches what other sources say, and whether those sources look credible. Then they name: only a few brands make it into the final answer. The tracker shows you the outside of that process — the searches the assistant ran, the sources it linked and whether you made the list — so you can tell which step you are dropping out at.",
   },
   {
     q: "Why these platforms?",
     a: "ChatGPT, Claude, Gemini and Perplexity are where AI answers are actually being read, and each is reached in the way that gives the truest result: ChatGPT and Gemini are read from their own product output, while Claude and Perplexity are answered through their APIs on a pinned model version with web search on.",
   },
   {
+    q: "Does it track Google AI Overviews or AI Mode?",
+    a: "Not in this tracker — it covers ChatGPT, Claude, Gemini and Perplexity, and Gemini is Google's own assistant. If you want to know whether Google AI Overviews cites your site, FreeSERP's AEO & GEO audit puts real questions to AI Overviews alongside the other engines, and it runs on the same credit balance.",
+  },
+  {
+    q: "How do I get my brand into AI answers?",
+    a: "The tracker tells you where to aim; the work happens on your own site and around the web. A low mention rate on a prompt usually means no page of yours answers that question directly, so write one that does, in clear, quotable sentences. Fan-out queries show the exact searches the assistant ran, which tells you what that page needs to rank for. Cited sources show which sites the assistants trust in your category — that is where reviews, listings and mentions are worth earning. And keep the basics right: the same brand facts everywhere, structured data on key pages, and AI crawlers allowed in. The AEO & GEO audit checks crawler access and schema for you.",
+  },
+  {
+    q: "How will I know it's working?",
+    a: "Put your prompts on a weekly cadence and watch mention rate, citation rate and prominence move, platform by platform. Each run collects several answers per prompt, so a change in the chart is a change in the rate rather than one lucky answer, and Claude and Perplexity run on pinned models, so a shift there reflects your visibility rather than a model swap. Share of voice tells you whether you gained on the competitors you listed or the whole category moved.",
+  },
+  {
     q: "What does it cost in credits?",
     a: "Five credits per answer on ChatGPT and Gemini, ten on Perplexity and thirty-five on Claude — Claude costs us about six times as much an answer, and pricing it apart stops the cheap platforms subsidising it. A run is one prompt × the platforms you picked × your samples per run, so one prompt on every platform at three samples each is 165 credits.",
   },
   {
-    q: "Why more than one answer per prompt?",
-    a: "Because these models do not answer identically twice. Ask once and you learn what one roll of the dice said; ask three to five times and you have a mention rate that means something and can be compared with last week's.",
+    q: "Why use a tracker instead of asking ChatGPT myself?",
+    a: "Because these models do not answer identically twice. Ask once by hand and you learn what one roll of the dice said, on one platform, with no history behind it. The tracker asks each prompt up to five times per platform, on a schedule, stores every answer, and turns them into a mention rate you can compare with last week's and with your competitors'.",
   },
   {
     q: "Can I track a specific country?",
@@ -499,9 +541,10 @@ export default function AiRankTrackerPage() {
 
             <p className="airt-lead mx-auto mt-6 max-w-[62ch]">
               A growing share of buying decisions never touches a blue link — it ends at an
-              assistant&rsquo;s answer. FreeSERP asks the questions your buyers ask, on every
-              platform, and scores how often you are named, how often you are cited, and how
-              early in the answer you appear.
+              assistant&rsquo;s answer. FreeSERP tracks your AI visibility: it asks the questions
+              your buyers ask, on every platform, and scores how often you are named, how often
+              you are cited, how early in the answer you appear, and which competitors are named
+              instead.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -692,7 +735,7 @@ export default function AiRankTrackerPage() {
               label="Metrics"
               name="What you get back"
               title="What every run tells you"
-              sub="The same metrics on every platform, so a number from ChatGPT and a number from Claude can sit in the same column."
+              sub="Brand mentions, citations, prominence and share of voice — the same metrics on every platform, so a number from ChatGPT and a number from Claude can sit in the same column."
             />
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -774,7 +817,7 @@ export default function AiRankTrackerPage() {
               label="Why"
               name="One platform"
               title="Built to be read, not just collected"
-              sub="A visibility number is only worth having if you can see the answer behind it, act on it, and get it out of the tool when the report is due."
+              sub="An AI visibility number is only worth having if you can see the answer behind it, turn the gap into a fix, and get it out of the tool when the report is due."
             />
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -988,8 +1031,8 @@ export default function AiRankTrackerPage() {
               Find out what the assistants say about you
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              Multiple AI platforms, one credit balance. 100 free credits every month, no credit card,
-              and every answer stored so you can read it for yourself.
+              ChatGPT, Claude, Gemini and Perplexity on one credit balance. 100 free credits every
+              month, no credit card, and every answer stored so you can read it for yourself.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Start free — 100 credits" />

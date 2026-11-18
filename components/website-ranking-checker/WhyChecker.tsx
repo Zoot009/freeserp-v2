@@ -12,22 +12,22 @@ export function WhyChecker() {
     >
       <SectionHead
         tag="Why It Matters"
-        title="Why use a website ranking checker?"
+        title="Why check your website ranking with a checker?"
       />
 
       <Reveal>
         <div style={{ maxWidth: 720, margin: "40px auto 0" }}>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: 0 }}>
-            Checking your website ranking from your own browser does not show your real position. Results are
-            personalized based on your location, browsing history, account, and device. The ranking you see for
-            your site is not the ranking your customers see — this gap can be 5 to 15 positions higher than your
-            actual rank.
+            Googling your own keywords does not show your real position. Even in a private window, results are
+            shaped by your location and device, and a signed-in browser adds your history and account on top —
+            often making your site look 5 to 15 positions higher than it really ranks. Search Console helps, but
+            it reports an average across every location and device, and only for your own site.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: "16px 0 0" }}>
-            A website ranking checker fixes this by running an unbiased query from a clean server, with no
-            personalization, from the country and device you specify. It also pulls the full top 100 results,
-            not just page 1, so you can see exactly how far from page 1 you are and which competitors are
-            sitting between you and the top position.
+            A website ranking checker answers the question directly: it runs an unbiased query from a clean
+            server, in the country and on the device you pick, and returns your exact position in the top 100.
+            You see how far you are from page 1, which of your pages Google chose, and which competitors stand
+            between you and the top — the starting point for deciding what to fix.
           </p>
           <div
             style={{
@@ -41,8 +41,8 @@ export function WhyChecker() {
               lineHeight: 1.5,
             }}
           >
-            Run a check above to see your actual website ranking — not the one your browser shows when you are
-            logged in.
+            Run a check above to see your real website ranking, then use the guide below to read the result and
+            improve it.
           </div>
         </div>
       </Reveal>

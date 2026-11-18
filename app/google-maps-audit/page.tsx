@@ -43,13 +43,16 @@ import { GbpAuditDemo } from "@/components/demos/GbpAuditDemo";
  * (Business Profile) audit.
  *
  * Every claim is taken from freeserp-backend-v2/src/modules/gbp-audit:
- * report.ts (25 checks, category weights 30/25/20/15/10, pass 1 / warn ½ /
- * fail 0, "Not verified" checks left out of the score, the 30-day plan's three
- * phases), gridScan.ts (3×3 grid, 1 km to the edge), gbpCache.ts (20 newest
- * reviews, 10-day shared cache), credits/catalog.ts ((12 + 7 for the grid) × 5 = 95),
- * billing/spendGate.ts and the frontend's verdict bands.
- * Things the tool does NOT do — sentiment, posts, Q&A, AI writing, share
- * links, CSV, letter grades — are deliberately never mentioned.
+ * report.ts (53 checks in 8 categories, weighted citations 30 / profile 14 /
+ * reviews 14 / visibility 11 / keywords 11 / website 9 / engagement 6 /
+ * photos 5 — the tiles below group them, pass 1 / warn ½ / fail 0, "Not
+ * verified" checks left out of the score, the 30-day plan's three phases),
+ * citations.ts (local citation directories, for you and the top competitors),
+ * gridScan.ts (3×3 grid, 1 km to the edge), gbpCache.ts (50 newest reviews,
+ * 10-day shared cache), credits/catalog.ts ((12 + 7 for the grid) × 5 = 95),
+ * billing/spendGate.ts and the frontend's section score bands.
+ * Things the tool does NOT do — sentiment, AI writing, share links, CSV,
+ * letter grades — are deliberately never mentioned.
  *
  * The map, bento tiles, competitor rows and plan tasks are illustrative mock
  * ups built in HTML/CSS (no screenshot exists for this tool) and each carries
@@ -63,17 +66,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Google Maps Audit — Business Profile audit with a local rank grid — FreeSERP",
+  title: "Google Maps Audit — Get Into the Local Pack — FreeSERP",
   description:
-    "Paste a Google Maps link and FreeSERP audits the Business Profile in 25 checks — profile, reviews, photos, website and visibility — runs a 3×3 local rank grid around the business, compares it with the listings around it and hands back a 30-day action plan. 100 free credits every month, no credit card.",
+    "Audit your Google Business Profile in 50+ checks: categories, reviews, photos, posts, keywords, citations and website, plus a local rank grid and a 30-day plan.",
+  keywords: [
+    "Google Maps audit",
+    "Google Business Profile audit",
+    "GBP audit",
+    "Google local pack",
+    "local pack ranking factors",
+    "local SEO audit",
+    "Google Maps ranking",
+    "local rank grid",
+    "local citations",
+    "NAP consistency",
+    "Google reviews",
+  ],
   alternates: { canonical: "/google-maps-audit" },
   openGraph: {
-    title: "Why isn't your business showing up on Google Maps?",
+    title: "Why isn't your business in the Google local pack?",
     description:
-      "A 25-check Business Profile audit, a 3×3 local rank grid and a 30-day action plan — from one pasted Google Maps link.",
+      "A 50+ check Business Profile audit, a 3×3 local rank grid, a competitor comparison and a 30-day action plan, from one pasted Google Maps link.",
     url: "/google-maps-audit",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Why isn't your business in the Google local pack?",
+    description:
+      "Audit your Google Business Profile in 50+ checks, see where you rank around your location and get a 30-day plan to climb the map.",
   },
   // Paid-traffic destination, kept out of the index like the sibling ad pages.
   robots: { index: false, follow: true },
@@ -84,9 +106,9 @@ export const metadata: Metadata = {
    ══════════════════════════════════════════════════════════════════════════ */
 
 const HERO_POINTS = [
-  "25 checks on the Business Profile",
+  "50+ checks on the Business Profile",
   "A 3×3 rank grid around the business",
-  "Compared with the listings around you",
+  "Compared with your top local competitors",
   "A 30-day plan, in order of impact",
 ];
 
@@ -123,12 +145,14 @@ const STARS = [
   { n: 1, w: 4 },
 ];
 
+/** Category weights from gbp-audit/report.ts, grouped the way the tiles are. */
 const SCORE_PARTS = [
-  { name: "Profile", w: 30, c: "#03155a" },
-  { name: "Reviews", w: 25, c: "#0b3bd0" },
-  { name: "Visibility", w: 20, c: "#0454ff" },
-  { name: "Photos", w: 15, c: "#2f6bff" },
-  { name: "Website", w: 10, c: "#4a8fff" },
+  { name: "Local citations", w: 30, c: "#03155a" },
+  { name: "Profile & keywords", w: 25, c: "#0b3bd0" },
+  { name: "Reviews", w: 14, c: "#0454ff" },
+  { name: "Visibility", w: 11, c: "#2f6bff" },
+  { name: "Photos & activity", w: 11, c: "#3f7fff" },
+  { name: "Website", w: 9, c: "#4a8fff" },
 ];
 
 const VERDICTS = [
@@ -149,8 +173,10 @@ const COMPETITORS = [
 const COMPETITOR_POINTS = [
   "The listings ranking at your own location, ads removed",
   "Your rating against their average",
-  "Your review count against their median",
-  "The category most of them use — and whether you do",
+  "Your review count against their median, and your review pace against the top 3",
+  "Your photo count against theirs",
+  "The categories they use that you don't",
+  "The local citation directories they're already listed on",
   "Google's own “People also search for” list",
 ];
 
@@ -207,7 +233,7 @@ const STEPS = [
   {
     n: "03",
     title: "The listing gets audited",
-    text: "The profile and its 20 newest reviews are read, the 3×3 rank grid runs around the business, and the competitors at your location are lined up beside you.",
+    text: "The profile, its 50 newest reviews, recent posts and the website are read, the 3×3 rank grid runs around the business, and the competitors at your location are lined up beside you.",
   },
   {
     n: "04",
@@ -217,7 +243,7 @@ const STEPS = [
 ];
 
 const STATS = [
-  { value: "25", label: "checks on every profile" },
+  { value: "50+", label: "checks on every profile" },
   { value: "9", label: "rank grid points" },
   { value: "95", label: "credits an audit" },
   { value: "100", label: "free credits every month" },
@@ -258,7 +284,7 @@ const BENEFITS = [
 
 const FREE_POINTS = [
   "One full audit a month",
-  "All 25 checks and the rank grid",
+  "Every check and the rank grid",
   "The full 30-day action plan",
   "No credit card required",
 ];
@@ -272,8 +298,36 @@ const PAID_POINTS = [
 
 const FAQS = [
   {
+    q: "What is the Google local pack, and why does it matter?",
+    a: "The local pack is the block of a map and the top few business listings Google shows for searches with local intent, like “dentist near me” or “plumber in Leeds”. It sits above the regular results and shows the rating, hours, phone and directions right there, so searchers often call, visit or book without scrolling further. For a local business, being in it is usually worth more than a page-one organic ranking.",
+  },
+  {
+    q: "How does Google decide who appears in the local pack?",
+    a: "Google describes three factors: relevance (how well the profile matches the search), distance (how close the business is to the searcher or the place named) and prominence (how well known and well reviewed it is, on Google and across the web). You can't move your building, so the audit focuses on what you control: categories, description and keywords for relevance; reviews, photos, posts, citations and the website for prominence; and a 3×3 rank grid to show how far your visibility reaches from your door.",
+  },
+  {
     q: "What does the Google Maps audit check?",
-    a: "25 checks across five areas: the profile (claimed status, categories, description, phone, hours, address, attributes, keyword-stuffed names), reviews (rating, review count against local competitors, recency, reply rate, unanswered low-star reviews), photos (count, logo, cover), the website link (present, HTTPS, UTM tags, booking links) and local visibility from a 3×3 rank grid around the business.",
+    a: "More than 50 checks across eight areas: the profile (claimed status, categories, description, phone, hours, address, attributes, business name), keywords (main and secondary keywords, service and location terms, category fit, competitor gaps, buying-intent searches), reviews (rating, volume, recency, growth against competitors, reply rate and speed, unanswered low ratings, reviews that mention your service), photos (count, logo, cover, against competitors), activity (Google Posts, offers, Q&A, booking and contact options), the website (HTTPS, speed, mobile, title and meta description, broken links, LocalBusiness schema, service and location pages, a trackable link), local citations, and local visibility from the rank grid.",
+  },
+  {
+    q: "How complete does my Google Business Profile need to be?",
+    a: "As complete as you can honestly make it. Claim the profile, pick the primary category that best matches what you do, add the additional categories that also apply, write a description of at least 250 characters that says what you do and where, and fill in phone, address, hours and attributes. A complete profile gives Google more to match against searches and gives searchers fewer reasons to pick someone else. The audit flags every gap and puts the fix in the 30-day plan.",
+  },
+  {
+    q: "Do reviews and replies affect local rankings?",
+    a: "Reviews feed prominence, and they are the first thing searchers compare in the pack. Volume, rating and a steady stream of recent reviews all matter, and replying shows you are active and listening. The audit reads your 50 newest reviews, compares your rating, review count and review pace with the businesses ranking around you, and flags slow replies and low ratings left unanswered.",
+  },
+  {
+    q: "What are local citations and NAP consistency?",
+    a: "A citation is any listing of your business name, address and phone number (NAP) on another site, such as a local directory. Matching details everywhere help Google trust that the business is real and where it says it is. The audit checks whether you are listed on a set of local citation directories, shows which ones your top competitors already use, and links to where to add the business. Use exactly the same name, address and phone as your profile on each.",
+  },
+  {
+    q: "Do local backlinks help with Google Maps rankings?",
+    a: "Links from other local websites — suppliers, partners, local news, community groups, sponsorships — add to prominence and send people who are already nearby. The audit does not count backlinks; it checks the local citation directories and the website your profile links to, including LocalBusiness schema and dedicated service and location pages, which give those links something useful to point at.",
+  },
+  {
+    q: "How should I monitor my local performance?",
+    a: "Rankings in the map change street by street, so a single check from one address can mislead. The audit's 3×3 rank grid searches from nine points around the business and is saved as a Maps Tracker scan, so you can keep tracking the same keyword across the area and re-run the audit to see the score move after each round of fixes.",
   },
   {
     q: "What link do I need?",
@@ -285,7 +339,7 @@ const FAQS = [
   },
   {
     q: "How is the score calculated?",
-    a: "Each check passes, warns or fails, and carries a weight. Categories are combined at Profile 30%, Reviews 25%, Local visibility 20%, Photos & content 15% and Website 10% into a score out of 100. It is FreeSERP's score, not one Google publishes — and a check Google returned no data for is left out rather than counted as a fail.",
+    a: "Each check passes, warns or fails, and carries a weight. Categories are combined at Local citations 30%, Profile 14%, Reviews 14%, Local visibility 11%, Keywords 11%, Website 9%, Activity 6% and Photos 5% into a score out of 100. It is FreeSERP's score, not one Google publishes — and a check Google returned no data for is left out rather than counted as a fail.",
   },
   {
     q: "What does an audit cost?",
@@ -346,7 +400,7 @@ export default function GoogleMapsAuditPage() {
               </h1>
 
               <p className="cmpa-lead mx-auto mt-6 max-w-[54ch] lg:mx-0">
-                Paste your Google Maps link. FreeSERP audits the Business Profile in 25 checks, maps
+                Paste your Google Maps link. FreeSERP audits the Business Profile in 50+ checks, maps
                 where you rank around your own front door, lines you up against the listings beating
                 you and hands back a 30-day plan to fix it.
               </p>
@@ -392,8 +446,8 @@ export default function GoogleMapsAuditPage() {
             <SectionHead
               label="Audit"
               name="The checks"
-              title="Five areas, 25 checks, one score"
-              sub="Everything Google shows a searcher about your business, checked against what tends to win the map."
+              title="Eight areas, 50+ checks, one score"
+              sub="Google ranks the local pack on relevance, distance and prominence. The audit checks everything you control behind them — profile, keywords, reviews, photos, posts, website and local citations."
             />
             <p className="mt-5 text-center">
               <span className="gma-example">Example report · illustrative figures</span>
@@ -402,7 +456,7 @@ export default function GoogleMapsAuditPage() {
             <div className="gma-bento mt-12">
               {/* Profile */}
               <article className="cmpa-card gma-tile gma-span-3">
-                <TileHead icon={Store} name="Profile" sub="9 checks" weight="30%" />
+                <TileHead icon={Store} name="Profile & keywords" sub="17 checks" weight="25%" />
                 <div className="mt-5 grid gap-2">
                   {PROFILE_ROWS.map((r) => (
                     <div key={r.label} className="gma-check">
@@ -418,7 +472,7 @@ export default function GoogleMapsAuditPage() {
 
               {/* Reviews */}
               <article className="cmpa-card gma-tile gma-span-3">
-                <TileHead icon={Star} name="Reviews" sub="5 checks · 20 newest read" weight="25%" />
+                <TileHead icon={Star} name="Reviews" sub="9 checks · 50 newest read" weight="14%" />
                 <div className="mt-5 grid gap-6 sm:grid-cols-[auto_1fr]">
                   <div>
                     <div className="text-[52px] leading-none font-semibold tracking-[-2px]">4.6</div>
@@ -459,7 +513,7 @@ export default function GoogleMapsAuditPage() {
 
               {/* Visibility — the grid as a small map, with its three numbers */}
               <article id="grid" className="cmpa-card gma-tile gma-span-2 scroll-mt-24">
-                <TileHead icon={LayoutGrid} name="Local visibility" sub="4 checks" weight="20%" />
+                <TileHead icon={LayoutGrid} name="Local visibility" sub="4 checks" weight="11%" />
                 <div className="gma-minimap mt-5">
                   {GRID.map((r, i) =>
                     i === 4 ? (
@@ -499,7 +553,7 @@ export default function GoogleMapsAuditPage() {
 
               {/* Photos — count against the 10 / 50 thresholds, then logo and cover */}
               <article className="cmpa-card gma-tile gma-span-2">
-                <TileHead icon={Camera} name="Photos & content" sub="3 checks" weight="15%" />
+                <TileHead icon={Camera} name="Photos & activity" sub="10 checks · posts, Q&A" weight="11%" />
                 <div className="gma-photos mt-5">
                   {[0, 1, 2, 3, 4, 5, 6].map((i) => (
                     <span key={i} />
@@ -533,7 +587,7 @@ export default function GoogleMapsAuditPage() {
 
               {/* Website — the link as a browser bar, the booking action, then checks */}
               <article className="cmpa-card gma-tile gma-span-2">
-                <TileHead icon={Globe} name="Website & actions" sub="4 checks" weight="10%" />
+                <TileHead icon={Globe} name="Website & actions" sub="12 checks" weight="9%" />
                 <div className="gma-browser mt-5">
                   <div className="gma-browser-bar">
                     <Lock className="h-3.5 w-3.5 text-[var(--accent)]" strokeWidth={2.4} />
@@ -847,7 +901,7 @@ export default function GoogleMapsAuditPage() {
               See your listing <span className="cmpa-grad-text">the way Google sees it</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              One Google Maps link, 25 checks, a local rank grid and a 30-day plan. 100 free credits
+              One Google Maps link, 50+ checks, a local rank grid and a 30-day plan. 100 free credits
               every month, no credit card.
             </p>
             <div className="mt-8 flex justify-center">

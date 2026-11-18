@@ -62,17 +62,37 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AEO & GEO Audit — get your website cited by ChatGPT, Gemini and AI Overviews — FreeSERP",
+  title: "AEO & GEO Audit — Get Your Site Cited by AI — FreeSERP",
   description:
-    "Check whether AI answer engines can read, trust and cite your website. FreeSERP audits crawler access, rendering, schema, content structure, trust and freshness, scores you for AEO and GEO, then asks ChatGPT, Claude, Perplexity, Gemini and AI Overviews real questions to see who they cite. 100 free credits every month, no credit card.",
+    "Audit your site for AEO and GEO: AI crawler access, schema, answer-first content, trust and freshness. Then see whether ChatGPT, Gemini and Perplexity cite you.",
+  keywords: [
+    "AEO audit",
+    "GEO audit",
+    "answer engine optimization",
+    "generative engine optimization",
+    "AI search audit",
+    "AI crawler robots.txt",
+    "GPTBot",
+    "Google-Extended",
+    "AI Overviews optimization",
+    "get cited by ChatGPT",
+    "AEO checklist",
+    "GEO audit checklist",
+  ],
   alternates: { canonical: "/aeo-geo-audit" },
   openGraph: {
-    title: "Does AI cite your website — or your competitors'?",
+    title: "AEO & GEO audit: does AI cite your website, or your competitors?",
     description:
-      "An AEO and GEO score for your site, the fixes ranked by impact, and real answers from ChatGPT, Claude, Perplexity, Gemini and AI Overviews showing who gets cited.",
+      "AI crawler access, schema, answer-first structure, trust and freshness, scored for AEO and GEO, plus real answers from five AI engines showing who gets cited.",
     url: "/aeo-geo-audit",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AEO & GEO audit: does AI cite your website?",
+    description:
+      "Check AI crawler access, schema, answer-first content, trust and freshness, then see who ChatGPT, Gemini and Perplexity actually cite.",
   },
   // Paid-traffic destination, kept out of the index like the sibling ad pages.
   robots: { index: false, follow: true },
@@ -296,16 +316,40 @@ const PAID_POINTS = [
 
 const FAQS = [
   {
-    q: "What are AEO and GEO?",
-    a: "AEO — answer engine optimisation — is how ready your pages are to be the answer an AI or search engine gives. GEO — generative engine optimisation — is how ready your brand is to be cited by generative AI like ChatGPT, Claude and Perplexity. The audit scores both out of 100 from the same checks, weighted differently: content structure counts most for AEO, entity and trust signals count most for GEO.",
+    q: "What are AEO and GEO, and how do they overlap?",
+    a: "AEO — answer engine optimisation — is about making a page the answer: a clear, quotable reply that a search engine or AI assistant can lift straight into its response. GEO — generative engine optimisation — is about making your brand the source generative AI like ChatGPT, Claude, Perplexity and Gemini trusts enough to cite. They overlap heavily, because both depend on pages AI crawlers can reach, read without JavaScript and understand. The audit scores both out of 100 from the same checks, weighted differently: content structure counts most for AEO, entity and trust signals count most for GEO.",
   },
   {
-    q: "Which AI crawlers does it check?",
-    a: "Search bots (Googlebot, Bingbot), AI answer bots (OAI-SearchBot, PerplexityBot, Claude-SearchBot) and AI training bots (GPTBot, ClaudeBot, Google-Extended, CCBot) — each tested against your robots.txt on every audited page. A block is reported with the exact Disallow line and the fix.",
+    q: "Which AI crawlers does it check in robots.txt?",
+    a: "Search bots (Googlebot, Bingbot), AI answer bots (OAI-SearchBot, PerplexityBot, Claude-SearchBot) and AI training bots (GPTBot, ClaudeBot, Google-Extended, CCBot) — each tested against your robots.txt on every audited page. A block is reported with the exact Disallow line and the fix. Blocking training bots can be a deliberate choice: the answer engines use separate crawlers, and blocking Google-Extended does not affect Google Search.",
+  },
+  {
+    q: "What does answer-first content look like?",
+    a: "Headings phrased the way people ask (“How much does it cost?”), with the direct answer in the first sentence or two underneath, then the detail. Short paragraphs that each make one point, lists or tables for steps and comparisons, and an FAQ section for the questions people ask most. The audit checks for one H1, headings in a logical order, question-style headings, answers placed right after the question, paragraph length, lists and tables, and FAQ content.",
+  },
+  {
+    q: "Does schema markup help AI engines cite you?",
+    a: "Structured data does not guarantee a citation, but it tells machines plainly who you are and what each page is. The audit checks that your JSON-LD parses, that your organisation is defined (with sameAs links to your profiles elsewhere), that the site has WebSite schema, that articles carry Article schema, that Q&A content is marked up as FAQPage, that breadcrumbs are marked up, and that required fields are filled in across 9 schema types.",
+  },
+  {
+    q: "What entity and trust signals does it look for?",
+    a: "Whether AI can tell who is behind the site and believe it: an About page that actually describes the business, easy-to-find contact details (and no placeholder ones), named authors on articles, customer reviews or testimonials, one consistent brand name, links to your profiles elsewhere declared as sameAs, and articles that link to the outside sources their claims rest on. Beyond what the audit checks, original data, specific figures and quotes from named experts all make a page more worth citing.",
+  },
+  {
+    q: "Why do dates and freshness matter for AI answers?",
+    a: "Prices, rules and best practice change, so engines that weigh freshness pass over pages that look abandoned. The audit checks that pages show a publish or update date and declare it in the page's data, that articles were updated within the last two years, that no date is set in the future, and that your sitemap carries lastmod dates that actually vary by page.",
+  },
+  {
+    q: "Why does it check whether content works without JavaScript?",
+    a: "The crawlers behind ChatGPT, Claude and Perplexity read the HTML your server sends and don't run JavaScript; Googlebot does, but later and not on every page. Text or links that only appear after scripts run are invisible to them, so they can't be quoted. The audit flags pages whose main content is empty in the raw HTML and links that only work with JavaScript.",
   },
   {
     q: "How do you measure whether AI cites my site?",
-    a: "Ten questions a customer would ask are written from your homepage and About page, then put to each engine you pick — ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews — in your site's country and language. Each answer is marked cited (with the source position), read but not cited, named without a link, or absent, and the domains cited instead are listed.",
+    a: "Ten questions a customer would ask are written from your homepage and About page, then put to each engine you pick — ChatGPT, Claude, Perplexity, Gemini and Google AI Overviews — in your site's country and language. Each answer is marked cited (with the source position), read but not cited, named without a link, or absent, and the domains cited instead are listed. Answers are asked fresh on every run, so you can track citations over time rather than trust a single snapshot.",
+  },
+  {
+    q: "How often should I re-run an AEO and GEO audit?",
+    a: "Run it again after you ship fixes, and after anything that can quietly undo them — a redesign, a new CMS or theme, a robots.txt or firewall change. Beyond that, a monthly or quarterly check is a sensible rhythm, because AI answers shift from run to run. Each re-run is compared with the last one: what got fixed, what newly broke and how both scores moved.",
   },
   {
     q: "What does an audit cost?",
@@ -521,7 +565,7 @@ export default function AeoGeoAuditPage() {
                 </div>
                 <ul className="mt-6 space-y-3">
                   <Point>One H1, headings in order, question-style headings</Point>
-                  <Point>Answer-first openings and short paragraphs</Point>
+                  <Point>A direct answer in the first sentence or two, then short paragraphs</Point>
                   <Point>Lists, tables and FAQ sections</Point>
                 </ul>
               </article>
@@ -542,8 +586,8 @@ export default function AeoGeoAuditPage() {
                   ))}
                 </div>
                 <ul className="mt-6 space-y-3">
-                  <Point>About, contact, authors, brand name, sameAs</Point>
-                  <Point>Published and updated dates, sitemap lastmod</Point>
+                  <Point>About, contact, named authors, reviews, one consistent brand name, sameAs</Point>
+                  <Point>Outside sources cited, visible and declared dates, sitemap lastmod</Point>
                   <Point>Plus 11 technical basics — HTTPS to broken pages</Point>
                 </ul>
               </article>
@@ -558,7 +602,7 @@ export default function AeoGeoAuditPage() {
               label="Score"
               name="AEO vs GEO"
               title="Same checks, two different questions"
-              sub="AEO asks whether your pages can be the answer. GEO asks whether your brand is worth citing. So the same seven categories count differently in each."
+              sub="AEO asks whether your pages can be the answer. GEO asks whether your brand is worth citing. Both need pages AI can reach, read and trust, so the same seven categories feed both scores, weighted differently."
             />
 
             <div className="cmpa-soft mt-12 p-5 sm:p-10">

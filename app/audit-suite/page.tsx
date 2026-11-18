@@ -75,17 +75,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Website Audit, Page Audit and Keyword Research — FreeSERP",
+  title: "SEO Audit Tools: Full Site Audit Workflow — FreeSERP",
   description:
-    "Crawl every page, audit one page against 63 checks, compare yourself with the pages ranking above you, map your internal links, and research keywords. 100 free credits every month, no credit card.",
+    "A complete SEO audit workflow in one place: crawl your site, audit pages against 63 checks, compare competitors, map internal links. 100 free credits.",
+  keywords: [
+    "SEO audit",
+    "SEO audit tool",
+    "website audit",
+    "site audit",
+    "SEO audit checklist",
+    "technical SEO audit",
+    "page audit",
+    "competitive audit",
+    "internal link analysis",
+    "Core Web Vitals",
+    "keyword research",
+  ],
   alternates: { canonical: "/audit-suite" },
   openGraph: {
-    title: "Find what is holding your site back",
+    title: "A complete SEO audit workflow in one place",
     description:
-      "Full site audit, page audit, competitor analysis, internal link analysis and keyword research — one dashboard, one credit balance.",
+      "Crawlability, indexing, HTTPS, on-page, mobile, speed, internal links, competitors and keywords — seven audit tools, one dashboard, one credit balance.",
     url: "/audit-suite",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SEO Audit Tools: Full Site Audit Workflow — FreeSERP",
+    description:
+      "Crawl your site, audit pages against 63 checks, compare competitors, map internal links and research keywords — one dashboard, one credit balance.",
   },
   // Paid-traffic destination, kept out of the index on purpose: it restates the
   // home page and the tool pages, and letting Google choose between them is how
@@ -151,7 +170,7 @@ const FEATURES: Feature[] = [
     label: "Crawl",
     kicker: "Full Website Audit",
     title: "The whole site, graded and grouped",
-    body: "When the crawl finishes it is a report, not a progress bar. One site average over six category grades, then every finding grouped by issue — or flipped to a page-by-page list — with the URLs and the exact element behind each one.",
+    body: "Where every SEO audit starts: can search engines reach, crawl and index your pages? Robots.txt, the XML sitemap, noindex tags, canonicals and HTTPS are read along the way, and when the crawl finishes it is a report, not a progress bar — one site average over six category grades, then every finding grouped by issue or page, with the URLs and the exact element behind each one.",
     points: [
       "A site average, and a grade per category",
       "Findings by issue, or by page, either way",
@@ -170,7 +189,7 @@ const FEATURES: Feature[] = [
     label: "Audit",
     kicker: "Page Audit",
     title: "One page, 63 checks, graded",
-    body: "The page you actually care about, scored end to end and explained in words you can act on. Six category grades sit under one overall score, and every failed check says what it found, why it matters and where.",
+    body: "The on-page part of the audit, for the page you actually care about: titles, meta descriptions, headings, alt text, mobile viewport, tap targets, Core Web Vitals and more, scored end to end. Six category grades sit under one overall score, and every failed check says what it found, why it matters and where.",
     points: [
       "SEO, Performance, UI/UX, Links, Technology and Social",
       "Failures ranked Critical or Warning, each one explained",
@@ -189,7 +208,7 @@ const FEATURES: Feature[] = [
     label: "Compare",
     kicker: "Competitor Analysis",
     title: "Your page against the ones ranking above it",
-    body: "Pick a keyword and FreeSERP puts your page beside the pages beating you, scored on the same 63 on-page checks. Not a list of what they rank for — a column-by-column read of what they do differently on the page that outranks yours.",
+    body: "The competitive audit, one keyword at a time. Pick a keyword and FreeSERP puts your page beside the pages beating you, scored on the same 63 on-page checks. Not a list of what they rank for — a column-by-column read of what they do differently on the page that outranks yours.",
     points: [
       "Your domain and the pages above it, side by side",
       "Overall SEO score plus every check behind it",
@@ -208,7 +227,7 @@ const FEATURES: Feature[] = [
     label: "Structure",
     kicker: "Internal Link Analysis",
     title: "See the link graph your site actually has",
-    body: "Crawl the whole domain and get the internal link structure drawn out — which pages are hubs, which hold authority, how deep everything sits from the homepage, and which pages nothing at all links to.",
+    body: "Site architecture, audited. Crawl the whole domain and get the internal link structure drawn out — which pages are hubs, which hold authority, how deep everything sits from the homepage, and which pages nothing at all links to.",
     points: [
       "Pages crawled, internal links, links per page",
       "Orphan pages — reachable from nothing — named",
@@ -227,7 +246,7 @@ const FEATURES: Feature[] = [
     label: "Track",
     kicker: "Keywords",
     title: "Your whole portfolio in one table",
-    body: "Every keyword you track, across every project, in one table — position, movement, search volume and the URL that ranks. Filter it, star the ones that matter, and take the whole thing out as a CSV when the report is due.",
+    body: "The rankings check in your audit. Every keyword you track, across every project, in one table — position, movement, search volume and the URL that ranks — so a page that is slipping shows up before the traffic does. Filter it, star the ones that matter, and export a CSV when the report is due.",
     points: [
       "Every project in one table, not one tab each",
       "Position, movement, volume, traffic and ranking URL",
@@ -265,7 +284,7 @@ const FEATURES: Feature[] = [
     label: "Score",
     kicker: "Keyword Score Checker",
     title: "Score a page before you publish",
-    body: "No competitors, no crawl of the whole site — just your page and the term you want it to rank for. FreeSERP crawls it, runs it through PageSpeed and an authority lookup, and tells you how well the page is actually built for that keyword.",
+    body: "No competitors, no crawl of the whole site — just your page and the term you want it to rank for. FreeSERP crawls it, runs it through PageSpeed and an authority lookup with backlink counts, and tells you how well the page is actually built for that keyword.",
     points: [
       "One grade over on-page and off-page together",
       "Domain and Page Authority, and the backlinks behind them",
@@ -282,6 +301,16 @@ const FEATURES: Feature[] = [
 ];
 
 const CHIPS = [
+  "Robots.txt blocking",
+  "XML sitemap",
+  "Noindex tags",
+  "HTTPS & SSL",
+  "Mobile viewport",
+  "Tap target size",
+  "Core Web Vitals",
+  "Heading hierarchy",
+  "Hreflang",
+  "Friendly URLs",
   "Missing alt text",
   "Largest Contentful Paint",
   "Meta description length",
@@ -378,6 +407,42 @@ const PAID_POINTS = [
 
 const FAQS = [
   {
+    q: "What is an SEO audit?",
+    a: "An SEO audit is a health check of everything that decides whether search engines can find, understand and rank your pages: whether they are crawled and indexed, how the site is structured, how each page is built, how fast and mobile-friendly it is, how it compares with the competition and where it ranks today. The point is not the report itself but a prioritised list of fixes.",
+  },
+  {
+    q: "What should a complete SEO audit checklist cover?",
+    a: "Indexing (are your important pages in Google at all), crawlability (robots.txt, XML sitemap, noindex and canonical tags), security (HTTPS and SSL), rankings and traffic, site architecture (internal links, orphan pages, crawl depth, URL structure), on-page SEO (titles, meta descriptions, headings, keyword use, alt text), content quality and freshness, mobile-friendliness, page speed and Core Web Vitals, backlinks and authority, and how you stack up against the pages ranking above you.",
+  },
+  {
+    q: "How do I run an SEO audit with the Audit Suite?",
+    a: "Start with the Full Website Audit to catch crawl, indexing, HTTPS and technical issues across the whole site. Run Internal Link Analysis to check architecture, crawl depth and orphan pages. Put your most important pages through the Page Audit for on-page, mobile and speed. Use Competitor Analysis on the keywords where you are close but not first, check where you rank in Keywords, and plan new or refreshed content with the Keyword Magic Tool and the Keyword Score Checker.",
+  },
+  {
+    q: "Which issues should I fix first?",
+    a: "Work from severity and reach. Critical findings come before warnings, and warnings before notices; an issue that touches hundreds of pages, or the pages that earn your traffic, beats a one-off. Anything stopping a page being crawled or indexed goes to the top, because no amount of on-page work helps a page Google cannot see. Grouping findings by issue in the site audit shows you that reach at a glance.",
+  },
+  {
+    q: "Does the audit check mobile-friendliness and Core Web Vitals?",
+    a: "Yes. The Page Audit checks the mobile viewport, tap target size and font size, runs PageSpeed for both mobile and desktop, and reports Core Web Vitals alongside load time and page size. Competitor Analysis and the Keyword Score Checker put the same speed figures beside your target keyword.",
+  },
+  {
+    q: "Does it look at backlinks?",
+    a: "Competitor Analysis and the Keyword Score Checker report domain authority, page authority and backlink counts to the domain and the ranking page, which is usually enough to tell whether authority is the gap holding a page back. It is an authority comparison rather than a link-by-link backlink audit.",
+  },
+  {
+    q: "Why include competitors in an SEO audit?",
+    a: "A technical audit tells you what is broken; a competitive audit tells you what is missing. A page can pass every check and still sit below a rival with deeper content, faster load times or more authority. Comparing yourself with the pages that outrank you shows which gap actually explains the ranking, so the fix list is ordered by what moves positions rather than by what is easiest to tick off.",
+  },
+  {
+    q: "What should I do after the audit?",
+    a: "Turn the findings into an action plan: group them by issue, decide what to fix first, and give each fix an owner. Export the report as PDF or CSV for whoever needs to sign it off. Once changes ship, re-crawl to confirm the issues are gone and watch the affected keywords in Keywords to see whether positions follow. Pages whose rankings keep sliding are the first candidates for a content refresh.",
+  },
+  {
+    q: "How often should I run an SEO audit?",
+    a: "Run a full crawl after any redesign, migration or large batch of new pages, and on a regular rhythm in between — monthly for sites that change often, quarterly for quieter ones. Audit individual pages before and after you edit them, and re-crawl any time you want to confirm a fix.",
+  },
+  {
     q: "What do I get on the free plan?",
     a: "100 credits every month, refilled automatically, with no credit card. Every tool is unlocked on it — audits, competitor analysis, internal link analysis and keyword research all draw from the same balance.",
   },
@@ -453,9 +518,10 @@ export default function AuditSuitePage() {
             </h1>
 
             <p className="ads-lead mx-auto mt-6 max-w-[62ch]">
-              Crawl every page and get one prioritised list of what is broken. Grade a
-              single page against 63 checks. Put yourself beside the pages outranking
-              you, map your internal links, and find the keywords worth writing for.
+              A complete SEO audit workflow in one place. Crawl every page and get one
+              prioritised list of what is broken. Grade a single page against 63 checks. Put
+              yourself beside the pages outranking you, map your internal links, and find the
+              keywords worth writing for.
             </p>
             <div className="mt-8 flex justify-center">
               <a
@@ -541,8 +607,8 @@ export default function AuditSuitePage() {
             <SectionHead
               label="Toolkit"
               name="Audit & research"
-              title="Seven tools, one dashboard"
-              sub="Finding the problem, proving it against your competitors, and finding what to write next — without a second subscription for each."
+              title="Seven tools, one SEO audit workflow"
+              sub="Crawl and index, on-page, architecture, competitors, rankings and content — in the order a full SEO audit runs, without a second subscription for each."
             />
           </div>
 
@@ -599,8 +665,8 @@ export default function AuditSuitePage() {
             <SectionHead
               label="Checks"
               name="Under the hood"
-              title="Everything it looks at"
-              sub="A crawl, a page audit, a link graph and a keyword lookup, between them, produce all of this."
+              title="Your SEO audit checklist, covered"
+              sub="Indexing, crawlability, security, on-page, mobile, speed, links and keywords — a crawl, a page audit, a link graph and a keyword lookup, between them, check all of this."
             />
             <div className="mx-auto mt-11 flex max-w-[900px] flex-wrap justify-center gap-2.5">
               {CHIPS.map((c) => (
@@ -853,8 +919,8 @@ export default function AuditSuitePage() {
               Audit it before your competitor does
             </h2>
             <p className="mx-auto mt-5 max-w-[52ch] text-[16px] leading-[1.6] text-white/60">
-              Seven tools, one credit balance. 100 free credits every month, no credit card,
-              and everything unlocked from the first day.
+              A complete SEO audit workflow on one credit balance. 100 free credits every
+              month, no credit card, and all seven tools unlocked from the first day.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Start free — 100 credits" />

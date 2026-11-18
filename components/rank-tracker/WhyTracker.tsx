@@ -12,7 +12,7 @@ export function WhyTracker() {
       style={{ maxWidth: 1280, margin: "0 auto", padding: "100px 40px 0", scrollMarginTop: 80 }}
     >
       <SectionHead
-        title="Why use a Rank Tracker?"
+        title="What is rank tracking, and why monitor it?"
       />
       <div
         className="fs-row fs-why-grid"
@@ -26,15 +26,16 @@ export function WhyTracker() {
       >
         <Reveal>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: 0 }}>
-            Checking your business rankings manually in a browser does not show you real results.
-            Search engines personalize results based on your location, browser history, account, and device.
-            The rankings you see for your own business are not the rankings your customers see.
+            Rank tracking means recording the position your pages hold in Google for each target keyword,
+            again and again, so you can see the trend instead of a single moment. Checking by hand in your
+            own browser cannot do that reliably — Google tailors results to your location, history, account
+            and device, so the position you see is rarely the one your customers see.
           </p>
           <p style={{ fontSize: 16, lineHeight: 1.65, color: COLORS.gray, margin: "16px 0 0" }}>
-            A rank tracker fixes this by running an unbiased query from a clean server, with no
-            personalization, from the country and device you specify. It also pulls the full top 100 —
-            not just page 1 — so you can see exactly how far you are from the first page and which
-            competitors sit between you and the top.
+            A rank tracker runs a clean, depersonalized query from the location and device you choose,
+            records your spot in the top 100, and keeps every result. Over weeks, that history shows
+            whether a content update worked, when an algorithm update hit, and which competitors are
+            climbing past you — long before the change shows up as lost traffic.
           </p>
           <div
             style={{
@@ -48,8 +49,8 @@ export function WhyTracker() {
               lineHeight: 1.5,
             }}
           >
-            Run a check above to see your actual results — not the one search engine shows logged-in
-            to your own browser.
+            Run a free check above for your real position today, then save the keyword to a project to
+            watch it move over time.
           </div>
         </Reveal>
 

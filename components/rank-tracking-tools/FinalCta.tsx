@@ -7,7 +7,7 @@ export default function FinalCta() {
       <div className="l2-signup-panel">
         <div aria-hidden="true" className="l2-signup-glow" />
         <div className="l2-signup-body">
-          <h2 className="l2-signup-h2">Find out where you actually rank</h2>
+          <h2 className="l2-signup-h2">Find out where you actually rank, on every device</h2>
           <p className="l2-signup-p">
             Free plan, every tool unlocked, no credit card. Paid plans start at
             $19/month when you outgrow it. Your first report is about five minutes

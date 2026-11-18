@@ -4,6 +4,7 @@ import { SAMPLE_REPORTS } from "@/components/landing/sample-reports";
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import {
+  Activity,
   BarChart3,
   Briefcase,
   Building2,
@@ -11,6 +12,8 @@ import {
   ChevronDown,
   Clock,
   Download,
+  Eye,
+  Gauge,
   Landmark,
   Layers,
   MapPin,
@@ -72,17 +75,38 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Rank Tracking for Google, Maps, YouTube and AI — FreeSERP",
+  title: "SEO Tracking Suite: Rankings, Traffic & AI | FreeSERP",
   description:
-    "One dashboard for Google rank tracking, Google Maps grid scans, YouTube video rankings, and AI visibility on ChatGPT, Gemini, Perplexity and Claude. 100 free credits every month, no credit card.",
+    "Track the SEO metrics that prove ROI: rankings on Google, Maps, YouTube and AI, with Search Console clicks and impressions beside them. 100 free credits a month.",
+  keywords: [
+    "SEO tracking",
+    "SEO performance tracking",
+    "SEO metrics",
+    "keyword ranking tracker",
+    "organic traffic tracking",
+    "SEO visibility",
+    "organic impressions",
+    "Google Search Console",
+    "GA4 SEO reporting",
+    "Google Maps rank tracker",
+    "YouTube rank tracker",
+    "AI visibility tracker",
+    "SEO reporting dashboard",
+  ],
   alternates: { canonical: "/tracking-suite" },
   openGraph: {
-    title: "Track every ranking that matters — not just Google",
+    title: "SEO tracking for every ranking that matters, not just Google",
     description:
-      "Google, Google Maps, YouTube and AI answers in one dashboard. Free plan, no credit card.",
+      "Rankings, visibility, clicks, impressions and engagement in one dashboard, across Google, Maps, YouTube and AI answers. Free plan, no credit card.",
     url: "/tracking-suite",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SEO tracking for every ranking that matters, not just Google",
+    description:
+      "Track rankings, visibility, clicks and impressions across Google, Maps, YouTube and AI answers. 100 free credits a month.",
   },
   // Paid-traffic destination, kept out of the index on purpose: it restates the
   // home page and the four tool pages, and letting Google choose between them
@@ -300,7 +324,22 @@ const BENEFITS = [
   {
     icon: BarChart3,
     title: "Search Console, connected",
-    text: "Link your property for free and see clicks, impressions and CTR sitting next to the tracked position they belong to.",
+    text: "Link your property for free and see organic clicks, impressions and CTR sitting next to the tracked position they belong to.",
+  },
+  {
+    icon: Eye,
+    title: "Visibility you can report",
+    text: "Average position plus Top 3, 4–10, 11–20 and 21–100 bands across the whole keyword set — the trend a single keyword can never show.",
+  },
+  {
+    icon: Activity,
+    title: "Traffic and engagement",
+    text: "Connect GA4 and read sessions, engaged sessions and engagement rate in the same account, so a climb in position can be checked against real visits.",
+  },
+  {
+    icon: Gauge,
+    title: "Site health and page speed",
+    text: "Website Audit runs 63 SEO rules on a real browser crawl, and the Keyword Score Checker reads LCP, CLS and TTFB, so technical problems surface before they cost you rankings.",
   },
   {
     icon: Target,
@@ -334,6 +373,26 @@ const PAID_POINTS = [
 ];
 
 const FAQS = [
+  {
+    q: "What is SEO tracking?",
+    a: "Watching the numbers that show whether your search work is paying off — where you rank, how often you appear, how many people click, what they do next, and how healthy the site is — over time, against the goals the business actually cares about. Tracked consistently, those numbers tell you what to keep doing and give you something concrete to show a client or a boss.",
+  },
+  {
+    q: "Which SEO metrics should I track?",
+    a: "Eight are worth watching: keyword rankings, organic traffic, visibility, impressions, conversions and conversion rate, engagement, backlinks, and site health including Core Web Vitals. FreeSERP covers rankings and visibility bands, Search Console clicks and impressions, GA4 sessions and engagement, audits, and page speed. Set conversions up as key events in GA4, and use a dedicated link tool if you need ongoing new-and-lost backlink alerts — FreeSERP shows backlink counts for a page and its competitors, not a running link log.",
+  },
+  {
+    q: "How do I prove SEO ROI to stakeholders?",
+    a: "Record a baseline before you change anything, then compare the same metrics afterwards: positions for the keywords that matter, clicks and impressions from Search Console, and visits from GA4. Tie the movement to a goal such as leads or sales, and send it as a report people can open without logging in — every table on FreeSERP exports to CSV or PDF.",
+  },
+  {
+    q: "Does FreeSERP replace Google Search Console and GA4?",
+    a: "No — it reads from them. Connect both for free and their clicks, impressions, CTR, sessions and engagement sit in the same account as your tracked positions. Search Console is still the place to manage indexing and coverage; FreeSERP adds the daily rank checks, Maps, YouTube and AI tracking that neither of them does.",
+  },
+  {
+    q: "How often should I check SEO performance?",
+    a: "Let rankings check themselves daily so you catch sudden drops, review traffic and engagement weekly, and report monthly or quarterly. SEO moves slowly, so judge the trend over several weeks rather than any single day's position.",
+  },
   {
     q: "What do I get on the free plan?",
     a: "100 credits every month, refilled automatically, with no credit card. Every tool is unlocked on it — Google, Maps, YouTube and AI tracking all draw from the same balance.",
@@ -408,9 +467,10 @@ export default function TrackingSuitePage() {
             </h1>
 
             <p className="ads-lead mx-auto mt-5 max-w-[64ch]">
-              FreeSERP tracks your Google positions, your Google Maps pack rank street by
-              street, your YouTube videos, and whether ChatGPT, Gemini, Perplexity and
-              Claude recommend you — in one dashboard, updated every day.
+              SEO tracking in one dashboard: your Google positions on desktop and mobile,
+              your Google Maps pack rank street by street, your YouTube videos, and whether
+              ChatGPT, Gemini, Perplexity and Claude recommend you — with Search Console
+              clicks and impressions beside them, updated every day.
             </p>
             <div className="mt-8 flex justify-center">
               <a
@@ -591,8 +651,8 @@ export default function TrackingSuitePage() {
           <div className={WRAP}>
             <SectionHead
               tag="Why FreeSERP"
-              title="All-in-one, no extra tools needed"
-              sub="See your rankings, competitors, clicks and impressions together in one place. FreeSERP runs recurring checks for you, so you can spot what is changing, understand your performance and know where to focus next."
+              title="The SEO metrics that matter, side by side"
+              sub="Rankings, visibility, clicks, impressions, engagement and site health together in one place, so you can show what your SEO work is returning. FreeSERP runs recurring checks for you, so you spot what is changing and know where to focus next."
             />
 
             <p className="ads-note">

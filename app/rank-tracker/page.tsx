@@ -20,20 +20,20 @@ import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 const PAGE_URL = "https://freeserp.com/rank-tracker";
 const DESCRIPTION =
-  "Free rank tracker tool. Enter any domain and keyword to instantly see your real search engine ranking — unaffected by browser history or personalization. Check rankings by country and device. No signup needed.";
+  "Track Google keyword rankings daily by country, city and device. Follow SERP features, competitors and ranking history with alerts. 100 free credits a month.";
 
 export const metadata: Metadata = {
-  title: "Free Rank Tracker — Check Where Any Domain Ranks | Freeserp.com",
+  title: "Free Rank Tracker — Track Keyword Positions Daily | FreeSERP",
   description: DESCRIPTION,
   keywords:
-    "rank tracker, free rank tracker, keyword rank checker, SEO rank tracking, check keyword ranking, search position tracker",
+    "rank tracker, free rank tracker, keyword rank tracker, keyword position tracking, Google rank tracker, local rank tracker, mobile rank tracker, competitor rank tracking, SERP feature tracking, ranking history",
   alternates: { canonical: PAGE_URL },
   authors: [{ name: "FreeSERP" }],
   creator: "FreeSERP",
   publisher: "FreeSERP",
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Free Rank Tracker — Check Where Any Domain Ranks | Freeserp.com",
+    title: "Free Rank Tracker — Track Keyword Positions Daily | FreeSERP",
     description: DESCRIPTION,
     url: PAGE_URL,
     siteName: "FreeSERP",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Free Rank Tracker — Check Where Any Domain Ranks | Freeserp.com",
+    title: "Free Rank Tracker — Track Keyword Positions Daily | FreeSERP",
     description: DESCRIPTION,
   },
 };
@@ -59,7 +59,7 @@ export default function RankTrackerPage() {
       <DemoSection title="Click a keyword, see its history">
         <RankTrackerDemo />
       </DemoSection>
-      <Steps sub="Our rank tracker runs a clean, depersonalized search engine query from the country and device you specify — so you see exactly what your customers see, not what your browser history shows you." />
+      <Steps sub="Add your domain once, set the country, city and device, and the rank tracker re-checks every keyword with a clean, depersonalized query — so your position history reflects what real searchers see." />
       <WhyTracker />
       <UseCases />
       <SampleReport {...SAMPLE_REPORTS.rank} />

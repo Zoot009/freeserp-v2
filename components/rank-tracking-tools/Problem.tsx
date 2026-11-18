@@ -4,6 +4,10 @@ const POINTS = [
     body: "Real checks against the live SERP, per country and per device, with the snapshot kept so you can look back.",
   },
   {
+    title: "Mobile and desktop, kept apart",
+    body: "Google ranks the mobile version of your site first, and phone results run shorter, more visual and more local. Track each device on its own so one blended number never hides the gap.",
+  },
+  {
     title: "Get told, don't go looking",
     body: "Alerts fire when a keyword jumps or drops, so the dashboard is somewhere you go on purpose.",
   },
@@ -22,9 +26,10 @@ export default function Problem() {
           <h2 className="l2-h2">You know traffic is down. Nobody tells you why.</h2>
           <p className="l2-copy">
             Analytics shows the drop after it happens. It does not tell you that
-            you slipped from position 4 to position 11 last Tuesday, that a
-            competitor rewrote the page above you, or that your best page has no
-            internal links pointing at it.
+            you slipped from position 4 to position 11 last Tuesday, that you
+            hold page one on desktop but sit on page two for everyone searching
+            from a phone, that a competitor rewrote the page above you, or that
+            your best page has no internal links pointing at it.
           </p>
           <p className="l2-copy">
             FreeSERP watches all of that on a schedule and tells you when it

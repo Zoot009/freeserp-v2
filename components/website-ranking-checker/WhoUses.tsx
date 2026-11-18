@@ -13,8 +13,8 @@ export function WhoUses() {
     >
       <SectionHead
         tag="Built For"
-        title="Who uses this free website ranking checker"
-        sub="Built for people who need accurate ranking reports without paying for enterprise tools they will not fully use."
+        title="Who checks their ranking with this tool"
+        sub="For anyone who needs a straight answer to “where does my website rank?” without paying for an enterprise suite."
       />
       <div className="fs-grid-3" style={{ marginTop: 56 }}>
         {WHO_USES.map((u, i) => (

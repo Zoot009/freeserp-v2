@@ -85,17 +85,35 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SEO Competitor Analysis — your page against the ones outranking it — FreeSERP",
+  title: "SEO Competitor Analysis Tool & Audit Guide — FreeSERP",
   description:
-    "Put your page beside the pages beating you for a keyword. FreeSERP crawls both sides, scores them on the same checks — title, headings, content, speed, schema, internal links, domain and page authority — and turns every gap into a prioritised plan. 100 free credits every month, no credit card.",
+    "Run a competitive SEO audit: compare your page with the pages outranking it on content, speed and authority, then get a prioritised plan. 100 free credits.",
+  keywords: [
+    "competitor analysis",
+    "SEO competitor analysis",
+    "competitor analysis tool",
+    "competitive audit",
+    "competitive analysis",
+    "competitor SEO audit",
+    "SWOT analysis",
+    "content gap analysis",
+    "backlink comparison",
+    "competitor benchmarking",
+  ],
   alternates: { canonical: "/competitor-analysis" },
   openGraph: {
-    title: "Why are they ranking above you?",
+    title: "SEO Competitor Analysis: why are they ranking above you?",
     description:
-      "Your page and the pages outranking it, scored check by check — on-page, technical, internal links and authority — with the gaps written up as a prioritised action plan.",
+      "A competitive audit for one keyword: your page and the pages outranking it, compared on content, technical health, internal links and authority, with a prioritised action plan.",
     url: "/competitor-analysis",
     siteName: "FreeSERP",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SEO Competitor Analysis Tool — FreeSERP",
+    description:
+      "Compare your page with the pages outranking it on content, speed, internal links and authority, and get a prioritised plan to close the gaps.",
   },
   // Paid-traffic destination, kept out of the index on purpose, exactly as
   // /ai-rank-tracker, /audit-suite and /tracking-suite are: it restates the home
@@ -335,7 +353,7 @@ const DELIVERABLES = [
   },
   {
     icon: BarChart3,
-    title: "Gaps against their average",
+    title: "Gaps benchmarked against their average",
     text: "Word count, headings, images, links, readability, speed and authority — your figure beside the competitor average, computed before the model is asked anything so the plan argues from arithmetic rather than impressions.",
   },
   {
@@ -372,23 +390,23 @@ const CHIPS = [
 const STEPS = [
   {
     n: "01",
-    title: "Name the page and the keyword",
-    text: "The domain you want ranking and the term you want it to rank for. Start it from a tracked keyword and every column carries that keyword's live SERP position from your latest check.",
+    title: "Set the goal: one page, one keyword",
+    text: "An audit without a goal turns into a pile of data. Name the domain you want ranking and the term you want it to rank for. Start from a tracked keyword and every column carries its live SERP position from your latest check.",
   },
   {
     n: "02",
-    title: "Pick who to compare against",
-    text: "Search results are pulled for the keyword so you can tick the pages actually beating you, or paste URLs by hand — up to 10 in one analysis. Your own domain is filtered out, so you cannot end up compared with yourself.",
+    title: "Identify the competitors that matter",
+    text: "Your search competitors are whoever ranks for the keyword, not only the businesses you sell against. Tick the pages actually beating you from the live results, or paste URLs by hand — up to 10 in one analysis. Your own domain is filtered out.",
   },
   {
     n: "03",
-    title: "Both sides get crawled",
-    text: "Every page is rendered and read the same way, Lighthouse runs against each one, authority is looked up in bulk, and your own site is crawled for the links pointing at your page.",
+    title: "Gather the data, find the gaps",
+    text: "Every page is rendered and read the same way, Lighthouse runs against each one, authority is looked up in bulk, and your own site is crawled for the links pointing at your page. Each gap is measured against the competitor average.",
   },
   {
     n: "04",
-    title: "Work the list, then re-run",
-    text: "A score per page, a row per check and a prioritised plan with the numbers attached. Share it, export it, and re-run once you have shipped the changes to see whether the gap closed.",
+    title: "Act on the plan, then monitor",
+    text: "A score per page, a row per check and a prioritised plan with the numbers attached. Ship the changes and re-run to see whether the gap closed — their pages change too, so the check is worth repeating.",
   },
 ];
 
@@ -448,12 +466,32 @@ const PAID_POINTS = [
 
 const FAQS = [
   {
+    q: "What is a competitor analysis in SEO?",
+    a: "A competitor analysis — often called a competitive audit — is a structured look at who you are up against, what they do differently and where you can win. In SEO it starts from the search results: the pages ranking for the keywords you want, how they are built, how much authority sits behind them, and which of those differences explain why they sit above you. The output should be a benchmark and a list of actions, not just a spreadsheet.",
+  },
+  {
+    q: "Why run a competitive audit?",
+    a: "To find what sets you apart and what is missing. A good audit shows the differentiators worth leaning on, sharpens your positioning and messaging, exposes SEO gaps in content, technical health and links, and benchmarks you against the market so you know whether you are genuinely behind or simply on par. It also stops a team guessing — the debate moves from opinions to numbers.",
+  },
+  {
+    q: "What types of competitor analysis are there?",
+    a: "The common ones are a traffic analysis (where competitors' visitors come from and which pages attract the most), a content analysis (which topics they cover, how deeply, and how well each page is optimised), a pricing analysis (how their offers and packaging compare with yours) and an SEO analysis of on-page, technical and link signals. FreeSERP's competitor analysis covers the SEO side for one keyword at a time — on-page, speed, internal links and authority. Traffic and pricing reviews are worth running alongside it with whatever data you have.",
+  },
+  {
+    q: "How do I do a competitor analysis step by step?",
+    a: "1. Set a measurable goal and keep the scope tight. 2. Identify your primary and secondary competitors. 3. Gather the same data on each of them. 4. Lay it out in a SWOT or a comparison matrix. 5. Find the gaps and opportunities. 6. Turn them into specific action items with a target for each. 7. Monitor and repeat on a schedule. For a given keyword, FreeSERP does the data gathering, the gap-finding and the action plan, and a re-run takes care of the monitoring.",
+  },
+  {
+    q: "What should I compare between my site and a competitor's?",
+    a: "On the page: title, meta description, headings, word count, keyword placement, images and alt text, and content formats such as FAQs, lists and video. Technically: page speed, Core Web Vitals, schema markup and security headers. Structurally: the internal links pointing at the page. Off-page: domain authority, page authority and backlinks. A wider audit also looks at their top pages, organic versus paid keywords, branded versus non-branded demand and how they position the offer — useful context that sits outside the comparison table.",
+  },
+  {
     q: "What does the competitor analysis actually do?",
     a: "It takes one keyword, your page and the pages ranking around you, crawls all of them the same way, and lays every check side by side: title, meta description, headings, word count, keyword placement, images and alt text, internal and external links, Lighthouse scores, Core Web Vitals, schema markup, security headers, domain authority, page authority and backlinks. Then it writes a prioritised action plan out of the differences.",
   },
   {
     q: "How do I choose who to compare against?",
-    a: "Type the keyword and FreeSERP pulls the live search results so you can tick the pages actually ranking for it, or paste URLs yourself — up to 10 in a single analysis. Your own domain is filtered out of the competitor list, subdomains included, so you cannot end up comparing yourself with yourself.",
+    a: "Start with your primary competitors — the pages chasing the same keyword and the same audience as yours — then add secondary ones that overlap only partly, such as a marketplace, a publisher or a directory. Type the keyword and FreeSERP pulls the live search results so you can tick the pages actually ranking for it, or paste URLs yourself — up to 10 in a single analysis. Your own domain is filtered out of the competitor list, subdomains included, so you cannot end up comparing yourself with yourself.",
   },
   {
     q: "How is the overall score calculated?",
@@ -462,6 +500,14 @@ const FAQS = [
   {
     q: "Is the action plan just generic SEO advice?",
     a: "No. Every yours-versus-their-average gap is computed from the crawl before the model is asked anything, and the plan is instructed to cite those real numbers — “your page has 1,840 words against a competitor average of 2,880” — to give a target for each one, and to leave a whole category out when there is genuinely nothing to fix there.",
+  },
+  {
+    q: "How does a SWOT analysis fit into a competitor analysis?",
+    a: "The comparison table fills in most of a SWOT for one keyword. Rows where you lead are strengths, rows where you trail are weaknesses, gaps every competitor leaves open are opportunities, and a rival with far more authority behind it is the threat to plan around. Add what a crawl cannot see — pricing, reviews, brand reputation — and you have the full grid.",
+  },
+  {
+    q: "How often should I run a competitor analysis?",
+    a: "Re-run it after you ship changes, to see whether the gap closed, and on a regular rhythm — monthly or quarterly for the keywords that matter most — because competitors rewrite pages and new ones enter the results. Run it from a tracked keyword and the score sits beside that keyword's position history in your project, so a slipping position tells you when it is time to look again.",
   },
   {
     q: "What does it cost in credits?",
@@ -533,9 +579,9 @@ export default function CompetitorAnalysisPage() {
             </h1>
 
             <p className="cmpa-lead mx-auto mt-6 max-w-[62ch]">
-              Pick a keyword and FreeSERP crawls your page and the pages beating you, scores both
-              sides on the same checks, and turns every difference into a list of changes worth
-              making — in the order worth making them.
+              A competitor analysis built around one keyword. FreeSERP crawls your page and the
+              pages beating you, scores both sides on the same checks, and turns every difference
+              into a list of changes worth making — in the order worth making them.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
@@ -613,8 +659,8 @@ export default function CompetitorAnalysisPage() {
             <SectionHead
               label="Compare"
               name="The layers"
-              title="Four kinds of evidence, one table"
-              sub="Collected in whichever way gives the truest reading, and lined up the same way once it is in."
+              title="What to compare in an SEO competitor analysis"
+              sub="Content, technical health, internal links and authority — each collected in whichever way gives the truest reading, and lined up the same way once it is in."
             />
           </div>
 
@@ -778,7 +824,8 @@ export default function CompetitorAnalysisPage() {
             <SectionHead
               label="Setup"
               name="How it works"
-              title="Four steps, and the last one repeats"
+              title="How to run a competitor analysis in four steps"
+              sub="Goal, competitors, data and gaps, then action — and the last step repeats, because a competitive audit is only useful if you keep it current."
             />
 
             <div className="cmpa-steps mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

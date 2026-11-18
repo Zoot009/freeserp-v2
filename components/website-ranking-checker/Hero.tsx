@@ -48,7 +48,7 @@ export function Hero() {
               opacity: 0.92,
             }}
           >
-            Check your website ranking in any country, on any device, for free. No signup, no credit card, no limits.
+            See where your website really ranks on Google for any keyword — in any country, on desktop or mobile. Get your exact position, the page that ranks, and who sits above you. Free, no signup.
           </p>
         </Reveal>
 
