@@ -314,7 +314,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "Credits are shared. Spend them on rank checks, map grids, audits or keyword research — nothing is locked behind a higher tier.",
+    text: "Credits are shared. Spend them on rank checks, map grids, audits or keyword research — every paid plan unlocks every tool.",
   },
   {
     icon: Clock,
@@ -742,7 +742,7 @@ export default function TrackingSuitePage() {
             <SectionHead
               tag="Pricing"
               title="Start free. Pay when you outgrow it."
-              sub="One balance covers Google, Maps, YouTube and AI tracking — plus audits and keyword research. Nothing is reserved for a higher tier."
+              sub="One balance covers Google, Maps, YouTube and AI tracking — plus audits and keyword research. Every paid plan unlocks every tool."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

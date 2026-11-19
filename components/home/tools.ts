@@ -232,9 +232,9 @@ export const TOOLS: Tool[] = [
     label: "Maps Audit",
     kicker: "GOOGLE MAPS AUDIT",
     title: "Find out why the listing is not showing up",
-    text: "Paste a Google Maps link and FreeSERP audits the Business Profile in 25 checks — profile, reviews, photos, website and visibility — runs a 3×3 local rank grid around the business, compares it with the listings nearby and hands back a 30-day action plan.",
+    text: "Paste a Google Maps link and FreeSERP audits the Business Profile in more than 50 checks across eight areas — profile, reviews, keywords, photos, website, engagement, citations and visibility — runs a 3×3 local rank grid around the business, compares it with the listings nearby and hands back a 30-day action plan.",
     points: [
-      "25 checks across profile, reviews, photos, website and visibility",
+      "More than 50 checks across eight weighted areas",
       "A 3×3 local rank grid around the business",
       "A 30-day action plan in three phases",
     ],

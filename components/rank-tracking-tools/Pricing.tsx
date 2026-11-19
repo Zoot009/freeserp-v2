@@ -45,8 +45,8 @@ export default function Pricing() {
         <div className="l2-costs">
           <h3 className="l2-costs-h">What a credit buys</h3>
           <p className="l2-costs-sub">
-            Nothing is locked behind a higher tier — your credits work across all
-            of it.
+            Every paid plan unlocks every tool — your credits work across all of
+            it.
           </p>
           <div className="l2-costs-table">
             {COSTS.map((row) => (

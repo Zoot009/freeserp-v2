@@ -362,7 +362,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "Credits are shared across audits, analyses, keyword research and rank tracking. Nothing is locked behind a higher tier.",
+    text: "Credits are shared across audits, analyses, keyword research and rank tracking. Every paid plan unlocks every tool.",
   },
   {
     icon: Gauge,
@@ -732,7 +732,7 @@ export default function AuditSuitePage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers every audit, analysis and keyword search — and the rank trackers too. Nothing is reserved for a higher tier."
+              sub="One balance covers every audit, analysis and keyword search — and the rank trackers too. Every paid plan unlocks every tool."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -78,15 +78,6 @@
   .boxes .v { margin-top: 4px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
   .boxes .v small { margin-left: 5px; font-size: 12.5px; font-weight: 500; letter-spacing: 0; color: var(--text-mute); }
 
-  .groups { margin: 22px 0 6px; }
-  .groups-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-  .groups-h h2 { font-size: 14px; font-weight: 600; }
-  .groups-h span { font-size: 12px; color: var(--text-mute); }
-  .glist { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-  .glist li { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border-radius: var(--r-sm); background: var(--bg-inset); font-size: 13px; }
-  .glist li b { font-weight: 500; font-size: 12px; color: var(--text-mute); font-variant-numeric: tabular-nums; }
-  .glist li.all { background: var(--brand-soft); color: var(--brand); font-weight: 500; }
-  .glist li.all b { color: var(--brand); }
 
   .kwt { margin-top: 14px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
@@ -117,7 +108,7 @@
   }
   @media print {
     table { min-width: 0; }
-    .boxes, .groups { break-inside: avoid; }
+    .boxes { break-inside: avoid; }
   }
 </style>
 </head>
@@ -135,7 +126,7 @@
 </div>
 
 <div class="page">
-  <p class="note" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>This report uses made-up data, so you can see what the Keyword Magic Tool’s PDF export contains. Yours is built from your own searches.</span></p>
+  <p class="note" role="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>This report uses made-up data, so you can see what the Keyword Magic Tool’s PDF export contains. The Keyword Magic Tool needs a paid plan or a credit pack. Yours is built from your own searches.</span></p>
 
   <main class="card sheet">
     <header class="sh-in">
@@ -150,35 +141,6 @@
         <li><div class="k">Average KD</div><div class="v">31</div></li>
       </ul>
 
-      <section class="groups" aria-labelledby="h-groups">
-        <div class="groups-h">
-          <h2 id="h-groups">By keyword</h2>
-          <span>Word groups from the results screen, across the 1,000 keywords fetched</span>
-        </div>
-        <ul class="glist">
-          <li class="all">All keywords <b>1,000</b></li>
-          <li>kit <b>96</b></li>
-          <li>strips <b>74</b></li>
-          <li>best <b>71</b></li>
-          <li>near <b>58</b></li>
-          <li>home <b>55</b></li>
-          <li>cost <b>49</b></li>
-          <li>dentist <b>44</b></li>
-          <li>professional <b>39</b></li>
-          <li>pen <b>37</b></li>
-          <li>led <b>35</b></li>
-          <li>gel <b>33</b></li>
-          <li>how <b>31</b></li>
-          <li>safe <b>27</b></li>
-          <li>sensitive <b>26</b></li>
-          <li>laser <b>24</b></li>
-          <li>before <b>21</b></li>
-          <li>after <b>21</b></li>
-          <li>toothpaste <b>19</b></li>
-          <li>products <b>18</b></li>
-          <li>zoom <b>17</b></li>
-        </ul>
-      </section>
     </header>
 
     <section class="kwt" aria-labelledby="h-kw">

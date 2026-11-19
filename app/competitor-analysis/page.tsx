@@ -446,7 +446,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "The same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. Nothing here is locked behind a higher tier.",
+    text: "The same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. Every paid plan unlocks every tool.",
   },
 ];
 
@@ -511,7 +511,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. The free plan runs one full analysis a day out of its monthly credits; past that the comparison table is still complete and the plan narrows to the on-page category.",
+    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. Competitor analysis needs a paid plan or a credit pack — the free plan's monthly credits don't unlock it.",
   },
   {
     q: "Can I share the report with a client?",
@@ -894,7 +894,7 @@ export default function CompetitorAnalysisPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers competitor analysis, rank tracking, AI visibility, audits and keyword research. Nothing is reserved for a higher tier."
+              sub="One balance covers competitor analysis, rank tracking, AI visibility, audits and keyword research. Every paid plan unlocks every tool."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -131,7 +131,7 @@ export const PLANS: Plan[] = [
     name: "Free",
     price: "$0",
     note: "Refilled every month, automatically.",
-    feats: ["Every tool unlocked", "190+ countries, all devices", "No credit card required"],
+    feats: ["Rank tracking, audits and SERP checks", "190+ countries, all devices", "No credit card required"],
     cta: "Start free",
   },
   {

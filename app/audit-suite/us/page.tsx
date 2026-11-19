@@ -1057,7 +1057,7 @@ export default function AuditSuiteUsPage() {
             <SectionHead
               tag="Pricing"
               title="Start free. Pay when you outgrow it."
-              sub="One balance covers audits, competitor analysis, internal link analysis, keyword research and rank tracking. Nothing is reserved for a higher tier."
+              sub="One balance covers audits, competitor analysis, internal link analysis, keyword research and rank tracking. Every paid plan unlocks every tool."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

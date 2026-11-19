@@ -416,7 +416,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "The same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. Nothing here is locked behind a higher tier.",
+    text: "The same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. Every paid plan unlocks every tool.",
   },
 ];
 
@@ -844,7 +844,7 @@ export default function AiRankTrackerPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers AI visibility, rank tracking, audits and keyword research. Nothing is reserved for a higher tier."
+              sub="One balance covers AI visibility, rank tracking, audits and keyword research. Every paid plan unlocks every tool."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">

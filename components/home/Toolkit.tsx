@@ -66,7 +66,7 @@ export function Toolkit() {
       <SectionHead
         tag="AUDIT & RESEARCH"
         title="Find what is holding the site back"
-        sub="Rankings tell you where you stand. These tell you why — and what to change. Nine tools, all on the same credit balance, none locked behind a higher tier."
+        sub="Rankings tell you where you stand. These tell you why — and what to change. Nine tools, all on the same credit balance, every one unlocked on any paid plan."
       />
 
       <Reveal style={{ marginTop: 48 }}>

@@ -42,6 +42,8 @@ const entry = (
 });
 
 const RESULTS_NOTE = "Example data showing the tool's results screen — opens in a new tab.";
+// Tools behind requirePaidPlan: the free plan's monthly credits don't unlock them.
+const PAID = "needs a paid plan or a credit pack";
 
 export const SAMPLE_REPORTS = {
   rank: entry("rank-tracking-report", "Rank Tracking Report", {
@@ -56,6 +58,8 @@ export const SAMPLE_REPORTS = {
       "Every keyword with its 1d, 7d and 30d change",
       "SERP features for each keyword",
     ],
+    // reports.routes.ts: generating the report and its PDF is behind requirePaidPlan.
+    note: `Example data — opens in a new tab. The report, its PDF and email digests ${PAID}.`,
   }),
   audit: entry("website-audit-report", "Website Audit Report", {
     title: "See what a website audit looks like",
@@ -81,8 +85,9 @@ export const SAMPLE_REPORTS = {
       "Internal link analysis for every domain",
       "A prioritised action plan, with the numbers behind it",
     ],
-    // ai.service.ts buildFreeOnlyPrompt: free plans get the On-Page part of the plan only.
-    note: "Example data, showing the full report on a paid plan — the free plan's action plan covers on-page tasks. Opens in a new tab.",
+    // The standalone tool's results page has the comparison table only; internal
+    // links and the AI plan come with the project route (a tracked keyword).
+    note: `Example data — opens in a new tab. Internal links and the action plan come with analyses run from a tracked keyword. Competitor analysis ${PAID}.`,
   }),
   aeo: entry("aeo-geo-audit-report", "AEO & GEO Audit", {
     title: "See an AEO & GEO report before you run one",
@@ -94,17 +99,21 @@ export const SAMPLE_REPORTS = {
       "Measured answers from the AI engines",
       "AI crawler access, bot by bot",
     ],
+    // The sample asks all five engines; each audit asks only the engines picked (and paid for).
+    note: `Example data with all five AI engines asked — opens in a new tab. AEO & GEO audits ${PAID}.`,
   }),
   maps: entry("google-maps-audit-report", "Google Maps Audit", {
     title: "See a Google Maps audit before you run one",
     description:
-      "Open the full Business Profile audit — the score, all 25 checks, the reviews, the 3×3 rank grid, the competitors and the 30-day plan.",
+      "Open the full Business Profile audit — the score, every check, the reviews, the 3×3 rank grid, the competitors and the 30-day plan.",
+    // gbp-audit/report.ts: 8 weighted categories, ~50 scored checks plus manual ones.
     points: [
-      "Score across five weighted areas",
-      "All 25 checks with pass, warn or fail",
+      "Score across eight weighted categories",
+      "Every check with pass, warn or fail",
       "The 3×3 local rank grid and competitors",
       "A 30-day action plan",
     ],
+    note: `Example data — opens in a new tab. Google Maps audits ${PAID}.`,
   }),
 
   // ── Sample *results* pages: these tools have no downloadable report, so
@@ -173,7 +182,7 @@ export const SAMPLE_REPORTS = {
       "Inbound, outbound and depth for every page",
       "Orphan pages, named",
     ],
-    note: RESULTS_NOTE,
+    note: `${RESULTS_NOTE} Internal Link Analysis ${PAID}.`,
   }),
   keywordScore: entry("keyword-score-report", "Keyword Score Checker", {
     eyebrow: "Sample results",
@@ -186,7 +195,7 @@ export const SAMPLE_REPORTS = {
       "Every on-page factor, biggest gap first",
       "TTFB, FCP, LCP and CLS",
     ],
-    note: RESULTS_NOTE,
+    note: `${RESULTS_NOTE} The Keyword Score Checker ${PAID}.`,
   }),
   searchConsole: entry("search-console-report", "Search Console", {
     eyebrow: "Sample results",
@@ -197,11 +206,12 @@ export const SAMPLE_REPORTS = {
       "Clicks, impressions, CTR and average position",
       "Change against the previous period",
       "The clicks trend over time",
-      "Every query, with tracked ones tagged",
+      "Up to 1,000 queries, with tracked ones tagged",
     ],
     note: RESULTS_NOTE,
   }),
-  // keyword-magic-pdf.ts: this one IS a real export, so the default copy applies.
+  // keyword-magic-pdf.ts: this one IS a real export (no word groups — those are
+  // on the results screen only).
   keywordResearch: entry("keyword-research-report", "Keyword Research Report", {
     title: "See the keyword report you'll get",
     description:
@@ -210,7 +220,8 @@ export const SAMPLE_REPORTS = {
       "Keywords, total volume and average difficulty",
       "Volume, KD, CPC and intent per keyword",
       "SERP features for every keyword",
-      "Word groups from the results screen",
+      "Filtered to the rows you chose",
     ],
+    note: `Example data — opens in a new tab. The Keyword Magic Tool ${PAID}.`,
   }),
 } satisfies Record<string, SampleReportEntry>;

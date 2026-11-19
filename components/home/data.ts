@@ -150,7 +150,7 @@ export const PLANS = {
       featured: false,
       features: [
         "100 credits every month",
-        "Every tool unlocked",
+        "Rank tracking, site audits and SERP checks",
         "190+ countries & all devices",
         "No credit card required",
       ],
@@ -180,7 +180,7 @@ export const PLANS = {
       featured: false,
       features: [
         "100 credits every month",
-        "Every tool unlocked",
+        "Rank tracking, site audits and SERP checks",
         "190+ countries & all devices",
         "No credit card required",
       ],
@@ -280,7 +280,7 @@ export const FAQS = [
   },
   {
     q: "How do credits work?",
-    a: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
+    a: "One balance pays for everything, and every paid plan unlocks every tool. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
   },
   {
     q: "Can I export the data or share a report?",
@@ -468,7 +468,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "How do FreeSERP credits work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "One balance pays for everything, and nothing is reserved for a higher tier. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
+        text: "One balance pays for everything, and every paid plan unlocks every tool. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
       },
     },
     {

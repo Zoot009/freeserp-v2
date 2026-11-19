@@ -23,7 +23,7 @@ export function Credits() {
       <SectionHead
         tag="ONE BALANCE"
         title="Every tool, one pot of credits"
-        sub="No per-tool limits, no seat pricing, nothing reserved for a higher tier. You get 100 credits free every month and spend them on whatever you actually need that week."
+        sub="No per-tool limits, no seat pricing, and every paid plan unlocks every tool. The free plan gives you 100 credits every month for rank tracking, site audits and SERP checks."
       />
 
       <Reveal style={{ marginTop: 48, maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>

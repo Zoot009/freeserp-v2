@@ -38,7 +38,7 @@ const COMMON_FAQS = [
   },
   {
     q: "Do I need a separate subscription for this tool?",
-    a: "No. Every FreeSERP tool — rank tracking, audits and keyword research — draws from the same credit balance, and none is locked behind a higher tier.",
+    a: "No. Every FreeSERP tool draws from the same credit balance. Rank tracking, the SERP checker and site audits run on the free plan's credits; competitor analysis, keyword research, the keyword score checker, internal link analysis, AEO & GEO audits and Google Maps audits need a paid plan or a credit pack.",
   },
 ];
 
