@@ -9,7 +9,7 @@ export default function Hero() {
         <div>
           <div className="l2-pill l2-mono">
             <span className="l2-pill-dot" />
-            Free plan · no credit card
+            Free Google tracking · no card
           </div>
           <h1 className="l2-h1">
             Rank tracking for Google, Maps, YouTube{" "}
@@ -37,7 +37,7 @@ export default function Hero() {
             </a>
           </div>
           <p className="l2-hero-note l2-mono">
-            190+ countries · mobile & desktop · 12 tools, all unlocked free
+            190+ countries · mobile & desktop · 12 tools from $19/month
           </p>
         </div>
         <div className="l2-hero-shot">

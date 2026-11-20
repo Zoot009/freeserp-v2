@@ -87,7 +87,7 @@ export const FAQ_ITEMS: FAQ[] = [
   },
   {
     q: "Is the rank tracker really free?",
-    a: "Yes — the free plan gives you 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits, and the same balance also pays for site audits, local map grid scans, keyword research and competitor analysis. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes — the free plan gives you 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits and unlock the rest of FreeSERP — site audits, local map grid scans, keyword research and competitor analysis, all on the same balance. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank tracking data?",
@@ -107,7 +107,7 @@ export const FAQ_ITEMS: FAQ[] = [
   },
   {
     q: "How do I track my competitors' rankings?",
-    a: "Enter a competitor's domain instead of yours and run the same check — the rank tracker treats any domain the same way. For a fuller picture, use the Competitor Analysis feature to compare their ranking profile against yours and find the keywords they hold that you do not.",
+    a: "Enter a competitor's domain instead of yours and run the same check — the rank tracker treats any domain the same way. For a fuller picture, use Competitor Analysis (on any paid plan) to compare their ranking profile against yours and find the keywords they hold that you do not.",
   },
   {
     q: "How often should I track my rankings?",

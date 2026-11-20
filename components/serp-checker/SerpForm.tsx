@@ -742,7 +742,7 @@ function SignupTeaserModal({ keyword, country, onClose }: { keyword: string; cou
             boxShadow: "0 8px 22px rgba(4,84,255,.25)",
           }}
         >
-          Sign up free — unlock full access
+          Sign up free — unlock the full report
         </a>
         <p
           style={{ margin: "10px 0 0", fontSize: 12.5, color: COLORS.subtle, display: "flex", gap: 7, alignItems: "center", justifyContent: "center" }}
@@ -892,7 +892,7 @@ function ResultsPanel({ phase, onReset }: { phase: DonePhase; onReset: () => voi
                 <LockIcon size={18} />
               </span>
               <p style={{ margin: "10px 0 0", maxWidth: 380, fontSize: 13, fontWeight: 600, color: COLORS.black, textAlign: "center", lineHeight: 1.4 }}>
-                See all {resultsScanned} competitors, their exact positions, and the keywords they rank for.
+                See all {resultsScanned} competitors and their exact positions for this keyword.
               </p>
             </div>
           </div>

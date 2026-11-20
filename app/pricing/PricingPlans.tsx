@@ -40,7 +40,7 @@ export const TOPUP_PACKS = [
 
 const FREE_FEATURES = [
   "100 credits every month",
-  "Rank tracking, site audits and SERP checks",
+  "Google rank tracking",
   "190+ countries, all devices",
   "No credit card required",
 ];

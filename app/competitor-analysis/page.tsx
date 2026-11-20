@@ -87,7 +87,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "SEO Competitor Analysis Tool & Audit Guide — FreeSERP",
   description:
-    "Run a competitive SEO audit: compare your page with the pages outranking it on content, speed and authority, then get a prioritised plan. 100 free credits.",
+    "Run a competitive SEO audit: compare your page with the pages outranking it on content, speed and authority, then get a prioritised plan. Plans from $19/month.",
   keywords: [
     "competitor analysis",
     "SEO competitor analysis",
@@ -414,7 +414,7 @@ const STATS = [
   { value: "10", label: "competitors in one analysis" },
   { value: "25", label: "credits an analysis" },
   { value: "7", label: "plan categories, prioritised" },
-  { value: "100", label: "free credits every month" },
+  { value: "$19", label: "a month for 2,000 credits" },
 ];
 
 const BENEFITS = [
@@ -446,21 +446,22 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "The same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. Every paid plan unlocks every tool.",
+    text: "On any paid plan or credit pack, the same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. No tool is reserved for a higher tier.",
   },
 ];
 
 const FREE_POINTS = [
-  "A full analysis every day",
-  "Every check in the comparison table",
-  "On-page tasks in the action plan",
+  "Google rank tracking",
+  "Manual checks and rank history",
+  "100 credits every month",
   "No credit card required",
 ];
 
 const PAID_POINTS = [
+  "Competitor analysis, up to 10 rivals",
   "The full plan, every category",
   "Ask the report questions in chat",
-  "Internal link analysis unrestricted",
+  "Internal link analysis",
   "Cancel anytime",
 ];
 
@@ -511,7 +512,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. Competitor analysis needs a paid plan or a credit pack — the free plan's monthly credits don't unlock it.",
+    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. Competitor analysis runs on any paid plan, from $19/month, or with a credit pack; the free plan covers Google rank tracking only.",
   },
   {
     q: "Can I share the report with a client?",
@@ -519,7 +520,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card and includes 100 credits every month, refilled automatically. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For competitor analysis, yes: it runs on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -585,7 +586,7 @@ export default function CompetitorAnalysisPage() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <Cta placement="hero" label="Start free — 100 credits" />
+              <Cta placement="hero" label="Get started" />
               <a
                 href={SAMPLE_REPORTS.competitor.href}
                 target="_blank"
@@ -894,18 +895,18 @@ export default function CompetitorAnalysisPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers competitor analysis, rank tracking, AI visibility, audits and keyword research. Every paid plan unlocks every tool."
+              sub="Competitor analysis is on every paid plan and credit pack, on one balance with rank tracking, AI visibility, audits and keyword research. Free covers Google rank tracking."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <article className="cmpa-card flex flex-col p-7">
                 <h3 className="text-[15px] font-semibold">Free</h3>
-                <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Perfect for one site</p>
+                <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Google rank tracking only</p>
                 <p className="mt-5 text-[40px] leading-none font-semibold tracking-[-1.5px]">
                   $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-                  100 credits — about {100 / CREDITS_PER_ANALYSIS} analyses
+                  100 credits for Google rank checks
                 </p>
                 <Cta
                   placement="pricing_free"
@@ -1082,11 +1083,11 @@ export default function CompetitorAnalysisPage() {
               Find out <span className="cmpa-grad-text">what the page above you is doing</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              One keyword, one credit balance. 100 free credits every month, no credit card, and
-              every check laid out beside theirs so you can see the gap for yourself.
+              One keyword, one credit balance, from $19/month or a credit pack — and every check
+              laid out beside theirs so you can see the gap for yourself.
             </p>
             <div className="mt-8 flex justify-center">
-              <Cta placement="final_cta" label="Start free — 100 credits" />
+              <Cta placement="final_cta" label="Get started" />
             </div>
           </div>
         </div>

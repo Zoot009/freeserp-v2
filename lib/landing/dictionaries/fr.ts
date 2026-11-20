@@ -75,7 +75,7 @@ const fr: Dictionary = {
     hintClick: "Presque fini — inscrivez-vous pour voir vos positions",
     modalTitle: "Votre tableau de bord {domain} est prêt",
     modalSubtitle:
-      "Créez votre compte gratuit pour lancer une analyse réelle et voir vos positions, concurrents et scores réels.",
+      "Créez votre compte gratuit pour lancer une analyse réelle et voir vos positions réelles sur Google.",
     modalPoint1: "Suivez des mots-clés illimités, mis à jour chaque jour",
     modalPoint2: "Voyez précisément qui vous devance, et où",
     modalPoint3: "Scores de page et de mot-clé pour chaque URL",

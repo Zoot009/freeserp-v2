@@ -145,7 +145,7 @@ export const USE_CASES: UseCase[] = [
 export const FAQ_ITEMS = [
   {
     q: "Is the Free SERP checker really free?",
-    a: "Yes — the free plan includes 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits, spendable on rank checks, audits, local grid scans and keyword research alike. Saved tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes — the checker needs no account, and the free plan adds Google rank tracking with 100 credits every month, no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits, spendable on rank checks, audits, local grid scans and keyword research alike. Saved tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank data?",

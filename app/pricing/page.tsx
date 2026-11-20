@@ -11,12 +11,12 @@ const PAGE_URL = "https://freeserp.com/pricing";
 export const metadata: Metadata = {
   title: "Pricing | FreeSERP",
   description:
-    "Credit-based SEO tooling from $19/mo. Rank tracking, local grid scans, site audits, keyword research and competitor analysis, all from one balance. Free plan: 100 credits a month, no card.",
+    "Credit-based SEO tooling from $19/mo. Rank tracking, local grid scans, site audits, keyword research and competitor analysis, all from one balance. Free plan: Google rank tracking with 100 credits a month, no card.",
   alternates: { canonical: PAGE_URL },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Pricing | FreeSERP",
-    description: "From $19/mo. Every tool on every plan, paid for from one credit balance. Free plan: 100 credits a month, no card.",
+    description: "From $19/mo. Every tool on every paid plan, paid for from one credit balance. Free plan: Google rank tracking, 100 credits a month, no card.",
     url: PAGE_URL,
     siteName: "FreeSERP",
     type: "website",
@@ -76,7 +76,7 @@ export default function PricingPage() {
               maxWidth: 440,
             }}
           >
-            One balance, every tool. Plans from $19/month, or start free with 100 credits — no card.
+            One balance, every tool. Plans from $19/month, or track Google rankings free with 100 credits — no card.
           </p>
         </section>
 

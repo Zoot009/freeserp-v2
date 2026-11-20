@@ -202,7 +202,7 @@ export function SignupPopup({
 
         <p className="mt-4 flex items-center justify-center gap-2 text-[13px] text-[var(--muted)]">
           <ShieldCheck className="h-4 w-4" strokeWidth={1.8} />
-          {footnote} All seven tools are on the free plan.
+          {footnote} Google rank tracking is free; the audit tools are on paid plans.
         </p>
       </div>
     </div>

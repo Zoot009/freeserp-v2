@@ -70,7 +70,7 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            100 free credits every month, real-time ranking data, and competitor intelligence — for SEOs, marketers, and developers. Plans from $19/month, with every tool paid for out of one balance.
+            100 free credits every month for real-time Google rank tracking — for SEOs, marketers, and developers. Plans from $19/month add competitor intelligence and every other tool, paid for out of one balance.
           </p>
           <a
             href={appUrl("/signup")}

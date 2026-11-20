@@ -5,10 +5,10 @@ export default function Tools() {
     <section id="tools" className="l2-tools">
       <div className="l2-wrap">
         <div className="l2-tools-head">
-          <h2 className="l2-h2 l2-h2-flat">Every tool, on every paid plan</h2>
+          <h2 className="l2-h2 l2-h2-flat">Everything, on any paid plan</h2>
           <p className="l2-tools-note">
-            Every paid plan unlocks every tool — your credits work across all of
-            it.
+            Google rank tracking is free. Any paid plan or credit pack unlocks the
+            rest.
           </p>
         </div>
         <div className="l2-tools-grid">

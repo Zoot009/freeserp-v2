@@ -246,7 +246,7 @@ const STATS = [
   { value: "50+", label: "checks on every profile" },
   { value: "9", label: "rank grid points" },
   { value: "95", label: "credits an audit" },
-  { value: "100", label: "free credits every month" },
+  { value: "$19", label: "a month for 2,000 credits" },
 ];
 
 const BENEFITS = [
@@ -283,15 +283,15 @@ const BENEFITS = [
 ];
 
 const FREE_POINTS = [
-  "One full audit a month",
-  "Every check and the rank grid",
-  "The full 30-day action plan",
+  "Google rank tracking",
+  "Manual checks and rank history",
+  "100 credits every month",
   "No credit card required",
 ];
 
 const PAID_POINTS = [
   "Audit every client's listing",
-  "Every check, every report",
+  "Every check, the rank grid and plan",
   "Audit history for each business",
   "Cancel anytime",
 ];
@@ -343,7 +343,7 @@ const FAQS = [
   },
   {
     q: "What does an audit cost?",
-    a: "95 credits: 60 for the listing and reviews and 35 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. The free plan's 100 monthly credits cover one full audit.",
+    a: "95 credits: 60 for the listing and reviews and 35 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. Maps audits run on any paid plan, from $19/month, or with a credit pack.",
   },
   {
     q: "Can I give the report to a client?",
@@ -351,7 +351,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card and includes 100 credits every month, refilled automatically. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For Maps audits, yes: they run on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -406,7 +406,7 @@ export default function GoogleMapsAuditPage() {
               </p>
 
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-                <Cta placement="hero" label="Audit my listing free" />
+                <Cta placement="hero" label="Audit my listing" />
                 <a
                   href={SAMPLE_REPORTS.maps.href}
                   target="_blank"
@@ -864,7 +864,7 @@ export default function GoogleMapsAuditPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers Maps audits, rank tracking, AI visibility, site audits and keyword research."
+              sub="Maps audits are on every paid plan and credit pack, on one balance with rank tracking, AI visibility, site audits and keyword research."
             />
             <PricingGrid
               unit="audits"
@@ -901,11 +901,11 @@ export default function GoogleMapsAuditPage() {
               See your listing <span className="cmpa-grad-text">the way Google sees it</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              One Google Maps link, 50+ checks, a local rank grid and a 30-day plan. 100 free credits
-              every month, no credit card.
+              One Google Maps link, 50+ checks, a local rank grid and a 30-day plan. On paid plans
+              from $19/month, or with a credit pack.
             </p>
             <div className="mt-8 flex justify-center">
-              <Cta placement="final_cta" label="Audit my listing free" />
+              <Cta placement="final_cta" label="Audit my listing" />
             </div>
           </div>
         </div>
@@ -1063,12 +1063,12 @@ function PricingGrid({
     <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <article className="cmpa-card flex flex-col p-7">
         <h3 className="text-[15px] font-semibold">Free</h3>
-        <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Perfect for one business</p>
+        <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Google rank tracking only</p>
         <p className="mt-5 text-[40px] leading-none font-semibold tracking-[-1.5px]">
           $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
         </p>
         <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-          100 credits — about {Math.floor(100 / perUnit)} {unit}
+          100 credits for Google rank checks
         </p>
         <Cta placement="pricing_free" label="Get started" size="sm" variant="ghost" arrow={false} className="mt-6 w-full" />
         <p className="mt-7 mb-4 text-[12.5px] font-semibold">Features included:</p>

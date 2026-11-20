@@ -39,10 +39,11 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Rank tracking",
     rows: [
-      { feature: "Google & Bing rank tracking", tag: "5 / keyword", values: [true, true, true, true] },
-      { feature: "YouTube rank tracking", tag: "5 / keyword", values: [true, true, true, true] },
-      { feature: "Local map grid scans", tag: "35–1,475 / scan", values: [true, true, true, true] },
-      { feature: "AI visibility tracking", tag: "5–35 / answer", values: [true, true, true, true] },
+      { feature: "Google rank tracking", tag: "5 / keyword", values: [true, true, true, true] },
+      { feature: "Bing rank tracking", tag: "5 / keyword", values: [false, true, true, true] },
+      { feature: "YouTube rank tracking", tag: "5 / keyword", values: [false, true, true, true] },
+      { feature: "Local map grid scans", tag: "35–1,475 / scan", values: [false, true, true, true] },
+      { feature: "AI visibility tracking", tag: "5–35 / answer", values: [false, true, true, true] },
       { feature: "All Keywords view", tag: "free", values: [true, true, true, true] },
       { feature: "Automated recurring checks", values: [false, true, true, true] },
       { feature: "190+ countries, all devices", values: [true, true, true, true] },
@@ -52,22 +53,22 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Research and audits",
     rows: [
-      { feature: "Keyword Magic Tool", tag: "35–190 / search", values: [true, true, true, true] },
-      { feature: "Rows per keyword search", values: [100, "1,000", "1,000", "1,000"] },
-      { feature: "Website Audit", tag: "5 / page", values: [true, true, true, true] },
-      { feature: "Page Audit", tag: "5 / audit", values: [true, true, true, true] },
-      { feature: "AEO & GEO Audit", tag: "105–1,545 / audit", values: [true, true, true, true] },
-      { feature: "Google Maps Audit", tag: "95 / audit", values: [true, true, true, true] },
-      { feature: "Competitor Analysis", tag: "25 / analysis", values: [true, true, true, true] },
-      { feature: "AI Internal Linking", tag: "10 / crawl", values: [true, true, true, true] },
-      { feature: "Keyword Score Checker", tag: "15 / page", values: [true, true, true, true] },
-      { feature: "Quick Serp", tag: "5–20 / lookup", values: [true, true, true, true] },
+      { feature: "Keyword Magic Tool", tag: "35–190 / search", values: [false, true, true, true] },
+      { feature: "Rows per keyword search", values: [false, "1,000", "1,000", "1,000"] },
+      { feature: "Website Audit", tag: "5 / page", values: [false, true, true, true] },
+      { feature: "Page Audit", tag: "5 / audit", values: [false, true, true, true] },
+      { feature: "AEO & GEO Audit", tag: "105–1,545 / audit", values: [false, true, true, true] },
+      { feature: "Google Maps Audit", tag: "95 / audit", values: [false, true, true, true] },
+      { feature: "Competitor Analysis", tag: "25 / analysis", values: [false, true, true, true] },
+      { feature: "AI Internal Linking", tag: "10 / crawl", values: [false, true, true, true] },
+      { feature: "Keyword Score Checker", tag: "15 / page", values: [false, true, true, true] },
+      { feature: "Quick Serp", tag: "5–20 / lookup", values: [false, true, true, true] },
     ],
   },
   {
     title: "Data and support",
     rows: [
-      { feature: "Search Console and GA4", tag: "free", values: [true, true, true, true] },
+      { feature: "Search Console and GA4", tag: "no credits", values: [false, true, true, true] },
       { feature: "CSV and PDF export", values: [false, true, true, true] },
       { feature: "Email support", values: [true, true, true, true] },
       { feature: "Priority support", values: [false, false, true, true] },
@@ -117,8 +118,8 @@ export function ComparePlans() {
         Compare plans
       </h2>
       <p style={{ fontSize: 14.5, color: "#6b7280", margin: "0 0 24px", maxWidth: 600, lineHeight: 1.6 }}>
-        Every tool is on every plan. What changes is how many credits you get — the tags show what
-        each one draws from that balance.
+        Free covers Google rank tracking. Every paid plan unlocks every tool, and what changes is how
+        many credits you get — the tags show what each one draws from that balance.
       </p>
 
       <div className="pr-scroll">

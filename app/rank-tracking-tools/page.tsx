@@ -41,7 +41,7 @@ const geist = Geist({
 export const metadata: Metadata = {
   title: "Rank Tracking Tools for Mobile & Desktop | FreeSERP",
   description:
-    "Track keyword rankings on mobile and desktop in 190+ countries, plus Google Maps, YouTube and AI answers. History, alerts, competitors, exports. Free plan.",
+    "Track keyword rankings on mobile and desktop in 190+ countries, plus Google Maps, YouTube and AI answers. History, alerts, competitors, exports. Free Google rank tracking.",
   keywords: [
     "rank tracking tools",
     "rank tracker",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Rank tracking on mobile and desktop, in every engine that matters",
     description:
-      "Daily positions per device and country, with history, alerts and competitors. Google, Maps, YouTube and AI answers in one dashboard. Free plan, no card.",
+      "Daily positions per device and country, with history, alerts and competitors. Google, Maps, YouTube and AI answers in one dashboard. Free Google rank tracking, no card.",
     url: "/rank-tracking-tools",
     siteName: "FreeSERP",
     type: "website",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rank tracking on mobile and desktop, in every engine that matters",
     description:
-      "Track keyword positions per device and country, plus Google Maps, YouTube and AI answers. History, alerts and exports. Free plan.",
+      "Track keyword positions per device and country, plus Google Maps, YouTube and AI answers. History, alerts and exports. Free Google rank tracking.",
   },
 };
 

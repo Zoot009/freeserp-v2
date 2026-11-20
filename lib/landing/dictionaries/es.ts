@@ -76,7 +76,7 @@ const es: Dictionary = {
     hintClick: "Casi listo — regístrate para ver tus posiciones",
     modalTitle: "Tu panel de {domain} está listo",
     modalSubtitle:
-      "Crea tu cuenta gratuita para ejecutar una comprobación real y ver tus posiciones, competidores y puntuaciones reales.",
+      "Crea tu cuenta gratuita para ejecutar una comprobación real y ver tus posiciones reales en Google.",
     modalPoint1: "Rastrea palabras clave ilimitadas, actualizadas a diario",
     modalPoint2: "Descubre exactamente quién te supera y dónde",
     modalPoint3: "Puntuaciones de página y palabra clave para cada URL",

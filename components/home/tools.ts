@@ -339,7 +339,7 @@ export const CAPABILITIES: Capability[] = [
   },
   {
     icon: "chart",
-    title: "Search Console, connected free",
+    title: "Search Console, connected",
     text: "Link a property to any project and clicks, impressions and CTR sit beside the tracked position they belong to — so you can tell which rankings actually earn traffic.",
   },
   {
@@ -387,7 +387,7 @@ export const CAPABILITIES: Capability[] = [
 export const CREDIT_COSTS: { action: string; cost: string; note: string }[] = [
   { action: "Rank check", cost: "5", note: "One keyword, one engine, depth 100" },
   { action: "Adding a keyword", cost: "Free", note: "The check it schedules carries the charge" },
-  { action: "Quick SERP lookup", cost: "5–20", note: "A live, one-off check; 20 on paid plans, with volume and difficulty" },
+  { action: "Quick SERP lookup", cost: "5–20", note: "A live, one-off check with volume and difficulty, on paid plans" },
   { action: "YouTube check", cost: "5", note: "One keyword against a video or channel" },
   { action: "Local map grid scan", cost: "35–1,475", note: "3×3 costs 35, 11×11 costs 415, 21×21 costs 1,475" },
   { action: "AI answer", cost: "5–35", note: "Per answer sampled; 10 on Perplexity, 35 on Claude" },
@@ -397,5 +397,5 @@ export const CREDIT_COSTS: { action: string; cost: string; note: string }[] = [
   { action: "Internal link analysis", cost: "10", note: "Up to 150 pages crawled and graphed" },
   { action: "Keyword research", cost: "35–190", note: "35 for 100 keywords, 190 for the full page" },
   { action: "Keyword score", cost: "15", note: "Crawl, PageSpeed and an authority lookup" },
-  { action: "Search Console", cost: "Free", note: "Connecting it and reading it cost nothing" },
+  { action: "Search Console", cost: "No credits", note: "On paid plans, connecting and reading it cost no credits" },
 ];

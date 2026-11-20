@@ -89,11 +89,11 @@ export function SignupPopup() {
         </h2>
 
         <p className="ads-popup-body">
-          Sign up and get <b>100 free credits every month</b> to audit your site, analyse your
-          competitors and find your next keywords.
+          Sign up free and track your Google rankings. Audits, competitor analysis and keyword
+          research unlock on <b>any paid plan from $19/month</b>, or with a credit pack.
         </p>
 
-        <Cta placement="timed_popup" label="Claim My Free Credits" className="mt-7 w-full" />
+        <Cta placement="timed_popup" label="Create My Free Account" className="mt-7 w-full" />
       </div>
     </div>
   );

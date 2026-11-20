@@ -77,7 +77,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "SEO Tracking Suite: Rankings, Traffic & AI | FreeSERP",
   description:
-    "Track the SEO metrics that prove ROI: rankings on Google, Maps, YouTube and AI, with Search Console clicks and impressions beside them. 100 free credits a month.",
+    "Track the SEO metrics that prove ROI: rankings on Google, Maps, YouTube and AI, with Search Console clicks and impressions beside them. Free Google rank tracking, no card.",
   keywords: [
     "SEO tracking",
     "SEO performance tracking",
@@ -97,7 +97,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SEO tracking for every ranking that matters, not just Google",
     description:
-      "Rankings, visibility, clicks, impressions and engagement in one dashboard, across Google, Maps, YouTube and AI answers. Free plan, no credit card.",
+      "Rankings, visibility, clicks, impressions and engagement in one dashboard, across Google, Maps, YouTube and AI answers. Free Google rank tracking, no card.",
     url: "/tracking-suite",
     siteName: "FreeSERP",
     type: "website",
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SEO tracking for every ranking that matters, not just Google",
     description:
-      "Track rankings, visibility, clicks and impressions across Google, Maps, YouTube and AI answers. 100 free credits a month.",
+      "Track rankings, visibility, clicks and impressions across Google, Maps, YouTube and AI answers. Free Google rank tracking, no card.",
   },
   // Paid-traffic destination, kept out of the index on purpose: it restates the
   // home page and the four tool pages, and letting Google choose between them
@@ -314,7 +314,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "Credits are shared. Spend them on rank checks, map grids, audits or keyword research — every paid plan unlocks every tool.",
+    text: "Credits are shared. On any paid plan or credit pack, spend them on rank checks, map grids, audits or keyword research — no tool is reserved for a higher tier.",
   },
   {
     icon: Clock,
@@ -324,7 +324,7 @@ const BENEFITS = [
   {
     icon: BarChart3,
     title: "Search Console, connected",
-    text: "Link your property for free and see organic clicks, impressions and CTR sitting next to the tracked position they belong to.",
+    text: "Link your property on any paid plan and see organic clicks, impressions and CTR sitting next to the tracked position they belong to.",
   },
   {
     icon: Eye,
@@ -359,15 +359,16 @@ const BENEFITS = [
 ];
 
 const FREE_POINTS = [
-  "All four trackers unlocked",
+  "Google rank tracking",
   "190+ countries, all devices",
-  "Search Console included",
+  "Manual checks and rank history",
   "No credit card required",
 ];
 
 const PAID_POINTS = [
+  "Maps, YouTube and AI tracking",
   "Automated recurring checks",
-  "Local map grid scans and site audits",
+  "Audits, research and Search Console",
   "CSV and PDF export",
   "Cancel anytime",
 ];
@@ -387,7 +388,7 @@ const FAQS = [
   },
   {
     q: "Does FreeSERP replace Google Search Console and GA4?",
-    a: "No — it reads from them. Connect both for free and their clicks, impressions, CTR, sessions and engagement sit in the same account as your tracked positions. Search Console is still the place to manage indexing and coverage; FreeSERP adds the daily rank checks, Maps, YouTube and AI tracking that neither of them does.",
+    a: "No — it reads from them. Connect both and their clicks, impressions, CTR, sessions and engagement sit in the same account as your tracked positions. Search Console is still the place to manage indexing and coverage; FreeSERP adds the daily rank checks, Maps, YouTube and AI tracking that neither of them does.",
   },
   {
     q: "How often should I check SEO performance?",
@@ -395,7 +396,7 @@ const FAQS = [
   },
   {
     q: "What do I get on the free plan?",
-    a: "100 credits every month, refilled automatically, with no credit card. Every tool is unlocked on it — Google, Maps, YouTube and AI tracking all draw from the same balance.",
+    a: "100 credits every month, refilled automatically, with no credit card. They cover Google rank tracking — projects, keywords, manual checks and rank history. Maps, YouTube and AI tracking unlock on any paid plan (from $19/month) or with a credit pack.",
   },
   {
     q: "How do credits work across the four trackers?",
@@ -415,7 +416,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "No. The free plan needs no card and covers Google rank tracking. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -607,7 +608,7 @@ export default function TrackingSuitePage() {
                       </ul>
 
                       <div className="mt-8">
-                        <Cta placement={`tracker_${t.key}`} label="Start for free" size="sm" />
+                        <Cta placement={`tracker_${t.key}`} label="Get started" size="sm" />
                       </div>
                     </div>
 
@@ -656,7 +657,7 @@ export default function TrackingSuitePage() {
             />
 
             <p className="ads-note">
-              Get 100 free credits every month. Explore every tool before you pay for more.
+              Get 100 free credits every month for Google rank tracking. Unlock every tool from $19/month.
             </p>
 
             <div className="mt-12 space-y-10">
@@ -742,7 +743,7 @@ export default function TrackingSuitePage() {
             <SectionHead
               tag="Pricing"
               title="Start free. Pay when you outgrow it."
-              sub="One balance covers Google, Maps, YouTube and AI tracking — plus audits and keyword research. Every paid plan unlocks every tool."
+              sub="Free covers Google rank tracking. Any paid plan or credit pack unlocks Maps, YouTube and AI tracking — plus audits and keyword research."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -753,8 +754,8 @@ export default function TrackingSuitePage() {
                   <span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
-                  100 credits every month, refilled automatically. Enough to keep 3 keywords
-                  checked daily.
+                  100 credits every month, refilled automatically, for manual Google rank
+                  checks.
                 </p>
                 <ul className="mt-6 mb-8 space-y-3">
                   {FREE_POINTS.map((p) => (
@@ -857,8 +858,8 @@ export default function TrackingSuitePage() {
               Every ranking you own, on one screen
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              Google, Google Maps, YouTube and AI answers. 100 free credits every month, no
-              credit card, and every tool unlocked from the first day.
+              Google, Google Maps, YouTube and AI answers. Track Google free with 100 credits a
+              month and no card — unlock the rest from $19/month.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" />

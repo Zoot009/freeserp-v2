@@ -75,7 +75,7 @@ const en: Dictionary = {
     hintClick: "Almost there — sign up to view your rankings",
     modalTitle: "Your {domain} dashboard is ready",
     modalSubtitle:
-      "Create your free account to run a live check and see your real positions, competitors and scores.",
+      "Create your free account to run a live check and see your real Google positions.",
     modalPoint1: "Track unlimited keywords, updated daily",
     modalPoint2: "See exactly who outranks you, and where",
     modalPoint3: "Page and keyword scores for every URL",

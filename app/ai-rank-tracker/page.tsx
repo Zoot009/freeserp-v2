@@ -77,7 +77,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "AI Rank Tracker: ChatGPT, Claude, Gemini, Perplexity | FreeSERP",
   description:
-    "Track your AI visibility. See whether ChatGPT, Claude, Gemini and Perplexity name and cite your brand or your competitors. 100 free credits a month.",
+    "Track your AI visibility. See whether ChatGPT, Claude, Gemini and Perplexity name and cite your brand or your competitors. Plans from $19/month.",
   keywords: [
     "AI rank tracker",
     "AI visibility tracker",
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Do ChatGPT, Claude, Gemini and Perplexity name your brand?",
     description:
-      "Track AI visibility for GEO and AEO: mentions, citations, prominence and share of voice on every platform. 100 free credits a month.",
+      "Track AI visibility for GEO and AEO: mentions, citations, prominence and share of voice on every platform. Plans from $19/month.",
   },
   // Paid-traffic destination, kept out of the index on purpose, exactly as
   // /audit-suite and /tracking-suite are: it restates the home page and the
@@ -384,7 +384,7 @@ const STATS = [
   { value: "All", label: "AI platforms, one dashboard" },
   { value: "5", label: "answers a prompt, every run" },
   { value: "250", label: "prompts per brand" },
-  { value: "100", label: "free credits every month" },
+  { value: "$19", label: "a month for 2,000 credits" },
 ];
 
 const BENEFITS = [
@@ -416,20 +416,21 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "The same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. Every paid plan unlocks every tool.",
+    text: "On any paid plan or credit pack, the same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. No tool is reserved for a higher tier.",
   },
 ];
 
 const FREE_POINTS = [
-  "All platforms unlocked",
-  "Mentions, citations, prominence",
-  "Every answer stored in full",
+  "Google rank tracking",
+  "Manual checks and rank history",
+  "100 credits every month",
   "No credit card required",
 ];
 
 const PAID_POINTS = [
+  "All four AI platforms",
+  "Mentions, citations, prominence",
   "Recurring runs on a cadence",
-  "Bigger prompt sets, more samples",
   "CSV export",
   "Cancel anytime",
 ];
@@ -481,7 +482,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card and includes 100 credits every month, refilled automatically. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For the AI Rank Tracker, yes: it is on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -548,7 +549,7 @@ export default function AiRankTrackerPage() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <Cta placement="hero" label="Start free — 100 credits" />
+              <Cta placement="hero" label="Get started" />
               <a href="#platforms" className="airt-btn airt-btn-lg airt-btn-ghost">
                 See the platforms
               </a>
@@ -844,18 +845,18 @@ export default function AiRankTrackerPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers AI visibility, rank tracking, audits and keyword research. Every paid plan unlocks every tool."
+              sub="AI visibility is on every paid plan and credit pack, with rank tracking, audits and keyword research on the same balance. Free covers Google rank tracking."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <article className="airt-card flex flex-col p-7">
                 <h3 className="text-[15px] font-semibold">Free</h3>
-                <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Perfect for one brand</p>
+                <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Google rank tracking only</p>
                 <p className="mt-5 text-[40px] leading-none font-semibold tracking-[-1.5px]">
                   $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-                  100 credits — about 20 AI answers
+                  100 credits for Google rank checks
                 </p>
                 <Cta
                   placement="pricing_free"
@@ -1031,11 +1032,11 @@ export default function AiRankTrackerPage() {
               Find out what the assistants say about you
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              ChatGPT, Claude, Gemini and Perplexity on one credit balance. 100 free credits every
-              month, no credit card, and every answer stored so you can read it for yourself.
+              ChatGPT, Claude, Gemini and Perplexity on one credit balance, from $19/month or a
+              credit pack — and every answer stored so you can read it for yourself.
             </p>
             <div className="mt-8 flex justify-center">
-              <Cta placement="final_cta" label="Start free — 100 credits" />
+              <Cta placement="final_cta" label="Get started" />
             </div>
           </div>
         </div>

@@ -23,7 +23,7 @@ export function Credits() {
       <SectionHead
         tag="ONE BALANCE"
         title="Every tool, one pot of credits"
-        sub="No per-tool limits, no seat pricing, and every paid plan unlocks every tool. The free plan gives you 100 credits every month for rank tracking, site audits and SERP checks."
+        sub="No per-tool limits, no seat pricing, nothing reserved for a higher tier. Any paid plan or credit pack unlocks every tool; the free plan's 100 monthly credits go on Google rank tracking."
       />
 
       <Reveal style={{ marginTop: 48, maxWidth: 1040, marginLeft: "auto", marginRight: "auto" }}>
@@ -88,8 +88,9 @@ export function Credits() {
             margin: "16px 2px 0",
           }}
         >
-          Free plan: 100 credits, refilled every calendar month, no card. Paid plans add 2,000,
-          6,000 or 15,000 credits a month, and top-up packs never expire for 12 months.
+          Free plan: 100 credits for Google rank tracking, refilled every calendar month, no card.
+          Paid plans unlock every tool with 2,000, 6,000 or 15,000 credits a month, and top-up packs
+          never expire for 12 months.
         </p>
       </Reveal>
     </section>

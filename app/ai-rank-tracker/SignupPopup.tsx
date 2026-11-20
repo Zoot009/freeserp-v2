@@ -144,11 +144,11 @@ export function SignupPopup() {
         </h2>
 
         <p className="airt-popup-body">
-          Sign up and get <b>100 free credits every month</b> to ask ChatGPT, Claude, Gemini
-          and Perplexity what your buyers ask — and see who they answer with.
+          Ask ChatGPT, Claude, Gemini and Perplexity what your buyers ask — and see who they
+          answer with. On any paid plan <b>from $19/month</b>, or with a credit pack.
         </p>
 
-        <Cta placement="timed_popup" label="Claim My Free Credits" className="mt-7 w-full" />
+        <Cta placement="timed_popup" label="Get Started" className="mt-7 w-full" />
       </div>
     </div>
   );

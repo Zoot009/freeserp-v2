@@ -22,7 +22,7 @@ export const TOOLS: Tool[] = [
   { name: "Keyword Magic Tool", what: "Hundreds of ideas with volume, difficulty and intent", cost: "35–190 / search" },
   { name: "Keyword Score Checker", what: "One page scored against one keyword", cost: "15 / page" },
   { name: "Quick Serp", what: "A live lookup without tracking anything", cost: "5–20 / lookup" },
-  { name: "Search Console & GA4", what: "Real clicks beside your tracked positions", cost: "Free" },
+  { name: "Search Console & GA4", what: "Real clicks beside your tracked positions", cost: "Paid plans" },
 ];
 
 /** The rate card is the tool list minus the two with no public per-unit price. */
@@ -77,7 +77,7 @@ export type Faq = { q: string; a: string };
 export const FAQS: Faq[] = [
   {
     q: "Is the free plan actually usable?",
-    a: "Yes. Every tool is unlocked on it and it refills every month. There is no card at signup and no trial clock.",
+    a: "Yes, for Google rank tracking: projects, keywords, manual checks and rank history, on 100 credits that refill every month. There is no card at signup and no trial clock. Every other tool unlocks on a paid plan from $19/month or with a credit pack.",
   },
   {
     q: "Do I need to know SEO?",
@@ -131,14 +131,14 @@ export const PLANS: Plan[] = [
     name: "Free",
     price: "$0",
     note: "Refilled every month, automatically.",
-    feats: ["Rank tracking, audits and SERP checks", "190+ countries, all devices", "No credit card required"],
+    feats: ["Google rank tracking", "190+ countries, all devices", "No credit card required"],
     cta: "Start free",
   },
   {
     name: "Starter",
     price: "$19",
     note: "One site, checked every day.",
-    feats: ["Daily rank checks", "Site audits and competitor runs", "Top-up packs any time"],
+    feats: ["Every tool unlocked", "Daily rank checks", "Top-up packs any time"],
     cta: "Choose Starter",
   },
   {
@@ -161,7 +161,7 @@ export const PLANS: Plan[] = [
 export type Stat = { n: string; label: string; shortLabel: string };
 
 export const STATS: Stat[] = [
-  { n: "12", label: "tools, all included", shortLabel: "tools included" },
+  { n: "12", label: "tools on one balance", shortLabel: "tools" },
   { n: "63", label: "SEO rules per audit", shortLabel: "audit rules" },
   { n: "4", label: "AI platforms tracked", shortLabel: "AI platforms" },
   { n: "$0", label: "to start, no card", shortLabel: "to start" },

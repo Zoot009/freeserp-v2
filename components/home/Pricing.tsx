@@ -9,7 +9,7 @@ import { pushDataLayer } from "@/lib/gtm";
 
 const FREE_FEATURES = [
   "100 credits every month",
-  "Rank tracking, site audits and SERP checks",
+  "Google rank tracking",
   "190+ countries & all devices",
   "No credit card required",
 ];
@@ -86,7 +86,7 @@ export function Pricing() {
       <SectionHead
         tag="PRICING"
         title="Simple plans. No surprises."
-        sub="Five credits check one keyword, and the same balance pays for audits, local grids and keyword research. Start free with 100 credits a month."
+        sub="Five credits check one keyword, and the same balance pays for audits, local grids and keyword research. Track Google rankings free with 100 credits a month."
       />
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>
@@ -113,7 +113,7 @@ export function Pricing() {
                 Free
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 32px" }}>
-                100 credits every month, refilled automatically — no credit card. Enough to try every tool properly.
+                100 credits every month, refilled automatically — no credit card. Enough to track your Google rankings properly.
               </p>
               <div
                 style={{

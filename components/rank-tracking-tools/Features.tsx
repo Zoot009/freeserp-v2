@@ -22,7 +22,7 @@ const FEATURES: Feature[] = [
       "Mobile and desktop tracked separately, so device gaps show up",
       "Per-keyword history charts and SERP snapshots",
       "Email alerts when a position jumps or drops",
-      "Search Console and GA4 clicks beside your positions — free",
+      "Search Console and GA4 clicks beside your positions (paid plans)",
     ],
     shot: "/screenshots/02-rank-tracker.png",
     alt: "Keyword rank history",

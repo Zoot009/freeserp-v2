@@ -262,7 +262,7 @@ const STATS = [
   { value: "7", label: "scored categories" },
   { value: "5", label: "AI engines asked" },
   { value: "10", label: "questions per engine" },
-  { value: "100", label: "free credits every month" },
+  { value: "$19", label: "a month for 2,000 credits" },
 ];
 
 const BENEFITS = [
@@ -298,11 +298,11 @@ const BENEFITS = [
   },
 ];
 
-// The free plan's 100 credits are below the cheapest audit (105), so nothing
-// here may promise an audit on it.
+// AEO audits are paid-only (a plan or a credit pack), so nothing here may
+// promise an audit on the free plan.
 const FREE_POINTS = [
   "100 credits every month",
-  "Rank tracking, site audits and research",
+  "Google rank tracking and history",
   "AEO audits from 105 credits on a paid plan",
   "No credit card required",
 ];
@@ -365,7 +365,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card and includes 100 credits every month, refilled automatically. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For AEO audits, yes: they run on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -421,7 +421,7 @@ export default function AeoGeoAuditPage() {
               </p>
 
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-                <Cta placement="hero" label="Audit my site free" />
+                <Cta placement="hero" label="Audit my site" />
                 <a
                   href={SAMPLE_REPORTS.aeo.href}
                   target="_blank"
@@ -895,7 +895,7 @@ export default function AeoGeoAuditPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers AEO audits, rank tracking, AI visibility, site audits and keyword research. Audit counts below assume one engine (ChatGPT) per audit."
+              sub="AEO audits are on every paid plan and credit pack, on one balance with rank tracking, AI visibility, site audits and keyword research. Audit counts below assume one engine (ChatGPT) per audit."
             />
             <PricingGrid
               unit="audits"
@@ -933,11 +933,11 @@ export default function AeoGeoAuditPage() {
               Find out <span className="cmpa-grad-text">what AI says about you</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              Two scores, real answers from five AI engines and a fix list ranked by impact. 100
-              free credits every month, no credit card.
+              Two scores, real answers from five AI engines and a fix list ranked by impact. On
+              paid plans from $19/month, or with a credit pack.
             </p>
             <div className="mt-8 flex justify-center">
-              <Cta placement="final_cta" label="Audit my site free" />
+              <Cta placement="final_cta" label="Audit my site" />
             </div>
           </div>
         </div>
@@ -1098,14 +1098,14 @@ function PricingGrid({
     <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <article className="cmpa-card flex flex-col p-7">
         <h3 className="text-[15px] font-semibold">Free</h3>
-        <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Perfect for one site</p>
+        <p className="mt-1.5 text-[13.5px] text-[var(--muted)]">Google rank tracking only</p>
         <p className="mt-5 text-[40px] leading-none font-semibold tracking-[-1.5px]">
           $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
         </p>
         <p className="mt-2 text-[12.5px] text-[var(--muted)]">
           {Math.floor(100 / perUnit) > 0
             ? `100 credits — about ${Math.floor(100 / perUnit)} ${unit}`
-            : `100 credits — an audit starts at ${perUnit}, so audits need a paid plan`}
+            : `100 credits for Google rank tracking — audits need a paid plan`}
         </p>
         <Cta placement="pricing_free" label="Get started" size="sm" variant="ghost" arrow={false} className="mt-6 w-full" />
         <p className="mt-7 mb-4 text-[12.5px] font-semibold">Features included:</p>

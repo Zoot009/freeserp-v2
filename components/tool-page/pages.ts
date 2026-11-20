@@ -34,11 +34,11 @@ const tracker = (kicker: string) => TRACKERS.find((t) => t.kicker === kicker)!;
 const COMMON_FAQS = [
   {
     q: "Is there a free plan?",
-    a: "Yes. The free plan includes 100 credits every month, refilled automatically, with no credit card. Paid plans start at $19/month for 2,000 credits.",
+    a: "Yes. The free plan covers Google rank tracking with 100 credits every month, refilled automatically, with no credit card. Every other tool comes with any paid plan, from $19/month for 2,000 credits, or any credit pack.",
   },
   {
     q: "Do I need a separate subscription for this tool?",
-    a: "No. Every FreeSERP tool draws from the same credit balance. Rank tracking, the SERP checker and site audits run on the free plan's credits; competitor analysis, keyword research, the keyword score checker, internal link analysis, AEO & GEO audits and Google Maps audits need a paid plan or a credit pack.",
+    a: "No. Every FreeSERP tool draws from the same credit balance. The free plan's credits cover Google rank tracking; everything else — the SERP checker, site audits, competitor analysis, keyword research, the keyword score checker, internal link analysis, AEO & GEO audits and Google Maps audits — needs a paid plan or a credit pack.",
   },
 ];
 
@@ -399,7 +399,7 @@ export const TOOL_PAGES = {
       },
       {
         q: "Is the keyword research tool free?",
-        a: "Every account can run Broad match searches on its monthly credits. Related keywords and the full page of results come with a paid plan.",
+        a: "No. It comes with any paid plan or credit pack and runs on your credits; the free plan covers Google rank tracking only.",
       },
       {
         q: "How much does a search cost?",
@@ -471,7 +471,7 @@ export const TOOL_PAGES = {
     h1: "Search Console, beside your rankings",
     metaTitle: "Google Search Console data beside your rankings | FreeSERP",
     metaDescription:
-      "Connect Google Search Console and see clicks, impressions, CTR and average position by query, page, country and device beside your tracked rankings. Free.",
+      "Connect Google Search Console and see clicks, impressions, CTR and average position by query, page, country and device beside your tracked rankings. Costs no credits on any paid plan.",
     intro:
       "Link a Search Console property to any project and clicks, impressions and CTR sit beside the tracked position they belong to — so you can tell which rankings actually earn traffic.",
     points: [
@@ -480,9 +480,9 @@ export const TOOL_PAGES = {
       "Queries, pages, countries, devices and search appearance, each in its own table",
       "Drill from a page into its queries, or from a query into its pages",
       "Send queries straight to the rank tracker, or export any table to CSV",
-      "Connecting it and reading it cost nothing",
+      "Connecting it and reading it cost no credits",
     ],
-    cost: "Free",
+    cost: "No credits",
     shot: {
       src: "/shots/search-console.png",
       width: 3200,

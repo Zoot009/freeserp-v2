@@ -75,7 +75,7 @@ const nl: Dictionary = {
     hintClick: "Bijna klaar — meld je aan om je posities te bekijken",
     modalTitle: "Je {domain}-dashboard is klaar",
     modalSubtitle:
-      "Maak je gratis account aan om een echte controle uit te voeren en je werkelijke posities, concurrenten en scores te zien.",
+      "Maak je gratis account aan om een echte controle uit te voeren en je werkelijke posities in Google te zien.",
     modalPoint1: "Volg onbeperkt zoekwoorden, dagelijks bijgewerkt",
     modalPoint2: "Zie precies wie je voorbijstreeft, en waar",
     modalPoint3: "Pagina- en zoekwoordscores voor elke URL",

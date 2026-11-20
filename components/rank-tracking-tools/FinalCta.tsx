@@ -9,8 +9,8 @@ export default function FinalCta() {
         <div className="l2-signup-body">
           <h2 className="l2-signup-h2">Find out where you actually rank, on every device</h2>
           <p className="l2-signup-p">
-            Free plan, every tool unlocked, no credit card. Paid plans start at
-            $19/month when you outgrow it. Your first report is about five minutes
+            Free Google rank tracking, no credit card. Paid plans start at
+            $19/month and unlock every tool. Your first report is about five minutes
             away.
           </p>
           <div className="l2-signup-actions">
