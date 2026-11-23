@@ -9,11 +9,14 @@ export interface CaseStudy {
   website: string
   /** Before/after screenshot pairs (e.g. Google Maps ranking, GBP profile). */
   beforeAfter?: { before: string; after: string; caption?: string }[]
-  /** Link to the audit report (FreeSERP share link or a PDF in public/). */
-  auditReportUrl?: string
+  /** Local growth report (FreeSERP share link or a PDF in public/). */
+  growthReportUrl?: string
+  /** Before/after local rank reports (localrankreports.com) and the Maps rank each one shows. */
+  rankReports?: { before: { url: string; rank?: number }; after: { url: string; rank?: number } }
   citations: string[]
+  /** Shown blurred behind the login wall, by name only. */
   hiddenSites: string[]
-  /** "+ N of our websites" count. */
+  /** "+ N of our websites" count, also behind the login wall. */
   ownSites?: number
   reviews?: {
     before: { rating: number; count: number }
@@ -31,6 +34,11 @@ export const AGENCIES: Record<string, { name: string; clients: Record<string, Ca
         name: "Ci Siamo",
         address: "440 W 33rd St Ste 100, New York, NY 10001, United States",
         website: "https://www.cisiamo.com/",
+        growthReportUrl: "https://app.freeserp.com/share/report/7867b14d-e9bf-4483-ac6a-514447b1f7c7",
+        rankReports: {
+          before: { url: "https://localrankreports.com/reports/cmwt9kvqs000208js3y3705l7", rank: 19 },
+          after: { url: "https://localrankreports.com/reports/cmwt9m0nm000308js48u7xqgc", rank: 2 },
+        },
         citations: [
           "https://www.tripadvisor.in/Restaurant_Review-g60763-d23417627-Reviews-Ci_Siamo-New_York_City_New_York.html",
           "https://www.yelp.com/biz/ci-siamo-new-york-5",
