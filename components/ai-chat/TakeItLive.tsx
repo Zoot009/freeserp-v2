@@ -5,16 +5,15 @@ import { COLORS } from "@/components/site/constants";
 import { BrandIcon, type Brand } from "./brand-icons";
 
 // "Take it live": after the demo, where the agent can work for the visitor's business, and a way to talk to us.
-// Instagram and Messenger are marked "Soon": the chatbot server has them prepared, not yet live.
 
-type Channel = { title: string; text: string; soon?: boolean } & ({ brand: Brand } | { icon: typeof Globe; tint: string });
+type Channel = { title: string; text: string } & ({ brand: Brand } | { icon: typeof Globe; tint: string });
 
 const CHANNELS: Channel[] = [
   { title: "Your website", text: "A chat bubble on every page, from one line of code", icon: Globe, tint: COLORS.blue },
   { title: "Your app", text: "Built into your iOS or Android app", icon: Smartphone, tint: COLORS.purple },
   { title: "WhatsApp", text: "On your WhatsApp Business number", brand: "whatsapp" },
-  { title: "Instagram", text: "Answers your Instagram DMs", brand: "instagram", soon: true },
-  { title: "Messenger", text: "Answers your Facebook Page chats", brand: "messenger", soon: true },
+  { title: "Instagram", text: "Answers your Instagram DMs", brand: "instagram" },
+  { title: "Messenger", text: "Answers your Facebook Page chats", brand: "messenger" },
   { title: "Meta", text: "Official WhatsApp Business Platform", brand: "meta" },
 ];
 
@@ -22,11 +21,6 @@ function ChannelTile({ c }: { c: Channel }) {
   const color = "brand" in c ? undefined : c.tint;
   return (
     <div className="fs-card" style={{ position: "relative", background: "#fff", borderRadius: 18, padding: "18px 18px 16px", boxShadow: "0 14px 34px rgba(10,20,80,.18)", textAlign: "left" }}>
-      {c.soon && (
-        <span style={{ position: "absolute", top: 12, right: 12, fontSize: 11, fontWeight: 600, letterSpacing: ".04em", color: COLORS.amberText, background: COLORS.amberBg, borderRadius: 999, padding: "3px 8px" }}>
-          Soon
-        </span>
-      )}
       <span style={{ width: 44, height: 44, borderRadius: 12, display: "grid", placeItems: "center", background: "brand" in c ? "#f5f6f8" : `${color}14` }}>
         {"brand" in c ? <BrandIcon brand={c.brand} size={24} /> : <c.icon size={22} color={color} aria-hidden="true" />}
       </span>
