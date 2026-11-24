@@ -15,6 +15,7 @@ const CHANNELS: Channel[] = [
   { title: "WhatsApp", text: "On your WhatsApp Business number", brand: "whatsapp" },
   { title: "Instagram", text: "Answers your Instagram DMs", brand: "instagram", soon: true },
   { title: "Messenger", text: "Answers your Facebook Page chats", brand: "messenger", soon: true },
+  { title: "Meta", text: "Official WhatsApp Business Platform", brand: "meta" },
 ];
 
 function ChannelTile({ c }: { c: Channel }) {
@@ -55,13 +56,9 @@ export function TakeItLive() {
             <Link href="/contact" className="fs-cta-btn fs-ai-link" style={{ background: "#fff", color: COLORS.blue }}>Talk to us →</Link>
             <Link href="/ai-chat" className="fs-cta-btn fs-ai-link" style={{ border: "1px solid rgba(255,255,255,.55)", color: "#fff" }}>Try another website</Link>
           </div>
-          <p style={{ display: "flex", alignItems: "center", gap: 8, margin: "28px 0 0", fontSize: 14, opacity: 0.9 }}>
-            <span style={{ display: "inline-grid", placeItems: "center", width: 26, height: 26, borderRadius: 8, background: "#fff" }}><BrandIcon brand="meta" size={16} /></span>
-            WhatsApp runs on Meta&apos;s official WhatsApp Business Platform.
-          </p>
         </div>
         <div style={{ flex: "1 1 54%", minWidth: 0, width: "100%" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 14 }}>
+          <div className="fs-ai-channels" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 14 }}>
             {CHANNELS.map((c) => <ChannelTile key={c.title} c={c} />)}
           </div>
         </div>

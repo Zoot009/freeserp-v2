@@ -35,3 +35,9 @@
 /* Category chips: a keyboard focus ring on the chip, and a hover hint on the ones not chosen. */
 .fs-ai-chip:has(input:focus-visible) { outline: 2px solid #0454ff; outline-offset: 2px; }
 .fs-ai-chip:not([data-on]):hover { border-color: #b9ccff !important; background: #f7f9ff !important; }
+
+/* Channel tiles: three across, two on a phone. */
+@media (max-width: 640px) {
+  .fs-ai-channels { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .fs-ai-channels .fs-card { padding: 14px !important; }
+}
