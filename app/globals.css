@@ -4,6 +4,7 @@
 @import "../components/blog/blog.css";
 @import "../components/home/inside-app.css";
 @import "../components/home/tools.css";
+@import "../components/ai-chat/ai-chat.css";
 
 :root {
   --background: #ffffff;

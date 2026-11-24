@@ -1,0 +1,37 @@
+/* AI chatbot demo (/ai-chat): the example chat plays in, a typing indicator, and the build's active step. */
+@keyframes fs-chat-in {
+  from { opacity: 0; transform: translateY(10px); }
+}
+@keyframes fs-chat-dot {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+@keyframes fs-chat-spin {
+  to { transform: rotate(360deg); }
+}
+.fs-chat-in { animation: fs-chat-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.fs-chat-dot { animation: fs-chat-dot 1.2s ease-in-out infinite; }
+.fs-chat-spin { animation: fs-chat-spin 0.9s linear infinite; }
+
+.fs-ai-input:focus {
+  border-color: #0454ff !important;
+  box-shadow: 0 0 0 3px rgba(4, 84, 255, 0.15);
+}
+.fs-ai-input[aria-invalid="true"] { border-color: #ff5b5b !important; }
+.fs-ai-btn:focus-visible,
+.fs-ai-link:focus-visible {
+  outline: 2px solid #0454ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .fs-ai-grid2 { grid-template-columns: 1fr !important; }
+  .fs-ai-website { flex-direction: column !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fs-chat-in, .fs-chat-dot, .fs-chat-spin { animation: none; }
+}
+
+/* Category chips: a keyboard focus ring on the chip, and a hover hint on the ones not chosen. */
+.fs-ai-chip:has(input:focus-visible) { outline: 2px solid #0454ff; outline-offset: 2px; }
+.fs-ai-chip:not([data-on]):hover { border-color: #b9ccff !important; background: #f7f9ff !important; }

@@ -29,6 +29,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    // The AI chatbot demo. Only /ai-chat: the ad pages (/ai-chat/<code>) and build pages are never indexed.
+    {
+      url: `${SITE}/ai-chat`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
     {
       url: `${SITE}/blog`,
       lastModified: now,
