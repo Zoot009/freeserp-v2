@@ -14,6 +14,7 @@ export type DemoStatus = {
   pagesRead: number;
   chatUrl: string | null;
   demoUrl: string | null;
+  logoUrl: string | null; // the visitor's website logo, once their homepage has been read
 };
 
 // Shown if the chatbot server can't be reached when the page is rendered, so the page still works.

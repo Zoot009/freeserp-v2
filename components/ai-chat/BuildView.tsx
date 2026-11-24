@@ -24,6 +24,24 @@ const btn: React.CSSProperties = {
   textDecoration: "none", cursor: "pointer", fontFamily: "inherit",
 };
 
+/** The visitor's website logo in a white tile, or the business's first letter until the logo is known (or if it won't load). */
+function SiteLogo({ url, name, size = 64 }: { url: string | null; name: string; size?: number }) {
+  const [broken, setBroken] = useState<string | null>(null);
+  const show = url && broken !== url;
+  return (
+    <span aria-hidden="true"
+      style={{ width: size, height: size, flexShrink: 0, borderRadius: 18, background: "#fff", border: `1px solid ${COLORS.border}`, boxShadow: "0 10px 30px rgba(10,20,80,.10)",
+        display: "grid", placeItems: "center", overflow: "hidden" }}>
+      {show ? (
+        // eslint-disable-next-line @next/next/no-img-element -- any website's own logo, so not through next/image's allow-list
+        <img src={url} alt="" referrerPolicy="no-referrer" onError={() => setBroken(url)} style={{ width: "72%", height: "72%", objectFit: "contain" }} />
+      ) : (
+        <span style={{ fontSize: size * 0.42, fontWeight: 700, color: COLORS.blue }}>{name.trim().charAt(0).toUpperCase() || "•"}</span>
+      )}
+    </span>
+  );
+}
+
 function CopyLink({ url }: { url: string }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -100,12 +118,15 @@ export function BuildView({ token }: { token: string }) {
       <>
         <section style={{ width: "100%", maxWidth: 1600, margin: "0 auto", padding: "128px 32px 0" }}>
           <div className="fs-row" style={{ display: "flex", gap: 24, alignItems: "flex-end", justifyContent: "space-between" }}>
-            <div style={{ minWidth: 0 }}>
+            <div style={{ minWidth: 0, display: "flex", gap: 20, alignItems: "center" }}>
+              <SiteLogo url={s.logoUrl} name={s.business} size={72} />
+              <div style={{ minWidth: 0 }}>
               <Tag text="Ready" />
               <h1 style={{ ...h1, fontSize: "clamp(28px, 3.4vw, 44px)", margin: "14px 0 0" }}>{s.business}&apos;s AI agent is live</h1>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.55, margin: "8px 0 0" }}>
                 Built from {s.pagesRead} page{s.pagesRead === 1 ? "" : "s"} of {site}. Chat with it on the left; the report on the right shows what it learned and how it was tested.
               </p>
+            </div>
             </div>
             <div style={{ flex: "0 0 380px", maxWidth: "100%" }}>
               <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: COLORS.gray, letterSpacing: ".08em", textTransform: "uppercase" }}>Share this demo</p>
@@ -146,8 +167,13 @@ export function BuildView({ token }: { token: string }) {
   const pct = Math.max(6, Math.min(96, Math.round(((s.step + (s.step === 0 && s.pagesFound ? s.pagesRead / s.pagesFound : 0.5)) / STEPS.length) * 100)));
   return (
     <section className="fs-section" style={{ ...wrap, maxWidth: 760 }}>
-      <Tag text="Building" />
-      <h1 style={h1}>Building {s.business}&apos;s assistant</h1>
+      <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+        <SiteLogo url={s.logoUrl} name={s.business} />
+        <div style={{ minWidth: 0 }}>
+          <Tag text="Building" />
+          <h1 style={{ ...h1, margin: "12px 0 0" }}>Building {s.business}&apos;s assistant</h1>
+        </div>
+      </div>
       <p style={{ color: COLORS.gray, fontSize: 17, margin: "14px 0 0" }}>From <strong style={{ color: COLORS.black, fontWeight: 600 }}>{site}</strong>. This usually takes 5 to 15 minutes.</p>
 
       <div role="progressbar" aria-label="Build progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct}
