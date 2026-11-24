@@ -57,17 +57,15 @@ const tone = (score: number) =>
   : score >= 50 ? { text: "text-amber-600", bar: "bg-amber-500", hex: "#f59e0b" }
   : { text: "text-rose-600", bar: "bg-rose-500", hex: "#f43f5e" }
 
-// Map-pack rank pin colours: top 3 green, top 10 amber, 11–20 red, not in the top 20 white.
+// Map-pack rank pin colours: top 3 green, top 10 amber, 11+ (including not in the top 20) red.
 const RANK_BANDS = [
   { label: "Top 3", dot: "bg-emerald-600" },
   { label: "4–10", dot: "bg-amber-500" },
-  { label: "11–20", dot: "bg-rose-600" },
-  { label: "Not in top 20", dot: "bg-white ring-1 ring-slate-300" },
+  { label: "11+", dot: "bg-rose-600" },
 ] as const
 const pinTone = (rank: number | null) =>
-  rank == null ? "bg-white text-slate-500 ring-slate-300"
-  : rank <= 3 ? "bg-emerald-600 text-white ring-white"
-  : rank <= 10 ? "bg-amber-500 text-white ring-white"
+  rank != null && rank <= 3 ? "bg-emerald-600 text-white ring-white"
+  : rank != null && rank <= 10 ? "bg-amber-500 text-white ring-white"
   : "bg-rose-600 text-white ring-white"
 const top3 = (s: RankSide) => s.grid.filter((r) => r != null && r <= 3).length
 const inTop20 = (s: RankSide) => s.grid.filter((r) => r != null).length
@@ -181,7 +179,7 @@ function RankMap({ side, label, href, good }: { side: RankSide; label: string; h
             className={`absolute grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full text-[13px] font-bold tabular-nums shadow-[0_2px_8px_rgba(15,23,42,0.35)] ring-2 ${pinTone(p.rank)} ${p.isCenter ? "outline-2 outline-offset-2 outline-[#2d5bff]" : ""}`}
             style={{ left: p.left, top: p.top }}
           >
-            {p.rank ?? "–"}
+            {p.rank ?? <span className="text-[11px]">+20</span>}
           </span>
         ))}
         <span className="absolute bottom-1 right-1.5 rounded bg-white/85 px-1 text-[9px] text-slate-500">© OpenStreetMap contributors</span>
