@@ -41,3 +41,8 @@
   .fs-ai-channels { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
   .fs-ai-channels .fs-card { padding: 14px !important; }
 }
+
+/* The notes floating beside the demo phone: only where there's room for them. */
+@media (max-width: 1100px) {
+  .fs-ai-float { display: none !important; }
+}
