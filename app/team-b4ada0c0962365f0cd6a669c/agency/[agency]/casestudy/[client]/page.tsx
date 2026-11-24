@@ -6,6 +6,7 @@ import {
   QrCode, Star, TrendingUp, XCircle,
 } from "lucide-react"
 import { BACKEND_URL } from "@/components/site/constants"
+import { CitationList } from "./citations"
 
 type Props = { params: Promise<{ agency: string; client: string }> }
 
@@ -48,9 +49,6 @@ async function find(agency: string, client: string) {
 }
 
 const host = (url: string) => new URL(url).hostname.replace(/^www\./, "")
-const path = (url: string) => new URL(url).pathname.replace(/\/$/, "") || "/"
-// ponytail: third-party favicon service, like the QR image below; self-host icons if it ever matters.
-const favicon = (url: string) => `https://www.google.com/s2/favicons?domain=${host(url)}&sz=64`
 const fmt = (n: number) => n.toLocaleString("en-US")
 const pct = (n: number) => `${Math.round(n)}%`
 
@@ -303,27 +301,6 @@ function RankComparison({ b, a }: { b: RankSide; a: RankSide }) {
     </div>
   )
 }
-
-function LinkRow({ icon, title, sub, type }: { icon: React.ReactNode; title: string; sub: string; type: string }) {
-  return (
-    <>
-      <span className="flex min-w-0 items-center gap-3">
-        {icon}
-        <span className="min-w-0">
-          <span className="block truncate text-sm font-semibold text-slate-900">{title}</span>
-          <span className="block truncate text-xs text-slate-500">{sub}</span>
-        </span>
-      </span>
-      <span className="hidden rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 sm:inline">{type}</span>
-      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-600">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden />
-        Live
-      </span>
-    </>
-  )
-}
-
-const rowGrid = "grid grid-cols-[1fr_auto] items-center gap-4 px-4 py-3 sm:grid-cols-[1fr_8rem_4rem] sm:px-5"
 
 export default async function CaseStudyPage({ params }: Props) {
   const { agency, client } = await params
@@ -632,61 +609,6 @@ export default async function CaseStudyPage({ params }: Props) {
           </Section>
         )}
 
-        <Section
-          eyebrow="Off-page SEO"
-          title="Backlink portfolio"
-          description={`${totalLinks} backlinks built for ${s.name}. A sample of live citations is shown below.`}
-        >
-          <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_20rem] *:min-w-0">
-            <div className="overflow-hidden rounded-2xl border border-slate-200">
-              <div className={`${rowGrid} hidden border-b border-slate-200 bg-slate-50 !py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:grid`}>
-                <span>Source</span>
-                <span>Type</span>
-                <span>Status</span>
-              </div>
-              <ul className="divide-y divide-slate-100">
-                {s.citations.map((url) => (
-                  <li key={url}>
-                    <a href={url} {...ext} className={`${rowGrid} transition-colors hover:bg-slate-50`}>
-                      <LinkRow
-                        // eslint-disable-next-line @next/next/no-img-element
-                        icon={<img src={favicon(url)} alt="" width={20} height={20} className="h-5 w-5 shrink-0 rounded" />}
-                        title={host(url)}
-                        sub={path(url)}
-                        type="Local citation"
-                      />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5">
-              <div>
-                <p className="text-xs font-medium text-slate-500">Total backlinks</p>
-                <p className="text-4xl font-bold tabular-nums">{totalLinks}</p>
-              </div>
-              <div className="flex h-3 overflow-hidden rounded-full bg-slate-100">
-                {linkMix.map((x) => (
-                  <div key={x.label} className={x.bar} style={{ width: `${(x.n / totalLinks) * 100}%` }} />
-                ))}
-              </div>
-              <ul className="flex flex-col gap-2.5">
-                {linkMix.map((x) => (
-                  <li key={x.label} className="flex items-center gap-2.5 text-sm">
-                    <span className={`h-2.5 w-2.5 rounded-full ${x.bar}`} />
-                    <span className="flex-1 text-slate-600">{x.label}</span>
-                    <span className="font-semibold tabular-nums">{x.n}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-auto rounded-xl bg-slate-50 p-3 text-xs leading-relaxed text-slate-500 ring-1 ring-slate-200">
-                Consistent name, address and phone on trusted directories tells Google the business is real and local, which lifts map-pack rankings.
-              </p>
-            </div>
-          </div>
-        </Section>
-
         <div className={`grid grid-cols-1 gap-6 *:min-w-0 ${s.hideQr ? "" : "xl:grid-cols-[1.6fr_1fr]"}`}>
           {(reviews || biz?.rating) && (
             <Section eyebrow="Reputation" title="Review management">
@@ -741,6 +663,40 @@ export default async function CaseStudyPage({ params }: Props) {
             </div>
           </Section>}
         </div>
+
+        <Section
+          eyebrow="Off-page SEO"
+          title="Backlink portfolio"
+          description={`${totalLinks} backlinks built for ${s.name}. A sample of live citations is shown below.`}
+        >
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_20rem] *:min-w-0">
+            <CitationList citations={s.citations} />
+
+            <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5 xl:sticky xl:top-6 xl:self-start">
+              <div>
+                <p className="text-xs font-medium text-slate-500">Total backlinks</p>
+                <p className="text-4xl font-bold tabular-nums">{totalLinks}</p>
+              </div>
+              <div className="flex h-3 overflow-hidden rounded-full bg-slate-100">
+                {linkMix.map((x) => (
+                  <div key={x.label} className={x.bar} style={{ width: `${(x.n / totalLinks) * 100}%` }} />
+                ))}
+              </div>
+              <ul className="flex flex-col gap-2.5">
+                {linkMix.map((x) => (
+                  <li key={x.label} className="flex items-center gap-2.5 text-sm">
+                    <span className={`h-2.5 w-2.5 rounded-full ${x.bar}`} />
+                    <span className="flex-1 text-slate-600">{x.label}</span>
+                    <span className="font-semibold tabular-nums">{x.n}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="rounded-xl bg-slate-50 p-3 text-xs leading-relaxed text-slate-500 ring-1 ring-slate-200">
+                Consistent name, address and phone on trusted directories tells Google the business is real and local, which lifts map-pack rankings.
+              </p>
+            </div>
+          </div>
+        </Section>
 
         <footer className="pt-2 text-center text-xs text-slate-400">Prepared by {agencyName}</footer>
       </div>
