@@ -1,6 +1,8 @@
 // Client case studies, served at
 //   /team-b4ada0c0962365f0cd6a669c/agency/<agency>/casestudy/<client>
-// New client = new entry under its agency's `clients`. Empty optional sections are hidden.
+// New client = new entry under its agency's `clients`, then run
+//   node scripts/case-study-snapshot.mjs <client>
+// to pull the report numbers into snapshots.json. Empty optional sections are hidden.
 // Images go in public/case-studies/<client>/ and are referenced as "/case-studies/<client>/x.png".
 
 export interface CaseStudy {
@@ -11,8 +13,8 @@ export interface CaseStudy {
   beforeAfter?: { before: string; after: string; caption?: string }[]
   /** Local growth report (FreeSERP share link or a PDF in public/). */
   growthReportUrl?: string
-  /** Before/after local rank reports (localrankreports.com) and the Maps rank each one shows. */
-  rankReports?: { before: { url: string; rank?: number }; after: { url: string; rank?: number } }
+  /** Before/after local rank report links (localrankreports.com). */
+  rankReports?: { before: string; after: string }
   citations: string[]
   /** Shown blurred behind the login wall, by name only. */
   hiddenSites: string[]
@@ -36,8 +38,8 @@ export const AGENCIES: Record<string, { name: string; clients: Record<string, Ca
         website: "https://www.cisiamo.com/",
         growthReportUrl: "https://app.freeserp.com/share/report/7867b14d-e9bf-4483-ac6a-514447b1f7c7",
         rankReports: {
-          before: { url: "https://localrankreports.com/reports/cmwt9kvqs000208js3y3705l7", rank: 19 },
-          after: { url: "https://localrankreports.com/reports/cmwt9m0nm000308js48u7xqgc", rank: 2 },
+          before: "https://localrankreports.com/reports/cmwt9kvqs000208js3y3705l7",
+          after: "https://localrankreports.com/reports/cmwt9m0nm000308js48u7xqgc",
         },
         citations: [
           "https://www.tripadvisor.in/Restaurant_Review-g60763-d23417627-Reviews-Ci_Siamo-New_York_City_New_York.html",
