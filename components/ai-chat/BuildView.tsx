@@ -6,6 +6,7 @@ import { Check, Copy, FileSearch, Brain, Wand2, ShieldCheck, Loader2, UserRound 
 import { Tag } from "@/components/site/Tag";
 import { COLORS } from "@/components/site/constants";
 import { CHATBOT_API, type DemoStatus } from "./config";
+import { TakeItLive } from "./TakeItLive";
 
 // A visitor's private build page: asks the chatbot server how the build is going every few seconds; then shows their
 // chatbot to chat with (the server's chat page, in a frame), or says our team will finish it.
@@ -118,20 +119,7 @@ export function BuildView({ token }: { token: string }) {
         </section>
 
         <section style={{ width: "100%", maxWidth: 1600, margin: "0 auto", padding: "48px 32px 100px" }}>
-          <div className="fs-cta-inner" style={{ background: `linear-gradient(135deg, ${COLORS.blue}, #2f6bff 55%, ${COLORS.purple})`, borderRadius: 28, padding: "64px 40px", textAlign: "center", color: "#fff" }}>
-            <Tag text="Take it live" light />
-            <h2 style={{ fontSize: "clamp(26px, 3.6vw, 48px)", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "18px auto 14px", maxWidth: 820 }}>
-              Want this AI agent on your website, app or WhatsApp?
-            </h2>
-            <p style={{ fontSize: 17, lineHeight: 1.55, opacity: 0.92, margin: "0 auto 30px", maxWidth: 640 }}>
-              We add it to your website with one line of code, build it into your app, or connect it to your WhatsApp Business number through Meta,
-              then teach it every page of your website and fine-tune its answers with you.
-            </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-              <Link href="/contact" className="fs-cta-btn fs-ai-link" style={{ background: "#fff", color: COLORS.blue }}>Talk to us →</Link>
-              <Link href="/ai-chat" className="fs-cta-btn fs-ai-link" style={{ border: "1px solid rgba(255,255,255,.5)", color: "#fff" }}>Try another website</Link>
-            </div>
-          </div>
+          <TakeItLive />
         </section>
       </>
     );
