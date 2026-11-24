@@ -5,13 +5,11 @@ import {
   AlertTriangle, ArrowRight, BadgeCheck, Bot, CheckCircle2, ExternalLink, Globe, Lock, MapPin, Phone,
   QrCode, Star, TrendingUp, XCircle,
 } from "lucide-react"
-import { appUrl } from "@/components/site/constants"
-import { AGENCIES } from "../../../case-studies"
-import SNAPSHOTS from "../../../snapshots.json"
+import { appUrl, BACKEND_URL } from "@/components/site/constants"
 
 type Props = { params: Promise<{ agency: string; client: string }> }
 
-// Shape written by scripts/case-study-snapshot.mjs.
+// The backend's snapshot of the reports (freeserp-backend-v2 case-studies/caseStudy.snapshot.ts).
 type RankSide = {
   keyword: string; position: number; arp: number; solv: number; size: number; grid: (number | null)[]
   center: { lat: number; lng: number }; radiusMiles: number
@@ -29,12 +27,23 @@ type Snapshot = {
   }
   reviews?: { last30: number | null; negativeShare: number | null; latest: { author: string; text: string; date: string | null; localGuide: boolean }[] }
 }
-const snapshots = SNAPSHOTS as unknown as Record<string, Snapshot>
+type Study = {
+  name: string; address: string; website: string; agencyName: string
+  rankBeforeUrl?: string; rankAfterUrl?: string; growthReportUrl?: string
+  citations: string[]; hiddenSites: string[]; ownSites: number; qrUrl?: string
+}
 
-function find(agency: string, client: string) {
-  const a = Object.hasOwn(AGENCIES, agency) ? AGENCIES[agency] : undefined
-  const study = a && Object.hasOwn(a.clients, client) ? a.clients[client] : undefined
-  return a && study ? { agencyName: a.name, study, snap: snapshots[`${agency}/${client}`] ?? {} } : null
+// Case studies are managed by the in-house team at app.freeserp.com/dashboard/case-studies.
+async function find(agency: string, client: string) {
+  const res = await fetch(`${BACKEND_URL}/api/public/case-studies/${encodeURIComponent(agency)}/${encodeURIComponent(client)}`, {
+    next: { revalidate: 60 },
+  })
+  if (res.status === 404 || res.status === 400) return null
+  if (!res.ok) throw new Error(`Case study ${agency}/${client}: backend returned ${res.status}`)
+  const { caseStudy: c } = (await res.json()) as { caseStudy: { name: string; details: Omit<Study, "name">; snapshot: Snapshot | null } }
+  const study: Study = { ...c.details, name: c.name }
+  const rankReports = study.rankBeforeUrl && study.rankAfterUrl ? { before: study.rankBeforeUrl, after: study.rankAfterUrl } : undefined
+  return { agencyName: study.agencyName, study: { ...study, rankReports }, snap: c.snapshot ?? {} }
 }
 
 const host = (url: string) => new URL(url).hostname.replace(/^www\./, "")
@@ -111,7 +120,7 @@ function mapView(side: RankSide) {
 // Shared with clients by link only: never indexed.
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { agency, client } = await params
-  const found = find(agency, client)
+  const found = await find(agency, client)
   return {
     title: found ? `${found.study.name} · Case study` : "Case study",
     robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
@@ -209,29 +218,31 @@ function RankComparison({ b, a }: { b: RankSide; a: RankSide }) {
     { metric: "Search locations in the top 3", before: `${top3(b)} of ${n}`, after: `${top3(a)} of ${n}`, change: top3(a) - top3(b), unit: "" },
     { metric: "Search locations in the top 20", before: `${inTop20(b)} of ${n}`, after: `${inTop20(a)} of ${n}`, change: inTop20(a) - inTop20(b), unit: "" },
   ]
+  // Narrow cell padding and no units on phones so all four columns fit without sideways scrolling.
+  const cell = "px-2.5 sm:px-4"
   return (
     <div className="overflow-x-auto rounded-2xl border border-slate-200">
-      <table className="w-full min-w-[30rem] text-sm">
-        <thead className="bg-slate-50 text-[11px] uppercase tracking-wider text-slate-500">
+      <table className="w-full text-[13px] sm:text-sm">
+        <thead className="bg-slate-50 text-[10px] uppercase tracking-wider text-slate-500 sm:text-[11px]">
           <tr>
-            <th className="px-4 py-2.5 text-left font-semibold">Metric</th>
-            <th className="px-4 py-2.5 text-right font-semibold">Before</th>
-            <th className="px-4 py-2.5 text-right font-semibold">After</th>
-            <th className="px-4 py-2.5 text-right font-semibold">Change</th>
+            <th className={`${cell} py-2.5 text-left font-semibold`}>Metric</th>
+            <th className={`${cell} py-2.5 text-right font-semibold`}>Before</th>
+            <th className={`${cell} py-2.5 text-right font-semibold`}>After</th>
+            <th className={`${cell} py-2.5 text-right font-semibold`}>Change</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
           {rows.map((r) => (
             <tr key={r.metric}>
-              <td className="px-4 py-3 font-medium text-slate-700">{r.metric}</td>
-              <td className="px-4 py-3 text-right tabular-nums text-slate-500">{r.before}</td>
-              <td className="px-4 py-3 text-right font-semibold tabular-nums">{r.after}</td>
-              <td className="px-4 py-3 text-right">
+              <td className={`${cell} py-3 font-medium text-slate-700`}>{r.metric}</td>
+              <td className={`${cell} whitespace-nowrap py-3 text-right tabular-nums text-slate-500`}>{r.before}</td>
+              <td className={`${cell} whitespace-nowrap py-3 text-right font-semibold tabular-nums`}>{r.after}</td>
+              <td className={`${cell} py-3 text-right`}>
                 {r.change === 0 ? (
                   <span className="text-slate-400">—</span>
                 ) : (
-                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums ${r.change > 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
-                    {r.change > 0 ? "▲" : "▼"} {Math.abs(r.change)}{r.unit && ` ${r.unit}`}
+                  <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold tabular-nums ${r.change > 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>
+                    {r.change > 0 ? "▲" : "▼"} {Math.abs(r.change)}{r.unit && <span className="hidden sm:inline"> {r.unit}</span>}
                   </span>
                 )}
               </td>
@@ -266,7 +277,7 @@ const rowGrid = "grid grid-cols-[1fr_auto] items-center gap-4 px-4 py-3 sm:grid-
 
 export default async function CaseStudyPage({ params }: Props) {
   const { agency, client } = await params
-  const found = find(agency, client)
+  const found = await find(agency, client)
   if (!found) notFound()
   const { agencyName, study: s, snap } = found
   const { rank, business: biz, audit, reviews } = snap
@@ -354,11 +365,11 @@ export default async function CaseStudyPage({ params }: Props) {
       </header>
 
       <div className={`relative -mt-16 flex flex-col gap-6 pb-16 ${wrap}`}>
-        <div className={`grid gap-3 sm:grid-cols-2 ${stats.length > 3 ? "lg:grid-cols-4" : stats.length > 2 ? "lg:grid-cols-3" : ""}`}>
+        <div className={`grid grid-cols-2 gap-3 ${stats.length > 3 ? "lg:grid-cols-4" : stats.length > 2 ? "lg:grid-cols-3" : ""}`}>
           {stats.map((st) => (
-            <div key={st.label} className={`${card} p-5`}>
+            <div key={st.label} className={`${card} min-w-0 p-4 sm:p-5`}>
               <p className="text-xs font-medium text-slate-500">{st.label}</p>
-              <p className="mt-1 text-2xl font-bold tabular-nums tracking-tight sm:text-3xl">{st.value}</p>
+              <p className="mt-1 text-lg font-bold tabular-nums tracking-tight min-[400px]:text-xl sm:text-3xl">{st.value}</p>
               <p className="mt-1 truncate text-xs font-medium text-emerald-600">{st.note}</p>
             </div>
           ))}
@@ -374,7 +385,7 @@ export default async function CaseStudyPage({ params }: Props) {
                 : `How ${s.name} moved in local search, with the full reports behind every number.`
             }
           >
-            <div className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
+            <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1.5fr_1fr] *:min-w-0">
               <div className="flex flex-col gap-4">
                 {b && a && (
                   <>
@@ -390,7 +401,7 @@ export default async function CaseStudyPage({ params }: Props) {
                         ))}
                       </div>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 md:grid-cols-2 *:min-w-0">
                       <RankMap side={b} label="Before" href={s.rankReports?.before} />
                       <RankMap side={a} label="After" href={s.rankReports?.after} good />
                     </div>
@@ -460,7 +471,7 @@ export default async function CaseStudyPage({ params }: Props) {
             title="Profile, website & AI visibility audit"
             description={`What we checked across ${s.name}'s Google Business Profile, website and AI search presence, and what it found.`}
           >
-            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 *:min-w-0">
               <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5">
                 <div className="flex items-center gap-5">
                   <ScoreRing score={audit.gbpScore} label="Google Business Profile score" />
@@ -555,33 +566,12 @@ export default async function CaseStudyPage({ params }: Props) {
           </Section>
         )}
 
-        {s.beforeAfter?.length ? (
-          <Section eyebrow="Results" title="Before & after screenshots">
-            <div className="flex flex-col gap-8">
-              {s.beforeAfter.map((p, i) => (
-                <figure key={i}>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {(["before", "after"] as const).map((k) => (
-                      <div key={k}>
-                        <p className={`mb-2 text-[11px] font-semibold uppercase tracking-wider ${k === "after" ? "text-emerald-700" : "text-slate-500"}`}>{k}</p>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p[k]} alt={`${s.name} ${k}`} className="w-full rounded-xl border border-slate-200" />
-                      </div>
-                    ))}
-                  </div>
-                  {p.caption && <figcaption className="mt-3 text-sm text-slate-500">{p.caption}</figcaption>}
-                </figure>
-              ))}
-            </div>
-          </Section>
-        ) : null}
-
         <Section
           eyebrow="Off-page SEO"
           title="Backlink portfolio"
           description={`${totalLinks} backlinks built for ${s.name}. A sample of live citations is shown below.`}
         >
-          <div className="grid gap-5 xl:grid-cols-[1fr_20rem]">
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_20rem] *:min-w-0">
             <div className="overflow-hidden rounded-2xl border border-slate-200">
               <div className={`${rowGrid} hidden border-b border-slate-200 bg-slate-50 !py-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:grid`}>
                 <span>Source</span>
@@ -669,7 +659,7 @@ export default async function CaseStudyPage({ params }: Props) {
           </div>
         </Section>
 
-        <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.6fr_1fr] *:min-w-0">
           {(reviews || biz?.rating) && (
             <Section eyebrow="Reputation" title="Review management">
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -687,12 +677,6 @@ export default async function CaseStudyPage({ params }: Props) {
                     </div>
                   ))}
               </div>
-              {s.reviews && (
-                <p className="mt-3 text-sm text-slate-600">
-                  Rating moved from <b>{s.reviews.before.rating.toFixed(1)} ★</b> ({fmt(s.reviews.before.count)} reviews) to{" "}
-                  <b className="text-emerald-700">{s.reviews.after.rating.toFixed(1)} ★</b> ({fmt(s.reviews.after.count)} reviews).
-                </p>
-              )}
               {reviews?.latest.length ? (
                 <div className="mt-5 grid gap-3 md:grid-cols-3">
                   {reviews.latest.map((r) => (
