@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import type React from "react"
 import { notFound } from "next/navigation"
 import {
-  AlertTriangle, ArrowRight, BadgeCheck, Bot, CheckCircle2, ExternalLink, Globe, Lock, MapPin, Phone,
+  AlertTriangle, BadgeCheck, Bot, CheckCircle2, ExternalLink, Globe, MapPin, Phone,
   QrCode, Star, TrendingUp, XCircle,
 } from "lucide-react"
-import { appUrl, BACKEND_URL } from "@/components/site/constants"
+import { BACKEND_URL } from "@/components/site/constants"
 
 type Props = { params: Promise<{ agency: string; client: string }> }
 
@@ -26,17 +26,18 @@ type Snapshot = {
     strengths: { label: string; value: string }[]
   }
   reviews?: { last30: number | null; negativeShare: number | null; latest: { author: string; text: string; date: string | null; localGuide: boolean }[] }
+  auditBefore?: Snapshot["audit"] // from the growth report taken before the work
 }
 type Study = {
   name: string; address: string; website: string; agencyName: string
   rankBeforeUrl?: string; rankAfterUrl?: string; growthReportUrl?: string
-  citations: string[]; hiddenSites: string[]; ownSites: number; qrUrl?: string
+  citations: string[]; hiddenSites: string[]; ownSites: number; qrUrl?: string; hideQr?: boolean
 }
 
 // Case studies are managed by the in-house team at app.freeserp.com/dashboard/case-studies.
 async function find(agency: string, client: string) {
   const res = await fetch(`${BACKEND_URL}/api/public/case-studies/${encodeURIComponent(agency)}/${encodeURIComponent(client)}`, {
-    next: { revalidate: 60 },
+    cache: "no-store", // edits in the app show on the next page load
   })
   if (res.status === 404 || res.status === 400) return null
   if (!res.ok) throw new Error(`Case study ${agency}/${client}: backend returned ${res.status}`)
@@ -152,9 +153,58 @@ function ScoreRing({ score, size = 112, label }: { score: number; size?: number;
       role="img"
       aria-label={`${label ?? "Score"} ${score} out of 100`}
     >
-      <div className="grid place-items-center rounded-full bg-white" style={{ width: size - 16, height: size - 16 }}>
-        <span className={`text-3xl font-bold tabular-nums ${t.text}`}>{score}</span>
+      <div className="grid place-items-center rounded-full bg-white" style={{ width: size - size / 7, height: size - size / 7 }}>
+        <span className={`font-bold tabular-nums ${t.text} ${size < 100 ? "text-xl" : "text-3xl"}`}>{score}</span>
       </div>
+    </div>
+  )
+}
+
+function Delta({ d }: { d: number }) {
+  const cls = d > 0 ? "bg-emerald-100 text-emerald-700" : d < 0 ? "bg-rose-100 text-rose-700" : "bg-slate-100 text-slate-600"
+  return <span className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-xs font-bold tabular-nums ${cls}`}>{d > 0 ? `▲ +${d}` : d < 0 ? `▼ ${d}` : "±0"}</span>
+}
+
+/** A score card. With a before score: "38 → 51", the change, and before/after bars. */
+function ScoreCard({ label, now, before, sub }: { label: string; now: number; before?: number | null; sub?: string }) {
+  if (before == null) {
+    return (
+      <div className="min-w-0 rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
+        <p className="truncate text-xs font-medium text-slate-600">{label}</p>
+        <p className={`mt-1 text-2xl font-bold tabular-nums ${tone(now).text}`}>{now}<span className="text-xs font-medium text-slate-400">/100</span></p>
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200">
+          <div className={`h-full rounded-full ${tone(now).bar}`} style={{ width: `${now}%` }} />
+        </div>
+        {sub && <p className="mt-1.5 truncate text-[11px] text-slate-500">{sub}</p>}
+      </div>
+    )
+  }
+  return (
+    <div className="min-w-0 rounded-xl bg-white p-3 ring-1 ring-slate-200 shadow-sm">
+      <p className="text-xs font-semibold leading-tight text-slate-700">{label}</p>
+      <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <p className="flex items-baseline gap-1.5 tabular-nums">
+          <span className="text-lg font-semibold text-slate-400">{before}</span>
+          <span aria-hidden className="text-slate-300">→</span>
+          <span className={`text-3xl font-bold ${tone(now).text}`}>{now}</span>
+          <span className="sr-only">{`${label}: ${before} before, ${now} after`}</span>
+        </p>
+        <Delta d={now - before} />
+      </div>
+      <div className="mt-2 flex flex-col gap-1">
+        {[
+          { k: "Before", v: before, bar: "bg-slate-300" },
+          { k: "After", v: now, bar: tone(now).bar },
+        ].map((b) => (
+          <div key={b.k} className="flex items-center gap-2">
+            <span className="w-12 shrink-0 text-[10px] font-semibold uppercase tracking-wide text-slate-400">{b.k}</span>
+            <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-100">
+              <div className={`h-full rounded-full ${b.bar}`} style={{ width: `${b.v}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+      {sub && <p className="mt-1.5 truncate text-[11px] text-slate-500">{sub}</p>}
     </div>
   )
 }
@@ -280,7 +330,7 @@ export default async function CaseStudyPage({ params }: Props) {
   const found = await find(agency, client)
   if (!found) notFound()
   const { agencyName, study: s, snap } = found
-  const { rank, business: biz, audit, reviews } = snap
+  const { rank, business: biz, audit, reviews, auditBefore: ab } = snap
 
   const qrTarget =
     s.qrUrl ?? biz?.mapsUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.name}, ${s.address}`)}`
@@ -290,11 +340,6 @@ export default async function CaseStudyPage({ params }: Props) {
   const ownSites = s.ownSites ?? 0
   const locked = s.hiddenSites.length + ownSites
   const totalLinks = s.citations.length + locked
-  // Blurred teaser rows behind the login wall: hidden sites by name, then a few private-network placeholders.
-  const teaser = [
-    ...s.hiddenSites.map((name) => ({ name, type: "Local citation" })),
-    ...Array.from({ length: Math.min(ownSites, 3) }, () => ({ name: "Private network site", type: "Private network" })),
-  ]
   const linkMix = [
     { label: "Live citations", n: s.citations.length, bar: "bg-emerald-500" },
     { label: "Hidden citations", n: s.hiddenSites.length, bar: "bg-[#2d5bff]" },
@@ -473,34 +518,49 @@ export default async function CaseStudyPage({ params }: Props) {
           >
             <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 *:min-w-0">
               <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5">
-                <div className="flex items-center gap-5">
-                  <ScoreRing score={audit.gbpScore} label="Google Business Profile score" />
+                {ab ? (
                   <div>
                     <p className="text-sm font-semibold">Google Business Profile</p>
                     <p className="mt-1 text-xs leading-relaxed text-slate-500">Overall profile health across 8 areas Google uses to rank local businesses.</p>
+                    <div className="mt-4 flex items-center justify-center gap-3 sm:gap-5">
+                      <div className="flex flex-col items-center gap-1.5">
+                        <ScoreRing score={ab.gbpScore} size={80} label="Profile score before" />
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Before</span>
+                      </div>
+                      <span aria-hidden className="pb-6 text-xl text-slate-300">→</span>
+                      <div className="flex flex-col items-center gap-1.5">
+                        <ScoreRing score={audit.gbpScore} label="Profile score after" />
+                        <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-700">
+                          After <Delta d={audit.gbpScore - ab.gbpScore} />
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex items-center gap-5">
+                    <ScoreRing score={audit.gbpScore} label="Google Business Profile score" />
+                    <div>
+                      <p className="text-sm font-semibold">Google Business Profile</p>
+                      <p className="mt-1 text-xs leading-relaxed text-slate-500">Overall profile health across 8 areas Google uses to rank local businesses.</p>
+                    </div>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { label: "Website audit", score: audit.siteScore, sub: audit.sitePages ? `${audit.sitePages} pages · ${fmt(audit.siteIssues ?? 0)} issues` : "" },
-                    { label: "Mobile speed", score: audit.pageSpeed, sub: "Google PageSpeed" },
-                    { label: "AI answer engines", score: audit.aeo, sub: "AEO score" },
-                    { label: "Generative search", score: audit.geo, sub: "GEO score" },
+                    { label: "Website audit", score: audit.siteScore, was: ab?.siteScore, sub: audit.sitePages ? `${audit.sitePages} pages · ${fmt(audit.siteIssues ?? 0)} issues` : "" },
+                    { label: "Mobile speed", score: audit.pageSpeed, was: ab?.pageSpeed, sub: "Google PageSpeed" },
+                    { label: "AI answer engines", score: audit.aeo, was: ab?.aeo, sub: "AEO score" },
+                    { label: "Generative search", score: audit.geo, was: ab?.geo, sub: "GEO score" },
                   ]
-                    .filter((x): x is { label: string; score: number; sub: string } => x.score != null)
-                    .map((x) => (
-                      <div key={x.label} className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
-                        <p className="text-[11px] text-slate-500">{x.label}</p>
-                        <p className={`text-2xl font-bold tabular-nums ${tone(x.score).text}`}>{x.score}<span className="text-xs font-medium text-slate-400">/100</span></p>
-                        {x.sub && <p className="truncate text-[11px] text-slate-500">{x.sub}</p>}
-                      </div>
-                    ))}
+                    .filter((x): x is { label: string; score: number; was: number | null | undefined; sub: string } => x.score != null)
+                    .map((x) => <ScoreCard key={x.label} label={x.label} now={x.score} before={x.was} sub={x.sub} />)}
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 p-5">
+              <div className="flex flex-col rounded-2xl border border-slate-200 p-5">
                 <h3 className="text-sm font-semibold">Score by area</h3>
-                <ul className="mt-4 flex flex-col gap-3">
+                {/* Spread down the card so it fills the height of its neighbours. */}
+                <ul className="mt-4 flex flex-1 flex-col justify-between gap-3">
                   {audit.categories.map((c) => (
                     <li key={c.label}>
                       <div className="flex items-center justify-between text-xs">
@@ -513,6 +573,18 @@ export default async function CaseStudyPage({ params }: Props) {
                     </li>
                   ))}
                 </ul>
+                <div className="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center">
+                  {[
+                    { label: "Strong", sub: "80+", n: audit.categories.filter((c) => c.score >= 80).length, cls: "text-emerald-600" },
+                    { label: "Fair", sub: "50–79", n: audit.categories.filter((c) => c.score >= 50 && c.score < 80).length, cls: "text-amber-600" },
+                    { label: "Weak", sub: "below 50", n: audit.categories.filter((c) => c.score < 50).length, cls: "text-rose-600" },
+                  ].map((x) => (
+                    <div key={x.label} className="rounded-xl bg-slate-50 py-2.5 ring-1 ring-slate-200">
+                      <p className={`text-2xl font-bold tabular-nums ${x.cls}`}>{x.n}</p>
+                      <p className="text-[11px] font-medium text-slate-600">{x.label} <span className="text-slate-400">· {x.sub}</span></p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 p-5 lg:col-span-2 xl:col-span-1">
@@ -552,13 +624,7 @@ export default async function CaseStudyPage({ params }: Props) {
                 </h3>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                   {audit.engines.map((e) => (
-                    <div key={e.name} className="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-200">
-                      <p className="truncate text-xs font-medium text-slate-600">{e.name}</p>
-                      <p className={`mt-1 text-xl font-bold tabular-nums ${tone(e.score).text}`}>{e.score}</p>
-                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                        <div className={`h-full rounded-full ${tone(e.score).bar}`} style={{ width: `${e.score}%` }} />
-                      </div>
-                    </div>
+                    <ScoreCard key={e.name} label={e.name} now={e.score} before={ab?.engines.find((x) => x.name === e.name)?.score} />
                   ))}
                 </div>
               </div>
@@ -593,44 +659,6 @@ export default async function CaseStudyPage({ params }: Props) {
                   </li>
                 ))}
               </ul>
-
-              {locked > 0 && (
-                <div className="relative min-h-72 border-t border-slate-100">
-                  <ul aria-hidden className="pointer-events-none select-none divide-y divide-slate-100 blur-[3px]">
-                    {teaser.map((t, i) => (
-                      <li key={i} className={rowGrid}>
-                        <LinkRow
-                          icon={<span className="h-5 w-5 shrink-0 rounded bg-slate-200" />}
-                          title={t.name}
-                          sub="••••••••••/••••••••"
-                          type={t.type}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-white/40 via-white/85 to-white p-4">
-                    <div className="w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-xl shadow-slate-900/10">
-                      <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-[#2d5bff]/10 text-[#2d5bff]">
-                        <Lock className="h-5 w-5" aria-hidden />
-                      </span>
-                      <p className="mt-3 text-base font-semibold">{locked} more backlinks are locked</p>
-                      <p className="mt-1 text-sm leading-relaxed text-slate-500">
-                        {[
-                          s.hiddenSites.length ? `${s.hiddenSites.length} citations including ${s.hiddenSites.slice(0, 3).join(", ")}` : "",
-                          ownSites ? `${ownSites} sites from our private network` : "",
-                        ]
-                          .filter(Boolean)
-                          .join(", plus ")}
-                        .
-                      </p>
-                      <a href={appUrl("/login")} className={`${btnPrimary} mt-5 w-full`}>
-                        Unlock full backlink list <ArrowRight className="h-4 w-4" aria-hidden />
-                      </a>
-                      <p className="mt-2 text-xs text-slate-400">Available on paid plans</p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
             <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5">
@@ -659,7 +687,7 @@ export default async function CaseStudyPage({ params }: Props) {
           </div>
         </Section>
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.6fr_1fr] *:min-w-0">
+        <div className={`grid grid-cols-1 gap-6 *:min-w-0 ${s.hideQr ? "" : "xl:grid-cols-[1.6fr_1fr]"}`}>
           {(reviews || biz?.rating) && (
             <Section eyebrow="Reputation" title="Review management">
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -697,7 +725,7 @@ export default async function CaseStudyPage({ params }: Props) {
             </Section>
           )}
 
-          <Section eyebrow="Reputation" title="Review QR code">
+          {!s.hideQr && <Section eyebrow="Reputation" title="Review QR code">
             <div className="flex flex-col items-center gap-5 text-center">
               <div className="rounded-3xl bg-gradient-to-br from-[#2d5bff] to-[#1a37c2] p-4 shadow-lg">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -711,7 +739,7 @@ export default async function CaseStudyPage({ params }: Props) {
                 Print this at the counter, on table tents or on receipts. Customers scan it to open {s.name} on Google and leave a review.
               </p>
             </div>
-          </Section>
+          </Section>}
         </div>
 
         <footer className="pt-2 text-center text-xs text-slate-400">Prepared by {agencyName}</footer>
