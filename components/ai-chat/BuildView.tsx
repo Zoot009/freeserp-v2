@@ -147,7 +147,8 @@ export function BuildView({ token }: { token: string }) {
     );
   }
 
-  const pct = Math.min(96, Math.round(((s.step + (s.step === 0 && s.pagesFound ? s.pagesRead / s.pagesFound : 0.5)) / STEPS.length) * 100));
+  // Never quite empty (it has started) nor full (it isn't ready yet).
+  const pct = Math.max(6, Math.min(96, Math.round(((s.step + (s.step === 0 && s.pagesFound ? s.pagesRead / s.pagesFound : 0.5)) / STEPS.length) * 100)));
   return (
     <section className="fs-section" style={{ ...wrap, maxWidth: 760 }}>
       <Tag text="Building" />

@@ -14,7 +14,8 @@ export default async function AiChatBuildPage({ params }: { params: Promise<{ to
   const { token } = await params;
   return (
     <>
-      <Nav />
+      {/* A white page: the dark bar from the top, or the white nav links would vanish. */}
+      <Nav solid />
       <BuildView token={token} />
       <Footer />
     </>
