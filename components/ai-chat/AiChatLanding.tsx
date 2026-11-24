@@ -23,7 +23,7 @@ const FEATURES = [
 ];
 
 const faq = (fullSite: boolean) => [
-  { q: "Is the demo really free?", a: "Yes. Build your chatbot and try it at no cost, no credit card needed. If you'd like it on your website or WhatsApp, our team will talk you through the options." },
+  { q: "Is the demo really free?", a: "Yes. Build your chatbot and try it at no cost, with no sign-up and no credit card. If you'd like it on your website, app or WhatsApp, our team will talk you through the options." },
   {
     q: "How much of my website does it read?",
     a: fullSite
@@ -32,7 +32,7 @@ const faq = (fullSite: boolean) => [
   },
   { q: "How long does it take?", a: "Usually 5 to 15 minutes, depending on your website. You can close the page and come back: your private link keeps your progress." },
   { q: "What does it answer from?", a: "Only from your website's pages. It doesn't make things up: when it doesn't know, it says so and points the customer to you." },
-  { q: "What if my website can't be read?", a: "We respect your robots.txt and skip private pages. If we can't read enough automatically, our team gets your details and finishes the setup with you." },
+  { q: "What if my website can't be read?", a: "We respect your robots.txt and skip private pages. If we can't read enough automatically, contact us and our team will finish the setup with you." },
   { q: "Is my information safe?", a: "Your pages are used only to build your own assistant, which never sees another business's data. Demo chats are deleted automatically after 90 days." },
 ];
 
@@ -74,7 +74,7 @@ function ExampleChat() {
 export function AiChatLanding({ categories, open, campaign }: { categories: Category[]; open: boolean; campaign?: string }) {
   const fullSite = !!campaign;
   const steps = [
-    { icon: Globe, title: "Enter your website", text: "Paste your address and tell us a little about your business. No setup and no code." },
+    { icon: Globe, title: "Enter your website", text: "Paste your website address. That's it: no sign-up, no setup and no code." },
     {
       icon: ScanSearch,
       title: "We read and train",
@@ -105,7 +105,7 @@ export function AiChatLanding({ categories, open, campaign }: { categories: Cate
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <DemoForm categories={categories} open={open} campaign={campaign} />
+            <DemoForm open={open} campaign={campaign} />
           </Reveal>
         </div>
       </header>

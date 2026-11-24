@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, Copy, FileSearch, Brain, Wand2, ShieldCheck, Loader2, UserRound, Maximize2 } from "lucide-react";
+import { Check, Copy, FileSearch, Brain, Wand2, ShieldCheck, Loader2, UserRound } from "lucide-react";
 import { Tag } from "@/components/site/Tag";
 import { COLORS } from "@/components/site/constants";
 import { CHATBOT_API, type DemoStatus } from "./config";
@@ -94,39 +94,46 @@ export function BuildView({ token }: { token: string }) {
 
   const site = s.website.replace(/^https?:\/\//, "");
 
-  if (s.state === "ready" && s.chatUrl) {
+  if (s.state === "ready" && s.demoUrl) {
     return (
-      <section className="fs-section" style={wrap}>
-        <div className="fs-row" style={{ display: "flex", gap: 56, alignItems: "flex-start" }}>
-          <div style={{ flex: "0 0 40%", minWidth: 0 }}>
-            <Tag text="Ready" />
-            <h1 style={h1}>{s.business}&apos;s assistant is live</h1>
-            <p style={{ color: COLORS.gray, fontSize: 17, lineHeight: 1.6, margin: "16px 0 0" }}>
-              It learned from {s.pagesRead} page{s.pagesRead === 1 ? "" : "s"} of {site}. Ask it what your customers ask: it answers from your website, and says so when
-              it doesn&apos;t know.
-            </p>
-            <p style={{ margin: "32px 0 10px", fontSize: 12, fontWeight: 600, color: COLORS.gray, letterSpacing: ".08em", textTransform: "uppercase" }}>Share it with your team</p>
-            <CopyLink url={s.demoUrl ?? here} />
-            {s.demoUrl && (
-              <a href={s.demoUrl} target="_blank" rel="noopener" className="fs-ai-link"
-                style={{ ...btn, marginTop: 12, padding: "12px 18px", border: `1px solid ${COLORS.border}`, color: COLORS.black, background: "#fff" }}>
-                <Maximize2 size={16} aria-hidden="true" /> Open full screen
-              </a>
-            )}
-            <div style={{ marginTop: 32, padding: 24, borderRadius: 20, background: COLORS.blueBg }}>
-              <h2 style={{ fontSize: 20, fontWeight: 600, letterSpacing: "-0.4px", margin: 0 }}>Want it on your website or WhatsApp?</h2>
-              <p style={{ color: COLORS.gray, fontSize: 15, lineHeight: 1.55, margin: "8px 0 18px" }}>
-                We add it to your site with one line of code or connect your WhatsApp number, teach it every page, and fine-tune its answers with you.
+      <>
+        <section style={{ width: "100%", maxWidth: 1360, margin: "0 auto", padding: "128px 32px 0" }}>
+          <div className="fs-row" style={{ display: "flex", gap: 24, alignItems: "flex-end", justifyContent: "space-between" }}>
+            <div style={{ minWidth: 0 }}>
+              <Tag text="Ready" />
+              <h1 style={{ ...h1, fontSize: "clamp(28px, 3.4vw, 44px)", margin: "14px 0 0" }}>{s.business}&apos;s AI agent is live</h1>
+              <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.55, margin: "8px 0 0" }}>
+                Built from {s.pagesRead} page{s.pagesRead === 1 ? "" : "s"} of {site}. Chat with it on the left; the report on the right shows what it learned and how it was tested.
               </p>
-              <Link href="/contact" className="fs-btn fs-ai-link" style={{ ...btn, background: COLORS.blue, color: "#fff", boxShadow: "0 8px 22px rgba(4,84,255,.25)" }}>Talk to us →</Link>
+            </div>
+            <div style={{ flex: "0 0 380px", maxWidth: "100%" }}>
+              <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 600, color: COLORS.gray, letterSpacing: ".08em", textTransform: "uppercase" }}>Share this demo</p>
+              <CopyLink url={here} />
             </div>
           </div>
-          <div style={{ flex: 1, minWidth: 0, width: "100%" }}>
-            <iframe src={s.chatUrl} title={`Chat with ${s.business}'s assistant`}
-              style={{ width: "100%", height: "min(680px, 80vh)", border: `1px solid ${COLORS.border}`, borderRadius: 20, boxShadow: "0 30px 80px rgba(4,84,255,.14)", background: "#fff" }} />
+          {/* The agent and its report, from the chatbot server, shown here on freeserp.com. */}
+          <iframe src={s.demoUrl} title={`${s.business}'s AI agent and report`}
+            style={{ display: "block", width: "100%", height: "max(720px, calc(100vh - 150px))", marginTop: 24, border: `1px solid ${COLORS.border}`, borderRadius: 20,
+              boxShadow: "0 30px 80px rgba(4,84,255,.12)", background: COLORS.softGray }} />
+        </section>
+
+        <section style={{ width: "100%", maxWidth: 1360, margin: "0 auto", padding: "48px 32px 100px" }}>
+          <div className="fs-cta-inner" style={{ background: `linear-gradient(135deg, ${COLORS.blue}, #2f6bff 55%, ${COLORS.purple})`, borderRadius: 28, padding: "64px 40px", textAlign: "center", color: "#fff" }}>
+            <Tag text="Take it live" light />
+            <h2 style={{ fontSize: "clamp(26px, 3.6vw, 48px)", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "18px auto 14px", maxWidth: 820 }}>
+              Want this AI agent on your website, app or WhatsApp?
+            </h2>
+            <p style={{ fontSize: 17, lineHeight: 1.55, opacity: 0.92, margin: "0 auto 30px", maxWidth: 640 }}>
+              We add it to your website with one line of code, build it into your app, or connect it to your WhatsApp Business number through Meta,
+              then teach it every page of your website and fine-tune its answers with you.
+            </p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <Link href="/contact" className="fs-cta-btn fs-ai-link" style={{ background: "#fff", color: COLORS.blue }}>Talk to us →</Link>
+              <Link href="/ai-chat" className="fs-cta-btn fs-ai-link" style={{ border: "1px solid rgba(255,255,255,.5)", color: "#fff" }}>Try another website</Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </>
     );
   }
 
@@ -136,8 +143,8 @@ export function BuildView({ token }: { token: string }) {
         <span style={{ width: 56, height: 56, borderRadius: 16, background: COLORS.blueBg, display: "inline-grid", placeItems: "center" }}><UserRound size={26} color={COLORS.blue} aria-hidden="true" /></span>
         <h1 style={h1}>We&apos;re finishing {s.business}&apos;s assistant by hand</h1>
         <p style={{ color: COLORS.gray, fontSize: 18, lineHeight: 1.55, margin: "16px auto 32px", maxWidth: 600 }}>
-          We couldn&apos;t read enough of {site} automatically. Some websites block automated reading or keep their text in images. Our team has your details and will
-          finish your assistant with you.
+          We couldn&apos;t read enough of {site} automatically. Some websites block automated reading or keep their text in images. Contact us and our team
+          will finish your assistant with you.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/contact" className="fs-btn fs-ai-link" style={{ ...btn, background: COLORS.blue, color: "#fff" }}>Talk to us →</Link>
