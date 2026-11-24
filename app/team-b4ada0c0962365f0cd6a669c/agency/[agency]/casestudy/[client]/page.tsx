@@ -27,12 +27,17 @@ type Snapshot = {
     strengths: { label: string; value: string }[]
   }
   reviews?: { last30: number | null; negativeShare: number | null; latest: { author: string; text: string; date: string | null; localGuide: boolean }[] }
-  auditBefore?: Snapshot["audit"] // from the growth report taken before the work
+  auditBefore?: Before // from the growth report taken before the work
+}
+type Before = {
+  gbpScore?: number | null; siteScore?: number | null; pageSpeed?: number | null; aeo?: number | null; geo?: number | null
+  engines?: { name: string; score: number }[]
 }
 type Study = {
   name: string; address: string; website: string; agencyName: string
   rankBeforeUrl?: string; rankAfterUrl?: string; growthReportUrl?: string
   citations: string[]; hiddenSites: string[]; ownSites: number; qrUrl?: string; hideQr?: boolean
+  beforeScores?: Before // typed in the app; wins over the before growth report
 }
 
 // Case studies are managed by the in-house team at app.freeserp.com/dashboard/case-studies.
@@ -307,7 +312,20 @@ export default async function CaseStudyPage({ params }: Props) {
   const found = await find(agency, client)
   if (!found) notFound()
   const { agencyName, study: s, snap } = found
-  const { rank, business: biz, audit, reviews, auditBefore: ab } = snap
+  const { rank, business: biz, audit, reviews } = snap
+  // Before scores: typed in the app first, then the before growth report's.
+  const typed = s.beforeScores
+  const rep = snap.auditBefore
+  const ab = typed || rep
+    ? {
+        gbpScore: typed?.gbpScore ?? rep?.gbpScore ?? null,
+        siteScore: typed?.siteScore ?? rep?.siteScore ?? null,
+        pageSpeed: typed?.pageSpeed ?? rep?.pageSpeed ?? null,
+        aeo: typed?.aeo ?? rep?.aeo ?? null,
+        geo: typed?.geo ?? rep?.geo ?? null,
+        engine: (name: string) => typed?.engines?.find((e) => e.name === name)?.score ?? rep?.engines?.find((e) => e.name === name)?.score,
+      }
+    : null
 
   const qrTarget =
     s.qrUrl ?? biz?.mapsUrl ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${s.name}, ${s.address}`)}`
@@ -495,7 +513,7 @@ export default async function CaseStudyPage({ params }: Props) {
           >
             <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 *:min-w-0">
               <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 p-5">
-                {ab ? (
+                {ab?.gbpScore != null ? (
                   <div>
                     <p className="text-sm font-semibold">Google Business Profile</p>
                     <p className="mt-1 text-xs leading-relaxed text-slate-500">Overall profile health across 8 areas Google uses to rank local businesses.</p>
@@ -601,7 +619,7 @@ export default async function CaseStudyPage({ params }: Props) {
                 </h3>
                 <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                   {audit.engines.map((e) => (
-                    <ScoreCard key={e.name} label={e.name} now={e.score} before={ab?.engines.find((x) => x.name === e.name)?.score} />
+                    <ScoreCard key={e.name} label={e.name} now={e.score} before={ab?.engine(e.name)} />
                   ))}
                 </div>
               </div>
