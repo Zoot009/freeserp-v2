@@ -97,7 +97,7 @@ export function BuildView({ token }: { token: string }) {
   if (s.state === "ready" && s.demoUrl) {
     return (
       <>
-        <section style={{ width: "100%", maxWidth: 1360, margin: "0 auto", padding: "128px 32px 0" }}>
+        <section style={{ width: "100%", maxWidth: 1600, margin: "0 auto", padding: "128px 32px 0" }}>
           <div className="fs-row" style={{ display: "flex", gap: 24, alignItems: "flex-end", justifyContent: "space-between" }}>
             <div style={{ minWidth: 0 }}>
               <Tag text="Ready" />
@@ -117,7 +117,7 @@ export function BuildView({ token }: { token: string }) {
               boxShadow: "0 30px 80px rgba(4,84,255,.12)", background: COLORS.softGray }} />
         </section>
 
-        <section style={{ width: "100%", maxWidth: 1360, margin: "0 auto", padding: "48px 32px 100px" }}>
+        <section style={{ width: "100%", maxWidth: 1600, margin: "0 auto", padding: "48px 32px 100px" }}>
           <div className="fs-cta-inner" style={{ background: `linear-gradient(135deg, ${COLORS.blue}, #2f6bff 55%, ${COLORS.purple})`, borderRadius: 28, padding: "64px 40px", textAlign: "center", color: "#fff" }}>
             <Tag text="Take it live" light />
             <h2 style={{ fontSize: "clamp(26px, 3.6vw, 48px)", fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "18px auto 14px", maxWidth: 820 }}>
