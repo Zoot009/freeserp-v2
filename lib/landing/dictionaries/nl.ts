@@ -17,7 +17,7 @@ const nl: Dictionary = {
       "Vind de zoekwoorden en concurrenten die je zichtbaarheid in zoekmachines beïnvloeden, en overtref ze snel met dagelijkse updates.",
     inputPlaceholder: "Voer je domein in",
     ctaButton: "Gratis rankings checken",
-    disclaimer: "Voor altijd gratis · 5 SERP-checks per dag · Geen creditcard nodig",
+    disclaimer: "Gratis starten · 5 SERP-checks per dag · Geen creditcard nodig",
     liveDemo: "Live demo",
     demoAlt:
       "FreeSerp productdemo: een domein en zoekwoord invoeren om zoekresultaten te controleren",
@@ -80,7 +80,7 @@ const nl: Dictionary = {
     modalPoint2: "Zie precies wie je voorbijstreeft, en waar",
     modalPoint3: "Pagina- en zoekwoordscores voor elke URL",
     modalCta: "Meld je gratis aan om te ontgrendelen",
-    modalNote: "Altijd gratis · Geen creditcard nodig",
+    modalNote: "Gratis starten · Geen creditcard nodig",
     modalDismiss: "Verder rondkijken",
     modalDisclosure:
       "Preview met voorbeeldgegevens. Je echte posities worden na aanmelding gecontroleerd.",

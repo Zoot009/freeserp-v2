@@ -484,7 +484,7 @@ const STATS = [
   { value: "Multiple", label: "SEO tools on one credit balance" },
   { value: "1,000", label: "pages crawled in a single audit" },
   { value: "63", label: "checks behind every page score" },
-  { value: "100", label: "free rank-tracking credits a month" },
+  { value: "100", label: "free credits a month for 3 months" },
 ];
 
 const FREE_POINTS = [
@@ -496,7 +496,7 @@ const FREE_POINTS = [
 ];
 
 const FREE_PLAN_POINTS = [
-  "100 credits every month",
+  "100 credits a month for your first 3 months",
   "Google rank tracking",
   "Manual rank checks",
   "Rank history",
@@ -519,7 +519,7 @@ const UK_TESTIMONIALS = [
   {
     name: "Daniel Cooper",
     headline: "I replaced a £299/month SEO tool.",
-    text: "The free plan gave me what I needed to get started, and the £19/month plan made sense once I needed more rank tracking, audits and keyword research.",
+    text: "The free plan gave me what I needed to get started, and a paid plan made sense once I needed more rank tracking, audits and keyword research.",
   },
   {
     name: "Liam Parker",
@@ -539,7 +539,7 @@ const UK_TESTIMONIALS = [
 const FAQS = [
   {
     q: "What do I get on the free plan?",
-    a: "Google rank tracking: projects, Google keywords, manual rank checks and rank history, with 100 credits every month for those checks and no credit card. Website audits, page audits, competitor analysis, internal link analysis, keyword research and the keyword score checker are on paid plans, or unlocked by buying any credit pack.",
+    a: "Google rank tracking: projects, Google keywords, manual rank checks and rank history, with 100 credits a month for your first 3 months and no credit card. Website audits, page audits, competitor analysis, internal link analysis, keyword research and the keyword score checker are on paid plans.",
   },
   {
     q: "How big a website can FreeSERP audit?",
@@ -547,7 +547,7 @@ const FAQS = [
   },
   {
     q: "How do credits work across the multiple tools?",
-    a: "On any paid plan or credit pack, one balance covers all of them, so you spend credits on the job in front of you rather than on whichever tool your plan happened to include. A full site audit costs 5 credits per page crawled, and rank checks, keyword research and competitor analysis draw from the same balance. On the free plan, the 100 monthly credits go to Google rank checks.",
+    a: "On any paid plan, one balance covers all of them, so you spend credits on the job in front of you rather than on whichever tool your plan happened to include. A full site audit costs 5 credits per page crawled, and rank checks, keyword research and competitor analysis draw from the same balance. On the free plan, the 100 monthly credits go to Google rank checks.",
   },
   {
     q: "What's the difference between the Full Website Audit and the Page Audit?",
@@ -567,7 +567,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: `No. The free plan needs no card and doesn't expire — there's no trial countdown. Paid plans start at ${PRICE_PREFIX}19 a month and can be cancelled at any time; email support@freeserp.com if you'd like a hand sizing one.`,
+    a: `No. The free plan needs no card and gives you 100 credits a month for your first 3 months. Paid plans start at ${PRICE_PREFIX}9 a month and can be cancelled at any time; email support@freeserp.com if you'd like a hand sizing one.`,
   },
 ];
 
@@ -1117,10 +1117,9 @@ export default function AuditSuiteUkPage() {
                     subscriptions or keep track of different tool limits.
                   </p>
                   <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.6] text-[var(--body)]">
-                    Your 100 free credits are refilled every month for manual Google rank checks,
-                    so you can track where you stand without committing to a paid plan. Audits,
-                    competitor analysis and keyword research are on paid plans, or unlocked by any
-                    credit pack.
+                    Your 100 free credits a month for your first 3 months go on manual Google rank
+                    checks, so you can track where you stand without committing to a paid plan.
+                    Audits, competitor analysis and keyword research are on paid plans.
                   </p>
                   <p className="mt-6 text-[17px] font-semibold tracking-[-0.015em]">
                     Start free. Upgrade only when you need more.
@@ -1147,7 +1146,7 @@ export default function AuditSuiteUkPage() {
                     {PRICE_PREFIX}0
                     <span className="ml-1 text-[15px] font-normal text-[var(--muted)]">/month</span>
                   </p>
-                  <p className="mt-3 text-[14.5px] font-medium">100 free credits a month for rank checks</p>
+                  <p className="mt-3 text-[14.5px] font-medium">100 free credits a month for your first 3 months</p>
                   <ul className="mt-6 space-y-3">
                     {FREE_POINTS.map((p) => (
                       <li key={p} className="flex gap-2.5 text-[14.5px] leading-[1.45]">
@@ -1175,7 +1174,7 @@ export default function AuditSuiteUkPage() {
             <SectionHead
               tag="Pricing"
               title="Start Free. Scale When Your SEO Grows."
-              sub="One balance covers audits, competitor analysis, internal link analysis, keyword research and rank tracking. Google rank tracking is free; any paid plan or credit pack unlocks the rest."
+              sub="One balance covers audits, competitor analysis, internal link analysis, keyword research and rank tracking. Google rank tracking is free; any paid plan unlocks the rest."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -1186,7 +1185,7 @@ export default function AuditSuiteUkPage() {
                   <span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/month</span>
                 </p>
                 <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
-                  100 credits every month, refilled automatically, spent on manual Google rank
+                  100 credits a month for your first 3 months, spent on manual Google rank
                   checks.
                 </p>
                 <ul className="mt-6 mb-8 space-y-3">
@@ -1231,8 +1230,8 @@ export default function AuditSuiteUkPage() {
                   </p>
                   <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
                     {plan.credits.toLocaleString()} credits — about{" "}
-                    {Math.floor(plan.credits / 1000).toLocaleString()} full site audits of 200 pages
-                    each. {plan.who}.
+                    {plan.credits >= 1000 ? `${Math.floor(plan.credits / 1000).toLocaleString()} full site audits of 200 pages each` : `${Math.floor(plan.credits / 5).toLocaleString()} pages audited`}
+                    . {plan.who}.
                   </p>
                   <ul className="mt-6 mb-8 space-y-3">
                     {PAID_POINTS.map((p) => (
@@ -1253,7 +1252,7 @@ export default function AuditSuiteUkPage() {
             </div>
 
             <p className="mt-6 text-center text-[13.5px] text-[var(--muted)]">
-              Credits are shared across every tool. Top-up packs are available on any paid plan.
+              Credits are shared across every tool. Top-ups are available on any paid plan.
             </p>
           </div>
         </section>
@@ -1338,7 +1337,7 @@ export default function AuditSuiteUkPage() {
             <p className="mx-auto mt-5 max-w-[58ch] text-[16px] leading-[1.6] text-white/60">
               Audit your website. Understand your competitors. Find better keyword opportunities.
               Track your rankings. Start free with Google rank tracking, and unlock every other
-              tool on a paid plan or with a credit pack.
+              tool on a paid plan.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta
@@ -1376,7 +1375,7 @@ export default function AuditSuiteUkPage() {
         page="audit_suite_uk"
         title="Give Your Website the"
         titleAccent="SEO Check-Up It Deserves."
-        body="Sign up free to track your Google rankings, then audit your website, analyse competitors and research keywords on any paid plan or with a credit pack."
+        body="Sign up free to track your Google rankings, then audit your website, analyse competitors and research keywords on any paid plan."
         ctaLabel="Create Your Free Account"
       />
     </div>

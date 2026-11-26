@@ -262,7 +262,7 @@ const STATS = [
   { value: "7", label: "scored categories" },
   { value: "5", label: "AI engines asked" },
   { value: "10", label: "questions per engine" },
-  { value: "$19", label: "a month for 2,000 credits" },
+  { value: "$9", label: "a month for 120 credits" },
 ];
 
 const BENEFITS = [
@@ -298,10 +298,10 @@ const BENEFITS = [
   },
 ];
 
-// AEO audits are paid-only (a plan or a credit pack), so nothing here may
+// AEO audits are paid-only (any paid plan), so nothing here may
 // promise an audit on the free plan.
 const FREE_POINTS = [
-  "100 credits every month",
+  "100 credits a month for your first 3 months",
   "Google rank tracking and history",
   "AEO audits from 105 credits on a paid plan",
   "No credit card required",
@@ -365,7 +365,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "For AEO audits, yes: they run on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For AEO audits, yes: they run on paid plans, from $9/month. The free plan needs no card and covers Google rank tracking with 100 credits a month for your first 3 months. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -895,7 +895,7 @@ export default function AeoGeoAuditPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="AEO audits are on every paid plan and credit pack, on one balance with rank tracking, AI visibility, site audits and keyword research. Audit counts below assume one engine (ChatGPT) per audit."
+              sub="AEO audits are on every paid plan, on one balance with rank tracking, AI visibility, site audits and keyword research. Audit counts below assume one engine (ChatGPT) per audit."
             />
             <PricingGrid
               unit="audits"
@@ -934,7 +934,7 @@ export default function AeoGeoAuditPage() {
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
               Two scores, real answers from five AI engines and a fix list ranked by impact. On
-              paid plans from $19/month, or with a credit pack.
+              any paid plan from $9/month.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Audit my site" />

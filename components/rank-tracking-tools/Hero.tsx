@@ -37,7 +37,7 @@ export default function Hero() {
             </a>
           </div>
           <p className="l2-hero-note l2-mono">
-            190+ countries · mobile & desktop · 12 tools from $19/month
+            190+ countries · mobile & desktop · 12 tools from $9/month
           </p>
         </div>
         <div className="l2-hero-shot">

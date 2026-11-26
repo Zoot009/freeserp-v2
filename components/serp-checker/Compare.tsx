@@ -192,8 +192,8 @@ export function Compare() {
             />
           </div>
           <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: COLORS.gray }}>
-            The free plan is enough to see your real rankings — 100 credits every month.
-            Tracking daily? Plans start at $19/mo for 2,000 credits, and the same balance
+            The free plan is enough to see your real rankings — 100 credits a month for your first 3 months.
+            Tracking daily? Plans start at $9/mo, and the same balance
             covers audits, local grids and keyword research.
           </p>
         </div>

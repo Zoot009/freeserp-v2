@@ -20,7 +20,7 @@ import { RankTrackerDemo } from "@/components/demos/RankTrackerDemo";
 
 const PAGE_URL = "https://freeserp.com/rank-tracker";
 const DESCRIPTION =
-  "Track Google keyword rankings daily by country, city and device. Follow SERP features, competitors and ranking history with alerts. 100 free credits a month.";
+  "Track Google keyword rankings daily by country, city and device. Follow SERP features, competitors and ranking history with alerts. 100 free credits a month for your first 3 months.";
 
 export const metadata: Metadata = {
   title: "Free Rank Tracker — Track Keyword Positions Daily | FreeSERP",

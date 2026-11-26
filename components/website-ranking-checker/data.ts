@@ -18,11 +18,11 @@ export const FEATURE_BLOCKS: FeatureBlock[] = [
   {
     title: "Check Your Website Ranking Free",
     paras: [
-      "Most ranking tools lock your data behind expensive monthly plans, charging $29 to $99 per month for the same basic rank check you needed in the first place. FreeSERP gives you 100 credits every month for free — no credit card required — and paid plans start at $19 per month for 2,000 credits, which also cover site audits, local grid scans and keyword research.",
+      "Most ranking tools lock your data behind expensive monthly plans, charging $29 to $99 per month for the same basic rank check you needed in the first place. FreeSERP gives you 100 free credits a month for your first 3 months — no credit card required — and paid plans start at $9 per month, with credits that also cover site audits, local grid scans and keyword research.",
       "Your free checks work on any domain, for any keyword, in any country. Free accounts allow up to 10 keywords per project and provide 30 days of rank history for saved tracking projects — enough to see your real positions, spot ranking drops, and decide whether FreeSERP fits your workflow before spending anything.",
     ],
     img: "/serp-image/sparkles.png",
-    alt: "website-ranking-checker — check your website ranking free every month",
+    alt: "website-ranking-checker — check your website ranking free",
   },
   {
     title: "Check Your Ranking in Any Country, on Any Device",
@@ -72,13 +72,13 @@ export type WhoUsesItem = {
 export const WHO_USES: WhoUsesItem[] = [
   {
     title: "Solo & Freelancers",
-    desc: "Check where every client's site ranks — 5 clients or 50 — without a $99+ tool eating into your margins. From $19/month for 2,000 credits, so you can walk into every client call with live data. Export rankings as a PDF or CSV and attach them to your monthly reports.",
+    desc: "Check where every client's site ranks — 5 clients or 50 — without a $99+ tool eating into your margins. From $9/month, so you can walk into every client call with live data. Export rankings as a PDF or CSV and attach them to your monthly reports.",
     img: "/serp-image/user.png",
     alt: "website-ranking-checker — for solo SEOs and freelancers checking client rankings",
   },
   {
     title: "Small Business Owners",
-    desc: "Enter your domain and keyword, pick your country, and see where your site stands in seconds. No credit card, no setup — start with 100 free credits a month. If your ranking slips, you find out right away instead of weeks later when the phone stops ringing.",
+    desc: "Enter your domain and keyword, pick your country, and see where your site stands in seconds. No credit card, no setup — start with 100 free credits a month for your first 3 months. If your ranking slips, you find out right away instead of weeks later when the phone stops ringing.",
     img: "/serp-image/home.png",
     alt: "website-ranking-checker — for small business owners checking keyword positions",
   },
@@ -97,7 +97,7 @@ export const FAQ_ITEMS = [
   },
   {
     q: "Is the website ranking checker really free?",
-    a: "Yes — the free plan gives you 100 credits every month with no credit card. Check any domain, any keyword, and any country. When you need more, plans start at $19/month for 2,000 credits. Saved projects are limited to 10 keywords on the free plan with 30 days of history; paid plans unlock unlimited keywords and extended history.",
+    a: "Yes — the free plan gives you 100 credits a month for your first 3 months with no credit card. Check any domain, any keyword, and any country. When you need more, plans start at $9/month. Saved projects are limited to 10 keywords on the free plan with 30 days of history; paid plans unlock unlimited keywords and extended history.",
   },
   {
     q: "Why does my ranking look different when I search for myself?",

@@ -90,7 +90,7 @@ export function SignupPopup() {
 
         <p className="ads-popup-body">
           Sign up free and track your Google rankings. Audits, competitor analysis and keyword
-          research unlock on <b>any paid plan from $19/month</b>, or with a credit pack.
+          research unlock on <b>any paid plan from $9/month</b>.
         </p>
 
         <Cta placement="timed_popup" label="Create My Free Account" className="mt-7 w-full" />

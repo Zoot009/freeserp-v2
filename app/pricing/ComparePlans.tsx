@@ -11,7 +11,7 @@
 // inside the table's own flow, so a collision is not possible.
 
 import { AppCtaLink } from "@/components/site/AppCtaLink";
-import { CREDIT_PLANS } from "./PricingPlans";
+import { CREDIT_PLANS, planSlug } from "./PricingPlans";
 
 type Cell = string | number | boolean;
 
@@ -29,11 +29,11 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
   {
     title: "Credits",
     rows: [
-      { feature: "Credits per month", values: [100, "2,000", "6,000", "15,000"] },
-      { feature: "Rank checks", tag: "5 credits each", values: [20, 400, "1,200", "3,000"] },
-      { feature: "Keywords tracked daily", tag: "for a full month", values: [false, 13, 40, 100] },
-      { feature: "Buy top-up packs", values: [false, true, true, true] },
-      { feature: "Credits roll over", tag: "top-ups only", values: [false, true, true, true] },
+      { feature: "Credits per month", values: [100, 120, "1,000", "3,000–9,000"] },
+      { feature: "Rank checks", tag: "5 credits each", values: [20, 24, 200, "600–1,800"] },
+      { feature: "Keywords tracked daily", tag: "for a full month", values: [false, false, 6, "20–60"] },
+      { feature: "Top up any amount", tag: "from $5, lasts a month", values: [false, true, true, true] },
+      { feature: "Available for", values: ["3 months", "Ongoing", "Ongoing", "Ongoing"] },
     ],
   },
   {
@@ -78,7 +78,7 @@ const SECTIONS: { title: string; rows: CompareRow[] }[] = [
 
 const COLUMNS = ["Free", ...CREDIT_PLANS.map((p) => p.label)];
 const PRICES = ["$0", ...CREDIT_PLANS.map((p) => `$${p.price}`)];
-const SLUGS = ["", ...CREDIT_PLANS.map((p) => p.slug)];
+const SLUGS = ["", ...CREDIT_PLANS.map((p) => planSlug(p, false))];
 const FEATURED = 1 + CREDIT_PLANS.findIndex((p) => p.popular);
 
 function Tick() {

@@ -132,7 +132,7 @@ export function SignupPopup() {
 
         <p className="cmpa-popup-body">
           Audit your Google Business Profile, map where you rank around you and get a 30-day plan
-          to fix it. On any paid plan <b>from $19/month</b>, or with a credit pack.
+          to fix it. On any paid plan <b>from $9/month</b>.
         </p>
 
         <Cta placement="timed_popup" label="Get Started" className="mt-7 w-full" />

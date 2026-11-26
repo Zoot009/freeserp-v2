@@ -722,7 +722,7 @@ function SignupTeaserModal({ keyword, country, onClose }: { keyword: string; cou
           You&apos;ve used today&apos;s 2 free checks
         </h3>
         <p style={{ margin: "0 0 22px", fontSize: 13.5, lineHeight: 1.55, color: COLORS.gray }}>
-          Sign up free to unlock this full report and get <strong style={{ color: COLORS.black }}>100 credits every month</strong> —
+          Sign up free to unlock this full report and get <strong style={{ color: COLORS.black }}>100 credits a month for 3 months</strong> —
           no credit card required.
         </p>
         <a

@@ -246,7 +246,7 @@ const STATS = [
   { value: "50+", label: "checks on every profile" },
   { value: "9", label: "rank grid points" },
   { value: "95", label: "credits an audit" },
-  { value: "$19", label: "a month for 2,000 credits" },
+  { value: "$9", label: "a month for 120 credits" },
 ];
 
 const BENEFITS = [
@@ -285,7 +285,7 @@ const BENEFITS = [
 const FREE_POINTS = [
   "Google rank tracking",
   "Manual checks and rank history",
-  "100 credits every month",
+  "100 credits a month for your first 3 months",
   "No credit card required",
 ];
 
@@ -343,7 +343,7 @@ const FAQS = [
   },
   {
     q: "What does an audit cost?",
-    a: "95 credits: 60 for the listing and reviews and 35 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. Maps audits run on any paid plan, from $19/month, or with a credit pack.",
+    a: "95 credits: 60 for the listing and reviews and 35 for the rank grid. The listing and reviews part is free when they were fetched in the last 10 days, and the grid is free when you already have a recent scan for the same keyword. A failed audit is refunded. Maps audits run on any paid plan, from $9/month.",
   },
   {
     q: "Can I give the report to a client?",
@@ -351,7 +351,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "For Maps audits, yes: they run on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For Maps audits, yes: they run on paid plans, from $9/month. The free plan needs no card and covers Google rank tracking with 100 credits a month for your first 3 months. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -864,7 +864,7 @@ export default function GoogleMapsAuditPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="Maps audits are on every paid plan and credit pack, on one balance with rank tracking, AI visibility, site audits and keyword research."
+              sub="Maps audits are on every paid plan, on one balance with rank tracking, AI visibility, site audits and keyword research."
             />
             <PricingGrid
               unit="audits"
@@ -901,8 +901,8 @@ export default function GoogleMapsAuditPage() {
               See your listing <span className="cmpa-grad-text">the way Google sees it</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              One Google Maps link, 50+ checks, a local rank grid and a 30-day plan. On paid plans
-              from $19/month, or with a credit pack.
+              One Google Maps link, 50+ checks, a local rank grid and a 30-day plan. On any paid
+              plan from $9/month.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Audit my listing" />

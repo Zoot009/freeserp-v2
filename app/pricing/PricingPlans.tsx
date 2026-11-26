@@ -10,153 +10,91 @@
 
 import { AppCtaLink } from "@/components/site/AppCtaLink";
 
-export interface CreditPlan {
+/**
+ * One purchasable size of a plan. The backend plan slugs are
+ * `${slug}-monthly` and `${slug}-annual` (see planSlug).
+ */
+export interface PlanSize {
   slug: string;
-  label: string;
-  price: number;
   credits: number;
+  /** Monthly billing, $ per month — what it renews at. */
+  price: number;
+  /** Annual billing, $ per month (charged as 12× up front). */
+  annual: number;
+  /** Monthly billing, the first month's price for a first-time subscriber. */
+  intro?: number;
+}
+
+export const planSlug = (size: PlanSize, annual: boolean) => `${size.slug}-${annual ? "annual" : "monthly"}`;
+
+export interface CreditPlan extends PlanSize {
+  label: string;
   who: string;
   popular?: boolean;
+  /** A credit-size picker on the card; the first size is the plan's own. */
+  sizes?: PlanSize[];
 }
 
 export const CREDIT_PLANS: CreditPlan[] = [
-  { slug: "credits-19", label: "Starter", price: 19, credits: 2_000, who: "One site, checked every day" },
+  { slug: "starter", label: "Starter", price: 9, annual: 9, credits: 120, who: "For first-time SEO tracking" },
   {
-    slug: "credits-49",
+    slug: "pro",
     label: "Pro",
     price: 49,
-    credits: 6_000,
-    who: "Several sites, or one you work hard",
+    annual: 25,
+    intro: 35,
+    credits: 1_000,
+    who: "For everyday SEO work",
     popular: true,
   },
-  { slug: "credits-99", label: "Agency", price: 99, credits: 15_000, who: "Client work and bigger keyword sets" },
+  {
+    slug: "agency-3k",
+    label: "Agency",
+    price: 129,
+    annual: 45,
+    intro: 75,
+    credits: 3_000,
+    who: "For client work and bigger keyword sets",
+    sizes: [
+      { slug: "agency-3k", credits: 3_000, price: 129, annual: 45, intro: 75 },
+      { slug: "agency-6k", credits: 6_000, price: 258, annual: 83, intro: 142 },
+      { slug: "agency-9k", credits: 9_000, price: 387, annual: 117, intro: 205 },
+    ],
+  },
 ];
 
-export const TOPUP_PACKS = [
-  { credits: 1_000, price: 19 },
-  { credits: 5_000, price: 79 },
-  { credits: 15_000, price: 199 },
-];
+/** $1 a month, paid yearly — annual-only, so it is not shown on the monthly view. */
+export const LITE_PLAN = { slug: "lite-annual", label: "Lite", annual: 1, credits: 100 };
 
-const FREE_FEATURES = [
-  "100 credits every month",
-  "Google rank tracking",
-  "190+ countries, all devices",
-  "No credit card required",
-];
+/** The free plan lasts this long (backend credits.refill FREE_PLAN_MONTHS). */
+export const FREE_MONTHS = 3;
+
+/** Any amount in range, subscribers only, lasts a month (backend catalog TOPUP). */
+export const TOPUP = { min: 5, creditsPerDollar: 50, presets: [5, 100, 200, 500, 1_000] };
 
 /**
  * What a balance buys, in the things people actually do. A credit count is
  * meaningless on its own — "6,000 credits" only becomes a price once you can
  * see it is 40 keywords checked every day for a month.
  */
-function whatItBuys(credits: number): string[] {
-  return [
-    `${Math.floor(credits / 5).toLocaleString()} rank checks`,
-    `${Math.floor(credits / 150).toLocaleString()} keywords tracked daily`,
-    `${Math.floor(credits / 415).toLocaleString()} local map grid scans`, // an 11×11 grid
-    `${Math.floor(credits / 500).toLocaleString()} 100-page site audits`, // 5 credits a page
-  ];
-}
-
-function Tick() {
+export function whatItBuys(credits: number): string[] {
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden style={{ marginTop: 3, flexShrink: 0 }}>
-      <path d="M2 7L5.5 10.5L12 3.5" stroke="#0454ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-/** The free tier, shaped like the paid ones so the row reads as one scale. */
-export function FreeCard() {
-  return (
-    <div className="pr-card">
-      <span className="pr-tier">Free</span>
-      <div className="pr-price">
-        <b>$0</b>
-        <span>/month</span>
-      </div>
-      <p className="pr-credits">100 credits a month</p>
-      <p className="pr-who">Refilled automatically. No card.</p>
-      <div className="pr-rule" />
-      <ul className="pr-list">
-        {FREE_FEATURES.map((f) => (
-          <li key={f}>
-            <Tick />
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
-      <AppCtaLink path="/signup" className="pr-cta">
-        Start free
-      </AppCtaLink>
-    </div>
-  );
-}
-
-export function PlanCard({ plan }: { plan: CreditPlan }) {
-  return (
-    <div className={`pr-card${plan.popular ? " pr-card--featured" : ""}`}>
-      {plan.popular && <span className="pr-badge">Most popular</span>}
-      <span className="pr-tier">{plan.label}</span>
-      <div className="pr-price">
-        <b>${plan.price}</b>
-        <span>/month</span>
-      </div>
-      <p className="pr-credits">{plan.credits.toLocaleString()} credits a month</p>
-      <p className="pr-who">{plan.who}</p>
-      <div className="pr-rule" />
-      <ul className="pr-list">
-        {whatItBuys(plan.credits).map((line, i) => (
-          <li key={line}>
-            <Tick />
-            {/* The first line is the literal conversion; the rest are
-                alternatives, so they read as "or" without repeating the word. */}
-            <span>
-              {i > 0 && <span style={{ color: "#9ca3af" }}>or </span>}
-              {line}
-            </span>
-          </li>
-        ))}
-      </ul>
-      <AppCtaLink path={`/pricing?plan=${plan.slug}`} className={`pr-cta${plan.popular ? " pr-cta--primary" : ""}`}>
-        Get {plan.label}
-      </AppCtaLink>
-    </div>
-  );
+    [
+      [5, "rank checks"],
+      [150, "keywords tracked daily"],
+      [415, "local map grid scans"], // an 11×11 grid
+      [500, "100-page site audits"], // 5 credits a page
+    ] as const
+  )
+    .filter(([cost]) => credits >= cost) // "0 site audits" is not a selling point
+    .map(([cost, what]) => `${Math.floor(credits / cost).toLocaleString()} ${what}`);
 }
 
 /**
- * What a pack buys, in work rather than arithmetic.
- *
- * The per-credit price was on these cards and is gone: "$0.019 per credit"
- * makes the reader do division to find out whether a pack is worth buying, and
- * the answer it produces — three decimal places of a cent — means nothing to
- * anyone. What they actually want to know is how much tracking it covers.
+ * Top-ups: any amount on top of a plan. Shown as what each quick amount buys,
+ * linking into the app's top-up box, where the amount is actually chosen.
  */
-function packBuys(credits: number): string[] {
-  return [
-    `${Math.floor(credits / 5).toLocaleString()} rank checks`,
-    `or ${Math.floor(credits / 415).toLocaleString()} local grid scans`, // an 11×11 grid
-    `or ${Math.floor(credits / 500).toLocaleString()} 100-page site audits`, // 5 credits a page
-  ];
-}
-
-function Arrow() {
-  return (
-    <svg className="pr-pack-go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path
-        d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function TopupPacks() {
+export function Topups() {
   return (
     <section style={{ maxWidth: 1080, margin: "0 auto", padding: "0 24px 64px" }}>
       <div
@@ -168,38 +106,24 @@ export function TopupPacks() {
           boxShadow: "0 1px 2px rgba(16,24,40,.04)",
         }}
       >
-        <div style={{ maxWidth: 560 }}>
+        <div style={{ maxWidth: 600 }}>
           <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, color: "#0b1220", letterSpacing: "-0.02em" }}>
             Need more in a busy month?
           </h3>
           <p style={{ fontSize: 14, color: "#6b7280", margin: "8px 0 0", lineHeight: 1.6 }}>
-            Buy credits on top of your plan at any time. Unlike your monthly allowance, these last a
-            full year — so a one-off migration or client audit doesn&apos;t force you onto a bigger plan.
+            {`On any plan, top up whatever you need — from $${TOPUP.min}, and every $1 adds ${TOPUP.creditsPerDollar} credits. `}
+            Top-up credits last one month, so a one-off migration or client audit doesn&apos;t force you
+            onto a bigger plan.
           </p>
         </div>
 
-        <div className="pr-packs">
-          {TOPUP_PACKS.map((pack, i) => {
-            const best = i === TOPUP_PACKS.length - 1;
-            return (
-              <AppCtaLink
-                key={pack.credits}
-                path={`/pricing?topup=${pack.credits}`}
-                className={`pr-pack${best ? " pr-pack--best" : ""}`}
-              >
-                {best && <span className="pr-pack-badge">Best value</span>}
-                <Arrow />
-                <span className="pr-pack-credits">{pack.credits.toLocaleString()} credits</span>
-                <span className="pr-pack-price">${pack.price} one-off</span>
-                <span className="pr-pack-rule" />
-                <ul className="pr-pack-buys">
-                  {packBuys(pack.credits).map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </AppCtaLink>
-            );
-          })}
+        <div className="pr-topups">
+          {TOPUP.presets.map((dollars) => (
+            <AppCtaLink key={dollars} path="/pricing?topup=packs" className="pr-topup">
+              <b>${dollars.toLocaleString()}</b>
+              <span>{(dollars * TOPUP.creditsPerDollar).toLocaleString()} credits</span>
+            </AppCtaLink>
+          ))}
         </div>
       </div>
     </section>

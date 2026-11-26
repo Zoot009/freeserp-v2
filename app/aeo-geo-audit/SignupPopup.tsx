@@ -132,7 +132,7 @@ export function SignupPopup() {
 
         <p className="cmpa-popup-body">
           Check whether ChatGPT, Gemini and AI Overviews cite your site, and get every fix back
-          ranked by impact. On any paid plan <b>from $19/month</b>, or with a credit pack.
+          ranked by impact. On any paid plan <b>from $9/month</b>.
         </p>
 
         <Cta placement="timed_popup" label="Get Started" className="mt-7 w-full" />

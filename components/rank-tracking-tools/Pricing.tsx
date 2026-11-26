@@ -8,8 +8,8 @@ export default function Pricing() {
           <div className="l2-eyebrow l2-mono">Pricing</div>
           <h2 className="l2-h2">One balance, every tool</h2>
           <p className="l2-pricing-lede">
-            Google rank tracking is free. Any paid plan or credit pack works across
-            the whole product — no seat counts, no annual contract.
+            Google rank tracking is free. Any paid plan works across the whole
+            product — no seat counts, no annual contract needed.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Pricing() {
         <div className="l2-costs">
           <h3 className="l2-costs-h">What a credit buys</h3>
           <p className="l2-costs-sub">
-            On any paid plan or credit pack, your credits work across all of it —
+            On any paid plan, your credits work across all of it —
             nothing is held back for a higher tier.
           </p>
           <div className="l2-costs-table">
@@ -60,7 +60,7 @@ export default function Pricing() {
             ))}
           </div>
           <p className="l2-costs-foot">
-            Credits from a monthly plan are used first, and top-up packs are there
+            Credits from a monthly plan are used first, and top-ups are there
             when a month runs heavy.
           </p>
         </div>

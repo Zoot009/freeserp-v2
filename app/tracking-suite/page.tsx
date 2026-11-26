@@ -274,7 +274,7 @@ const STATS = [
   { value: "5+", label: "trackers on one credit balance" },
   { value: "190+", label: "countries and all device types" },
   { value: "50M+", label: "indexed search terms" },
-  { value: "100", label: "free credits every month" },
+  { value: "100", label: "free credits a month for 3 months" },
 ];
 
 const PERSONAS = [
@@ -314,7 +314,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "Credits are shared. On any paid plan or credit pack, spend them on rank checks, map grids, audits or keyword research — no tool is reserved for a higher tier.",
+    text: "Credits are shared. On any paid plan, spend them on rank checks, map grids, audits or keyword research — no tool is reserved for a higher tier.",
   },
   {
     icon: Clock,
@@ -396,7 +396,7 @@ const FAQS = [
   },
   {
     q: "What do I get on the free plan?",
-    a: "100 credits every month, refilled automatically, with no credit card. They cover Google rank tracking — projects, keywords, manual checks and rank history. Maps, YouTube and AI tracking unlock on any paid plan (from $19/month) or with a credit pack.",
+    a: "100 credits a month for your first 3 months, with no credit card. They cover Google rank tracking — projects, keywords, manual checks and rank history. Maps, YouTube and AI tracking unlock on any paid plan (from $9/month).",
   },
   {
     q: "How do credits work across the four trackers?",
@@ -416,7 +416,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card and covers Google rank tracking. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "No. The free plan needs no card and covers Google rank tracking. Paid plans start at $9/month and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -657,7 +657,7 @@ export default function TrackingSuitePage() {
             />
 
             <p className="ads-note">
-              Get 100 free credits every month for Google rank tracking. Unlock every tool from $19/month.
+              Get 100 free credits a month for your first 3 months of Google rank tracking. Unlock every tool from $9/month.
             </p>
 
             <div className="mt-12 space-y-10">
@@ -743,7 +743,7 @@ export default function TrackingSuitePage() {
             <SectionHead
               tag="Pricing"
               title="Start free. Pay when you outgrow it."
-              sub="Free covers Google rank tracking. Any paid plan or credit pack unlocks Maps, YouTube and AI tracking — plus audits and keyword research."
+              sub="Free covers Google rank tracking. Any paid plan unlocks Maps, YouTube and AI tracking — plus audits and keyword research."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -754,7 +754,7 @@ export default function TrackingSuitePage() {
                   <span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-3.5 text-[13.5px] leading-[1.55] text-[var(--body)]">
-                  100 credits every month, refilled automatically, for manual Google rank
+                  100 credits a month for your first 3 months, for manual Google rank
                   checks.
                 </p>
                 <ul className="mt-6 mb-8 space-y-3">
@@ -811,7 +811,7 @@ export default function TrackingSuitePage() {
             </div>
 
             <p className="mt-6 text-center text-[13.5px] text-[var(--muted)]">
-              Credits are shared across every tool. Top-up packs are available on any paid plan.
+              Credits are shared across every tool. Top-ups are available on any paid plan.
             </p>
           </div>
         </section>
@@ -859,7 +859,7 @@ export default function TrackingSuitePage() {
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
               Google, Google Maps, YouTube and AI answers. Track Google free with 100 credits a
-              month and no card — unlock the rest from $19/month.
+              month for 3 months and no card — unlock the rest from $9/month.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" />

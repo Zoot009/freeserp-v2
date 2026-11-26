@@ -43,7 +43,7 @@ const entry = (
 
 const RESULTS_NOTE = "Example data showing the tool's results screen — opens in a new tab.";
 // Tools behind requirePaidPlan: the free plan's monthly credits don't unlock them.
-const PAID = "needs a paid plan or a credit pack";
+const PAID = "needs a paid plan";
 
 export const SAMPLE_REPORTS = {
   rank: entry("rank-tracking-report", "Rank Tracking Report", {

@@ -34,11 +34,11 @@ const tracker = (kicker: string) => TRACKERS.find((t) => t.kicker === kicker)!;
 const COMMON_FAQS = [
   {
     q: "Is there a free plan?",
-    a: "Yes. The free plan covers Google rank tracking with 100 credits every month, refilled automatically, with no credit card. Every other tool comes with any paid plan, from $19/month for 2,000 credits, or any credit pack.",
+    a: "Yes. The free plan covers Google rank tracking with 100 credits a month for your first 3 months, with no credit card. Every other tool comes with any paid plan, from $9/month.",
   },
   {
     q: "Do I need a separate subscription for this tool?",
-    a: "No. Every FreeSERP tool draws from the same credit balance. The free plan's credits cover Google rank tracking; everything else — the SERP checker, site audits, competitor analysis, keyword research, the keyword score checker, internal link analysis, AEO & GEO audits and Google Maps audits — needs a paid plan or a credit pack.",
+    a: "No. Every FreeSERP tool draws from the same credit balance. The free plan's credits cover Google rank tracking; everything else — the SERP checker, site audits, competitor analysis, keyword research, the keyword score checker, internal link analysis, AEO & GEO audits and Google Maps audits — needs a paid plan.",
   },
 ];
 
@@ -399,7 +399,7 @@ export const TOOL_PAGES = {
       },
       {
         q: "Is the keyword research tool free?",
-        a: "No. It comes with any paid plan or credit pack and runs on your credits; the free plan covers Google rank tracking only.",
+        a: "No. It comes with any paid plan and runs on your credits; the free plan covers Google rank tracking only.",
       },
       {
         q: "How much does a search cost?",

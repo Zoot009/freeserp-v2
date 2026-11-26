@@ -77,7 +77,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "AI Rank Tracker: ChatGPT, Claude, Gemini, Perplexity | FreeSERP",
   description:
-    "Track your AI visibility. See whether ChatGPT, Claude, Gemini and Perplexity name and cite your brand or your competitors. Plans from $19/month.",
+    "Track your AI visibility. See whether ChatGPT, Claude, Gemini and Perplexity name and cite your brand or your competitors. Plans from $9/month.",
   keywords: [
     "AI rank tracker",
     "AI visibility tracker",
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Do ChatGPT, Claude, Gemini and Perplexity name your brand?",
     description:
-      "Track AI visibility for GEO and AEO: mentions, citations, prominence and share of voice on every platform. Plans from $19/month.",
+      "Track AI visibility for GEO and AEO: mentions, citations, prominence and share of voice on every platform. Plans from $9/month.",
   },
   // Paid-traffic destination, kept out of the index on purpose, exactly as
   // /audit-suite and /tracking-suite are: it restates the home page and the
@@ -384,7 +384,7 @@ const STATS = [
   { value: "All", label: "AI platforms, one dashboard" },
   { value: "5", label: "answers a prompt, every run" },
   { value: "250", label: "prompts per brand" },
-  { value: "$19", label: "a month for 2,000 credits" },
+  { value: "$9", label: "a month for 120 credits" },
 ];
 
 const BENEFITS = [
@@ -416,14 +416,14 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "On any paid plan or credit pack, the same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. No tool is reserved for a higher tier.",
+    text: "On any paid plan, the same credits run Google, Maps and YouTube rank tracking, site audits and keyword research. No tool is reserved for a higher tier.",
   },
 ];
 
 const FREE_POINTS = [
   "Google rank tracking",
   "Manual checks and rank history",
-  "100 credits every month",
+  "100 credits a month for your first 3 months",
   "No credit card required",
 ];
 
@@ -482,7 +482,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "For the AI Rank Tracker, yes: it is on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For the AI Rank Tracker, yes: it is on paid plans, from $9/month. The free plan needs no card and covers Google rank tracking with 100 credits a month for your first 3 months. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -845,7 +845,7 @@ export default function AiRankTrackerPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="AI visibility is on every paid plan and credit pack, with rank tracking, audits and keyword research on the same balance. Free covers Google rank tracking."
+              sub="AI visibility is on every paid plan, with rank tracking, audits and keyword research on the same balance. Free covers Google rank tracking."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -1032,8 +1032,8 @@ export default function AiRankTrackerPage() {
               Find out what the assistants say about you
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              ChatGPT, Claude, Gemini and Perplexity on one credit balance, from $19/month or a
-              credit pack — and every answer stored so you can read it for yourself.
+              ChatGPT, Claude, Gemini and Perplexity on one credit balance, from $9/month — and
+              every answer stored so you can read it for yourself.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Get started" />

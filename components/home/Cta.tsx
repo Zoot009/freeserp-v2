@@ -44,7 +44,7 @@ export function Cta() {
                 fill="#fff"
               />
             </svg>
-            Free plan · No credit card · Plans from $19/mo
+            Free plan · No credit card · Plans from $9/mo
           </div>
           <h2
             style={{
@@ -70,7 +70,7 @@ export function Cta() {
               opacity: 0.92,
             }}
           >
-            100 free credits every month for real-time Google rank tracking — for SEOs, marketers, and developers. Plans from $19/month add competitor intelligence and every other tool, paid for out of one balance.
+            100 free credits a month for your first 3 months of real-time Google rank tracking — for SEOs, marketers, and developers. Plans from $9/month add competitor intelligence and every other tool, paid for out of one balance.
           </p>
           <a
             href={appUrl("/signup")}

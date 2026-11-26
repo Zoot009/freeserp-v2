@@ -88,7 +88,7 @@ export function SignupPopup() {
         </h2>
 
         <p className="ads-popup-body">
-          Sign up and get <b>100 free credits every month</b> to start tracking your Google
+          Sign up and get <b>100 free credits a month for 3 months</b> to start tracking your Google
           rankings.
         </p>
 

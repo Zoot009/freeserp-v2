@@ -77,7 +77,7 @@ export type Faq = { q: string; a: string };
 export const FAQS: Faq[] = [
   {
     q: "Is the free plan actually usable?",
-    a: "Yes, for Google rank tracking: projects, keywords, manual checks and rank history, on 100 credits that refill every month. There is no card at signup and no trial clock. Every other tool unlocks on a paid plan from $19/month or with a credit pack.",
+    a: "Yes, for Google rank tracking: projects, keywords, manual checks and rank history, on 100 credits a month for your first 3 months. There is no card at signup. Every other tool unlocks on a paid plan from $9/month.",
   },
   {
     q: "Do I need to know SEO?",
@@ -130,15 +130,15 @@ export const PLANS: Plan[] = [
   {
     name: "Free",
     price: "$0",
-    note: "Refilled every month, automatically.",
+    note: "100 credits a month for your first 3 months.",
     feats: ["Google rank tracking", "190+ countries, all devices", "No credit card required"],
     cta: "Start free",
   },
   {
     name: "Starter",
-    price: "$19",
+    price: "$9",
     note: "One site, checked every day.",
-    feats: ["Every tool unlocked", "Daily rank checks", "Top-up packs any time"],
+    feats: ["Every tool unlocked", "Daily rank checks", "Top-ups any time"],
     cta: "Choose Starter",
   },
   {
@@ -151,7 +151,7 @@ export const PLANS: Plan[] = [
   },
   {
     name: "Agency",
-    price: "$99",
+    price: "$129",
     note: "Client work and bigger keyword sets.",
     feats: ["Everything in Pro", "Large crawls and multi-client projects", "PDF and CSV export everywhere"],
     cta: "Choose Agency",

@@ -18,7 +18,7 @@ const es: Dictionary = {
     inputPlaceholder: "Ingresa tu dominio",
     ctaButton: "Comprobar posiciones gratis",
     disclaimer:
-      "Gratis para siempre · 5 comprobaciones SERP al día · Sin tarjeta de crédito",
+      "Gratis para empezar · 5 comprobaciones SERP al día · Sin tarjeta de crédito",
     liveDemo: "Demo en vivo",
     demoAlt:
       "Demostración de FreeSerp: ingresar un dominio y palabra clave para comprobar posiciones de búsqueda",
@@ -81,7 +81,7 @@ const es: Dictionary = {
     modalPoint2: "Descubre exactamente quién te supera y dónde",
     modalPoint3: "Puntuaciones de página y palabra clave para cada URL",
     modalCta: "Regístrate gratis para desbloquear",
-    modalNote: "Gratis para siempre · Sin tarjeta de crédito",
+    modalNote: "Gratis para empezar · Sin tarjeta de crédito",
     modalDismiss: "Seguir explorando",
     modalDisclosure:
       "Vista previa con datos de ejemplo. Tus posiciones reales se comprueban tras el registro.",

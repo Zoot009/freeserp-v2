@@ -132,7 +132,7 @@ export function SignupPopup() {
 
         <p className="cmpa-popup-body">
           Put your page beside the ones beating you and get every gap back as a prioritised
-          plan. On any paid plan <b>from $19/month</b>, or with a credit pack.
+          plan. On any paid plan <b>from $9/month</b>.
         </p>
 
         <Cta placement="timed_popup" label="Get Started" className="mt-7 w-full" />

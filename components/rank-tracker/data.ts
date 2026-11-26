@@ -87,7 +87,7 @@ export const FAQ_ITEMS: FAQ[] = [
   },
   {
     q: "Is the rank tracker really free?",
-    a: "Yes — the free plan gives you 100 credits every month with no credit card, and one credit checks one keyword. When you need more, plans start at $19/month for 2,000 credits and unlock the rest of FreeSERP — site audits, local map grid scans, keyword research and competitor analysis, all on the same balance. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
+    a: "Yes — the free plan gives you 100 credits a month for your first 3 months with no credit card, and one credit checks one keyword. When you need more, plans start at $9/month and unlock the rest of FreeSERP — site audits, local map grid scans, keyword research and competitor analysis, all on the same balance. Saved rank tracking projects are limited to 10 keywords per project on the free plan; paid plans get unlimited keywords per project.",
   },
   {
     q: "How accurate is the rank tracking data?",
@@ -147,7 +147,7 @@ export const SOFTWARE_APP_SCHEMA = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "100 free credits every month. No credit card required.",
+    description: "100 free credits a month for your first 3 months. No credit card required.",
   },
   featureList: [
     "Depersonalized keyword position checks",

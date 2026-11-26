@@ -145,11 +145,11 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "100 credits every month for Google rank tracking, refilled automatically — no credit card. Built for solo SEOs and side projects.",
+      desc: "100 credits a month for Google rank tracking for your first 3 months — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "100 credits every month",
+        "100 credits a month for 3 months",
         "Google rank tracking",
         "190+ countries & all devices",
         "No credit card required",
@@ -158,7 +158,7 @@ export const PLANS = {
     {
       name: "Pro",
       price: 49,
-      desc: "6,000 credits a month — about 40 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      desc: "1,000 credits a month — about 6 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
       cta: "Get Pro",
       featured: true,
       features: [
@@ -175,11 +175,11 @@ export const PLANS = {
     {
       name: "Free",
       price: 0,
-      desc: "100 credits every month for Google rank tracking, refilled automatically — no credit card. Built for solo SEOs and side projects.",
+      desc: "100 credits a month for Google rank tracking for your first 3 months — no credit card. Built for solo SEOs and side projects.",
       cta: "Start for Free",
       featured: false,
       features: [
-        "100 credits every month",
+        "100 credits a month for 3 months",
         "Google rank tracking",
         "190+ countries & all devices",
         "No credit card required",
@@ -188,7 +188,7 @@ export const PLANS = {
     {
       name: "Pro",
       price: 49,
-      desc: "6,000 credits a month — about 40 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
+      desc: "1,000 credits a month — about 6 keywords checked daily, or spend them on audits, local grids and keyword research instead.",
       cta: "Get Pro",
       featured: true,
       features: [
@@ -214,7 +214,7 @@ export const INTEGRATIONS = [
 
 export const TESTIMONIALS = [
   {
-    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free plan sold me in a week, and $19/mo covering rank tracking, audits and keyword research is a no-brainer.",
+    text: "I dropped a $299/mo SEO tool the day I found FreeSERP. The free plan sold me in a week, and one plan covering rank tracking, audits and keyword research is a no-brainer.",
     name: "Daniel Cooper",
     role: "Indie SEO Consultant",
     img: "https://framerusercontent.com/images/KcCMMECKZOgi4RCYPbRBT2B8u0.png",
@@ -256,7 +256,7 @@ export const FAQS = [
   },
   {
     q: "Is there a free plan?",
-    a: "Yes — the free plan gives you 100 credits every month with no credit card for Google rank tracking: projects, keywords, manual rank checks and rank history. Plans start at $19/month for 2,000 credits and unlock every other tool. A keyword check is 5 credits, and the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
+    a: "Yes — the free plan gives you 100 credits a month for your first 3 months, with no credit card, for Google rank tracking: projects, keywords, manual rank checks and rank history. Plans start at $9/month and unlock every other tool. A keyword check is 5 credits, and the same balance pays for audits, local grid scans and keyword research. Questions? Email support@freeserp.com.",
   },
   {
     q: "What can FreeSERP track besides Google?",
@@ -280,7 +280,7 @@ export const FAQS = [
   },
   {
     q: "How do credits work?",
-    a: "One balance pays for everything, and any paid plan or credit pack unlocks every tool — the free plan covers Google rank tracking. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
+    a: "One balance pays for everything, and any paid plan unlocks every tool — the free plan covers Google rank tracking. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
   },
   {
     q: "Can I export the data or share a report?",
@@ -320,7 +320,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
       name: "Free Trial",
       price: "0",
       priceCurrency: "USD",
-      description: "100 free credits every month for Google rank tracking. No credit card required.",
+      description: "100 free credits a month for your first 3 months of Google rank tracking. No credit card required.",
     },
     {
       "@type": "Offer",
@@ -335,7 +335,7 @@ export const HOME_SOFTWARE_APP_SCHEMA = {
         billingIncrement: 1,
       },
       description:
-        "Credit plans from $19/month — 2,000 credits, where five credits check one keyword. The same balance also covers site audits, local map grid scans, keyword research and competitor analysis.",
+        "Credit plans from $9/month, where five credits check one keyword. The same balance also covers site audits, local map grid scans, keyword research and competitor analysis.",
     },
   ],
   featureList: [
@@ -420,7 +420,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "Is there a free plan?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. The free plan gives you 100 credits every month with no credit card required, for Google rank tracking: projects with up to 10 keywords each, manual rank checks and rank history. Paid plans start at $19/month for 2,000 credits — one credit checks one keyword — and unlock every other tool, plus automated recurring checks and unlimited project keywords.",
+        text: "Yes. The free plan gives you 100 credits a month for your first 3 months with no credit card required, for Google rank tracking: projects with up to 10 keywords each, manual rank checks and rank history. Paid plans start at $9/month and unlock every other tool, plus automated recurring checks and unlimited project keywords.",
       },
     },
     {
@@ -468,7 +468,7 @@ export const HOME_FAQ_SCHEMA = {
       name: "How do FreeSERP credits work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "One balance pays for everything, and any paid plan or credit pack unlocks every tool — the free plan covers Google rank tracking. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
+        text: "One balance pays for everything, and any paid plan unlocks every tool — the free plan covers Google rank tracking. A rank check costs 5 credits, adding a keyword is free, a page audit is 5, an internal link crawl is 10, a keyword score is 15, keyword research is 35 to 190, and a competitor analysis is 25. Website audits cost 5 credits per page crawled, and connecting Google Search Console is free.",
       },
     },
     {

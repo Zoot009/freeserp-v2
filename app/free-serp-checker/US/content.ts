@@ -19,7 +19,7 @@ export const content = {
   meta: {
     title: "Free SERP Checker — Check your Google rankings by country & device",
     description:
-      "Check where your website actually ranks by keyword, country, and device using real Google SERP results. 100 free credits monthly, no credit card.",
+      "Check where your website actually ranks by keyword, country, and device using real Google SERP results. 100 free credits a month for 3 months, no credit card.",
   },
   nav: {
     credits: "100 free credits",
@@ -42,7 +42,7 @@ export const content = {
       "Check where your site really ranks — by keyword, country and device.",
     subheading2:
       "Real Google SERP results, not the personalized ones you see when you search yourself.",
-    disclaimer: "100 Free Credits Monthly • No Credit Card • Real SERP Results",
+    disclaimer: "100 Free Credits a Month for 3 Months • No Credit Card • Real SERP Results",
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",
   },

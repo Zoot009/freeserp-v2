@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
 import "./pricing.css";
-import { CREDIT_PLANS, FreeCard, PlanCard, TopupPacks } from "./PricingPlans";
+import { Topups } from "./PricingPlans";
+import { PlanPicker } from "./PlanPicker";
 import { ComparePlans } from "./ComparePlans";
 import { Enterprise } from "./Enterprise";
 
@@ -11,12 +12,12 @@ const PAGE_URL = "https://freeserp.com/pricing";
 export const metadata: Metadata = {
   title: "Pricing | FreeSERP",
   description:
-    "Credit-based SEO tooling from $19/mo. Rank tracking, local grid scans, site audits, keyword research and competitor analysis, all from one balance. Free plan: Google rank tracking with 100 credits a month, no card.",
+    "Credit-based SEO tooling from $1/mo billed yearly. Rank tracking, local grid scans, site audits, keyword research and competitor analysis, all from one balance. Free for 3 months: Google rank tracking with 100 credits a month, no card.",
   alternates: { canonical: PAGE_URL },
   robots: { index: true, follow: true },
   openGraph: {
     title: "Pricing | FreeSERP",
-    description: "From $19/mo. Every tool on every paid plan, paid for from one credit balance. Free plan: Google rank tracking, 100 credits a month, no card.",
+    description: "From $1/mo billed yearly. Every tool on every paid plan, paid for from one credit balance. Free for 3 months: Google rank tracking, 100 credits a month, no card.",
     url: PAGE_URL,
     siteName: "FreeSERP",
     type: "website",
@@ -76,23 +77,16 @@ export default function PricingPage() {
               maxWidth: 440,
             }}
           >
-            One balance, every tool. Plans from $19/month, or track Google rankings free with 100 credits — no card.
+            One balance, every tool. Plans from $1/month billed yearly, or try Google rank tracking free for 3 months — no card.
           </p>
         </section>
 
         {/* ── Light content body ── */}
         <div style={{ background: "#f5f6f8" }}>
 
-          {/* Plans layout */}
-          {/* Four tiers on one row. The free plan is a peer of the paid ones,
-              not a footnote beside them. */}
-          <section style={{ maxWidth: 1080, margin: "0 auto", padding: "52px 24px 46px" }}>
-            <div className="pr-plans">
-              <FreeCard />
-              {CREDIT_PLANS.map((plan) => (
-                <PlanCard key={plan.slug} plan={plan} />
-              ))}
-            </div>
+          {/* Free is a peer of the paid tiers, not a footnote beside them. */}
+          <section style={{ maxWidth: 1320, margin: "0 auto", padding: "52px 16px 46px" }}>
+            <PlanPicker />
 
             <p
               style={{
@@ -104,13 +98,13 @@ export default function PricingPage() {
                 lineHeight: 1.65,
               }}
             >
-              Five credits check one keyword. Monthly credits refill on your billing date; anything
-              you buy on top lasts a year. Whatever expires soonest is always spent first.
+              Five credits check one keyword. Plan credits refill every month, on annual plans too;
+              top-ups last a month. Whatever expires soonest is always spent first.
             </p>
           </section>
 
           <ComparePlans />
-          <TopupPacks />
+          <Topups />
           <Enterprise />
 
 

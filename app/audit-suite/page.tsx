@@ -77,7 +77,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "SEO Audit Tools: Full Site Audit Workflow — FreeSERP",
   description:
-    "A complete SEO audit workflow in one place: crawl your site, audit pages against 63 checks, compare competitors, map internal links. Plans from $19/month, or start free with Google rank tracking.",
+    "A complete SEO audit workflow in one place: crawl your site, audit pages against 63 checks, compare competitors, map internal links. Plans from $9/month, or start free with Google rank tracking.",
   keywords: [
     "SEO audit",
     "SEO audit tool",
@@ -337,7 +337,7 @@ const STATS = [
   { value: "7", label: "tools on one credit balance" },
   { value: "63", label: "on-page checks per page" },
   { value: "1,000", label: "pages in a single crawl" },
-  { value: "100", label: "free rank-tracking credits a month" },
+  { value: "100", label: "free credits a month for 3 months" },
 ];
 
 const PERSONAS = [
@@ -362,7 +362,7 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "Credits are shared across audits, analyses, keyword research and rank tracking. Any paid plan or credit pack unlocks every tool.",
+    text: "Credits are shared across audits, analyses, keyword research and rank tracking. Any paid plan unlocks every tool.",
   },
   {
     icon: Gauge,
@@ -394,7 +394,7 @@ const BENEFITS = [
 const FREE_POINTS = [
   "Google rank tracking",
   "Rank history",
-  "100 credits a month for rank checks",
+  "100 credits a month for your first 3 months",
   "No credit card required",
 ];
 
@@ -444,7 +444,7 @@ const FAQS = [
   },
   {
     q: "What do I get on the free plan?",
-    a: "Google rank tracking: projects, Google keywords, manual rank checks and rank history, with 100 credits every month for those checks and no credit card. Audits, competitor analysis, internal link analysis and keyword research are on paid plans from $19/month, or unlocked by buying any credit pack.",
+    a: "Google rank tracking: projects, Google keywords, manual rank checks and rank history, with 100 credits a month for your first 3 months and no credit card. Audits, competitor analysis, internal link analysis and keyword research are on paid plans from $9/month.",
   },
   {
     q: "What does each tool cost in credits?",
@@ -464,7 +464,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "No. The free plan needs no card. Paid plans start at $19/month for 2,000 credits and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "No. The free plan needs no card. Paid plans start at $9/month and can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -732,7 +732,7 @@ export default function AuditSuitePage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="One balance covers every audit, analysis and keyword search — and the rank trackers too. Google rank tracking is free; any paid plan or credit pack unlocks the rest."
+              sub="One balance covers every audit, analysis and keyword search — and the rank trackers too. Google rank tracking is free; any paid plan unlocks the rest."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -745,7 +745,7 @@ export default function AuditSuitePage() {
                   $0<span className="ml-1 text-[14px] font-normal text-[var(--muted)]">/mo</span>
                 </p>
                 <p className="mt-2 text-[12.5px] text-[var(--muted)]">
-                  100 credits a month, for rank checks
+                  100 credits a month for your first 3 months
                 </p>
                 <Cta
                   placement="pricing_free"
@@ -920,7 +920,7 @@ export default function AuditSuitePage() {
             </h2>
             <p className="mx-auto mt-5 max-w-[52ch] text-[16px] leading-[1.6] text-white/60">
               A complete SEO audit workflow on one credit balance. Start free with Google rank
-              tracking, no credit card, and unlock all seven tools from $19/month or with a credit pack.
+              tracking, no credit card, and unlock all seven tools from $9/month.
             </p>
             <div className="mt-8 flex justify-center">
               <Cta placement="final_cta" label="Create my free account" />

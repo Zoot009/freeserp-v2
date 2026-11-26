@@ -17,7 +17,7 @@ const fr: Dictionary = {
       "Trouvez les mots-clés et concurrents qui impactent votre visibilité dans les moteurs de recherche, et devancez-les rapidement grâce à des mises à jour quotidiennes.",
     inputPlaceholder: "Entrez votre domaine",
     ctaButton: "Vérifier gratuitement mon classement",
-    disclaimer: "Gratuit à vie · 5 vérifications SERP par jour · Sans carte bancaire",
+    disclaimer: "Gratuit pour commencer · 5 vérifications SERP par jour · Sans carte bancaire",
     liveDemo: "Démo en direct",
     demoAlt:
       "Démonstration FreeSerp : saisie d'un domaine et d'un mot-clé pour vérifier le classement dans les résultats de recherche",
@@ -80,7 +80,7 @@ const fr: Dictionary = {
     modalPoint2: "Voyez précisément qui vous devance, et où",
     modalPoint3: "Scores de page et de mot-clé pour chaque URL",
     modalCta: "Inscrivez-vous gratuitement pour débloquer",
-    modalNote: "Gratuit pour toujours · Sans carte bancaire",
+    modalNote: "Gratuit pour commencer · Sans carte bancaire",
     modalDismiss: "Continuer à explorer",
     modalDisclosure:
       "Aperçu affiché avec des données d'exemple. Vos positions réelles sont vérifiées après l'inscription.",

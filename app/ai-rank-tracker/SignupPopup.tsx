@@ -145,7 +145,7 @@ export function SignupPopup() {
 
         <p className="airt-popup-body">
           Ask ChatGPT, Claude, Gemini and Perplexity what your buyers ask — and see who they
-          answer with. On any paid plan <b>from $19/month</b>, or with a credit pack.
+          answer with. On any paid plan <b>from $9/month</b>.
         </p>
 
         <Cta placement="timed_popup" label="Get Started" className="mt-7 w-full" />

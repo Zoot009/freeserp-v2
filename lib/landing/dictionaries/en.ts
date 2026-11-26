@@ -17,7 +17,7 @@ const en: Dictionary = {
       "Find the keywords and competitors impacting your search visibility — and outrank them fast, with daily updates.",
     inputPlaceholder: "Enter your domain",
     ctaButton: "Check rankings free",
-    disclaimer: "Free forever · 5 SERP checks a day · No credit card required",
+    disclaimer: "Free to start · 5 SERP checks a day · No credit card required",
     liveDemo: "Live demo",
     demoAlt:
       "FreeSerp product demo: entering a domain and keyword to check search rankings",
@@ -80,7 +80,7 @@ const en: Dictionary = {
     modalPoint2: "See exactly who outranks you, and where",
     modalPoint3: "Page and keyword scores for every URL",
     modalCta: "Sign up free to unlock",
-    modalNote: "Free forever · No credit card required",
+    modalNote: "Free to start · No credit card required",
     modalDismiss: "Keep looking around",
     modalDisclosure: "",
     scanTitle: "Analysis complete",

@@ -22,7 +22,7 @@ export const content = {
   meta: {
     title: "Free SERP Checker UK — Check your Google rankings by country & device",
     description:
-      "See where your website ranks on Google in the UK and worldwide. Check by keyword, country and device with real SERP results. 100 free credits monthly, no credit card.",
+      "See where your website ranks on Google in the UK and worldwide. Check by keyword, country and device with real SERP results. 100 free credits a month for 3 months, no credit card.",
   },
   hero: {
     headline1: "How does your website",
@@ -51,7 +51,7 @@ export const content = {
     mobile: "Mobile",
     submit: "Check rankings free",
     checking: "Checking…",
-    disclaimer: "100 Free Credits Monthly • No Credit Card • Real SERP Results",
+    disclaimer: "100 Free Credits a Month for 3 Months • No Credit Card • Real SERP Results",
   },
   tags: {
     demo: "The demo",

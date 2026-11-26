@@ -87,7 +87,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "SEO Competitor Analysis Tool & Audit Guide — FreeSERP",
   description:
-    "Run a competitive SEO audit: compare your page with the pages outranking it on content, speed and authority, then get a prioritised plan. Plans from $19/month.",
+    "Run a competitive SEO audit: compare your page with the pages outranking it on content, speed and authority, then get a prioritised plan. Plans from $9/month.",
   keywords: [
     "competitor analysis",
     "SEO competitor analysis",
@@ -414,7 +414,7 @@ const STATS = [
   { value: "10", label: "competitors in one analysis" },
   { value: "25", label: "credits an analysis" },
   { value: "7", label: "plan categories, prioritised" },
-  { value: "$19", label: "a month for 2,000 credits" },
+  { value: "$9", label: "a month for 120 credits" },
 ];
 
 const BENEFITS = [
@@ -446,14 +446,14 @@ const BENEFITS = [
   {
     icon: Wallet,
     title: "One balance, every tool",
-    text: "On any paid plan or credit pack, the same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. No tool is reserved for a higher tier.",
+    text: "On any paid plan, the same credits run Google, Maps and YouTube rank tracking, AI visibility, site audits and keyword research. No tool is reserved for a higher tier.",
   },
 ];
 
 const FREE_POINTS = [
   "Google rank tracking",
   "Manual checks and rank history",
-  "100 credits every month",
+  "100 credits a month for your first 3 months",
   "No credit card required",
 ];
 
@@ -512,7 +512,7 @@ const FAQS = [
   },
   {
     q: "What does it cost in credits?",
-    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. Competitor analysis runs on any paid plan, from $19/month, or with a credit pack; the free plan covers Google rank tracking only.",
+    a: "25 credits an analysis, however many competitors you put in it, and 5 credits a chat message. Competitor analysis runs on any paid plan, from $9/month; the free plan covers Google rank tracking only.",
   },
   {
     q: "Can I share the report with a client?",
@@ -520,7 +520,7 @@ const FAQS = [
   },
   {
     q: "Do I need a credit card to start?",
-    a: "For competitor analysis, yes: it runs on paid plans, from $19/month for 2,000 credits, or with a credit pack. The free plan needs no card and covers Google rank tracking with 100 credits a month. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
+    a: "For competitor analysis, yes: it runs on paid plans, from $9/month. The free plan needs no card and covers Google rank tracking with 100 credits a month for your first 3 months. Plans can be cancelled at any time — email support@freeserp.com if you want a hand sizing one.",
   },
 ];
 
@@ -895,7 +895,7 @@ export default function CompetitorAnalysisPage() {
               label="Pricing"
               name="Credits"
               title="Choose the plan that fits"
-              sub="Competitor analysis is on every paid plan and credit pack, on one balance with rank tracking, AI visibility, audits and keyword research. Free covers Google rank tracking."
+              sub="Competitor analysis is on every paid plan, on one balance with rank tracking, AI visibility, audits and keyword research. Free covers Google rank tracking."
             />
 
             <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -1083,7 +1083,7 @@ export default function CompetitorAnalysisPage() {
               Find out <span className="cmpa-grad-text">what the page above you is doing</span>
             </h2>
             <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-white/60">
-              One keyword, one credit balance, from $19/month or a credit pack — and every check
+              One keyword, one credit balance, from $9/month — and every check
               laid out beside theirs so you can see the gap for yourself.
             </p>
             <div className="mt-8 flex justify-center">

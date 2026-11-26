@@ -7,8 +7,7 @@ export default function Tools() {
         <div className="l2-tools-head">
           <h2 className="l2-h2 l2-h2-flat">Everything, on any paid plan</h2>
           <p className="l2-tools-note">
-            Google rank tracking is free. Any paid plan or credit pack unlocks the
-            rest.
+            Google rank tracking is free. Any paid plan unlocks the rest.
           </p>
         </div>
         <div className="l2-tools-grid">

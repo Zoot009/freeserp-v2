@@ -6,9 +6,10 @@ import { SectionHead } from "@/components/site/SectionHead";
 import { COLORS } from "@/components/site/constants";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { pushDataLayer } from "@/lib/gtm";
+import { CREDIT_PLANS } from "@/app/pricing/PricingPlans";
 
 const FREE_FEATURES = [
-  "100 credits every month",
+  "100 credits a month for 3 months",
   "Google rank tracking",
   "190+ countries & all devices",
   "No credit card required",
@@ -23,13 +24,8 @@ const PAID_FEATURES = [
   "Cancel anytime",
 ];
 
-// Five credits check one keyword. Keep in step with the backend's
-// credits/catalog.ts, which is what actually gets charged.
-const PAID_PLANS = [
-  { price: 19, credits: 2_000,  label: "Starter"                },
-  { price: 49, credits: 6_000,  label: "Pro", popular: true     },
-  { price: 99, credits: 15_000, label: "Agency"                 },
-];
+// The pricing page's plans (monthly prices), so the two can never disagree.
+const PAID_PLANS = CREDIT_PLANS;
 
 function DarkCheck() {
   return (
@@ -86,7 +82,7 @@ export function Pricing() {
       <SectionHead
         tag="PRICING"
         title="Simple plans. No surprises."
-        sub="Five credits check one keyword, and the same balance pays for audits, local grids and keyword research. Track Google rankings free with 100 credits a month."
+        sub="Five credits check one keyword, and the same balance pays for audits, local grids and keyword research. Track Google rankings free with 100 credits a month for your first 3 months."
       />
 
       <div className="fs-grid-2" style={{ marginTop: 40 }}>
@@ -113,7 +109,7 @@ export function Pricing() {
                 Free
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 32px" }}>
-                100 credits every month, refilled automatically — no credit card. Enough to track your Google rankings properly.
+                100 credits a month for your first 3 months — no credit card. Enough to track your Google rankings properly.
               </p>
               <div
                 style={{
@@ -145,7 +141,7 @@ export function Pricing() {
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
                   <span style={{ fontSize: 24, fontWeight: 600 }}>$</span>
                   <span style={{ fontSize: 48, fontWeight: 700, letterSpacing: "-0.04em" }}>0</span>
-                  <span style={{ fontSize: 18, fontWeight: 600 }}>/7 days</span>
+                  <span style={{ fontSize: 18, fontWeight: 600 }}>for 3 months</span>
                 </div>
               </div>
             </div>
@@ -193,7 +189,11 @@ export function Pricing() {
                 {plan.label}
               </h4>
               <p style={{ color: COLORS.gray, fontSize: 16, lineHeight: 1.5, margin: "0 0 24px" }}>
-                {plan.credits.toLocaleString()} credits a month — about {perDay.toLocaleString()} keywords checked every day, or spend them on audits, grids and research instead. Cancel anytime.
+                {plan.credits.toLocaleString()} credits a month — about{" "}
+                {perDay > 0
+                  ? `${perDay.toLocaleString()} keywords checked every day`
+                  : `${Math.floor(plan.credits / 5).toLocaleString()} rank checks`}
+                , or spend them on audits, grids and research instead. Cancel anytime.
               </p>
 
               {/* Stepper */}
