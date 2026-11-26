@@ -27,7 +27,7 @@ export function Nav({ currentNav, solid = false }: { currentNav?: NavItem; solid
       <nav
         style={{
           position: "fixed",
-          top: 0,
+          top: "var(--banner-h, 0px)",
           left: 0,
           right: 0,
           zIndex: 50,
