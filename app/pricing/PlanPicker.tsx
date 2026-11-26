@@ -13,6 +13,11 @@ type Interval = "month" | "year";
 // Rounded down, so a discount is never overstated.
 const pct = (price: number, now: number) => Math.floor((1 - now / price) * 100);
 const MAX_OFF = Math.max(...CREDIT_PLANS.flatMap((p) => (p.sizes ?? [p]).map((s) => pct(s.price, s.annual))));
+
+// Christmas & New Year wording on the annual saving, until 6 Jan 2027. Checked
+// in the browser, so the page drops it on time without a redeploy (the static
+// HTML may still say it until the next build — hence suppressHydrationWarning).
+const FESTIVE = Date.now() < Date.UTC(2027, 0, 7);
 const short = (credits: number) => `${credits / 1000}K`;
 
 /** Price line plus a caption saying what is actually charged, and when. */
@@ -96,7 +101,11 @@ export function PlanPicker() {
       <div className="pp-bar">
         <div>
           <h2>All plans</h2>
-          <p>Pay yearly and save up to {MAX_OFF}%.</p>
+          <p suppressHydrationWarning>
+            {FESTIVE
+              ? `🎄 Christmas & New Year offer: pay yearly and save up to ${MAX_OFF}%.`
+              : `Pay yearly and save up to ${MAX_OFF}%.`}
+          </p>
         </div>
         <div className="pp-toggles">
           <div className="pp-seg" role="group" aria-label="Billing">
@@ -111,7 +120,9 @@ export function PlanPicker() {
               </button>
             ))}
           </div>
-          <span className="pp-max-off">Up to {MAX_OFF}% off</span>
+          <span className="pp-max-off" suppressHydrationWarning>
+            {FESTIVE ? `🎄 Holiday sale · up to ${MAX_OFF}% off` : `Up to ${MAX_OFF}% off`}
+          </span>
         </div>
       </div>
 

@@ -115,6 +115,9 @@ export function Topups() {
             Top-up credits last one month, so a one-off migration or client audit doesn&apos;t force you
             onto a bigger plan.
           </p>
+          <p style={{ fontSize: 13, color: "#0b1220", fontWeight: 600, margin: "8px 0 0", lineHeight: 1.6 }}>
+            Top-ups are available only while you have an active monthly or annual subscription.
+          </p>
         </div>
 
         <div className="pr-topups">
