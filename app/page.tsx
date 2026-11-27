@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   },
 };
 import { Hero } from "@/components/home/Hero";
-import { CountryBanner } from "@/components/home/CountryBanner";
 import { Ticker } from "@/components/home/Ticker";
 import { InsideApp } from "@/components/home/InsideApp";
 import { Trackers } from "@/components/home/Trackers";
@@ -55,7 +54,6 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOME_SOFTWARE_APP_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOME_ORGANIZATION_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(HOME_FAQ_SCHEMA) }} />
-      <CountryBanner />
       <Nav />
       <Hero />
       <Ticker />

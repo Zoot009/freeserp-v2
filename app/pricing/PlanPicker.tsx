@@ -120,7 +120,7 @@ export function PlanPicker() {
               </button>
             ))}
           </div>
-          <span className="pp-max-off" suppressHydrationWarning>
+          <span className={`pp-max-off${FESTIVE ? " pp-max-off--festive" : ""}`} suppressHydrationWarning>
             {FESTIVE ? `🎄 Holiday sale · up to ${MAX_OFF}% off` : `Up to ${MAX_OFF}% off`}
           </span>
         </div>

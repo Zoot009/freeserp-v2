@@ -30,7 +30,7 @@ function countryName(code: string) {
 }
 
 /**
- * Bar above the homepage nav: "🇺🇸 8 developers from the US put their hearts into
+ * Bar above the site nav (rendered by Nav, so on every page that has it): "🇺🇸 8 developers from the US put their hearts into
  * FreeSERP." The country is the visitor's, from /api/country. Hidden when it is
  * unknown (always so locally; add ?country=IN to the URL to preview one).
  * Publishes its height as --banner-h, which the fixed nav uses as its top.

@@ -115,7 +115,24 @@ export function Topups() {
             Top-up credits last one month, so a one-off migration or client audit doesn&apos;t force you
             onto a bigger plan.
           </p>
-          <p style={{ fontSize: 13, color: "#0b1220", fontWeight: 600, margin: "8px 0 0", lineHeight: 1.6 }}>
+          <p
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 10,
+              margin: "14px 0 0",
+              padding: "12px 14px",
+              background: "#fff7ed",
+              border: "1px solid #fed7aa",
+              borderLeft: "4px solid #f97316",
+              borderRadius: 10,
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#9a3412",
+              lineHeight: 1.5,
+            }}
+          >
+            <span aria-hidden style={{ fontSize: 16, lineHeight: 1.3 }}>🔒</span>
             Top-ups are available only while you have an active monthly or annual subscription.
           </p>
         </div>

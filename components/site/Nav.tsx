@@ -9,6 +9,7 @@ import { ArrowUpRight } from "./icons";
 import { pushDataLayer } from "@/lib/gtm";
 import { useAppUrl } from "@/lib/useAppUrl";
 import { useSession } from "@/lib/useSession";
+import { CountryBanner } from "./CountryBanner";
 
 /** `solid` keeps the dark bar from the top, for pages whose hero is light — white links would vanish on it. */
 export function Nav({ currentNav, solid = false }: { currentNav?: NavItem; solid?: boolean }) {
@@ -24,6 +25,8 @@ export function Nav({ currentNav, solid = false }: { currentNav?: NavItem; solid
 
   return (
     <>
+      {/* Rendered with the nav, so every page that has the site nav has the banner too. */}
+      <CountryBanner />
       <nav
         style={{
           position: "fixed",

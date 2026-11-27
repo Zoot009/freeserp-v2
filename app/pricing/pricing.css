@@ -69,6 +69,18 @@
   color: #e11d74;
 }
 
+/* The holiday badge: a solid pill, so the offer reads before the cards do. */
+.pp-max-off--festive {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 55%, #be123c 100%);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 18px -6px rgba(225, 29, 72, 0.7);
+  white-space: nowrap;
+}
+
 /* Each card spans two subgrid rows (panel, credits), so every panel in a row
    is as tall as the tallest — Agency's size picker no longer drops its price
    below everyone else's. */
